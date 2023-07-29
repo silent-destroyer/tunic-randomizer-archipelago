@@ -1,0 +1,1 @@
+# Tunic Randomizer Archipelago Client

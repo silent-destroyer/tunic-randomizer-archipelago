@@ -1,0 +1,345 @@
+﻿using Archipelago.MultiClient.Net.Models;
+using BepInEx.Logging;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using UnityEngine;
+using UnityEngine.InputSystem.Utilities;
+using UnityEngine.SceneManagement;
+using Newtonsoft.Json;
+using UnityEngine.UI;
+using System.Globalization;
+
+namespace TunicArchipelago {
+    public class PlayerCharacterPatches {
+
+        private static ManualLogSource Logger = TunicArchipelago.Logger;
+
+        public static string SaveName = null;
+        public static int HeirAssistModeDamageValue = 0;
+        public static bool StungByBee = false;
+        public static bool IsTeleporting = false;
+        public static bool DiedToDeathLink = false;
+        public static int index = 0;
+
+        public static bool LoadSecondSword = false;
+        public static bool LoadThirdSword = false;
+        public static float LoadSwordTimer = 0.0f;
+        public static bool LoadCustomTexture = false;
+        public static bool WearHat = false;
+        public static float TimeWhenLastChangedDayNight = 0.0f;
+        public static float FinishLineSwordTimer = 0.0f;
+        public static float CompletionTimer = 0.0f;
+        public static float ResetDayNightTimer = -1.0f;
+
+        public static void PlayerCharacter_Update_PostfixPatch(PlayerCharacter __instance) {
+            Cheats.FastForward = Input.GetKey(KeyCode.Backslash);
+
+            if (Input.GetKeyDown(KeyCode.Alpha1)) {
+                if (GameObject.Find("_FinishlineDisplay(Clone)/").transform.childCount >= 3) {
+                    GameObject.Find("_FinishlineDisplay(Clone)/").transform.GetChild(2).gameObject.SetActive(!GameObject.Find("_FinishlineDisplay(Clone)/").transform.GetChild(2).gameObject.active);
+                }
+            }
+
+            if (Input.GetKeyDown(KeyCode.Alpha4)) {
+                foreach (string Key in TunicArchipelago.Tracker.ImportantItems.Keys.ToList()) {
+                    if (TunicArchipelago.Tracker.ImportantItems[Key] > 0) {
+                        Logger.LogInfo(Key + ": " + TunicArchipelago.Tracker.ImportantItems[Key]);
+                    }
+                }
+            }
+            if (Input.GetKeyDown(KeyCode.Alpha5)) {
+                PaletteEditor.RandomizeFoxColors();
+            }
+            if (Input.GetKeyDown(KeyCode.Alpha6)) {
+                PaletteEditor.LoadCustomTexture();
+            }
+
+            if (StungByBee) {
+                __instance.gameObject.transform.Find("Fox/root/pelvis/chest/head").localScale = new Vector3(3f, 3f, 3f);
+            }
+            if ((LoadSecondSword || LoadThirdSword || WearHat) && (GameObject.Find("_Fox(Clone)/Fox/root/pelvis/chest/arm_upper.R/arm_lower.R/hand.R/sword_proxy/") != null)) {
+                try {
+                    if (LoadSecondSword) { SwordProgression.EnableSecondSword(); }
+                    if (LoadThirdSword) { SwordProgression.EnableThirdSword(); }
+                    if (WearHat) {
+                        GameObject.Find("_Fox(Clone)/Fox/root/pelvis/chest/head/floppy hat").SetActive(true);
+                        WearHat = false;
+                    }
+                } catch (Exception ex) {
+                    Logger.LogError("Error applying upgraded sword!");
+                }
+            }
+            if (LoadCustomTexture && GameObject.Find("_Fox(Clone)/Fox/root/pelvis/chest/head/GameObject") != null) {
+                PaletteEditor.LoadCustomTexture();
+                LoadCustomTexture = false;
+            }
+            if (SpeedrunData.timerRunning && ResetDayNightTimer != -1.0f && SaveFile.GetInt("randomizer died to heir") != 1) {
+                ResetDayNightTimer += Time.fixedUnscaledDeltaTime;
+                CycleController.IsNight = false;
+                if (ResetDayNightTimer >= 5.0f) {
+                    CycleController.AnimateSunrise();
+                    SaveFile.SetInt("randomizer died to heir", 1);
+                    ResetDayNightTimer = -1.0f;
+                }
+            }
+            if (SpeedrunFinishlineDisplayPatches.ShowSwordAfterDelay) {
+                FinishLineSwordTimer += Time.fixedUnscaledDeltaTime;
+                if (FinishLineSwordTimer > 3.5f) {
+                    FinishLineSwordTimer = 0.0f;
+                    int SwordLevel = SaveFile.GetInt("randomizer sword progression level");
+                    GameObject.Find("_FinishlineDisplay(Clone)/Finishline Camera/Vertical Group/Item Parade Group/").transform.GetChild(1).GetChild(1).GetComponent<Image>().enabled = false;
+                    GameObject.Instantiate(SwordLevel == 3 ? ModelSwaps.SecondSwordImage : ModelSwaps.ThirdSwordImage, GameObject.Find("_FinishlineDisplay(Clone)/Finishline Camera/Vertical Group/Item Parade Group/").transform.GetChild(1)).GetComponent<RawImage>().color = new UnityEngine.Color(1, 1, 1, 0.65f);
+                    SpeedrunFinishlineDisplayPatches.ShowSwordAfterDelay = false;
+                }
+            }
+            if (SpeedrunFinishlineDisplayPatches.ShowCompletionStatsAfterDelay) {
+                CompletionTimer += Time.fixedUnscaledDeltaTime;
+                if (CompletionTimer > 6.0f) {
+                    CompletionTimer = 0.0f;
+                    SpeedrunFinishlineDisplay.instance.transform.GetChild(2).gameObject.SetActive(true);
+                    SpeedrunFinishlineDisplayPatches.ShowCompletionStatsAfterDelay = false;
+                }
+            }
+            if (SpeedrunData.timerRunning && SceneLoaderPatches.SceneName != null && Locations.AllScenes.Count > 0) {
+                float AreaPlaytime = SaveFile.GetFloat($"randomizer play time {SceneLoaderPatches.SceneName}");
+                SaveFile.SetFloat($"randomizer play time {SceneLoaderPatches.SceneName}", AreaPlaytime + Time.fixedUnscaledDeltaTime);
+            }
+            if (IsTeleporting) {
+                PlayerCharacter.instance.cheapIceParticleSystemEmission.enabled = true;
+                PlayerCharacter.instance.damageBoostParticleSystemEmission.enabled = true;
+                PlayerCharacter.instance.staminaBoostParticleSystemEmission.enabled = true;
+                PlayerCharacter.instance._CompletelyInvulnerableEvenToIFrameIgnoringAttacks_k__BackingField = true;
+                PlayerCharacter.instance.AddPoison(1f);
+                if (PlayerCharacter.instance.gameObject.GetComponent<Rotate>() != null) {
+                    PlayerCharacter.instance.gameObject.GetComponent<Rotate>().eulerAnglesPerSecond += new Vector3(0, 3.5f, 0);
+                }
+            }
+            if (SaveFile.GetInt("randomizer shuffled abilities") == 1 && SaveFile.GetInt($"randomizer obtained page 12") == 0) {
+                __instance.prayerBeginTimer = 0;
+            }
+            if (SaveFile.GetInt("randomizer shuffled abilities") == 1 && SaveFile.GetInt($"randomizer obtained page 26") == 0) {
+                TechbowItemBehaviour.kIceShotWindow = 0;
+            }
+
+        }
+
+
+        public static void PlayerCharacter_Start_PostfixPatch(PlayerCharacter __instance) {
+            if (!Archipelago.instance.integration.connected) {
+                Archipelago.instance.Connect();
+            }
+            Archipelago.instance.integration.lastProcessedItemIndex = SaveFile.GetInt("randomizer last processed item index");
+            if (Locations.AllScenes.Count == 0) {
+                for (int i = 0; i < SceneManager.sceneCountInBuildSettings; i++) {
+                    string SceneName = Path.GetFileNameWithoutExtension(SceneUtility.GetScenePathByBuildIndex(i));
+                    Locations.AllScenes.Add(SceneName);
+                }
+            }
+
+            if (PaletteEditor.ToonFox.GetComponent<MeshRenderer>() == null) {
+                PaletteEditor.ToonFox.AddComponent<MeshRenderer>().material = __instance.transform.GetChild(25).GetComponent<SkinnedMeshRenderer>().material;
+            }
+
+            StateVariable.GetStateVariableByName("SV_ShopTrigger_Fortress").BoolValue = true;
+            StateVariable.GetStateVariableByName("SV_ShopTrigger_Sewer").BoolValue = true;
+            StateVariable.GetStateVariableByName("SV_ShopTrigger_Swamp(Night)").BoolValue = true;
+            StateVariable.GetStateVariableByName("SV_ShopTrigger_WestGarden").BoolValue = true;
+
+            CustomItemBehaviors.CanTakeGoldenHit = false;
+            CustomItemBehaviors.CanSwingGoldenSword = false;
+
+            Inventory.GetItemByName("Homeward Bone Statue").icon = Inventory.GetItemByName("Dash Stone").icon;
+            Inventory.GetItemByName("Spear").icon = Inventory.GetItemByName("MoneyBig").icon;
+            if (Inventory.GetItemByName("Spear").TryCast<ButtonAssignableItem>() != null) {
+                Inventory.GetItemByName("Spear").TryCast<ButtonAssignableItem>().useMPUsesForQuantity = true;
+                Dat.floatDatabase["mpCost_Spear_mp2"] = 40f;
+            }
+            Inventory.GetItemByName("MoneyLevelItem").Quantity = 1;
+
+            if (SaveFile.GetInt("randomizer sword progression enabled") != 0) {
+                int SwordLevel = SaveFile.GetInt("randomizer sword progression level");
+
+                if (SwordLevel == 3) {
+                    LoadSecondSword = true;
+                }
+                if (SwordLevel == 4) {
+                    LoadThirdSword = true;
+                }
+            }
+
+            /*            if (SaveFile.GetString("randomizer game mode") == "HEXAGONQUEST") {
+                            TunicRandomizer.Tracker.ImportantItems["Pages"] = 28;
+                            TunicRandomizer.Tracker.ImportantItems["Hexagon Gold"] = SaveFile.GetInt("randomizer inventory quantity Hexagon Gold");
+                            SaveFile.SetInt("last page viewed", 0);
+                            ModelSwaps.SetupHexagonQuest();
+                        } else {
+                            ModelSwaps.RestoreOriginalHexagons();
+                        }*/
+
+            if (Archipelago.instance.integration.connected) {
+                Dictionary<string, object> slotData = Archipelago.instance.GetPlayerSlotData();
+                SaveFile.SetInt("archipelago", 1);
+
+                if (Locations.VanillaLocations.Count == 0) {
+                    Locations.CreateLocationLookups();
+                }
+
+                if (slotData.TryGetValue("start_with_sword", out var startWithSword)) {
+                    if (SaveFile.GetInt("randomizer started with sword") == 0 && startWithSword.ToString() == "1") {
+                        Logger.LogInfo("start with sword enabled");
+                        SaveFile.SetInt("randomizer started with sword", 1);
+                        Inventory.GetItemByName("Sword").Quantity += 1;
+                    }
+                }
+                if (slotData.TryGetValue("ability_shuffling", out var abilityShuffling)) {
+                    if (SaveFile.GetInt("randomizer shuffled abilities") == 0 && abilityShuffling.ToString() == "1") {
+                        Logger.LogInfo("ability shuffling enabled");
+                        SaveFile.SetInt("randomizer shuffled abilities", 1);
+                    }
+                }
+                if (slotData.TryGetValue("sword_progression", out var swordProgression)) {
+                    if (SaveFile.GetInt("randomizer sword progression enabled") == 0 && swordProgression.ToString() == "1") {
+                        Logger.LogInfo("sword progression enabled");
+                        SaveFile.SetInt("randomizer sword progression enabled", 1);
+                    }
+                }
+                if (slotData.TryGetValue("keys_behind_bosses", out var keysBehindBosses)) {
+                    if (SaveFile.GetInt("randomizer keys behind bosses") == 0 && keysBehindBosses.ToString() == "1") {
+                        Logger.LogInfo("keys behind bosses enabled");
+                        SaveFile.SetInt("randomizer keys behind bosses", 1);
+                    }
+                }
+                if (slotData.TryGetValue("seed", out var ArchipelagoSeed)) {
+                    SaveFile.SetString("archipelago seed", ArchipelagoSeed.ToString());
+                    if (SaveFile.GetInt("seed") == 0) {
+                        int Seed = int.Parse(ArchipelagoSeed.ToString().Substring(0, 9), CultureInfo.InvariantCulture);
+                        SaveFile.SetInt("seed", Seed);
+                        Logger.LogInfo("Generated new seed: " + Seed);
+                    } else {
+                        Logger.LogInfo("Loading seed: " + SaveFile.GetInt("seed"));
+                    }
+                }
+
+                Locations.PopulateMajorItemLocations(slotData);
+
+                Locations.CheckedLocations.Clear();
+                ItemLookup.ItemList.Clear();
+                List<long> LocationIDs = new List<long>();
+
+                foreach (string Key in Locations.VanillaLocations.Keys) {
+                    Locations.CheckedLocations.Add(Key, SaveFile.GetInt($"randomizer picked up {Key}") == 1);
+                    LocationIDs.Add(Archipelago.instance.integration.session.Locations.GetLocationIdFromName("Tunic", Locations.LocationIdToDescription[Key]));
+                }
+
+                SceneLoaderPatches.TimeOfLastSceneTransition = SaveFile.GetFloat("playtime");
+                Archipelago.instance.integration.session.Locations.ScoutLocationsAsync(LocationIDs.ToArray()).ContinueWith(locationInfoPacket => {
+                    foreach (NetworkItem Location in locationInfoPacket.Result.Locations) {
+                        ItemLookup.ItemList.Add(Locations.LocationDescriptionToId[Archipelago.instance.integration.session.Locations.GetLocationNameFromId(Location.Location)], new ArchipelagoItem(Archipelago.instance.integration.session.Items.GetItemName(Location.Item), Location.Player));
+                    }
+                }).Wait(TimeSpan.FromSeconds(10));
+
+                ItemTracker.PopulateSpoilerLog();
+                GhostHints.GenerateHints();
+                Hints.PopulateHints();
+
+                if (SaveFile.GetInt("randomizer shuffled abilities") == 1 && SaveFile.GetInt("randomizer obtained page 21") == 0) {
+                    foreach (ToggleObjectBySpell SpellToggle in Resources.FindObjectsOfTypeAll<ToggleObjectBySpell>()) {
+                        SpellToggle.gameObject.GetComponent<ToggleObjectBySpell>().enabled = false;
+                    }
+                }
+
+                FairyTargets.CreateFairyTargets();
+
+                if (!SceneLoaderPatches.SpawnedGhosts) {
+                    GhostHints.SpawnHintGhosts(SceneLoaderPatches.SceneName);
+                }
+
+                if (!ModelSwaps.SwappedThisSceneAlready) {
+                    ModelSwaps.SwapItemsInScene();
+                }
+
+                OptionsGUIPatches.SaveSettings();
+            }
+
+            ModelSwaps.SetupDathStoneItemPresentation();
+
+            PaletteEditor.SetupPartyHat(__instance);
+
+            if (TunicArchipelago.Settings.RandomFoxColorsEnabled) {
+                PaletteEditor.RandomizeFoxColors();
+            }
+
+            if (TunicArchipelago.Settings.UseCustomTexture) {
+                LoadCustomTexture = true;
+            }
+
+            if (TunicArchipelago.Settings.RealestAlwaysOn) {
+                GameObject.FindObjectOfType<RealestSpell>().SpellEffect();
+            }
+
+            if (PaletteEditor.CelShadingEnabled) {
+                PaletteEditor.ApplyCelShading();
+            }
+
+            if (PaletteEditor.PartyHatEnabled) {
+                WearHat = true;
+            }
+        }
+
+        public static void PlayerCharacter_creature_Awake_PostfixPatch(PlayerCharacter __instance) {
+            __instance.gameObject.AddComponent<WaveSpell>();
+        }
+
+        public static void PlayerCharacter_Die_MoveNext_PostfixPatch(PlayerCharacter._Die_d__481 __instance, ref bool __result) {
+
+            if (!__result) {
+                int Deaths = SaveFile.GetInt("randomizer death count");
+                SaveFile.SetInt("randomizer death count", Deaths + 1);
+                if (TunicArchipelago.Settings.DeathLinkEnabled && Archipelago.instance.integration.session.ConnectionInfo.Tags.Contains("DeathLink") && !DiedToDeathLink) {
+                    Archipelago.instance.integration.SendDeathLink();
+                }
+                DiedToDeathLink = false;
+            }
+        }
+
+        public static bool Monster_IDamageable_ReceiveDamage_PrefixPatch(Monster __instance) {
+
+            if (__instance.name == "Foxgod" && SaveFile.GetString("randomizer game mode") == "HEXAGONQUEST") {
+                return false;
+            }
+            if (__instance.name == "_Fox(Clone)") {
+                if (CustomItemBehaviors.CanTakeGoldenHit) {
+                    GameObject.Find("_Fox(Clone)/fox").GetComponent<CreatureMaterialManager>().originalMaterials = CustomItemBehaviors.FoxBody.GetComponent<MeshRenderer>().materials;
+                    GameObject.Find("_Fox(Clone)/fox hair").GetComponent<CreatureMaterialManager>().originalMaterials = CustomItemBehaviors.FoxHair.GetComponent<MeshRenderer>().materials;
+                    GameObject.Find("_Fox(Clone)/fox").GetComponent<CreatureMaterialManager>()._ghostMaterialArray = CustomItemBehaviors.GhostFoxBody.GetComponent<MeshRenderer>().materials;
+                    GameObject.Find("_Fox(Clone)/fox hair").GetComponent<CreatureMaterialManager>()._ghostMaterialArray = CustomItemBehaviors.GhostFoxHair.GetComponent<MeshRenderer>().materials;
+                    SFX.PlayAudioClipAtFox(PlayerCharacter.instance.bigHurtSFX);
+                    CustomItemBehaviors.CanTakeGoldenHit = false;
+                    return false;
+                }
+            } else {
+                if (__instance.name == "Foxgod" && TunicArchipelago.Settings.HeirAssistModeEnabled) {
+                    __instance.hp -= HeirAssistModeDamageValue;
+                }
+                if (CustomItemBehaviors.CanSwingGoldenSword) {
+                    __instance.hp -= 30;
+                    if (SaveFile.GetInt("randomizer sword progression level") == 3) {
+                        GameObject.Find("_Fox(Clone)/Fox/root/pelvis/chest/arm_upper.R/arm_lower.R/hand.R/sword_proxy").transform.GetChild(4).GetComponent<MeshRenderer>().materials = ModelSwaps.SecondSword.GetComponent<MeshRenderer>().materials;
+                    } else if (SaveFile.GetInt("randomizer sword progression level") == 4) {
+                        GameObject.Find("_Fox(Clone)/Fox/root/pelvis/chest/arm_upper.R/arm_lower.R/hand.R/sword_proxy").transform.GetChild(4).GetComponent<MeshRenderer>().materials = ModelSwaps.ThirdSword.GetComponent<MeshRenderer>().materials;
+                    } else {
+                        GameObject.Find("_Fox(Clone)/Fox/root/pelvis/chest/arm_upper.R/arm_lower.R/hand.R/sword_proxy").GetComponent<MeshRenderer>().materials = CustomItemBehaviors.Sword.GetComponent<MeshRenderer>().materials;
+                    }
+                    SFX.PlayAudioClipAtFox(PlayerCharacter.instance.bigHurtSFX);
+                    CustomItemBehaviors.CanSwingGoldenSword = false;
+                }
+            }
+            return true;
+        }
+
+    }
+}
