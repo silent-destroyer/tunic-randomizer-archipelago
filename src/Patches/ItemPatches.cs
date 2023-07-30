@@ -176,9 +176,8 @@ namespace TunicArchipelago {
 
         public static ItemResult GiveItem(string ItemName, NetworkItem networkItem) {
             if(ItemPresentation.instance.isActiveAndEnabled || GenericMessage.instance.isActiveAndEnabled || 
-                NPCDialogue.instance.isActiveAndEnabled || PageDisplay.instance.isActiveAndEnabled ||
-                GameObject.Find("_GameGUI(Clone)/PauseMenu/") != null || GameObject.Find("_OptionsGUI(Clone)") != null ||
-                SceneManager.GetActiveScene().name == "TitleScreen" || SceneLoaderPatches.SceneName == "TitleScreen" || PlayerCharacter.instance.IsDead) {
+                NPCDialogue.instance.isActiveAndEnabled || PageDisplay.instance.isActiveAndEnabled || GenericPrompt.instance.isActiveAndEnabled ||
+                GameObject.Find("_GameGUI(Clone)/PauseMenu/") != null || GameObject.Find("_OptionsGUI(Clone)") != null || PlayerCharacter.instance.IsDead) {
                 return ItemResult.TemporaryFailure;
             }
 
@@ -249,6 +248,7 @@ namespace TunicArchipelago {
 
             if (Item.Type == ItemTypes.PAGE) {
                 SaveFile.SetInt($"randomizer obtained page {Item.ItemNameForInventory}", 1);
+                PageDisplay.ShowPage(int.Parse(Item.ItemNameForInventory, CultureInfo.InvariantCulture));
                 if (SaveFile.GetInt("randomizer shuffled abilities") == 1)
                 {
                     if (Item.ItemNameForInventory == "12" || Item.ItemNameForInventory == "21" || Item.ItemNameForInventory == "26")
@@ -257,10 +257,6 @@ namespace TunicArchipelago {
                         PageDisplayPatches.AbilityUnlockPage = Item.ItemNameForInventory;
                     }
                 }
-                PageDisplay.showSpecificPageOnOpen = true;
-                PageDisplay.specificLeafToShowOnOpen = int.Parse(Item.ItemNameForInventory, CultureInfo.InvariantCulture);
-                PageDisplay.ShowPage(int.Parse(Item.ItemNameForInventory, CultureInfo.InvariantCulture));
-                PageDisplay.showSpecificPageOnOpen = false;
             }
 
             if (Item.Type == ItemTypes.GOLDENTROPHY) {
@@ -316,7 +312,7 @@ namespace TunicArchipelago {
                 }
             }
 
-            TunicArchipelago.Tracker.SetCollectedItem(ItemName);
+            TunicArchipelago.Tracker.SetCollectedItem(ItemName, true);
 
             return ItemResult.Success;
         }
@@ -350,8 +346,8 @@ namespace TunicArchipelago {
         }
 
         public static void PotionCombine_Show_PostFixPatch(PotionCombine __instance) {
-            TunicArchipelago.Tracker.ImportantItems["Flask Container"]++;
-            ItemTracker.SaveTrackerFile();
+            //TunicArchipelago.Tracker.ImportantItems["Flask Container"]++;
+            //ItemTracker.SaveTrackerFile();
         }
 
         public static void UpgradeAltar_DoOfferingSequence_PostfixPatch(UpgradeAltar __instance) {

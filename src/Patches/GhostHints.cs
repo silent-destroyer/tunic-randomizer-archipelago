@@ -306,11 +306,12 @@ namespace TunicArchipelago {
         public static void GenerateLocationHints() {
             LocationHints.Clear();
             foreach (string Key in HintableLocationIds.Keys) {
-                string ItemName = ItemLookup.ItemList[Key].ItemName;
+                ArchipelagoItem Item = ItemLookup.ItemList[Key];
                 string Location = HintableLocationIds[Key];
                 string LocationSuffix = Location[Location.Length - 1] == 'S' ? "R" : "iz";
-                string ItemPrefix = ItemName.Contains("Money") ? "suhm" : Vowels.Contains(ItemName.ToUpper()[0]) ? "ahn" : "uh";
-                string Hint = $"bI #uh wA, I hurd #aht \"{HintableLocationIds[Key]}\"\n{LocationSuffix} gRdi^ {ItemPrefix} \"{ItemName.ToUpper()}.\"";
+                string ItemPrefix = Item.ItemName.Contains("Money") ? "suhm" : Vowels.Contains(Item.ItemName.ToUpper()[0]) ? "ahn" : "uh";
+                string PlayerName = Archipelago.instance.GetPlayerName(Item.Player);
+                string Hint = $"bI #uh wA, I hurd #aht \"{HintableLocationIds[Key]}\"\n{LocationSuffix} gRdi^ \"{PlayerName.ToUpper()}'S {Item.ItemName.ToUpper()}.\"";
 
                 LocationHints.Add(Hint);
             }
@@ -331,10 +332,11 @@ namespace TunicArchipelago {
                     Item = "Sword Upgrade";
                 }
                 if (ItemLocation.Player == Archipelago.instance.GetPlayerSlot()) {
-                    
-                    Hint = $"bI #uh wA, I saw yor \"{Item.ToUpper().Replace(" ", "\" \"")}\" aht \"{Locations.SimplifiedSceneNames[Locations.VanillaLocations[Locations.LocationDescriptionToId[ItemLocation.Location]].Location.SceneName].ToUpper().Replace(" ", "\" \"")}\" in \"YOUR WORLD.\"";
+                    string Scene = Locations.SimplifiedSceneNames[Locations.VanillaLocations[Locations.LocationDescriptionToId[ItemLocation.Location]].Location.SceneName].ToUpper();
+                    string ScenePrefix = Scene == "Trinket Well" ? "%rOi^" : "aht #uh";
+                    Hint = $"bI #uh wA, I saw \"YOUR {Item.ToUpper().Replace(" ", "\" \"")}\" #uh lahst tIm I wuhs {ScenePrefix} \"{Scene}.\"";
                 } else {
-                    Hint = $"bI #uh wA, I saw yor \"{Item.ToUpper().Replace(" ", "\" \"")}\" aht \"{ItemLocation.Location.ToUpper().Replace(" ", "\" \"")}\" in \"{Archipelago.instance.GetPlayerName((int)ItemLocation.Player).ToUpper().Replace(" ", "\" \"")}'S WORLD\"";
+                    Hint = $"bI #uh wA, I saw \" YOUR {Item.ToUpper().Replace(" ", "\" \"")}\" in \"{Archipelago.instance.GetPlayerName((int)ItemLocation.Player).ToUpper().Replace(" ", "\" \"")}'S WORLD\"";
                 }
 
                 ItemHints.Add(WordWrapString(Hint).Replace($"\" \"", $" "));

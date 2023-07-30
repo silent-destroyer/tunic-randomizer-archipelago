@@ -106,7 +106,7 @@ namespace TunicArchipelago {
             }
             if (SpeedrunData.timerRunning && SceneLoaderPatches.SceneName != null && Locations.AllScenes.Count > 0) {
                 float AreaPlaytime = SaveFile.GetFloat($"randomizer play time {SceneLoaderPatches.SceneName}");
-                SaveFile.SetFloat($"randomizer play time {SceneLoaderPatches.SceneName}", AreaPlaytime + Time.fixedUnscaledDeltaTime);
+                SaveFile.SetFloat($"randomizer play time {SceneLoaderPatches.SceneName}", AreaPlaytime + Time.unscaledDeltaTime);
             }
             if (IsTeleporting) {
                 PlayerCharacter.instance.cheapIceParticleSystemEmission.enabled = true;
@@ -229,7 +229,6 @@ namespace TunicArchipelago {
                 Locations.CheckedLocations.Clear();
                 ItemLookup.ItemList.Clear();
                 List<long> LocationIDs = new List<long>();
-
                 foreach (string Key in Locations.VanillaLocations.Keys) {
                     Locations.CheckedLocations.Add(Key, SaveFile.GetInt($"randomizer picked up {Key}") == 1);
                     LocationIDs.Add(Archipelago.instance.integration.session.Locations.GetLocationIdFromName("Tunic", Locations.LocationIdToDescription[Key]));
@@ -240,8 +239,7 @@ namespace TunicArchipelago {
                     foreach (NetworkItem Location in locationInfoPacket.Result.Locations) {
                         ItemLookup.ItemList.Add(Locations.LocationDescriptionToId[Archipelago.instance.integration.session.Locations.GetLocationNameFromId(Location.Location)], new ArchipelagoItem(Archipelago.instance.integration.session.Items.GetItemName(Location.Item), Location.Player));
                     }
-                }).Wait(TimeSpan.FromSeconds(10));
-
+                }).Wait();
                 ItemTracker.PopulateSpoilerLog();
                 GhostHints.GenerateHints();
                 Hints.PopulateHints();

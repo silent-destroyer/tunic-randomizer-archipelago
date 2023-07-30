@@ -148,7 +148,7 @@ namespace TunicArchipelago {
         private IEnumerator<bool> ProcessIncomingItemsStateMachine() {
             while (!cancellationTokenSource.IsCancellationRequested) {
 
-                while (SceneManager.GetActiveScene().name == "TitleScreen" || SceneLoaderPatches.SceneName == "TitleScreen" || lastProcessedItemIndex == -1 || PlayerCharacter.instance.IsDead) {
+                while (SceneManager.GetActiveScene().name == "TitleScreen" || SceneLoaderPatches.SceneName == "TitleScreen" || lastProcessedItemIndex == -1) {
                     yield return true;
                 }
 
@@ -163,10 +163,12 @@ namespace TunicArchipelago {
 
                 if (pendingItem.ItemIndex <= lastProcessedItemIndex) {
                     incomingItems.TryDequeue(out _);
-                    TunicArchipelago.Tracker.SetCollectedItem(itemName);
+                    TunicArchipelago.Tracker.SetCollectedItem(itemName, false);
                     yield return true;
                     continue;
                 }
+
+                //ItemTracker.SaveTrackerFile();
 
                 // Delay until a few seconds after connecting/screen transition
                 while (SpeedrunData.inGameTime < SceneLoaderPatches.TimeOfLastSceneTransition + 3.0f) {
@@ -197,13 +199,10 @@ namespace TunicArchipelago {
                         // Wait for all interactions to finish
                         while (
                             GenericMessage.instance.isActiveAndEnabled ||
+                            GenericPrompt.instance.isActiveAndEnabled ||
                             ItemPresentation.instance.isActiveAndEnabled ||
                             PageDisplay.instance.isActiveAndEnabled ||
-                            NPCDialogue.instance.isActiveAndEnabled ||
-                            GameObject.Find("_GameGUI(Clone)/PauseMenu/") != null ||
-                            GameObject.Find("_OptionsGUI(Clone)") != null || 
-                            SceneManager.GetActiveScene().name == "TitleScreen" || 
-                            SceneLoaderPatches.SceneName == "TitleScreen" || PlayerCharacter.instance.IsDead) {
+                            NPCDialogue.instance.isActiveAndEnabled || PlayerCharacter.InstanceIsDead) {
                             yield return true;
                         }
 

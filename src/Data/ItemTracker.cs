@@ -98,7 +98,7 @@ namespace TunicArchipelago {
             ImportantItems["Trinket Slot"] = 1;
         }
 
-        public void SetCollectedItem(string ItemName) {
+        public void SetCollectedItem(string ItemName, bool WriteToDisk) {
 
             ItemData Item = ItemLookup.Items[ItemName];
 
@@ -152,7 +152,9 @@ namespace TunicArchipelago {
             }
 
             ItemsCollected.Add(Item);
-            SaveTrackerFile();
+            if (WriteToDisk) {
+                SaveTrackerFile();
+            }
         }
 
         public static void SaveTrackerFile() {

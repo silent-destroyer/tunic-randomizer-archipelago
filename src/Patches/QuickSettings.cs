@@ -38,7 +38,7 @@ namespace TunicArchipelago {
                 GUI.color = Color.green;
                 GUI.Label(new Rect(95f, 60f, 150f, 30f), $"Connected!");
                 GUI.color = Color.white;
-                GUI.Label(new Rect(250f, 60f, 300f, 30f), $"(world {Archipelago.instance.integration.session.ConnectionInfo.Slot} of {Archipelago.instance.integration.session.Players.Players.Count})");
+                GUI.Label(new Rect(250f, 60f, 300f, 30f), $"(world {Archipelago.instance.integration.session.ConnectionInfo.Slot} of {Archipelago.instance.integration.session.Players.Players[0].Count-1})");
             } else {
                 GUI.color = Color.red;
                 GUI.Label(new Rect(95f, 60f, 300f, 30f), $"Disconnected");
