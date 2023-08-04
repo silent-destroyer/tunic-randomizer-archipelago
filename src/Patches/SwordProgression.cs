@@ -46,7 +46,7 @@ namespace TunicArchipelago {
                 Inventory.GetItemByName("Level Up - Attack").Quantity += 1;
                 TunicArchipelago.Tracker.ImportantItems["Level Up - Attack"] = Inventory.GetItemByName("Level Up - Attack").Quantity;
                 EnableSecondSword();
-            } else if (SwordLevel == 4) {
+            } else if (SwordLevel >= 4) {
                 Inventory.GetItemByName("Sword").Quantity = 1;
                 SwordPresentation.GetComponent<MeshFilter>().mesh = ModelSwaps.ThirdSword.GetComponent<MeshFilter>().mesh;
                 SwordPresentation.GetComponent<MeshRenderer>().materials = ModelSwaps.ThirdSword.GetComponent<MeshRenderer>().materials;

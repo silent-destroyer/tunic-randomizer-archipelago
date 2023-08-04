@@ -322,7 +322,7 @@ namespace TunicArchipelago {
                                 NewSword.transform.localScale = new Vector3(2f, 2f, 2f);
                                 NewSword.transform.localPosition = Vector3.zero;
                                 Equipment.transform.GetChild(i).GetChild(1).gameObject.SetActive(false);
-                            } else if (SaveFile.GetInt("randomizer sword progression level") == 4) {
+                            } else if (SaveFile.GetInt("randomizer sword progression level") >= 4) {
                                 GameObject NewSword = GameObject.Instantiate(ModelSwaps.ThirdSwordImage);
                                 NewSword.transform.parent = Equipment.transform.GetChild(i);
                                 NewSword.transform.localScale = new Vector3(2f, 2f, 2f);
@@ -346,7 +346,7 @@ namespace TunicArchipelago {
                             EquipButton.transform.GetChild(0).gameObject.SetActive(false);
                             EquipButton.transform.GetChild(2).gameObject.SetActive(true);
                             EquipButton.transform.GetChild(3).gameObject.SetActive(false);
-                        } else if (SaveFile.GetInt("randomizer sword progression level") == 4) {
+                        } else if (SaveFile.GetInt("randomizer sword progression level") >= 4) {
                             EquipButton.transform.GetChild(0).gameObject.SetActive(false);
                             EquipButton.transform.GetChild(2).gameObject.SetActive(false);
                             EquipButton.transform.GetChild(3).gameObject.SetActive(true);

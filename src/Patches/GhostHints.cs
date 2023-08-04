@@ -334,12 +334,12 @@ namespace TunicArchipelago {
                 if (ItemLocation.Player == Archipelago.instance.GetPlayerSlot()) {
                     string Scene = Locations.SimplifiedSceneNames[Locations.VanillaLocations[Locations.LocationDescriptionToId[ItemLocation.Location]].Location.SceneName].ToUpper();
                     string ScenePrefix = Scene == "Trinket Well" ? "%rOi^" : "aht #uh";
-                    Hint = $"bI #uh wA, I saw \"YOUR {Item.ToUpper().Replace(" ", "\" \"")}\" #uh lahst tIm I wuhs {ScenePrefix} \"{Scene}.\"";
+                    Hint = $"bI #uh wA, I saw \"YOUR {Item.ToUpper().Replace(" ", "\" \"")}\" #uh lahst tIm I wuhs {ScenePrefix} \"{Scene.Replace(" ", "\" \"")}.\"";
                 } else {
                     Hint = $"bI #uh wA, I saw \" YOUR {Item.ToUpper().Replace(" ", "\" \"")}\" in \"{Archipelago.instance.GetPlayerName((int)ItemLocation.Player).ToUpper().Replace(" ", "\" \"")}'S WORLD\"";
                 }
 
-                ItemHints.Add(WordWrapString(Hint).Replace($"\" \"", $" "));
+                ItemHints.Add(WordWrapString(Hint));
             }
         }
 
@@ -362,7 +362,7 @@ namespace TunicArchipelago {
                 }
             }
 
-            return formattedHint;
+            return formattedHint.Replace($"\" \"", $" ");
         }
 
 /*        public static void GenerateBarrenAndMoneySceneHints() {

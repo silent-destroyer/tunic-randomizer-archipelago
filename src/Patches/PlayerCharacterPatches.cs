@@ -166,7 +166,7 @@ namespace TunicArchipelago {
                 if (SwordLevel == 3) {
                     LoadSecondSword = true;
                 }
-                if (SwordLevel == 4) {
+                if (SwordLevel >= 4) {
                     LoadThirdSword = true;
                 }
             }
@@ -213,12 +213,10 @@ namespace TunicArchipelago {
                         SaveFile.SetInt("randomizer keys behind bosses", 1);
                     }
                 }
-                if (slotData.TryGetValue("seed", out var ArchipelagoSeed)) {
-                    SaveFile.SetString("archipelago seed", ArchipelagoSeed.ToString());
+                if(slotData.TryGetValue("seed", out var Seed)) {
                     if (SaveFile.GetInt("seed") == 0) {
-                        int Seed = int.Parse(ArchipelagoSeed.ToString().Substring(0, 9), CultureInfo.InvariantCulture);
-                        SaveFile.SetInt("seed", Seed);
-                        Logger.LogInfo("Generated new seed: " + Seed);
+                        SaveFile.SetInt("seed", int.Parse(Seed.ToString(), CultureInfo.InvariantCulture));
+                        Logger.LogInfo("Imported seed from archipelago: " + Seed);
                     } else {
                         Logger.LogInfo("Loading seed: " + SaveFile.GetInt("seed"));
                     }
@@ -243,7 +241,6 @@ namespace TunicArchipelago {
                 ItemTracker.PopulateSpoilerLog();
                 GhostHints.GenerateHints();
                 Hints.PopulateHints();
-
                 if (SaveFile.GetInt("randomizer shuffled abilities") == 1 && SaveFile.GetInt("randomizer obtained page 21") == 0) {
                     foreach (ToggleObjectBySpell SpellToggle in Resources.FindObjectsOfTypeAll<ToggleObjectBySpell>()) {
                         SpellToggle.gameObject.GetComponent<ToggleObjectBySpell>().enabled = false;
@@ -327,7 +324,7 @@ namespace TunicArchipelago {
                     __instance.hp -= 30;
                     if (SaveFile.GetInt("randomizer sword progression level") == 3) {
                         GameObject.Find("_Fox(Clone)/Fox/root/pelvis/chest/arm_upper.R/arm_lower.R/hand.R/sword_proxy").transform.GetChild(4).GetComponent<MeshRenderer>().materials = ModelSwaps.SecondSword.GetComponent<MeshRenderer>().materials;
-                    } else if (SaveFile.GetInt("randomizer sword progression level") == 4) {
+                    } else if (SaveFile.GetInt("randomizer sword progression level") >= 4) {
                         GameObject.Find("_Fox(Clone)/Fox/root/pelvis/chest/arm_upper.R/arm_lower.R/hand.R/sword_proxy").transform.GetChild(4).GetComponent<MeshRenderer>().materials = ModelSwaps.ThirdSword.GetComponent<MeshRenderer>().materials;
                     } else {
                         GameObject.Find("_Fox(Clone)/Fox/root/pelvis/chest/arm_upper.R/arm_lower.R/hand.R/sword_proxy").GetComponent<MeshRenderer>().materials = CustomItemBehaviors.Sword.GetComponent<MeshRenderer>().materials;

@@ -135,7 +135,13 @@ namespace TunicArchipelago {
             string LocationId = $"{__instance.name} [Shop]";
             if (Locations.LocationIdToDescription.ContainsKey(LocationId)) {
                 int Price = TunicArchipelago.Settings.CheaperShopItemsEnabled ? 300 : __instance.price;
+                ArchipelagoItem ShopItem = ItemLookup.ItemList[LocationId];
                 __instance.confirmPurchaseFormattedLanguageLine.text = $"bI for {Price} [money]?";
+
+                if (ShopItem.Player != Archipelago.instance.GetPlayerSlot()) {
+                    __instance.confirmPurchaseFormattedLanguageLine.text = GhostHints.WordWrapString($"bI for {Price} [money]?\n\"({Archipelago.instance.GetPlayerName(ShopItem.Player).ToUpper().Replace(" ", "\" \"")}'S {ShopItem.ItemName.ToUpper().Replace($" ", $"\" \"")})\"");
+                    Logger.LogInfo(GhostHints.WordWrapString($"bI for {Price} [money]?\n\"({Archipelago.instance.GetPlayerName(ShopItem.Player).ToUpper().Replace(" ", "\" \"")}'S {ShopItem.ItemName.ToUpper().Replace($" ", $"\" \"")})\""));
+                }
             } else {
                 __instance.confirmPurchaseFormattedLanguageLine.text = $"bI for {__instance.price} [money]?";
             }
@@ -232,6 +238,9 @@ namespace TunicArchipelago {
 
                     InventoryItem.Quantity += Item.QuantityToGive;
                     ItemPresentation.PresentItem(InventoryItem);
+                }
+                if (TunicArchipelago.Settings.ShowItemsEnabled) {
+                    ModelSwaps.SwapItemsInScene();
                 }
             }
 
