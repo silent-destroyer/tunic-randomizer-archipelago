@@ -290,16 +290,18 @@ namespace TunicArchipelago {
             if (SceneLoaderPatches.SceneName == "Shop") {
                 SetupShopItems();
             } else {
-                if (true) {
+                if (TunicArchipelago.Settings.ShowItemsEnabled) {
                     foreach (ItemPickup ItemPickup in Resources.FindObjectsOfTypeAll<ItemPickup>()) {
-                        string checkId = $"{ItemPickup.itemToGive.name} [{SceneLoaderPatches.SceneName}]";
-                        if (ItemPickup != null && ItemPickup.itemToGive != null && ItemLookup.ItemList.ContainsKey(checkId)) {
-                            if (ItemPickup.itemToGive.name == "Hexagon Red") {
-                                SetupRedHexagonPlinth();
-                            } else if (ItemPickup.itemToGive.name == "Hexagon Blue") {
-                                SetupBlueHexagonPlinth();
-                            } else if(ItemPickup.itemToGive.name != "MoneySmall") {
-                                SetupItemPickup(ItemPickup);
+                        if (ItemPickup != null && ItemPickup.itemToGive != null) {
+                            string checkId = $"{ItemPickup.itemToGive.name} [{SceneLoaderPatches.SceneName}]";
+                            if(ItemLookup.ItemList.ContainsKey(checkId)) {
+                                if (ItemPickup.itemToGive.name == "Hexagon Red") {
+                                    SetupRedHexagonPlinth();
+                                } else if (ItemPickup.itemToGive.name == "Hexagon Blue") {
+                                    SetupBlueHexagonPlinth();
+                                } else if (ItemPickup.itemToGive.name != "MoneySmall") {
+                                    SetupItemPickup(ItemPickup);
+                                }
                             }
                         }
                     }
@@ -352,7 +354,7 @@ namespace TunicArchipelago {
                     } else if (Item.ItemNameForInventory == "Hyperdash") {
                         Chest.transform.GetChild(1).GetComponent<SkinnedMeshRenderer>().materials = Chests["Hyperdash"].GetComponent<MeshRenderer>().materials;
                         Chest.GetComponent<FMODUnity.StudioEventEmitter>().EventReference = Chests["Hyperdash"].GetComponent<FMODUnity.StudioEventEmitter>().EventReference;
-                    } else if (Item.ItemNameForInventory.Contains("Hexagon")) {
+                    } else if (Item.ItemNameForInventory.Contains("Hexagon") && Item.Type != ItemTypes.HEXAGONQUEST) {
                         Material[] Mats = new Material[] { Items[Item.ItemNameForInventory].GetComponent<MeshRenderer>().material, Items[Item.ItemNameForInventory].GetComponent<MeshRenderer>().material };
                         Chest.transform.GetChild(1).GetComponent<SkinnedMeshRenderer>().materials = Mats;
                         Chest.GetComponent<FMODUnity.StudioEventEmitter>().EventReference = Chests["Normal"].GetComponent<FMODUnity.StudioEventEmitter>().EventReference;
@@ -851,33 +853,27 @@ namespace TunicArchipelago {
             }
         }
 
+        public static void SetupHexagonQuest() {
+            try {
+                Items["Hexagon Blue"].GetComponent<MeshRenderer>().materials = Items["GoldenTrophy_2"].GetComponent<MeshRenderer>().materials;
+                Inventory.GetItemByName("Hexagon Blue").collectionMessage = ScriptableObject.CreateInstance<LanguageLine>();
+                Inventory.GetItemByName("Hexagon Blue").collectionMessage.text = $"    #uh sEl wEkinz\"...\"";
+            } catch (Exception e) {
+                Logger.LogInfo(e.Message);
+            }
+        }
 
-        /*        
-               
-                public static void SetupHexagonQuest() {
-                    try {
-                        Items["Hexagon Blue"].GetComponent<MeshRenderer>().materials = Items["GoldenTrophy_2"].GetComponent<MeshRenderer>().materials;
-                        Inventory.GetItemByName("Hexagon Blue").collectionMessage = ScriptableObject.CreateInstance<LanguageLine>();
-                        Inventory.GetItemByName("Hexagon Blue").collectionMessage.text = $"    #uh sEl wEkinz\"...\"";
-                    } catch (Exception e) {
-                        Logger.LogInfo(e.Message);
-                    }
-                }
-
-                public static void RestoreOriginalHexagons() {
-                    try {
-                        Items["Hexagon Red"].GetComponent<MeshRenderer>().materials = RedKeyMaterial.GetComponent<MeshRenderer>().materials;
-                        Items["Hexagon Green"].GetComponent<MeshRenderer>().materials = GreenKeyMaterial.GetComponent<MeshRenderer>().materials;
-                        Items["Hexagon Blue"].GetComponent<MeshRenderer>().materials = BlueKeyMaterial.GetComponent<MeshRenderer>().materials;
-                        Inventory.GetItemByName("Hexagon Blue").collectionMessage = ScriptableObject.CreateInstance<LanguageLine>();
-                        Inventory.GetItemByName("Hexagon Blue").collectionMessage.text = $"fownd ahn Itehm!";
-                    } catch (Exception e) {
-                        Logger.LogInfo(e.Message);
-                    }
-                }
-
-
-              */
+        public static void RestoreOriginalHexagons() {
+            try {
+                Items["Hexagon Red"].GetComponent<MeshRenderer>().materials = RedKeyMaterial.GetComponent<MeshRenderer>().materials;
+                Items["Hexagon Green"].GetComponent<MeshRenderer>().materials = GreenKeyMaterial.GetComponent<MeshRenderer>().materials;
+                Items["Hexagon Blue"].GetComponent<MeshRenderer>().materials = BlueKeyMaterial.GetComponent<MeshRenderer>().materials;
+                Inventory.GetItemByName("Hexagon Blue").collectionMessage = ScriptableObject.CreateInstance<LanguageLine>();
+                Inventory.GetItemByName("Hexagon Blue").collectionMessage.text = $"fownd ahn Itehm!";
+            } catch (Exception e) {
+                Logger.LogInfo(e.Message);
+            }
+        }
 
         public static void SetupDathStoneItemPresentation() {
             if (!DathStonePresentationAlreadySetup) {

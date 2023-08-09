@@ -64,9 +64,6 @@ namespace TunicArchipelago {
                 } else if (AbilityUnlockPage == "21") {
                     AreaData.topLine.text = $"\"HOLY CROSS Unlocked\"";
                     AreaData.bottomLine.text = $"sEk wuht iz rItfuhlE yorz";
-                    foreach (ToggleObjectBySpell SpellToggle in Resources.FindObjectsOfTypeAll<ToggleObjectBySpell>()) {
-                        SpellToggle.gameObject.GetComponent<ToggleObjectBySpell>().enabled = true;
-                    }
                 } else if (AbilityUnlockPage == "26") {
                     AreaData.topLine.text = $"\"ICE ROD Unlocked\"";
                     AreaData.bottomLine.text = $"#A wOnt nO wuht hit #ehm";

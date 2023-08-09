@@ -118,13 +118,14 @@ namespace TunicArchipelago {
                     PlayerCharacter.instance.gameObject.GetComponent<Rotate>().eulerAnglesPerSecond += new Vector3(0, 3.5f, 0);
                 }
             }
-            if (SaveFile.GetInt("randomizer shuffled abilities") == 1 && SaveFile.GetInt($"randomizer obtained page 12") == 0) {
-                __instance.prayerBeginTimer = 0;
+            if(SaveFile.GetInt("randomizer shuffled abilities") == 1) { 
+                if(SaveFile.GetInt("randomizer prayer unlocked") == 0) {
+                    __instance.prayerBeginTimer = 0;
+                }
+                if(SaveFile.GetInt("randomizer ice rod unlocked") == 0) {
+                    TechbowItemBehaviour.kIceShotWindow = 0;
+                }
             }
-            if (SaveFile.GetInt("randomizer shuffled abilities") == 1 && SaveFile.GetInt($"randomizer obtained page 26") == 0) {
-                TechbowItemBehaviour.kIceShotWindow = 0;
-            }
-
         }
 
 
@@ -152,6 +153,8 @@ namespace TunicArchipelago {
             CustomItemBehaviors.CanTakeGoldenHit = false;
             CustomItemBehaviors.CanSwingGoldenSword = false;
 
+            TunicArchipelago.Tracker.ImportantItems["Coins Tossed"] = StateVariable.GetStateVariableByName("Trinket Coins Tossed").IntValue;
+
             Inventory.GetItemByName("Homeward Bone Statue").icon = Inventory.GetItemByName("Dash Stone").icon;
             Inventory.GetItemByName("Spear").icon = Inventory.GetItemByName("MoneyBig").icon;
             if (Inventory.GetItemByName("Spear").TryCast<ButtonAssignableItem>() != null) {
@@ -171,15 +174,6 @@ namespace TunicArchipelago {
                 }
             }
 
-            /*            if (SaveFile.GetString("randomizer game mode") == "HEXAGONQUEST") {
-                            TunicRandomizer.Tracker.ImportantItems["Pages"] = 28;
-                            TunicRandomizer.Tracker.ImportantItems["Hexagon Gold"] = SaveFile.GetInt("randomizer inventory quantity Hexagon Gold");
-                            SaveFile.SetInt("last page viewed", 0);
-                            ModelSwaps.SetupHexagonQuest();
-                        } else {
-                            ModelSwaps.RestoreOriginalHexagons();
-                        }*/
-
             if (Archipelago.instance.integration.connected) {
                 Dictionary<string, object> slotData = Archipelago.instance.GetPlayerSlotData();
                 SaveFile.SetInt("archipelago", 1);
@@ -187,7 +181,20 @@ namespace TunicArchipelago {
                 if (Locations.VanillaLocations.Count == 0) {
                     Locations.CreateLocationLookups();
                 }
-
+                if (slotData.TryGetValue("hexagon_quest", out var hexagonQuest)) {
+                    if (SaveFile.GetInt("randomizer hexagon quest enabled") == 0 && hexagonQuest.ToString() == "1") {
+                        SaveFile.SetInt("randomizer hexagon quest enabled", 1);
+                        for (int i = 0; i < 28; i++) {
+                            SaveFile.SetInt($"randomizer obtained page {i}", 1);
+                        }
+                        StateVariable.GetStateVariableByName("Placed Hexagon 1 Red").BoolValue = true;
+                        StateVariable.GetStateVariableByName("Placed Hexagon 2 Green").BoolValue = true;
+                        StateVariable.GetStateVariableByName("Placed Hexagon 3 Blue").BoolValue = true;
+                        StateVariable.GetStateVariableByName("Placed Hexagons ALL").BoolValue = true;
+                        StateVariable.GetStateVariableByName("Has Been Betrayed").BoolValue = true;
+                        StateVariable.GetStateVariableByName("Has Died To God").BoolValue = true;
+                    }
+                }
                 if (slotData.TryGetValue("start_with_sword", out var startWithSword)) {
                     if (SaveFile.GetInt("randomizer started with sword") == 0 && startWithSword.ToString() == "1") {
                         Logger.LogInfo("start with sword enabled");
@@ -199,6 +206,17 @@ namespace TunicArchipelago {
                     if (SaveFile.GetInt("randomizer shuffled abilities") == 0 && abilityShuffling.ToString() == "1") {
                         Logger.LogInfo("ability shuffling enabled");
                         SaveFile.SetInt("randomizer shuffled abilities", 1);
+                        if (SaveFile.GetInt("randomizer hexagon quest enabled") == 1)
+                        {
+                            SaveFile.SetInt("randomizer hexagon quest prayer requirement", int.Parse(slotData["Hexagon Quest Prayer"].ToString(), CultureInfo.InvariantCulture));
+                            SaveFile.SetInt("randomizer hexagon quest holy cross requirement", int.Parse(slotData["Hexagon Quest Holy Cross"].ToString(), CultureInfo.InvariantCulture));
+                            SaveFile.SetInt("randomizer hexagon quest ice rod requirement", int.Parse(slotData["Hexagon Quest Ice Rod"].ToString(), CultureInfo.InvariantCulture));
+                        }
+                    }
+                    if(abilityShuffling.ToString() == "0") {
+                        SaveFile.SetInt("randomizer prayer unlocked", 1);
+                        SaveFile.SetInt("randomizer holy cross unlocked", 1);
+                        SaveFile.SetInt("randomizer ice rod unlocked", 1);
                     }
                 }
                 if (slotData.TryGetValue("sword_progression", out var swordProgression)) {
@@ -241,10 +259,18 @@ namespace TunicArchipelago {
                 ItemTracker.PopulateSpoilerLog();
                 GhostHints.GenerateHints();
                 Hints.PopulateHints();
-                if (SaveFile.GetInt("randomizer shuffled abilities") == 1 && SaveFile.GetInt("randomizer obtained page 21") == 0) {
+                if (SaveFile.GetInt("randomizer shuffled abilities") == 1 && SaveFile.GetInt("randomizer holy cross unlocked") == 0) {
                     foreach (ToggleObjectBySpell SpellToggle in Resources.FindObjectsOfTypeAll<ToggleObjectBySpell>()) {
                         SpellToggle.gameObject.GetComponent<ToggleObjectBySpell>().enabled = false;
                     }
+                }
+
+                if(SaveFile.GetInt("randomizer hexagon quest enabled") == 1) {
+                    TunicArchipelago.Tracker.ImportantItems["Pages"] = 28;
+                    SaveFile.SetInt("last page viewed", 0);
+                    ModelSwaps.SetupHexagonQuest();
+                } else {
+                    ModelSwaps.RestoreOriginalHexagons();
                 }
 
                 FairyTargets.CreateFairyTargets();
@@ -303,7 +329,7 @@ namespace TunicArchipelago {
 
         public static bool Monster_IDamageable_ReceiveDamage_PrefixPatch(Monster __instance) {
 
-            if (__instance.name == "Foxgod" && SaveFile.GetString("randomizer game mode") == "HEXAGONQUEST") {
+            if (__instance.name == "Foxgod" && SaveFile.GetInt("randomizer hexagon quest enabled") == 1) {
                 return false;
             }
             if (__instance.name == "_Fox(Clone)") {

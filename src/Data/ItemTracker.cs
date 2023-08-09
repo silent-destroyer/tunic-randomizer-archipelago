@@ -187,15 +187,17 @@ namespace TunicArchipelago {
             foreach (string MajorItem in ItemLookup.MajorItems) {
                 if(MajorItem == "Gold Hexagon") { continue; }
                 bool HasItem = false;
-                GhostHints.ArchipelagoHint Hint = Locations.MajorItemLocations[MajorItem];
-                foreach(NetworkItem item in Archipelago.instance.integration.session.Items.AllItemsReceived) {
-                    if (Archipelago.instance.integration.session.Items.GetItemName(item.Item) == MajorItem && item.Player == Archipelago.instance.GetPlayerSlot()) {
-                        HasItem = true;
+                if(Locations.MajorItemLocations.ContainsKey(MajorItem) && Locations.MajorItemLocations[MajorItem].Count > 0) {
+                    GhostHints.ArchipelagoHint Hint = Locations.MajorItemLocations[MajorItem][0];
+                    foreach (NetworkItem item in Archipelago.instance.integration.session.Items.AllItemsReceived) {
+                        if (Archipelago.instance.integration.session.Items.GetItemName(item.Item) == MajorItem && item.Player == Archipelago.instance.GetPlayerSlot()) {
+                            HasItem = true;
+                        }
                     }
-                }
 
-                string Spoiler = $"\t{(HasItem ? "x" : "-")} {MajorItem}: {Hint.Location} ({Archipelago.instance.GetPlayerName((int)Hint.Player)}'s World)";
-                SpoilerLogLines.Add(Spoiler);
+                    string Spoiler = $"\t{(HasItem ? "x" : "-")} {MajorItem}: {Hint.Location} ({Archipelago.instance.GetPlayerName((int)Hint.Player)}'s World)";
+                    SpoilerLogLines.Add(Spoiler);
+                }
             }
             foreach (string Key in SpoilerLog.Keys) {
                 SpoilerLogLines.Add(Locations.SceneNamesForSpoilerLog[Key]);

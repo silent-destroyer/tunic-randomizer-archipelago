@@ -19,7 +19,8 @@ namespace TunicArchipelago {
         PAGE,
         RELIC,
         SPECIAL,
-        FOOL
+        FOOL,
+        HEXAGONQUEST
     }
 
     public struct BonusUpgrade {
@@ -158,7 +159,7 @@ namespace TunicArchipelago {
             { "Red Hexagon", new ItemData("Red Hexagon", "useful", "Hexagon Red", ItemTypes.INVENTORY, 1) },
             { "Green Hexagon", new ItemData("Green Hexagon", "useful", "Hexagon Green", ItemTypes.INVENTORY, 1) },
             { "Blue Hexagon", new ItemData("Blue Hexagon", "useful", "Hexagon Blue", ItemTypes.INVENTORY, 1) },
-            { "Gold Hexagon", new ItemData("Blue Hexagon", "useful", "Hexagon Gold", ItemTypes.SPECIAL, 1) },
+            { "Gold Hexagon", new ItemData("Gold Hexagon", "useful", "Hexagon Gold", ItemTypes.HEXAGONQUEST, 1) },
 
             // Upgrades and Relics
             { "ATT Offering", new ItemData("ATT Offering", "useful", "Upgrade Offering - Attack - Tooth", ItemTypes.INVENTORY, 1) },
@@ -173,7 +174,6 @@ namespace TunicArchipelago {
             { "Hero Relic - HP", new ItemData("Hero Relic - HP", "useful", "Relic - Hero Pendant HP", ItemTypes.RELIC, 1) },
             { "Hero Relic - MP", new ItemData("Hero Relic - MP", "useful", "Relic - Hero Pendant MP", ItemTypes.RELIC, 1) },
             { "Hero Relic - SP", new ItemData("Hero Relic - SP", "useful", "Relic - Hero Pendant SP", ItemTypes.RELIC, 1) },
-
 
             // Trinket Cards
             { "Orange Peril Ring", new ItemData("Orange Peril Ring", "useful", "Trinket - RTSR", ItemTypes.TRINKET, 1) },

@@ -203,21 +203,22 @@ namespace TunicArchipelago {
                     (FoolOption == RandomizerSettings.FoolTrapOption.DOUBLE && AmountToGive <= 20) ||
                     (FoolOption == RandomizerSettings.FoolTrapOption.ONSLAUGHT && AmountToGive <= 30)) {
                     ApplyFoolEffect();
-                }
-
-                Dictionary<string, int> OriginalShopPrices = new Dictionary<string, int>() {
+                } else {
+                    Dictionary<string, int> OriginalShopPrices = new Dictionary<string, int>() {
                     { "Shop - Potion 1", 300 },
                     { "Shop - Potion 2", 1000 },
                     { "Shop - Coin 1", 999 },
                     { "Shop - Coin 2", 999 }
                 };
-                
-                // If buying your own money item from the shop, increase amount rewarded
-                if (OriginalShopPrices.ContainsKey(LocationId) && (networkItem.Player == Archipelago.instance.GetPlayerSlot())) {
-                    AmountToGive += OriginalShopPrices[LocationId];
+
+                    // If buying your own money item from the shop, increase amount rewarded
+                    if (OriginalShopPrices.ContainsKey(LocationId) && (networkItem.Player == Archipelago.instance.GetPlayerSlot())) {
+                        AmountToGive += OriginalShopPrices[LocationId];
+                    }
+
+                    CoinSpawner.SpawnCoins(AmountToGive, PlayerCharacter.instance.transform.position);
                 }
 
-                CoinSpawner.SpawnCoins(AmountToGive, PlayerCharacter.instance.transform.position);
             }
 
             if (Item.Type == ItemTypes.INVENTORY || Item.Type == ItemTypes.TRINKET) {
@@ -257,15 +258,26 @@ namespace TunicArchipelago {
 
             if (Item.Type == ItemTypes.PAGE) {
                 SaveFile.SetInt($"randomizer obtained page {Item.ItemNameForInventory}", 1);
-                PageDisplay.ShowPage(int.Parse(Item.ItemNameForInventory, CultureInfo.InvariantCulture));
-                if (SaveFile.GetInt("randomizer shuffled abilities") == 1)
-                {
-                    if (Item.ItemNameForInventory == "12" || Item.ItemNameForInventory == "21" || Item.ItemNameForInventory == "26")
-                    {
+                if (SaveFile.GetInt("randomizer shuffled abilities") == 1) {
+                    Dictionary<string, string> pagesForAbilities = new Dictionary<string, string>() {
+                        { "12", "randomizer prayer unlocked" },
+                        { "21", "randomizer holy cross unlocked" },
+                        { "26", "randomizer ice rod unlocked" },
+                    };
+                    if (pagesForAbilities.ContainsKey(Item.ItemNameForInventory)) {
                         PageDisplayPatches.ShowAbilityUnlock = true;
                         PageDisplayPatches.AbilityUnlockPage = Item.ItemNameForInventory;
+                        SaveFile.SetInt(pagesForAbilities[Item.ItemNameForInventory], 1);
+                        SaveFile.SetFloat($"{pagesForAbilities[Item.ItemNameForInventory]} time", SpeedrunData.inGameTime);
+                        if(Item.ItemNameForInventory == "21") {
+                            foreach (ToggleObjectBySpell SpellToggle in Resources.FindObjectsOfTypeAll<ToggleObjectBySpell>()) {
+                                SpellToggle.gameObject.GetComponent<ToggleObjectBySpell>().enabled = true;
+                            }
+                        }
                     }
                 }
+
+                PageDisplay.ShowPage(int.Parse(Item.ItemNameForInventory, CultureInfo.InvariantCulture));
             }
 
             if (Item.Type == ItemTypes.GOLDENTROPHY) {
@@ -308,6 +320,33 @@ namespace TunicArchipelago {
             if (Item.Type == ItemTypes.SPECIAL) {
                 Inventory.GetItemByName("Homeward Bone Statue").Quantity += Item.QuantityToGive;
                 ItemPresentation.PresentItem(Inventory.GetItemByName("Key Special"));
+            }
+
+            if(Item.Type == ItemTypes.HEXAGONQUEST) {
+                SaveFile.SetInt("randomizer inventory quantity Hexagon Gold", SaveFile.GetInt("randomizer inventory quantity Hexagon Gold") + 1);
+
+                int GoldHexes = SaveFile.GetInt("randomizer inventory quantity Hexagon Gold");
+
+                if (GoldHexes == SaveFile.GetInt("randomizer hexagon quest prayer requirement")) {
+                    SaveFile.SetInt("randomizer prayer unlocked", 1);
+                    SaveFile.SetFloat("randomizer prayer unlocked time", SpeedrunData.inGameTime);
+                    ShowNotification($"\"PRAYER Unlocked\"", $"Jahnuhl yor wizduhm, rooin sEkur");
+                }
+                if (GoldHexes == SaveFile.GetInt("randomizer hexagon quest holy cross requirement"))
+                {
+                    SaveFile.SetInt("randomizer holy cross unlocked", 1);
+                    SaveFile.SetFloat("randomizer holy cross unlocked time", SpeedrunData.inGameTime);
+                    ShowNotification($"\"HOLY CROSS Unlocked\"", $"sEk wuht iz rItfuhlE yorz");
+                    foreach (ToggleObjectBySpell SpellToggle in Resources.FindObjectsOfTypeAll<ToggleObjectBySpell>()) {
+                        SpellToggle.gameObject.GetComponent<ToggleObjectBySpell>().enabled = true;
+                    }
+                }
+                if (GoldHexes == SaveFile.GetInt("randomizer hexagon quest ice rod requirement")) {
+                    SaveFile.SetInt("randomizer ice rod unlocked", 1);
+                    SaveFile.SetFloat("randomizer ice rod unlocked time", SpeedrunData.inGameTime);
+                    ShowNotification($"\"ICE ROD Unlocked\"", $"#A wOnt nO wuht hit #ehm");
+                }
+                ItemPresentation.PresentItem(Inventory.GetItemByName("Hexagon Blue"));
             }
 
             if (ItemLookup.MajorItems.Contains(Item.Name)) {

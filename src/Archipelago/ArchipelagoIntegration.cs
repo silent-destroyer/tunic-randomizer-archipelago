@@ -70,7 +70,7 @@ namespace TunicArchipelago {
             TunicArchipelago.Tracker = new ItemTracker();
 
             try {
-                LoginResult = session.TryConnectAndLogin("Tunic", TunicArchipelago.Settings.ConnectionSettings.Player, ItemsHandlingFlags.AllItems, requestSlotData: true);
+                LoginResult = session.TryConnectAndLogin("Tunic", TunicArchipelago.Settings.ConnectionSettings.Player, ItemsHandlingFlags.AllItems, requestSlotData: true, password: TunicArchipelago.Settings.ConnectionSettings.Password);
             } catch (Exception e) {
                 LoginResult = new LoginFailure(e.GetBaseException().Message);
             }
@@ -93,6 +93,8 @@ namespace TunicArchipelago {
 
                 deathLinkService.OnDeathLinkReceived += (deathLinkObject) => {
                     Logger.LogInfo("Death link received");
+                    SaveFile.SetInt("hp_lost", 1000);
+                    PlayerCharacter.instance.gameObject.GetComponent<FireController>().FireAmount = 3;
                 };
 
                 if (TunicArchipelago.Settings.DeathLinkEnabled) {

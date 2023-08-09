@@ -75,56 +75,6 @@ namespace TunicArchipelago {
             TunicArchipelago.Settings.DeathLinkEnabled = DeathLink;
             GUI.skin.label.fontSize = 20;
             GUI.Label(new Rect(10f, 370f, 500f, 30f), $"More settings in options menu!");
-
-            //bool Disconnect = GUI.Toggle(new Rect(10f, 60f, 125f, 30f), TunicRandomizer.Settings.GameMode == RandomizerSettings.GameModes.RANDOMIZER, "Play");
-            /*bool ToggleRandomizer = GUI.Toggle(new Rect(10f, 60f, 125f, 30f), TunicRandomizer.Settings.GameMode == RandomizerSettings.GameModes.RANDOMIZER, "Play");
-            if (ToggleRandomizer) {
-                TunicRandomizer.Settings.GameMode = RandomizerSettings.GameModes.RANDOMIZER;
-            }
-            bool ToggleHexagonQuest = GUI.Toggle(new Rect(140f, 60f, 175f, 30f), TunicRandomizer.Settings.GameMode == RandomizerSettings.GameModes.HEXAGONQUEST, "Hexagon Quest");
-
-            if (ToggleHexagonQuest) {
-                TunicRandomizer.Settings.GameMode = RandomizerSettings.GameModes.HEXAGONQUEST;
-            }
-            GUI.Label(new Rect(10f, 95f, 200f, 30f), "Logic Settings");
-            bool TopggleBossKeys = GUI.Toggle(new Rect(10f, 140f, 180f, 30f), TunicRandomizer.Settings.KeysBehindBosses, "Keys Behind Bosses");
-            TunicRandomizer.Settings.KeysBehindBosses = TopggleBossKeys;
-            bool ToggleSwordProgression = GUI.Toggle(new Rect(240f, 140f, 180f, 30f), TunicRandomizer.Settings.SwordProgressionEnabled, "Sword Progression");
-            TunicRandomizer.Settings.SwordProgressionEnabled = ToggleSwordProgression;
-            bool ToggleSwordStart = GUI.Toggle(new Rect(10f, 180f, 175f, 30f), TunicRandomizer.Settings.StartWithSwordEnabled, "Start With Sword");
-            TunicRandomizer.Settings.StartWithSwordEnabled = ToggleSwordStart;
-            bool ToggleAbilityShuffle = GUI.Toggle(new Rect(240f, 180f, 175f, 30f), TunicRandomizer.Settings.ShuffleAbilities, "Shuffle Abilities");
-            TunicRandomizer.Settings.ShuffleAbilities = ToggleAbilityShuffle;
-            GUI.skin.button.fontSize = 20;
-            GUI.Label(new Rect(10f, 220f, 300f, 30f), $"Custom Seed: {(CustomSeed == 0 ? "Not Set" : CustomSeed.ToString())}");
-
-            bool GenerateSeed = GUI.Button(new Rect(10f, 260f, 200f, 30f), "Generate Seed");
-            if (GenerateSeed) {
-                CustomSeed = new System.Random().Next();
-            }
-            bool PasteSeed = GUI.Button(new Rect(220f, 260f, 200f, 30f), "Paste Seed");
-            if (PasteSeed) {
-                try {
-                    CustomSeed = int.Parse(GUIUtility.systemCopyBuffer, CultureInfo.InvariantCulture);
-                } catch (System.Exception e) {
-
-                }
-            }
-            bool CopySettings = GUI.Button(new Rect(10f, 300f, 200f, 30f), "Copy Seed + Settings");
-            if (CopySettings) {
-                CopyQuickSettings();
-            }
-            bool PasteSettings = GUI.Button(new Rect(220f, 300f, 200f, 30f), "Paste Seed + Settings");
-            if (PasteSettings) {
-                PasteQuickSettings();
-            }
-
-            if (CustomSeed != 0) {
-                bool ClearSeed = GUI.Button(new Rect(300f, 220f, 110f, 30f), "Clear");
-                if (ClearSeed) {
-                    CustomSeed = 0;
-                }
-            }*/
         }
 
         private static void RefreshSettings() {

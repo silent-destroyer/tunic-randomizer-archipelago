@@ -311,10 +311,10 @@ namespace TunicArchipelago {
                 string Text = $"<size=78%><#FFFFFF>";
                 List<float> HexTimes = new List<float>();
                 List<string> Times = new List<string>();
-                if (SaveFile.GetString("randomizer game mode") == "HEXAGONQUEST") {
-                    Text += $"1st Hex:\t{FormatTime(SaveFile.GetFloat("randomizer Hexagon Gold 1 time"), true)}\t" +
-                            $"10th Hex:\t{FormatTime(SaveFile.GetFloat("randomizer Hexagon Gold 10 time"), true)}\n" +
-                            $"20th Hex:\t{FormatTime(SaveFile.GetFloat("randomizer Hexagon Gold 20 time"), true)}\t";
+                if (SaveFile.GetInt("randomizer hexagon quest enabled") == 1) {
+                    Text += $"1st Hex:\t{FormatTime(SaveFile.GetFloat("randomizer Gold Hexagon 1 time"), true)}\t" +
+                            $"10th Hex:\t{FormatTime(SaveFile.GetFloat("randomizer Gold Hexagon 10 time"), true)}\n" +
+                            $"20th Hex:\t{FormatTime(SaveFile.GetFloat("randomizer Gold Hexagon 20 time"), true)}\t";
                 } else {
                     Text += $"Red Hex:\t{FormatTime(SaveFile.GetFloat("randomizer Red Hexagon 1 time"), true)}\t" +
                             $"Green Hex:\t{FormatTime(SaveFile.GetFloat("randomizer Green Hexagon 1 time"), true)}\n" +
@@ -329,8 +329,8 @@ namespace TunicArchipelago {
                         $"Laurels:\t{FormatTime(HyperdashTime, true)}\n";
                 int Total = 6;
                 if (SaveFile.GetInt("randomizer shuffled abilities") == 1) {
-                    float PrayerTime = SaveFile.GetFloat("randomizer Pages 24-25 (Prayer) 1 time");
-                    float HolyCrossTime = SaveFile.GetFloat("randomizer Pages 42-43 (Holy Cross) 1 time");
+                    float PrayerTime = SaveFile.GetFloat("randomizer prayer unlocked time");
+                    float HolyCrossTime = SaveFile.GetFloat("randomizer holy cross unlocked time");
                     Text += $"Prayer:\t{FormatTime(PrayerTime, true)}\t" +
                             $"Holy Cross:\t{FormatTime(HolyCrossTime, true)}";
                     Total = 8;

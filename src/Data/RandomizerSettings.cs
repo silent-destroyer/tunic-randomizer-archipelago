@@ -10,31 +10,6 @@ namespace TunicArchipelago {
 
         public ConnectionSettings ConnectionSettings { get; set; }
 
-        // Logic Settings
-/*        public GameModes GameMode {
-            get;
-            set;
-        }
-
-        public bool KeysBehindBosses {
-            get;
-            set;
-        }
-
-        public bool StartWithSwordEnabled {
-            get;
-            set;
-        }
-
-        public bool SwordProgressionEnabled {
-            get;
-            set;
-        }
-
-        public bool ShuffleAbilities {
-            get;
-            set;
-        }*/
         // Archipelago Settings
         public bool DeathLinkEnabled {
             get;
@@ -124,11 +99,6 @@ namespace TunicArchipelago {
         public bool UseCustomTexture {
             get;
             set;
-        }
-
-        public enum GameModes {
-            RANDOMIZER,
-            HEXAGONQUEST
         }
 
         public enum FoolTrapOption {

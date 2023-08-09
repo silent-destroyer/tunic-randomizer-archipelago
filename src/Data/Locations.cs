@@ -18,7 +18,7 @@ namespace TunicArchipelago {
         public static Dictionary<string, VanillaCheck> VanillaLocations = new Dictionary<string, VanillaCheck>() { };
         public static Dictionary<string, bool> CheckedLocations = new Dictionary<string, bool>();
 
-        public static Dictionary<string, ArchipelagoHint> MajorItemLocations = new Dictionary<string, ArchipelagoHint>();
+        public static Dictionary<string, List<ArchipelagoHint>> MajorItemLocations = new Dictionary<string, List<ArchipelagoHint>>();
 
         public static List<string> AllScenes = new List<string>();
 
@@ -40,16 +40,24 @@ namespace TunicArchipelago {
             MajorItemLocations.Clear();
 
             foreach (string Item in ItemLookup.MajorItems) {
+                if(!MajorItemLocations.ContainsKey(Item)) {
+                    MajorItemLocations.Add(Item, new List<ArchipelagoHint>());
+                }
                 if(SlotData.ContainsKey(Item)) {
                     JArray jarray = JArray.Parse(SlotData[Item].ToString());
                     int i = 0;
                     ArchipelagoHint hint = new ArchipelagoHint();
                     hint.Item = Item;
                     foreach(JValue v in jarray) {
-                        if (i == 0) { hint.Location = (string)v.Value; i++; }
-                        else if (i == 1) { hint.Player = (long)v.Value; i = 0; }
+                        if (i % 2 == 0) { 
+                            hint.Location = (string)v.Value;
+                        }
+                        else if (i % 2 != 0) { 
+                            hint.Player = (long)v.Value;
+                            MajorItemLocations[Item].Add(hint);
+                        }
+                        i++;
                     }
-                    MajorItemLocations.Add(Item, hint);
                 }
             }
         }

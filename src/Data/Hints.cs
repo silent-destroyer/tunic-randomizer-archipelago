@@ -32,7 +32,7 @@ namespace TunicArchipelago {
 
             int Player = Archipelago.instance.GetPlayerSlot();
 
-            ArchipelagoHint Lantern = Locations.MajorItemLocations["Lantern"];
+            ArchipelagoHint Lantern = Locations.MajorItemLocations["Lantern"][0];
             Scene = Locations.SimplifiedSceneNames[Locations.VanillaLocations[Locations.LocationDescriptionToId[Lantern.Location]].Location.SceneName].ToUpper();
             Prefix = Vowels.Contains(Scene[0]) ? "#E" : "#uh";
             if (Lantern.Player == Player) {
@@ -42,7 +42,7 @@ namespace TunicArchipelago {
             }
             HintMessages.Add("Mailbox", Hint);
 
-            ArchipelagoHint Hyperdash = Locations.MajorItemLocations["Hero's Laurels"];
+            ArchipelagoHint Hyperdash = Locations.MajorItemLocations["Hero's Laurels"][0];
             Hint = $"lehjehnd sehz <#FF00FF>suhm%i^ ehkstruhordinArE<#FFFFFF>\nuhwAts yoo in ";
             if (Hyperdash.Player == Player) {
                 Scene = Locations.SimplifiedSceneNames[Locations.VanillaLocations[Locations.LocationDescriptionToId[Hyperdash.Location]].Location.SceneName].ToUpper();
@@ -54,7 +54,7 @@ namespace TunicArchipelago {
             HintMessages.Add("Temple Statue", Hint);
 
             List<string> HintItems = new List<string>() { "Magic Wand", "Magic Orb", "Magic Dagger" };
-            if (SaveFile.GetInt("randomizer shuffled abilities") == 1) {
+            if (SaveFile.GetInt("randomizer shuffled abilities") == 1 && SaveFile.GetInt("randomizer hexagon quest enabled") == 0) {
                 HintItems.Add("Pages 24-25 (Prayer)");
                 HintItems.Add("Pages 42-43 (Holy Cross)");
                 HintItems.Remove("Magic Dagger");
@@ -62,7 +62,7 @@ namespace TunicArchipelago {
             List<string> HintGraves = new List<string>() { "East Forest Relic", "Fortress Relic", "West Garden Relic" };
             while (HintGraves.Count > 0) {
                 string HintItem = HintItems[random.Next(HintItems.Count)];
-                ArchipelagoHint ItemHint = Locations.MajorItemLocations[HintItem];
+                ArchipelagoHint ItemHint = Locations.MajorItemLocations[HintItem][0];
                 string HintGrave = HintGraves[random.Next(HintGraves.Count)];
 
                 if (ItemHint.Player == Player) {
@@ -84,7 +84,7 @@ namespace TunicArchipelago {
 
             List<string> Hexagons;
             Dictionary<string, string> HexagonColors = new Dictionary<string, string>() { { "Red Hexagon", "<#FF3333>" }, { "Green Hexagon", "<#33FF33>" }, { "Blue Hexagon", "<#3333FF>" }, { "Gold Hexagon", "<#ffd700>" } };
-            if (SaveFile.GetString("randomizer game mode") == "HEXAGONQUEST") {
+            if (SaveFile.GetInt("randomizer hexagon quest enabled") == 1) {
                 Hexagons = new List<string>() { "Gold Hexagon", "Gold Hexagon", "Gold Hexagon" };
             } else {
                 Hexagons = new List<string>() { "Red Hexagon", "Green Hexagon", "Blue Hexagon" };
@@ -94,7 +94,7 @@ namespace TunicArchipelago {
             for (int i = 0; i < 3; i++) {
                 string Hexagon = Hexagons[random.Next(Hexagons.Count)];
                 string HexagonHintArea = HexagonHintGraves[random.Next(HexagonHintGraves.Count)];
-                ArchipelagoHint HexHint = Locations.MajorItemLocations[Hexagon];
+                ArchipelagoHint HexHint = Locations.MajorItemLocations[Hexagon][0];
 
                 if (HexHint.Player == Player) {
                     Scene = Locations.SimplifiedSceneNames[Locations.VanillaLocations[Locations.LocationDescriptionToId[HexHint.Location]].Location.SceneName].ToUpper();

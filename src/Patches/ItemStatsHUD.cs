@@ -261,19 +261,19 @@ namespace TunicArchipelago {
                 BlueHexagon.GetComponent<Image>().color = Color.white;
                 if (Inventory.GetItemByName("Hexagon Red").Quantity == 1 || StateVariable.GetStateVariableByName("Placed Hexagon 1 Red").BoolValue) {
                     __instance.hexagonImages[0].enabled = true;
-                    RedHexagon.GetComponent<Image>().color = SaveFile.GetString("randomizer game mode") == "HEXAGONQUEST" ? new Color(0.917f, 0.65f, .08f) : new Color(1f, 0f, 0f, 0.75f);
+                    RedHexagon.GetComponent<Image>().color = SaveFile.GetInt("randomizer hexagon quest enabled") == 1 ? new Color(0.917f, 0.65f, .08f) : new Color(1f, 0f, 0f, 0.75f);
                 } else {
                     __instance.hexagonImages[0].enabled = false;
                 }
                 if (Inventory.GetItemByName("Hexagon Green").Quantity == 1 || StateVariable.GetStateVariableByName("Placed Hexagon 2 Green").BoolValue) {
                     __instance.hexagonImages[1].enabled = true;
-                    GreenHexagon.GetComponent<Image>().color = SaveFile.GetString("randomizer game mode") == "HEXAGONQUEST" ? new Color(0.917f, 0.65f, .08f) : new Color(0f, 1f, 0f, 0.75f);
+                    GreenHexagon.GetComponent<Image>().color = SaveFile.GetInt("randomizer hexagon quest enabled") == 1 ? new Color(0.917f, 0.65f, .08f) : new Color(0f, 1f, 0f, 0.75f);
                 } else {
                     __instance.hexagonImages[1].enabled = false;
                 }
                 if (Inventory.GetItemByName("Hexagon Blue").Quantity == 1 || StateVariable.GetStateVariableByName("Placed Hexagon 3 Blue").BoolValue) {
                     __instance.hexagonImages[2].enabled = true;
-                    BlueHexagon.GetComponent<Image>().color = SaveFile.GetString("randomizer game mode") == "HEXAGONQUEST" ? new Color(0.917f, 0.65f, .08f) : new Color(0f, 0f, 1f, 1f);
+                    BlueHexagon.GetComponent<Image>().color = SaveFile.GetInt("randomizer hexagon quest enabled") == 1 ? new Color(0.917f, 0.65f, .08f) : new Color(0f, 0f, 1f, 1f);
                 } else {
                     __instance.hexagonImages[2].enabled = false;
                 }
@@ -358,7 +358,7 @@ namespace TunicArchipelago {
                     }
                 }
             }
-            if (SaveFile.GetString("randomizer game mode") == "HEXAGONQUEST") {
+            if (SaveFile.GetInt("randomizer hexagon quest enabled") == 1) {
                 HexagonQuest.SetActive(true);
             } else {
                 HexagonQuest.SetActive(false);

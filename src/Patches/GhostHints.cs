@@ -302,7 +302,7 @@ namespace TunicArchipelago {
                 Hints.Remove(Hint);
             }
         }
-
+        
         public static void GenerateLocationHints() {
             LocationHints.Clear();
             foreach (string Key in HintableLocationIds.Keys) {
@@ -326,20 +326,25 @@ namespace TunicArchipelago {
             }
             for (int i = 0; i < HintableItems.Count; i++) {
                 string Item = HintableItems[i];
-                ArchipelagoHint ItemLocation = Locations.MajorItemLocations[Item];
-                string Hint = "";
-                if (SaveFile.GetInt("randomizer sword progression enabled") == 1 && (Item == "Sword" || Item == "Stick")) {
-                    Item = "Sword Upgrade";
+                List<ArchipelagoHint> ItemLocations = Locations.MajorItemLocations[Item];
+                foreach(ArchipelagoHint HintLocation in ItemLocations) {
+                    string Hint = "";
+                    if (SaveFile.GetInt("randomizer sword progression enabled") == 1 && (Item == "Sword" || Item == "Stick"))
+                    {
+                        Item = "Sword Upgrade";
+                    }
+                    if (HintLocation.Player == Archipelago.instance.GetPlayerSlot())
+                    {
+                        string Scene = Locations.SimplifiedSceneNames[Locations.VanillaLocations[Locations.LocationDescriptionToId[HintLocation.Location]].Location.SceneName].ToUpper();
+                        string ScenePrefix = Scene == "Trinket Well" ? "%rOi^" : "aht #uh";
+                        Hint = $"bI #uh wA, I saw \"YOUR {Item.ToUpper().Replace(" ", "\" \"")}\" #uh lahst tIm I wuhs {ScenePrefix} \"{Scene.Replace(" ", "\" \"")}.\"";
+                    }
+                    else
+                    {
+                        Hint = $"bI #uh wA, I saw \"YOUR {Item.ToUpper().Replace(" ", "\" \"")}\" in \"{Archipelago.instance.GetPlayerName((int)HintLocation.Player).ToUpper().Replace(" ", "\" \"")}'S WORLD\"";
+                    }
+                    ItemHints.Add(WordWrapString(Hint));
                 }
-                if (ItemLocation.Player == Archipelago.instance.GetPlayerSlot()) {
-                    string Scene = Locations.SimplifiedSceneNames[Locations.VanillaLocations[Locations.LocationDescriptionToId[ItemLocation.Location]].Location.SceneName].ToUpper();
-                    string ScenePrefix = Scene == "Trinket Well" ? "%rOi^" : "aht #uh";
-                    Hint = $"bI #uh wA, I saw \"YOUR {Item.ToUpper().Replace(" ", "\" \"")}\" #uh lahst tIm I wuhs {ScenePrefix} \"{Scene.Replace(" ", "\" \"")}.\"";
-                } else {
-                    Hint = $"bI #uh wA, I saw \" YOUR {Item.ToUpper().Replace(" ", "\" \"")}\" in \"{Archipelago.instance.GetPlayerName((int)ItemLocation.Player).ToUpper().Replace(" ", "\" \"")}'S WORLD\"";
-                }
-
-                ItemHints.Add(WordWrapString(Hint));
             }
         }
 

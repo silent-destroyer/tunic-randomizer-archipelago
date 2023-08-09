@@ -23,10 +23,16 @@ namespace TunicArchipelago {
             set;
         }
 
+        public string Password {
+            get;
+            set;
+        }
+
         public ConnectionSettings() {
             Player = "Player";
             Hostname = "localhost";
             Port = 38281;
+            Password = "";
         }
     }
 }

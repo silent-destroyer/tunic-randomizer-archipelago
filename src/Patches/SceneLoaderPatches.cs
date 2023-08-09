@@ -143,7 +143,8 @@ namespace TunicArchipelago {
                 Camera.main.transform.parent.gameObject.AddComponent<CycleController>();
             }
 
-            if (SceneName == "Overworld Redux" && (StateVariable.GetStateVariableByName("Has Been Betrayed").BoolValue || StateVariable.GetStateVariableByName("Has Died To God").BoolValue) && SaveFile.GetInt("randomizer died to heir") != 1) {
+            if (SceneName == "Overworld Redux" && (StateVariable.GetStateVariableByName("Has Been Betrayed").BoolValue || 
+                StateVariable.GetStateVariableByName("Has Died To God").BoolValue) && SaveFile.GetInt("randomizer died to heir") != 1 && SaveFile.GetInt("randomizer hexagon quest enabled") == 0) {
                 PlayerCharacterPatches.ResetDayNightTimer = 0.0f;
                 Logger.LogInfo("Resetting time of day to daytime!");
             }
@@ -189,7 +190,7 @@ namespace TunicArchipelago {
                     SaveFile.SetInt("unlocked page " + i, SaveFile.GetInt("randomizer obtained page " + i) == 1 ? 1 : 0);
                 }
                 PlayerCharacterPatches.HeirAssistModeDamageValue = Locations.CheckedLocations.Values.ToList().Where(item => item).ToList().Count / 15;
-                if (SaveFile.GetString("randomizer game mode") == "HEXAGONQUEST") {
+                if (SaveFile.GetInt("randomizer hexagon quest enabled") == 1) {
                     Resources.FindObjectsOfTypeAll<Foxgod>().ToList()[0].gameObject.transform.GetChild(0).GetComponent<CreatureMaterialManager>().originalMaterials = ModelSwaps.Items["GoldenTrophy_2"].GetComponent<MeshRenderer>().materials;
                     Resources.FindObjectsOfTypeAll<Foxgod>().ToList()[0].gameObject.transform.GetChild(1).GetComponent<CreatureMaterialManager>().originalMaterials = ModelSwaps.Items["GoldenTrophy_2"].GetComponent<MeshRenderer>().materials;
                 }
@@ -200,7 +201,7 @@ namespace TunicArchipelago {
                     StateVariable.GetStateVariableByName(ItemLookup.HeroRelicLookup[Key].Flag).BoolValue = Inventory.GetItemByName(Key).Quantity == 1;
                 }
                 GameObject.Destroy(GameObject.Find("_Special/Bed Toggle Trigger/"));
-                if ((StateVariable.GetStateVariableByName("Has Been Betrayed").BoolValue || StateVariable.GetStateVariableByName("Has Died To God").BoolValue) && SaveFile.GetString("randomizer game mode") != "HEXAGONQUEST") {
+                if ((StateVariable.GetStateVariableByName("Has Been Betrayed").BoolValue || StateVariable.GetStateVariableByName("Has Died To God").BoolValue) && SaveFile.GetInt("randomizer hexagon quest enabled") == 0) {
                     InteractionPatches.SetupDayNightHourglass();
                 }
                 if (GameObject.Find("_Offerings/ash group/")) {
@@ -212,7 +213,7 @@ namespace TunicArchipelago {
                     Archipelago.instance.Connect();
                 }
             } else if (SceneName == "Temple") {
-                if (SaveFile.GetString("randomizer game mode") == "HEXAGONQUEST") {
+                if (SaveFile.GetInt("randomizer hexagon quest enabled") == 1) {
                     foreach (GameObject Questagon in Resources.FindObjectsOfTypeAll<GameObject>().Where(Obj => Obj.name == "questagon")) {
                         Questagon.GetComponent<MeshRenderer>().materials = ModelSwaps.Items["GoldenTrophy_2"].GetComponent<MeshRenderer>().materials;
                         Questagon.GetComponent<MeshRenderer>().receiveShadows = false;
@@ -251,7 +252,7 @@ namespace TunicArchipelago {
                     Logger.LogError(ex.Message + " " + ex.StackTrace);
                 }
 
-                if (SaveFile.GetInt("randomizer shuffled abilities") == 1 && SaveFile.GetInt("randomizer obtained page 21") == 0) {
+                if (SaveFile.GetInt("randomizer shuffled abilities") == 1 && SaveFile.GetInt("randomizer holy cross unlocked") == 0) {
                     foreach (ToggleObjectBySpell SpellToggle in Resources.FindObjectsOfTypeAll<ToggleObjectBySpell>()) {
                         SpellToggle.gameObject.GetComponent<ToggleObjectBySpell>().enabled = false;
                     }
@@ -297,16 +298,19 @@ namespace TunicArchipelago {
                 }
 
             }
+            foreach(NPC npc in Resources.FindObjectsOfTypeAll<NPC>()) {
+                Logger.LogInfo(npc.script.text);
+            }
 
         }
 
         public static void PauseMenu___button_ReturnToTitle_PostfixPatch(PauseMenu __instance) {
 
-/*            if (ItemStatsHUD.HexagonQuest != null) {
+            if (ItemStatsHUD.HexagonQuest != null) {
                 ItemStatsHUD.HexagonQuest.SetActive(false);
-            }*/
+            }
+
             SceneName = "TitleScreen";
-            //Archipelago.instance.Disconnect();
         }
 
     }

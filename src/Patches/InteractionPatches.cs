@@ -30,7 +30,7 @@ namespace TunicArchipelago {
                 }
                 return false;
             }
-            if (SaveFile.GetString("randomizer game mode") == "HEXAGONQUEST") {
+            if (SaveFile.GetInt("randomizer hexagon quest enabled") == 1) {
                 if (__instance.transform.position.ToString() == "(0.0, 0.0, 0.0)" && SceneLoaderPatches.SceneName == "Spirit Arena" && TunicArchipelago.Tracker.ImportantItems["Hexagon Gold"] < 20) {
                     GenericMessage.ShowMessage($"\"<#EAA615>Sealed Forever.\"");
                     return false;
