@@ -305,7 +305,14 @@ namespace TunicArchipelago {
         
         public static void GenerateLocationHints() {
             LocationHints.Clear();
-            foreach (string Key in HintableLocationIds.Keys) {
+            List<String> HintableLocations = HintableLocationIds.Keys.ToList();
+            if(SaveFile.GetInt("randomizer keys behind bosses") == 1) {
+                // Remove boss hints if keys behind bosses is on
+                HintableLocations.Remove("Vault Key (Red) [Fortress Arena]");
+                HintableLocations.Remove("Hexagon Green [Library Arena]");
+                HintableLocations.Remove("Hexagon Blue [ziggurat2020_3]");
+            }
+            foreach (string Key in HintableLocations) {
                 ArchipelagoItem Item = ItemLookup.ItemList[Key];
                 string Location = HintableLocationIds[Key];
                 string LocationSuffix = Location[Location.Length - 1] == 'S' ? "R" : "iz";

@@ -205,12 +205,11 @@ namespace TunicArchipelago {
                     ApplyFoolEffect();
                 } else {
                     Dictionary<string, int> OriginalShopPrices = new Dictionary<string, int>() {
-                    { "Shop - Potion 1", 300 },
-                    { "Shop - Potion 2", 1000 },
-                    { "Shop - Coin 1", 999 },
-                    { "Shop - Coin 2", 999 }
-                };
-
+                        { "Shop - Potion 1", 300 },
+                        { "Shop - Potion 2", 1000 },
+                        { "Shop - Coin 1", 999 },
+                        { "Shop - Coin 2", 999 }
+                    };
                     // If buying your own money item from the shop, increase amount rewarded
                     if (OriginalShopPrices.ContainsKey(LocationId) && (networkItem.Player == Archipelago.instance.GetPlayerSlot())) {
                         AmountToGive += OriginalShopPrices[LocationId];
