@@ -139,8 +139,7 @@ namespace TunicArchipelago {
                 __instance.confirmPurchaseFormattedLanguageLine.text = $"bI for {Price} [money]?";
 
                 if (ShopItem.Player != Archipelago.instance.GetPlayerSlot()) {
-                    __instance.confirmPurchaseFormattedLanguageLine.text = GhostHints.WordWrapString($"bI for {Price} [money]?\n\"({Archipelago.instance.GetPlayerName(ShopItem.Player).ToUpper().Replace(" ", "\" \"")}'S {ShopItem.ItemName.ToUpper().Replace($" ", $"\" \"")})\"");
-                    Logger.LogInfo(GhostHints.WordWrapString($"bI for {Price} [money]?\n\"({Archipelago.instance.GetPlayerName(ShopItem.Player).ToUpper().Replace(" ", "\" \"")}'S {ShopItem.ItemName.ToUpper().Replace($" ", $"\" \"")})\""));
+                    __instance.confirmPurchaseFormattedLanguageLine.text = $"bI for {Price} [money]? " + GhostHints.WordWrapString($"\"({Archipelago.instance.GetPlayerName(ShopItem.Player).ToUpper().Replace(" ", "\" \"")}'S {ShopItem.ItemName.ToUpper().Replace($" ", $"\" \"")})\"");
                 }
             } else {
                 __instance.confirmPurchaseFormattedLanguageLine.text = $"bI for {__instance.price} [money]?";

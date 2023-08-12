@@ -338,7 +338,7 @@ namespace TunicArchipelago {
                 string ItemId = Chest.chestID == 0 ? $"{SceneLoaderPatches.SceneName}-{Chest.transform.position.ToString()} [{SceneLoaderPatches.SceneName}]" : $"{Chest.chestID} [{SceneLoaderPatches.SceneName}]";
                 if (ItemLookup.ItemList.ContainsKey(ItemId)) {
                     ArchipelagoItem APItem = ItemLookup.ItemList[ItemId];
-                    if (APItem.Player != Player || !ItemLookup.Items.ContainsKey(APItem.ItemName)) {
+                    if (Archipelago.instance.GetPlayerGame(APItem.Player) != "Tunic" || !ItemLookup.Items.ContainsKey(APItem.ItemName)) {
                         Chest.transform.GetChild(1).GetComponent<SkinnedMeshRenderer>().materials = Chests["Normal"].GetComponent<MeshRenderer>().materials;
                         Chest.GetComponent<FMODUnity.StudioEventEmitter>().EventReference = Chests["Normal"].GetComponent<FMODUnity.StudioEventEmitter>().EventReference;
                         Chest.GetComponent<FMODUnity.StudioEventEmitter>().Lookup();
@@ -399,7 +399,7 @@ namespace TunicArchipelago {
                         if (ItemPickup.itemToGive.name == "Key" || ItemPickup.itemToGive.name == "Key (House)") {
                             NewItem.transform.parent.localRotation = SceneLoaderPatches.SceneName == "Overworld Redux" ? new Quaternion(0f, 0f, 0f, 0f) : new Quaternion(0f, 0.7071f, 0f, 0.7071f);
                         }
-                        if (Item.Player != Player || !ItemLookup.Items.ContainsKey(Item.ItemName)) {
+                        if (Archipelago.instance.GetPlayerGame(Item.Player) != "Tunic" || !ItemLookup.Items.ContainsKey(Item.ItemName)) {
                             TransformData = ItemPositions.SpecificItemPlacement[ItemPickup.itemToGive.name]["Other World"];
                         } else {
                             ItemData ItemData = ItemLookup.Items[Item.ItemName];
@@ -415,7 +415,7 @@ namespace TunicArchipelago {
                                 } else {
                                     TransformData = ItemPositions.SpecificItemPlacement[ItemPickup.itemToGive.name]["money large"];
                                 }
-                            } else if (ItemData.Type == ItemTypes.SWORD && (SaveFile.GetInt("randomizer sword progression enabled") == 1)) {
+                            } else if (ItemData.Type == ItemTypes.SWORD && (SaveFile.GetInt("randomizer sword progression enabled") == 1) && Item.Player == Archipelago.instance.GetPlayerSlot()) {
                                 int SwordLevel = SaveFile.GetInt("randomizer sword progression level");
                                 TransformData = ItemPositions.SpecificItemPlacement[ItemPickup.itemToGive.name].ContainsKey($"Sword Progression {SwordLevel}") ? ItemPositions.SpecificItemPlacement[ItemPickup.itemToGive.name][$"Sword Progression {SwordLevel}"] : ItemPositions.SpecificItemPlacement[ItemPickup.itemToGive.name][ItemData.ItemNameForInventory];
                             } else {
@@ -467,7 +467,7 @@ namespace TunicArchipelago {
 
                     Page.transform.localRotation = Quaternion.Euler(0, 0, 0);
                     TransformData TransformData;
-                    if (APItem.Player != Player || !ItemLookup.Items.ContainsKey(APItem.ItemName)) {
+                    if (Archipelago.instance.GetPlayerGame(APItem.Player) != "Tunic" || !ItemLookup.Items.ContainsKey(APItem.ItemName)) {
                         TransformData = ItemPositions.Techbow["Other World"];
                         PagePickup.transform.GetChild(2).GetComponent<Rotate>().eulerAnglesPerSecond = new Vector3(0f, 45f, 0f);
                     } else {
@@ -482,7 +482,7 @@ namespace TunicArchipelago {
                             } else {
                                 TransformData = ItemPositions.Techbow["money large"];
                             }
-                        } else if (Item.Type == ItemTypes.SWORD && (SaveFile.GetInt("randomizer sword progression enabled") == 1)) {
+                        } else if (Item.Type == ItemTypes.SWORD && (SaveFile.GetInt("randomizer sword progression enabled") == 1) && APItem.Player == Archipelago.instance.GetPlayerSlot()) {
                             int SwordLevel = SaveFile.GetInt("randomizer sword progression level");
                             TransformData = ItemPositions.Techbow.ContainsKey($"Sword Progression {SwordLevel}") ? ItemPositions.Techbow[$"Sword Progression {SwordLevel}"] : ItemPositions.Techbow[Item.ItemNameForInventory];
                         } else {
@@ -506,7 +506,7 @@ namespace TunicArchipelago {
         public static GameObject SetupItemBase(Transform Parent, ArchipelagoItem APItem) {
             GameObject NewItem;
             int Player = Archipelago.instance.GetPlayerSlot();
-            if (APItem.Player != Player || !ItemLookup.Items.ContainsKey(APItem.ItemName)) {
+            if (Archipelago.instance.GetPlayerGame(APItem.Player) != "Tunic" || !ItemLookup.Items.ContainsKey(APItem.ItemName)) {
                 NewItem = GameObject.Instantiate(Items["Other World"], Parent.transform.position, Parent.transform.rotation);
             } else {
                 ItemData Item = ItemLookup.Items[APItem.ItemName];
@@ -520,7 +520,7 @@ namespace TunicArchipelago {
                     NewItem = GameObject.Instantiate(PagePickup, Parent.transform.position, Parent.transform.rotation);
                 } else if (Item.Type == ItemTypes.FAIRY) {
                     NewItem = GameObject.Instantiate(Chests["Fairy"], Parent.transform.position, Parent.transform.rotation);
-                } else if (Item.Type == ItemTypes.SWORD && (SaveFile.GetInt("randomizer sword progression enabled") == 1)) {
+                } else if (Item.Type == ItemTypes.SWORD && (SaveFile.GetInt("randomizer sword progression enabled") == 1) && APItem.Player == Archipelago.instance.GetPlayerSlot()) {
                     NewItem = SwordProgressionObject(Parent);
                 } else {
                     NewItem = GameObject.Instantiate(Items[Item.ItemNameForInventory], Parent.transform.position, Parent.transform.rotation);
@@ -583,7 +583,7 @@ namespace TunicArchipelago {
                 GameObject NewItem = SetupItemBase(Plinth.transform, Item);
 
                 TransformData TransformData;
-                if (Item.Player != Player || !ItemLookup.Items.ContainsKey(Item.ItemName)) {
+                if (Archipelago.instance.GetPlayerGame(Item.Player) != "Tunic" || !ItemLookup.Items.ContainsKey(Item.ItemName)) {
                     TransformData = ItemPositions.HexagonRed["Other World"];
                 } else {
                     ItemData HexagonItem = ItemLookup.Items[Item.ItemName];
@@ -597,7 +597,7 @@ namespace TunicArchipelago {
                         } else {
                             TransformData = ItemPositions.HexagonRed["money large"];
                         }
-                    } else if (HexagonItem.Type == ItemTypes.SWORD && (SaveFile.GetInt("randomizer sword progression enabled") == 1)) {
+                    } else if (HexagonItem.Type == ItemTypes.SWORD && (SaveFile.GetInt("randomizer sword progression enabled") == 1) && Item.Player == Archipelago.instance.GetPlayerSlot()) {
                         int SwordLevel = SaveFile.GetInt("randomizer sword progression level");
                         TransformData = ItemPositions.HexagonRed.ContainsKey($"Sword Progression {SwordLevel}") ? ItemPositions.HexagonRed[$"Sword Progression {SwordLevel}"] : ItemPositions.HexagonRed[HexagonItem.ItemNameForInventory];
                     } else {
@@ -636,7 +636,7 @@ namespace TunicArchipelago {
                 GameObject NewItem = SetupItemBase(Plinth.transform, Item);
 
                 TransformData TransformData;
-                if (Item.Player != Player || !ItemLookup.Items.ContainsKey(Item.ItemName)) {
+                if (Archipelago.instance.GetPlayerGame(Item.Player) != "Tunic" || !ItemLookup.Items.ContainsKey(Item.ItemName)) {
                     TransformData = ItemPositions.HexagonRed["Other World"];
                 } else {
                     ItemData HexagonItem = ItemLookup.Items[Item.ItemName];
@@ -650,7 +650,7 @@ namespace TunicArchipelago {
                         } else {
                             TransformData = ItemPositions.HexagonRed["money large"];
                         }
-                    } else if (HexagonItem.Type == ItemTypes.SWORD && (SaveFile.GetInt("randomizer sword progression enabled") == 1)) {
+                    } else if (HexagonItem.Type == ItemTypes.SWORD && (SaveFile.GetInt("randomizer sword progression enabled") == 1) && Item.Player == Archipelago.instance.GetPlayerSlot()) {
                         int SwordLevel = SaveFile.GetInt("randomizer sword progression level");
                         TransformData = ItemPositions.HexagonRed.ContainsKey($"Sword Progression {SwordLevel}") ? ItemPositions.HexagonRed[$"Sword Progression {SwordLevel}"] : ItemPositions.HexagonRed[HexagonItem.ItemNameForInventory];
                     } else {
@@ -692,7 +692,7 @@ namespace TunicArchipelago {
                 GameObject NewItem = SetupItemBase(VaultKey.transform, Item);
 
                 TransformData TransformData;
-                if (Item.Player != Player || !ItemLookup.Items.ContainsKey(Item.ItemName)) {
+                if (Archipelago.instance.GetPlayerGame(Item.Player) != "Tunic" || !ItemLookup.Items.ContainsKey(Item.ItemName)) {
                     TransformData = ItemPositions.VaultKeyRed["Other World"];
                 } else {
                     ItemData VaultKeyItem = ItemLookup.Items[Item.ItemName];
@@ -706,7 +706,7 @@ namespace TunicArchipelago {
                         } else {
                             TransformData = ItemPositions.VaultKeyRed["money large"];
                         }
-                    } else if (VaultKeyItem.Type == ItemTypes.SWORD && (SaveFile.GetInt("randomizer sword progression enabled") == 1)) {
+                    } else if (VaultKeyItem.Type == ItemTypes.SWORD && (SaveFile.GetInt("randomizer sword progression enabled") == 1) && Item.Player == Archipelago.instance.GetPlayerSlot()) {
                         int SwordLevel = SaveFile.GetInt("randomizer sword progression level");
                         TransformData = ItemPositions.VaultKeyRed.ContainsKey($"Sword Progression {SwordLevel}") ? ItemPositions.VaultKeyRed[$"Sword Progression {SwordLevel}"] : ItemPositions.VaultKeyRed[VaultKeyItem.ItemNameForInventory];
                     } else {
@@ -759,7 +759,7 @@ namespace TunicArchipelago {
                     NewItem = SetupItemBase(ItemHolder.transform, APItem);
 
                     TransformData TransformData;
-                    if (APItem.Player != Player || !ItemLookup.Items.ContainsKey(APItem.ItemName)) {
+                    if (Archipelago.instance.GetPlayerGame(APItem.Player) != "Tunic" || !ItemLookup.Items.ContainsKey(APItem.ItemName)) {
                         TransformData = ItemPositions.Shop["Other World"];
                     } else {
                         ItemData Item = ItemLookup.Items[APItem.ItemName];
@@ -773,7 +773,7 @@ namespace TunicArchipelago {
                             } else {
                                 TransformData = ItemPositions.Shop["money large"];
                             }
-                        } else if (Item.Type == ItemTypes.SWORD && (SaveFile.GetInt("randomizer sword progression enabled") == 1)) {
+                        } else if (Item.Type == ItemTypes.SWORD && (SaveFile.GetInt("randomizer sword progression enabled") == 1) && APItem.Player == Archipelago.instance.GetPlayerSlot()) {
                             int SwordLevel = SaveFile.GetInt("randomizer sword progression level");
                             TransformData = ItemPositions.Shop.ContainsKey($"Sword Progression {SwordLevel}") ? ItemPositions.Shop[$"Sword Progression {SwordLevel}"] : ItemPositions.Shop[Item.ItemNameForInventory];
                         } else {
@@ -820,7 +820,7 @@ namespace TunicArchipelago {
                 ArchipelagoItem APItem = ItemLookup.ItemList[ItemId];
                 GameObject NewItem = SetupItemBase(HeroRelicPickup.transform, APItem);
 
-                if (APItem.Player != Player || !ItemLookup.Items.ContainsKey(APItem.ItemName)) {
+                if (Archipelago.instance.GetPlayerGame(APItem.Player) != "Tunic" || !ItemLookup.Items.ContainsKey(APItem.ItemName)) {
                     if (NewItem.GetComponent<Rotate>() == null) {
                         NewItem.AddComponent<Rotate>().eulerAnglesPerSecond = new Vector3(0f, 45f, 0f);
                     }
@@ -830,7 +830,7 @@ namespace TunicArchipelago {
                     ItemData Item = ItemLookup.Items[APItem.ItemName];
                     NewItem.transform.localRotation = ItemPositions.ItemPickupRotations.ContainsKey(Item.ItemNameForInventory) ? ItemPositions.ItemPickupRotations[Item.ItemNameForInventory] : Quaternion.Euler(0, 0, 0);
                     NewItem.transform.localPosition = ItemPositions.ItemPickupPositions.ContainsKey(Item.ItemNameForInventory) ? ItemPositions.ItemPickupPositions[Item.ItemNameForInventory] : Vector3.zero;
-                    if (Item.Type == ItemTypes.SWORD && SaveFile.GetInt("randomizer sword progression enabled") == 1) {
+                    if (Item.Type == ItemTypes.SWORD && SaveFile.GetInt("randomizer sword progression enabled") == 1 && APItem.Player == Archipelago.instance.GetPlayerSlot()) {
                         int SwordLevel = SaveFile.GetInt("randomizer sword progression level");
                         TransformData TransformData = ItemPositions.Techbow.ContainsKey($"Sword Progression {SwordLevel}") ? ItemPositions.Techbow[$"Sword Progression {SwordLevel}"] : ItemPositions.Techbow[Item.ItemNameForInventory];
                         NewItem.transform.localPosition = TransformData.pos;

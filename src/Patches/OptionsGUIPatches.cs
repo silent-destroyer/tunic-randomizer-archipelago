@@ -92,10 +92,10 @@ namespace TunicArchipelago {
             OptionsGUI.addToggle("Keepin' It Real", "Off", "On", TunicArchipelago.Settings.RealestAlwaysOn ? 1 : 0, (OptionsGUIMultiSelect.MultiSelectAction)ToggleSunglasses);
             OptionsGUI.addToggle("Show Fox Color Editor", "Off", "On", PaletteEditor.EditorOpen ? 1 : 0, (OptionsGUIMultiSelect.MultiSelectAction)TogglePaletteEditor);
             OptionsGUI.addToggle("Use Custom Texture", "Off", "On", TunicArchipelago.Settings.UseCustomTexture ? 1 : 0, (OptionsGUIMultiSelect.MultiSelectAction)ToggleCustomTexture);
-  /*          if (BonusOptionsUnlocked && SceneLoaderPatches.SceneName != "TitleScreen") {
+            if (BonusOptionsUnlocked && SceneLoaderPatches.SceneName != "TitleScreen") {
                 OptionsGUI.addToggle("<#FFA500>BONUS: Cel Shaded Fox", "Off", "On", PaletteEditor.CelShadingEnabled ? 1 : 0, (OptionsGUIMultiSelect.MultiSelectAction)ToggleCelShading);
                 OptionsGUI.addToggle("<#00FFFF>BONUS: Party Hat", "Off", "On", PaletteEditor.PartyHatEnabled ? 1 : 0, (OptionsGUIMultiSelect.MultiSelectAction)TogglePartyHat);
-            }*/
+            }
             OptionsGUI.addButton("Reset to Defaults", (Action)ResetToDefaults);
         }
 

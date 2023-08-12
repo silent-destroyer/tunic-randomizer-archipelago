@@ -276,24 +276,16 @@ namespace TunicArchipelago {
             //GenerateBarrenAndMoneySceneHints();
 
             List<string> Hints = new List<string>();
-            for (int i = 0; i < 5; i++) {
-                string LocationHint = LocationHints[random.Next(LocationHints.Count)];
-                Hints.Add(LocationHint);
-                LocationHints.Remove(LocationHint);
-
-                string ItemHint = ItemHints[random.Next(ItemHints.Count)];
-                Hints.Add(ItemHint);
-                ItemHints.Remove(ItemHint);
-
+            for (int i = 0; i < 10; i++) {
                 int flip = random.Next(2);
-                if (flip == 0) {
-                    LocationHint = LocationHints[random.Next(LocationHints.Count)];
-                    Hints.Add(LocationHint);
-                    LocationHints.Remove(LocationHint);
-                } else {
-                    ItemHint = ItemHints[random.Next(ItemHints.Count)];
+                if (flip == 0 && ItemHints.Count > 0) {
+                    string ItemHint = ItemHints[random.Next(ItemHints.Count)];
                     Hints.Add(ItemHint);
                     ItemHints.Remove(ItemHint);
+                } else {
+                    string LocationHint = LocationHints[random.Next(LocationHints.Count)];
+                    Hints.Add(LocationHint);
+                    LocationHints.Remove(LocationHint);
                 }
             }
             foreach (HintGhost HintGhost in HintGhosts) {
@@ -335,22 +327,17 @@ namespace TunicArchipelago {
                 string Item = HintableItems[i];
                 List<ArchipelagoHint> ItemLocations = Locations.MajorItemLocations[Item];
                 foreach(ArchipelagoHint HintLocation in ItemLocations) {
-                    string Hint = "";
-                    if (SaveFile.GetInt("randomizer sword progression enabled") == 1 && (Item == "Sword" || Item == "Stick"))
-                    {
-                        Item = "Sword Upgrade";
-                    }
-                    if (HintLocation.Player == Archipelago.instance.GetPlayerSlot())
-                    {
+                    if (HintLocation.Player == Archipelago.instance.GetPlayerSlot()) {
+                        string Hint = "";
+                        if (SaveFile.GetInt("randomizer sword progression enabled") == 1 && (Item == "Sword" || Item == "Stick")) {
+                            Item = "Sword Upgrade";
+                        }
                         string Scene = Locations.SimplifiedSceneNames[Locations.VanillaLocations[Locations.LocationDescriptionToId[HintLocation.Location]].Location.SceneName].ToUpper();
                         string ScenePrefix = Scene == "Trinket Well" ? "%rOi^" : "aht #uh";
                         Hint = $"bI #uh wA, I saw \"YOUR {Item.ToUpper().Replace(" ", "\" \"")}\" #uh lahst tIm I wuhs {ScenePrefix} \"{Scene.Replace(" ", "\" \"")}.\"";
+
+                        ItemHints.Add(WordWrapString(Hint));
                     }
-                    else
-                    {
-                        Hint = $"bI #uh wA, I saw \"YOUR {Item.ToUpper().Replace(" ", "\" \"")}\" in \"{Archipelago.instance.GetPlayerName((int)HintLocation.Player).ToUpper().Replace(" ", "\" \"")}'S WORLD\"";
-                    }
-                    ItemHints.Add(WordWrapString(Hint));
                 }
             }
         }

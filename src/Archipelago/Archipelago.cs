@@ -48,8 +48,12 @@ namespace TunicArchipelago {
             return integration.session.ConnectionInfo.Slot;
         }
 
-        public string GetPlayerName(int Slot) { 
+        public string GetPlayerName(int Slot) {
             return integration.session.Players.GetPlayerName(Slot);
+        }
+
+        public string GetPlayerGame(int Slot) {
+            return integration.session.Players.Players[0][Slot].Game;
         }
 
         public string GetItemName(long id) {
