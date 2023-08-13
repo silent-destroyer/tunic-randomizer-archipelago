@@ -8,6 +8,8 @@ using TMPro;
 using UnityEngine.UI;
 using System.Net;
 using UnityEngine.InputSystem.Utilities;
+using System.IO;
+using Newtonsoft.Json;
 
 namespace TunicArchipelago {
     public class TitleVersion {
@@ -16,26 +18,28 @@ namespace TunicArchipelago {
         public static GameObject TitleLogo;
         public static void Initialize() {
             if (!Loaded) {
-/*                bool UpdateAvailable = false;
+                bool UpdateAvailable = false;
                 string UpdateVersion = PluginInfo.VERSION;
                 try {
-                    HttpWebRequest Request = (HttpWebRequest)WebRequest.Create("https://api.github.com/repos/silent-destroyer/tunic-randomizer/releases");
+                    HttpWebRequest Request = (HttpWebRequest)WebRequest.Create("https://api.github.com/silent-destroyer/tunic-randomizer-archipelago/releases");
                     Request.UserAgent = "request";
                     HttpWebResponse response = (HttpWebResponse)Request.GetResponse();
                     StreamReader Reader = new StreamReader(response.GetResponseStream());
                     string JsonResponse = Reader.ReadToEnd();
-                    dynamic Releases = JSONParser.FromJson<dynamic>(JsonResponse);
-                    UpdateAvailable = Releases[0]["tag_name"] != PluginInfo.VERSION;
-                    UpdateVersion = Releases[0]["tag_name"];
+                    dynamic Releases = JsonConvert.DeserializeObject<dynamic>(JsonResponse);
+                    TunicArchipelago.Logger.LogInfo(Releases[0]["tag_name"]);
+                    UpdateAvailable = Releases[0]["tag_name"].ToString() != PluginInfo.VERSION;
+                    UpdateVersion = Releases[0]["tag_name"].ToString();
                 } catch (Exception e) {
-                }*/
+                    TunicArchipelago.Logger.LogInfo(e.Message);
+                }
                 TMP_FontAsset FontAsset = Resources.FindObjectsOfTypeAll<TMP_FontAsset>().Where(Font => Font.name == "Latin Rounded").ToList()[0];
                 Material FontMaterial = Resources.FindObjectsOfTypeAll<Material>().Where(Material => Material.name == "Latin Rounded - Quantity Outline").ToList()[0];
                 GameObject TitleVersion = new GameObject("randomizer version");
                 TitleVersion.AddComponent<TextMeshProUGUI>().text = $"Randomizer + Archipelago Mod Ver. {PluginInfo.VERSION}";
-/*                if (UpdateAvailable) {
+                if (UpdateAvailable) {
                     TitleVersion.GetComponent<TextMeshProUGUI>().text += $" (Update Available: v{UpdateVersion}!)";
-                }*/
+                }
                 TitleVersion.GetComponent<TextMeshProUGUI>().color = new Color(1.0f, 0.64f, 0.0f);
                 TitleVersion.GetComponent<TextMeshProUGUI>().fontMaterial = FontMaterial;
                 TitleVersion.GetComponent<TextMeshProUGUI>().font = FontAsset;
