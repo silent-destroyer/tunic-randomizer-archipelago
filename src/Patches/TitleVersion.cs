@@ -21,7 +21,7 @@ namespace TunicArchipelago {
                 bool UpdateAvailable = false;
                 string UpdateVersion = PluginInfo.VERSION;
                 try {
-                    HttpWebRequest Request = (HttpWebRequest)WebRequest.Create("https://api.github.com/silent-destroyer/tunic-randomizer-archipelago/releases");
+                    HttpWebRequest Request = (HttpWebRequest)WebRequest.Create("https://api.github.com/repos/silent-destroyer/tunic-randomizer-archipelago/releases");
                     Request.UserAgent = "request";
                     HttpWebResponse response = (HttpWebResponse)Request.GetResponse();
                     StreamReader Reader = new StreamReader(response.GetResponseStream());
