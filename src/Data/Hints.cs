@@ -94,7 +94,7 @@ namespace TunicArchipelago {
             for (int i = 0; i < 3; i++) {
                 string Hexagon = Hexagons[random.Next(Hexagons.Count)];
                 string HexagonHintArea = HexagonHintGraves[random.Next(HexagonHintGraves.Count)];
-                ArchipelagoHint HexHint = Locations.MajorItemLocations[Hexagon][0];
+                ArchipelagoHint HexHint = Hexagon == "Gold Hexagon" ? Locations.MajorItemLocations[Hexagon][i] : Locations.MajorItemLocations[Hexagon][0];
 
                 if (HexHint.Player == Player) {
                     Scene = Locations.SimplifiedSceneNames[Locations.VanillaLocations[Locations.LocationDescriptionToId[HexHint.Location]].Location.SceneName].ToUpper();

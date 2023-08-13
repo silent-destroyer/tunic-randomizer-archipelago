@@ -87,18 +87,44 @@ namespace TunicArchipelago {
             "Dath Stone",
         };
 
-
         public static List<string> BarrenItemNames = new List<string>() {
-            "Firecracker",
-            "Ice Bomb",
-            "Firebomb",
-            "Pepper",
-            "Ivy",
-            "Bait",
-            "money",
-            "Piggybank L1",
-            "Berry_MP",
-            "Berry_HP"
+            "Firecracker x2",
+            "Firecracker x3",
+            "Firecracker x4",
+            "Firecracker x5",
+            "Firecracker x6",
+            "Fire Bomb x2",
+            "Fire Bomb x3",
+            "Ice Bomb x2",
+            "Ice Bomb x3",
+            "Ice Bomb x5",
+            "Pepper x2",
+            "Ivy x3",
+            "Lure",
+            "Lure x2",
+            "Effigy",
+            "HP Berry",
+            "HP Berry x2",
+            "HP Berry x3",
+            "MP Berry",
+            "MP Berry x2",
+            "MP Berry x3",
+            "Money x1",
+            "Money x10",
+            "Money x15",
+            "Money x16",
+            "Money x20",
+            "Money x25",
+            "Money x30",
+            "Money x32",
+            "Money x40",
+            "Money x48",
+            "Money x50",
+            "Money x64",
+            "Money x100",
+            "Money x128",
+            "Money x200",
+            "Money x255",
         };
 
         public static Dictionary<string, List<HintGhost>> GhostLocations = new Dictionary<string, List<HintGhost>>() {
@@ -271,22 +297,41 @@ namespace TunicArchipelago {
                 HintGhost HintGhost = GhostLocations[Location][random.Next(GhostLocations[Location].Count)];
                 HintGhosts.Add(HintGhost);
             }
+
             GenerateLocationHints();
             GenerateItemHints();
-            //GenerateBarrenAndMoneySceneHints();
+            GenerateBarrenAndMoneySceneHints();
 
             List<string> Hints = new List<string>();
-            for (int i = 0; i < 10; i++) {
-                int flip = random.Next(2);
-                if (flip == 0 && ItemHints.Count > 0) {
+            for (int i = 0; i < 5; i++) {
+                
+                string LocationHint = LocationHints[random.Next(LocationHints.Count)];
+                Hints.Add(LocationHint);
+                LocationHints.Remove(LocationHint);
+
+                if (ItemHints.Count > 0) {
                     string ItemHint = ItemHints[random.Next(ItemHints.Count)];
                     Hints.Add(ItemHint);
                     ItemHints.Remove(ItemHint);
-                } else {
-                    string LocationHint = LocationHints[random.Next(LocationHints.Count)];
-                    Hints.Add(LocationHint);
-                    LocationHints.Remove(LocationHint);
                 }
+
+                if(BarrenAndTreasureHints.Count > 0) {
+                    string BarrenHint = BarrenAndTreasureHints[random.Next(BarrenAndTreasureHints.Count)];
+                    Hints.Add(BarrenHint);
+                    BarrenAndTreasureHints.Remove(BarrenHint);
+                }
+            }
+
+            while (Hints.Count < 15) {
+                if (LocationHints.Count == 0) {
+                    break;
+                }
+                string LocationHint = LocationHints[random.Next(LocationHints.Count)];
+                Hints.Add(LocationHint);
+                LocationHints.Remove(LocationHint);
+            }
+            if (Hints.Count < 15) {
+                HintGhosts = HintGhosts.Take(Hints.Count).ToList();
             }
             foreach (HintGhost HintGhost in HintGhosts) {
                 string Hint = Hints[random.Next(Hints.Count)];
@@ -334,7 +379,7 @@ namespace TunicArchipelago {
                         }
                         string Scene = Locations.SimplifiedSceneNames[Locations.VanillaLocations[Locations.LocationDescriptionToId[HintLocation.Location]].Location.SceneName].ToUpper();
                         string ScenePrefix = Scene == "Trinket Well" ? "%rOi^" : "aht #uh";
-                        Hint = $"bI #uh wA, I saw \"YOUR {Item.ToUpper().Replace(" ", "\" \"")}\" #uh lahst tIm I wuhs {ScenePrefix} \"{Scene.Replace(" ", "\" \"")}.\"";
+                        Hint = $"bI #uh wA, I saw A \"{Item.ToUpper().Replace(" ", "\" \"")}\" #uh lahst tIm I wuhs {ScenePrefix} \"{Scene.Replace(" ", "\" \"")}.\"";
 
                         ItemHints.Add(WordWrapString(Hint));
                     }
@@ -364,27 +409,35 @@ namespace TunicArchipelago {
             return formattedHint.Replace($"\" \"", $" ");
         }
 
-/*        public static void GenerateBarrenAndMoneySceneHints() {
+        public static void GenerateBarrenAndMoneySceneHints() {
             BarrenAndTreasureHints.Clear();
-            foreach (string Key in Hints.SimplifiedSceneNames.Keys) {
+            foreach (string Key in Locations.SimplifiedSceneNames.Keys) { 
                 HashSet<string> ItemsInScene = new HashSet<string>();
-                string Scene = Hints.SimplifiedSceneNames[Key].ToUpper();
+                List<ArchipelagoItem> APItemsInScene = new List<ArchipelagoItem>();
+                string Scene = Locations.SimplifiedSceneNames[Key];
                 int SceneItemCount = 0;
                 int MoneyInScene = 0;
-                foreach (ItemData Item in ItemRandomizer.ItemList.Values.Where(item => item.Location.SceneName == Key).ToList()) {
-                    ItemsInScene.Add(Item.Reward.Name);
-                    if (Item.Reward.Name == "money") {
-                        MoneyInScene += Item.Reward.Amount;
+                foreach (string ItemKey in ItemLookup.ItemList.Keys.Where(item => Locations.VanillaLocations[item].Location.SceneName == Key).ToList()) {
+                    ArchipelagoItem Item = ItemLookup.ItemList[ItemKey];
+                    ItemsInScene.Add(Item.ItemName);
+                    APItemsInScene.Add(Item);
+                    if (Item.Player == Archipelago.instance.GetPlayerSlot() && ItemLookup.Items[Item.ItemName].Type == ItemTypes.MONEY) {
+                        MoneyInScene += ItemLookup.Items[Item.ItemName].QuantityToGive;
                     }
                     SceneItemCount++;
                 }
+
                 if (MoneyInScene >= 200 && SceneItemCount < 10) {
                     string ScenePrefix = Vowels.Contains(Scene[0]) ? "#E" : "#uh";
                     BarrenAndTreasureHints.Add($"ahn EzE plAs too fInd A \"LOT OF MONEY\" iz {ScenePrefix}\n\"{Scene}.\"");
                 } else {
                     bool BarrenArea = true;
-                    foreach (string Item in ItemsInScene) {
-                        if (!BarrenItemNames.Contains(Item)) {
+                    foreach(ArchipelagoItem Item in APItemsInScene) {
+                        if (Item.Player != Archipelago.instance.GetPlayerSlot()) {
+                            BarrenArea = false;
+                            break;
+                        }
+                        if(!BarrenItemNames.Contains(Item.ItemName)) {
                             BarrenArea = false;
                             break;
                         }
@@ -393,7 +446,7 @@ namespace TunicArchipelago {
                             break;
                         }
                     }
-                    if (BarrenArea) {
+                    if(BarrenArea) {
                         string Hint = "";
                         if (Scene.Length > 15) {
                             string[] SceneSplit = Scene.Split(' ');
@@ -404,20 +457,21 @@ namespace TunicArchipelago {
                         BarrenAndTreasureHints.Add(Hint);
                     }
                 }
-            }
-        }*/
 
-/*        public static List<ItemData> FindAllRandomizedItemsByName(string ItemName) {
-            List<ItemData> Items = new List<ItemData>();
-            foreach (string Key in ItemRandomizer.ItemList.Keys) {
-                ItemData Item = ItemRandomizer.ItemList[Key];
-                if (Item.Reward.Name == ItemName) {
-                    Items.Add(Item);
-                }
             }
-            return Items;
         }
-*/
+
+        /*        public static List<ItemData> FindAllRandomizedItemsByName(string ItemName) {
+                    List<ItemData> Items = new List<ItemData>();
+                    foreach (string Key in ItemRandomizer.ItemList.Keys) {
+                        ItemData Item = ItemRandomizer.ItemList[Key];
+                        if (Item.Reward.Name == ItemName) {
+                            Items.Add(Item);
+                        }
+                    }
+                    return Items;
+                }
+        */
         public static void ResetGhostHints() {
             HintGhosts.Clear();
             LocationHints.Clear();

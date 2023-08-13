@@ -229,6 +229,15 @@ namespace TunicArchipelago {
                 if (TunicArchipelago.Settings.HeroPathHintsEnabled && SaveFile.GetInt("randomizer got mailbox hint item") == 0) {
                     GameObject.Find("_Environment/_Decorations/Mailbox (1)/mailbox flag").transform.rotation = new Quaternion(0.5f, -0.5f, 0.5f, 0.5f);
                 }
+            } else if (SceneName == "Swamp Redux 2") {
+                GhostHints.GhostFox.GetComponent<NPC>().nPCAnimState = NPC.NPCAnimState.GAZE;
+                GameObject DoorHint = GameObject.Instantiate(GhostHints.GhostFox);
+                DoorHint.transform.position = new Vector3(82.5f, 14f, 143.7f);
+                DoorHint.transform.transform.rotation = new Quaternion(0f, 0f, 0f, 1f);
+                LanguageLine DoorSecret = ScriptableObject.CreateInstance<LanguageLine>();
+                DoorSecret.text = $"$$$... dOnt tehl ehnEwuhn, buht #aht \"DOOR\" bahk #Ar\nkahn bE \"OPENED\" fruhm #E \"OUTSIDE...\"";
+                DoorHint.GetComponent<NPC>().script = DoorSecret;
+                DoorHint.SetActive(true);
             } else {
                 foreach (string Key in ItemLookup.FairyLookup.Keys) {
                     StateVariable.GetStateVariableByName(ItemLookup.FairyLookup[Key].Flag).BoolValue = SaveFile.GetInt("randomizer opened fairy chest " + Key) == 1;
@@ -297,9 +306,6 @@ namespace TunicArchipelago {
                     }
                 }
 
-            }
-            foreach(NPC npc in Resources.FindObjectsOfTypeAll<NPC>()) {
-                Logger.LogInfo(npc.script.text);
             }
 
         }
