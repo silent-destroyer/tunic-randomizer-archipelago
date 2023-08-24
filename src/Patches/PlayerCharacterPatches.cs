@@ -12,6 +12,7 @@ using UnityEngine.SceneManagement;
 using Newtonsoft.Json;
 using UnityEngine.UI;
 using System.Globalization;
+using Archipelago.MultiClient.Net.Enums;
 
 namespace TunicArchipelago {
     public class PlayerCharacterPatches {
@@ -44,11 +45,9 @@ namespace TunicArchipelago {
                 }
             }
 
-            if (Input.GetKeyDown(KeyCode.Alpha4)) {
-                foreach (string Key in TunicArchipelago.Tracker.ImportantItems.Keys.ToList()) {
-                    if (TunicArchipelago.Tracker.ImportantItems[Key] > 0) {
-                        Logger.LogInfo(Key + ": " + TunicArchipelago.Tracker.ImportantItems[Key]);
-                    }
+            if (Input.GetKeyDown(KeyCode.Alpha3)) {
+                if (OptionsGUIPatches.BonusOptionsUnlocked) {
+                    PlayerCharacter.instance.GetComponent<Animator>().SetBool("wave", true);
                 }
             }
             if (Input.GetKeyDown(KeyCode.Alpha5)) {
@@ -125,6 +124,11 @@ namespace TunicArchipelago {
                 if(SaveFile.GetInt("randomizer ice rod unlocked") == 0) {
                     TechbowItemBehaviour.kIceShotWindow = 0;
                 }
+            }
+
+            foreach (string Key in EnemyRandomizer.Enemies.Keys.ToList()) {
+                EnemyRandomizer.Enemies[Key].SetActive(false);
+                EnemyRandomizer.Enemies[Key].transform.position = new Vector3(-30000f, -30000f, -30000f);
             }
         }
 
@@ -253,7 +257,7 @@ namespace TunicArchipelago {
                 SceneLoaderPatches.TimeOfLastSceneTransition = SaveFile.GetFloat("playtime");
                 Archipelago.instance.integration.session.Locations.ScoutLocationsAsync(LocationIDs.ToArray()).ContinueWith(locationInfoPacket => {
                     foreach (NetworkItem Location in locationInfoPacket.Result.Locations) {
-                        ItemLookup.ItemList.Add(Locations.LocationDescriptionToId[Archipelago.instance.integration.session.Locations.GetLocationNameFromId(Location.Location)], new ArchipelagoItem(Archipelago.instance.integration.session.Items.GetItemName(Location.Item), Location.Player));
+                        ItemLookup.ItemList.Add(Locations.LocationDescriptionToId[Archipelago.instance.integration.session.Locations.GetLocationNameFromId(Location.Location)], new ArchipelagoItem(Archipelago.instance.integration.session.Items.GetItemName(Location.Item), Location.Player, Location.Flags));
                     }
                 }).Wait();
                 ItemTracker.PopulateSpoilerLog();

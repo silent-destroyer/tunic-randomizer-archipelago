@@ -39,14 +39,16 @@ namespace TunicArchipelago {
             if (!connected) {
                 return;
             }
+            if (SceneManager.GetActiveScene().name != "TitleScreen") {
+                if (processIncomingItemsStateMachine != null) {
+                    processIncomingItemsStateMachine.MoveNext();
+                }
 
-            if (processIncomingItemsStateMachine != null) {
-                processIncomingItemsStateMachine.MoveNext();
+                if (processOutgoingItemsStateMachine != null) {
+                    processOutgoingItemsStateMachine.MoveNext();
+                }
             }
 
-            if (processOutgoingItemsStateMachine != null) {
-                processOutgoingItemsStateMachine.MoveNext();
-            }
         }
 
         public void TryConnect() {

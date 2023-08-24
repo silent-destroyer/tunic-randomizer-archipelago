@@ -37,7 +37,7 @@ namespace TunicArchipelago {
 
             if (loadingScene.name == "Posterity" && !EnemyRandomizer.Enemies.ContainsKey("Phage")) {
                 EnemyRandomizer.InitializeEnemies("Posterity");
-                ModelSwaps.CreateOtherWorldItemBlock();
+                ModelSwaps.CreateOtherWorldItemBlocks();
                 SceneLoader.LoadScene("TitleScreen");
                 return;
             }
@@ -159,6 +159,8 @@ namespace TunicArchipelago {
                 PaletteEditor.RandomizeFoxColors();
             }
 
+
+
             if (PlayerCharacterPatches.IsTeleporting) {
                 PlayerCharacter.instance.cheapIceParticleSystemEmission.enabled = false;
                 PlayerCharacter.instance.damageBoostParticleSystemEmission.enabled = false;
@@ -238,6 +240,11 @@ namespace TunicArchipelago {
                 DoorSecret.text = $"$$$... dOnt tehl ehnEwuhn, buht #aht \"DOOR\" bahk #Ar\nkahn bE \"OPENED\" fruhm #E \"OUTSIDE...\"";
                 DoorHint.GetComponent<NPC>().script = DoorSecret;
                 DoorHint.SetActive(true);
+            } else if (SceneName == "Shop") {
+                if (new System.Random().Next(100) < 3) { 
+                    GameObject.Find("merchant").SetActive(false);
+                    GameObject.Find("Environment").transform.GetChild(3).gameObject.SetActive(true);
+                }
             } else {
                 foreach (string Key in ItemLookup.FairyLookup.Keys) {
                     StateVariable.GetStateVariableByName(ItemLookup.FairyLookup[Key].Flag).BoolValue = SaveFile.GetInt("randomizer opened fairy chest " + Key) == 1;
@@ -252,6 +259,14 @@ namespace TunicArchipelago {
 
 
             if (Archipelago.instance != null && Archipelago.instance.integration != null && Archipelago.instance.integration.connected) {
+                try {
+                    if (TunicArchipelago.Settings.UseCustomTexture) {
+                        PaletteEditor.LoadCustomTexture();
+                    }
+                } catch (Exception ex) {
+                    Logger.LogError("An error occurred applying custom texture:");
+                    Logger.LogError(ex.Message + " " + ex.StackTrace);
+                }
                 try {
                     if (!ModelSwaps.SwappedThisSceneAlready && (ItemLookup.ItemList.Count > 0 && SaveFile.GetInt("seed") != 0)) {
                         ModelSwaps.SwapItemsInScene();
@@ -286,15 +301,6 @@ namespace TunicArchipelago {
                     FairyTargets.CreateFairyTargets();
                 } catch (Exception ex) {
                     Logger.LogError("An error occurred creating new fairy seeker spell targets:");
-                    Logger.LogError(ex.Message + " " + ex.StackTrace);
-                }
-
-                try {
-                    if (TunicArchipelago.Settings.UseCustomTexture) {
-                        PaletteEditor.LoadCustomTexture();
-                    }
-                } catch (Exception ex) {
-                    Logger.LogError("An error occurred applying custom texture:");
                     Logger.LogError(ex.Message + " " + ex.StackTrace);
                 }
 

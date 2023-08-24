@@ -12,7 +12,7 @@ namespace TunicArchipelago {
     public enum ItemTypes { 
         MONEY,
         INVENTORY,
-        SWORD,
+        SWORDUPGRADE,
         GOLDENTROPHY,
         TRINKET,
         FAIRY,
@@ -138,8 +138,9 @@ namespace TunicArchipelago {
             { "Fairy", new ItemData("Fairy", "progression", "Fairy", ItemTypes.FAIRY, 1) },
 
             // Regular Items
-            { "Stick", new ItemData("Stick", "progression", "Stick", ItemTypes.SWORD, 1) },
-            { "Sword", new ItemData("Sword", "progression", "Sword", ItemTypes.SWORD, 1) },
+            { "Stick", new ItemData("Stick", "progression", "Stick", ItemTypes.INVENTORY, 1) },
+            { "Sword", new ItemData("Sword", "progression", "Sword", ItemTypes.INVENTORY, 1) },
+            { "Sword Upgrade", new ItemData("Sword Upgrade", "progression", "Sword", ItemTypes.SWORDUPGRADE, 1) },
             { "Magic Wand", new ItemData("Magic Wand", "progression", "Techbow", ItemTypes.INVENTORY, 1) },
             { "Magic Dagger", new ItemData("Magic Dagger", "progression", "Stundagger", ItemTypes.INVENTORY, 1) },
             { "Magic Orb", new ItemData("Magic Orb", "progression", "Wand", ItemTypes.INVENTORY, 1) },
@@ -302,7 +303,7 @@ namespace TunicArchipelago {
             {"Fortress Main-(-75.0, -1.0, 17.0)", new Fairy("SV_Fairy_19_FortressCandles_Opened", $"\"FORTRESS OF THE EASTERN VAULT\"")},
             {"East Forest Redux-(164.0, -25.0, -56.0)", new Fairy("SV_Fairy_20_ForestMonolith_Opened", $"\"EAST FOREST\"")}
         };
-
+        
         public static Dictionary<string, HeroRelic> HeroRelicLookup = new Dictionary<string, HeroRelic>() {
             {"Relic - Hero Pendant SP", new HeroRelic("SV_RelicVoid_Got_Pendant_SP", "Upgrade Offering - Stamina SP - Feather", "Hero Relic - <#8ddc6e>SP", "Relic PIckup (1) (SP) [RelicVoid]", "Level Up - Stamina")},
             {"Relic - Hero Crown", new HeroRelic("SV_RelicVoid_Got_Crown_DEF", "Upgrade Offering - DamageResist - Effigy", "Hero Relic - <#5de7cf>DEF", "Relic PIckup (2) (Crown) [RelicVoid]", "Level Up - DamageResist")},
@@ -312,7 +313,7 @@ namespace TunicArchipelago {
             {"Relic - Hero Sword", new HeroRelic("SV_RelicVoid_Got_Sword_ATT", "Upgrade Offering - Attack - Tooth", "Hero Relic - <#e99d4c>ATT", "Relic PIckup (6) Sword) [RelicVoid]", "Level Up - Attack")},
         };
 
-        public static List<string> MajorItems = new List<string>() { "Stick", "Sword", "Magic Dagger", "Magic Wand", "Magic Orb", "Hero's Laurels", "Lantern", "Shield", "Shotgun", "Scavenger Mask",
+        public static List<string> MajorItems = new List<string>() { "Stick", "Sword", "Sword Upgrade", "Magic Dagger", "Magic Wand", "Magic Orb", "Hero's Laurels", "Lantern", "Shield", "Shotgun", "Scavenger Mask",
                 "Old House Key", "Fortress Vault Key", "Dath Stone", "Hourglass", "Hero Relic - ATT", "Hero Relic - DEF", "Hero Relic - POTION", "Hero Relic - HP", "Hero Relic - SP",
                 "Hero Relic - MP", "Red Hexagon", "Green Hexagon", "Blue Hexagon", "Gold Hexagon", "Pages 24-25 (Prayer)", "Pages 42-43 (Holy Cross)", "Pages 52-53 (Ice Rod)"
         };

@@ -102,7 +102,7 @@ namespace TunicArchipelago {
 
             ItemData Item = ItemLookup.Items[ItemName];
 
-            if (ImportantItems.ContainsKey(Item.ItemNameForInventory) && Item.Type != ItemTypes.SWORD) {
+            if (ImportantItems.ContainsKey(Item.ItemNameForInventory) && Item.Type != ItemTypes.SWORDUPGRADE) {
                 ImportantItems[Item.ItemNameForInventory]++;
 
                 if (Item.ItemNameForInventory == "Flask Shard" && ImportantItems["Flask Shard"] % 3 == 0) {
@@ -134,7 +134,7 @@ namespace TunicArchipelago {
                 }
             }
             
-            if (Item.Type == ItemTypes.SWORD) {
+            if (Item.Type == ItemTypes.SWORDUPGRADE) {
                 if (SaveFile.GetInt("randomizer sword progression enabled") == 1) {
                     int SwordLevel = SaveFile.GetInt("randomizer sword progression level");
                     ImportantItems["Stick"] = 1;

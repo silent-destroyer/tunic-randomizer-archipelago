@@ -222,21 +222,18 @@ namespace TunicArchipelago {
             if (Item.Type == ItemTypes.INVENTORY || Item.Type == ItemTypes.TRINKET) {
                 Item InventoryItem = Inventory.GetItemByName(Item.ItemNameForInventory);
                 InventoryItem.Quantity += Item.QuantityToGive;
+                if (Item.Name == "Stick" || Item.Name == "Sword") {
+                    InventoryItem.collectionMessage = ScriptableObject.CreateInstance<LanguageLine>();
+                    InventoryItem.collectionMessage.text = $"fownd ahn Itehm!";
+                }
                 ItemPresentation.PresentItem(InventoryItem, Item.QuantityToGive);
             }
 
-            if (Item.Type == ItemTypes.SWORD) {
+            if (Item.Type == ItemTypes.SWORDUPGRADE) {
 
-                if (SaveFile.GetInt("randomizer sword progression enabled") == 1) {
+                if (SaveFile.GetInt("randomizer sword progression enabled") == 1 && Item.Name == "Sword Upgrade") {
                     int SwordLevel = SaveFile.GetInt("randomizer sword progression level");
                     SwordProgression.UpgradeSword(SwordLevel+1);
-                } else {
-                    Item InventoryItem = Inventory.GetItemByName(Item.ItemNameForInventory);
-                    InventoryItem.collectionMessage = ScriptableObject.CreateInstance<LanguageLine>();
-                    InventoryItem.collectionMessage.text = $"fownd ahn Itehm!";
-
-                    InventoryItem.Quantity += Item.QuantityToGive;
-                    ItemPresentation.PresentItem(InventoryItem);
                 }
                 if (TunicArchipelago.Settings.ShowItemsEnabled) {
                     ModelSwaps.SwapItemsInScene();
@@ -348,7 +345,7 @@ namespace TunicArchipelago {
             }
 
             if (ItemLookup.MajorItems.Contains(Item.Name)) {
-                if (Item.Type == ItemTypes.SWORD && SaveFile.GetInt("randomizer sword progression enabled") == 1) {
+                if (Item.Type == ItemTypes.SWORDUPGRADE && SaveFile.GetInt("randomizer sword progression enabled") == 1) {
                     SaveFile.SetFloat($"randomizer Sword Progression {SaveFile.GetInt("randomizer sword progression level")} time", SpeedrunData.inGameTime);
                 }
                 if (Item.Type == ItemTypes.PAGE) {

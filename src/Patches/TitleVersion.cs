@@ -27,7 +27,6 @@ namespace TunicArchipelago {
                     StreamReader Reader = new StreamReader(response.GetResponseStream());
                     string JsonResponse = Reader.ReadToEnd();
                     dynamic Releases = JsonConvert.DeserializeObject<dynamic>(JsonResponse);
-                    TunicArchipelago.Logger.LogInfo(Releases[0]["tag_name"]);
                     UpdateAvailable = Releases[0]["tag_name"].ToString() != PluginInfo.VERSION;
                     UpdateVersion = Releases[0]["tag_name"].ToString();
                 } catch (Exception e) {

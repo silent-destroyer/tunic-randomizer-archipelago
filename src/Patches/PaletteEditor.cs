@@ -285,9 +285,8 @@ namespace TunicArchipelago {
                         }
                     }
                 }
-                GameObject LaurelsPresentation = GameObject.Find("_ItemPresentation(Clone)/root/Item Root/User Rotation Root/Laurels");
-                if (LaurelsPresentation != null) {
-                    LaurelsPresentation.GetComponent<MeshRenderer>().material.color = HyperdashColor;
+                if (ModelSwaps.Items.ContainsKey("Hyperdash") && ModelSwaps.Items["Hyperdash"] != null) {
+                    ModelSwaps.Items["Hyperdash"].GetComponent<MeshRenderer>().material.color = HyperdashColor;
                 }
             }
         }

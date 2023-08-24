@@ -33,9 +33,9 @@ namespace TunicArchipelago {
             int Player = Archipelago.instance.GetPlayerSlot();
 
             ArchipelagoHint Lantern = Locations.MajorItemLocations["Lantern"][0];
-            Scene = Locations.SimplifiedSceneNames[Locations.VanillaLocations[Locations.LocationDescriptionToId[Lantern.Location]].Location.SceneName].ToUpper();
-            Prefix = Vowels.Contains(Scene[0]) ? "#E" : "#uh";
             if (Lantern.Player == Player) {
+                Scene = Locations.SimplifiedSceneNames[Locations.VanillaLocations[Locations.LocationDescriptionToId[Lantern.Location]].Location.SceneName].ToUpper();
+                Prefix = Vowels.Contains(Scene[0]) ? "#E" : "#uh";
                 Hint = $"lehjehnd sehz {Prefix} \"{Scene.ToUpper()}\"\nwil hehlp yoo \"<#00FFFF>LIGHT THE WAY<#ffffff>...\"";
             } else {
                 Hint = $"lehjehnd sehz \"{Archipelago.instance.GetPlayerName((int)Lantern.Player).ToUpper()}'S WORLD\"\nwil hehlp yoo \"<#00FFFF>LIGHT THE WAY<#ffffff>...\"";
