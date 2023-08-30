@@ -34,7 +34,7 @@ namespace TunicArchipelago {
 
             ArchipelagoHint Lantern = Locations.MajorItemLocations["Lantern"][0];
             if (Lantern.Player == Player) {
-                Scene = Locations.SimplifiedSceneNames[Locations.VanillaLocations[Locations.LocationDescriptionToId[Lantern.Location]].Location.SceneName].ToUpper();
+                Scene = Lantern.Location == "Your Pocket" ? Lantern.Location.ToUpper() : Locations.SimplifiedSceneNames[Locations.VanillaLocations[Locations.LocationDescriptionToId[Lantern.Location]].Location.SceneName].ToUpper();
                 Prefix = Vowels.Contains(Scene[0]) ? "#E" : "#uh";
                 Hint = $"lehjehnd sehz {Prefix} \"{Scene.ToUpper()}\"\nwil hehlp yoo \"<#00FFFF>LIGHT THE WAY<#ffffff>...\"";
             } else {
@@ -45,7 +45,7 @@ namespace TunicArchipelago {
             ArchipelagoHint Hyperdash = Locations.MajorItemLocations["Hero's Laurels"][0];
             Hint = $"lehjehnd sehz <#FF00FF>suhm%i^ ehkstruhordinArE<#FFFFFF>\nuhwAts yoo in ";
             if (Hyperdash.Player == Player) {
-                Scene = Locations.SimplifiedSceneNames[Locations.VanillaLocations[Locations.LocationDescriptionToId[Hyperdash.Location]].Location.SceneName].ToUpper();
+                Scene = Hyperdash.Location == "Your Pocket" ? Hyperdash.Location.ToUpper() : Locations.SimplifiedSceneNames[Locations.VanillaLocations[Locations.LocationDescriptionToId[Hyperdash.Location]].Location.SceneName].ToUpper();
                 Prefix = Vowels.Contains(Scene[0]) ? "#E" : "#uh";
                 Hint += $"{Prefix} \"{Scene}...\"";
             } else {
@@ -66,7 +66,7 @@ namespace TunicArchipelago {
                 string HintGrave = HintGraves[random.Next(HintGraves.Count)];
 
                 if (ItemHint.Player == Player) {
-                    Scene = Locations.SimplifiedSceneNames[Locations.VanillaLocations[Locations.LocationDescriptionToId[ItemHint.Location]].Location.SceneName].ToUpper();
+                    Scene = ItemHint.Location == "Your Pocket" ? ItemHint.Location.ToUpper() : Locations.SimplifiedSceneNames[Locations.VanillaLocations[Locations.LocationDescriptionToId[ItemHint.Location]].Location.SceneName].ToUpper();
                     if (HintItem == "Pages 24-25 (Prayer)" && Scene == "Fortress Relic") {
                         continue;
                     }
@@ -97,7 +97,7 @@ namespace TunicArchipelago {
                 ArchipelagoHint HexHint = Hexagon == "Gold Hexagon" ? Locations.MajorItemLocations[Hexagon][i] : Locations.MajorItemLocations[Hexagon][0];
 
                 if (HexHint.Player == Player) {
-                    Scene = Locations.SimplifiedSceneNames[Locations.VanillaLocations[Locations.LocationDescriptionToId[HexHint.Location]].Location.SceneName].ToUpper();
+                    Scene = HexHint.Location == "Your Pocket" ? HexHint.Location.ToUpper() : Locations.SimplifiedSceneNames[Locations.VanillaLocations[Locations.LocationDescriptionToId[HexHint.Location]].Location.SceneName].ToUpper();
                     Prefix = Vowels.Contains(Scene[0]) ? "#E" : "#uh";
                     Hint = $"#A sA {Prefix} \"{Scene.ToUpper()}\" iz \nwAr #uh {HexagonColors[Hexagon]}kwehstuhgawn [hexagram]<#FFFFFF> iz fownd\"...\"";
                 } else {

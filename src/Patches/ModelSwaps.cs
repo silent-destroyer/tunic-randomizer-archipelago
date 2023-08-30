@@ -202,11 +202,11 @@ namespace TunicArchipelago {
 
             Items[$"Other World {ItemFlags.None}"] = GameObject.Instantiate(Items[$"Other World {ItemFlags.Advancement}"]);
             Items[$"Other World {ItemFlags.None}"].transform.GetChild(6).gameObject.GetComponent<MeshRenderer>().materials = GameObject.Find("Group/Jelly Cube/Jelly Cube").GetComponent<CreatureMaterialManager>().originalMaterials;
-            Items[$"Other World {ItemFlags.None}"].transform.GetChild(6).gameObject.GetComponent<MeshRenderer>().material.color = UnityEngine.Color.green;
+            Items[$"Other World {ItemFlags.None}"].transform.GetChild(6).gameObject.GetComponent<MeshRenderer>().material.color = new UnityEngine.Color(0, 0.5f, 0, 1);
 
             Items[$"Other World {ItemFlags.NeverExclude}"] = GameObject.Instantiate(Items[$"Other World {ItemFlags.Advancement}"]);
             Items[$"Other World {ItemFlags.NeverExclude}"].transform.GetChild(6).gameObject.GetComponent<MeshRenderer>().materials = GameObject.Find("Group/Jelly Cube/Jelly Cube").GetComponent<CreatureMaterialManager>().originalMaterials;
-            Items[$"Other World {ItemFlags.NeverExclude}"].transform.GetChild(6).gameObject.GetComponent<MeshRenderer>().material.color = UnityEngine.Color.blue;
+            Items[$"Other World {ItemFlags.NeverExclude}"].transform.GetChild(6).gameObject.GetComponent<MeshRenderer>().material.color = new UnityEngine.Color(0, 0.15f, 1, 1);
 
             Items[$"Other World {ItemFlags.Trap}"] = GameObject.Instantiate(Items[$"Other World {ItemFlags.Advancement}"]);
 
@@ -386,8 +386,33 @@ namespace TunicArchipelago {
             }
         }
 
-        public static void ApplyAPChestTexture(Chest chest, ArchipelagoItem APItem) { 
+        public static void ApplyAPChestTexture(Chest chest, ArchipelagoItem APItem) {
+
+            GameObject ChestTop = new GameObject("sprite");
+            ChestTop.transform.parent = chest.transform.GetChild(0).GetChild(0).GetChild(0).GetChild(0);
+            ChestTop.AddComponent<SpriteRenderer>().sprite = FindSprite("trinkets 1_slot_grey");
+            ChestTop.transform.localPosition = new Vector3(0f, 0.1f, 1.2f);
+            ChestTop.transform.localEulerAngles = new Vector3(57f, 180f, 0f);
+            ChestTop.transform.localScale = new Vector3(0.2f, 0.2f, 0.2f);
+            ItemFlags flag = APItem.Classification;
+            if (flag == ItemFlags.Trap) {
+                flag = new List<ItemFlags>() { ItemFlags.Advancement, ItemFlags.NeverExclude, ItemFlags.None }[new System.Random().Next(3)];
+            }
+
+            if (flag == ItemFlags.None) {
+                chest.transform.GetChild(1).GetComponent<SkinnedMeshRenderer>().materials[0].color = new UnityEngine.Color(0f, 0.75f, 0f, 1f);
+            } else if(flag == ItemFlags.NeverExclude) {
+                chest.transform.GetChild(1).GetComponent<SkinnedMeshRenderer>().materials[0].color = new UnityEngine.Color(0f, 0.5f, 0.75f, 1f);
+            } else if(flag == ItemFlags.Advancement) {
+                chest.transform.GetChild(1).GetComponent<SkinnedMeshRenderer>().materials = new Material[] {
+                    ModelSwaps.Items["GoldenTrophy_2"].GetComponent<MeshRenderer>().material,
+                    chest.transform.GetChild(1).GetComponent<SkinnedMeshRenderer>().materials[1]
+                };
+            }
             
+            if(APItem.Classification == ItemFlags.Trap) {
+                ChestTop.transform.localEulerAngles = new Vector3(57f, 180f, 180f);
+            }
         }
 
         public static void SetupItemPickup(ItemPickup ItemPickup) {

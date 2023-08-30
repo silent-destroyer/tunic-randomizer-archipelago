@@ -152,7 +152,7 @@ namespace TunicArchipelago {
         private IEnumerator<bool> ProcessIncomingItemsStateMachine() {
             while (!cancellationTokenSource.IsCancellationRequested) {
 
-                while (SceneManager.GetActiveScene().name == "TitleScreen" || SceneLoaderPatches.SceneName == "TitleScreen" || lastProcessedItemIndex == -1) {
+                while (SceneManager.GetActiveScene().name == "TitleScreen" || SceneLoaderPatches.SceneName == "TitleScreen") {
                     yield return true;
                 }
 
@@ -165,7 +165,7 @@ namespace TunicArchipelago {
                 var itemName = session.Items.GetItemName(networkItem.Item);
                 var itemDisplayName = itemName + " (" + networkItem.Item + ") at index " + pendingItem.ItemIndex;
 
-                if (pendingItem.ItemIndex <= lastProcessedItemIndex) {
+                if (SaveFile.GetInt($"randomizer processed item index {pendingItem.ItemIndex}") == 1) {
                     incomingItems.TryDequeue(out _);
                     TunicArchipelago.Tracker.SetCollectedItem(itemName, false);
                     yield return true;
@@ -193,7 +193,7 @@ namespace TunicArchipelago {
                         incomingItems.TryDequeue(out _);
                         lastProcessedItemIndex = pendingItem.ItemIndex;
                         SaveFile.SetInt("randomizer last processed item index", lastProcessedItemIndex);
-
+                        SaveFile.SetInt($"randomizer processed item index {pendingItem.ItemIndex}", 1);
 /*                        // Wait for animation to finish
                         var preInteractionStart = DateTime.Now;
                         while (DateTime.Now < preInteractionStart + TimeSpan.FromSeconds(1.0)) {
@@ -249,7 +249,7 @@ namespace TunicArchipelago {
 
                 if (networkItem.Player != session.ConnectionInfo.Slot) {
                     SaveFile.SetInt("archipelago items sent to other players", SaveFile.GetInt("archipelago items sent to other players")+1);
-                    ShowNotification($"yoo sehnt \"{itemName}\" too \"{receiver}!\"", $"hOp #A lIk it!");
+                    ShowNotification($"yoo sehnt \"{itemName.Replace("_", " ")}\" too \"{receiver}!\"", $"hOp #A lIk it!");
                 } else {
                     //ShowNotification($"yoo \"FOUND {itemName}!\"", $"$oud bE yoosfuhl!");
                 }

@@ -355,9 +355,9 @@ namespace TunicArchipelago {
                 string LocationSuffix = Location[Location.Length - 1] == 'S' ? "R" : "iz";
                 string ItemPrefix = Item.ItemName.Contains("Money") ? "suhm" : Vowels.Contains(Item.ItemName.ToUpper()[0]) ? "ahn" : "uh";
                 string PlayerName = Archipelago.instance.GetPlayerName(Item.Player);
-                string Hint = $"bI #uh wA, I hurd #aht \"{HintableLocationIds[Key]}\"\n{LocationSuffix} gRdi^ \"{PlayerName.ToUpper()}'S {Item.ItemName.ToUpper()}.\"";
+                string Hint = $"bI #uh wA, I hurd #aht \"{HintableLocationIds[Key].Replace(" ", "\" \"")}\" {LocationSuffix} gRdi^ \"{PlayerName.ToUpper().Replace(" ", "\" \"")}'S {Item.ItemName.ToUpper().Replace(" ", "\" \"").Replace("_", "\" \"")}.\"";
 
-                LocationHints.Add(Hint);
+                LocationHints.Add(WordWrapString(Hint));
             }
         }
 
@@ -377,7 +377,7 @@ namespace TunicArchipelago {
                         if (SaveFile.GetInt("randomizer sword progression enabled") == 1 && (Item == "Sword" || Item == "Stick")) {
                             Item = "Sword Upgrade";
                         }
-                        string Scene = Locations.SimplifiedSceneNames[Locations.VanillaLocations[Locations.LocationDescriptionToId[HintLocation.Location]].Location.SceneName].ToUpper();
+                        string Scene = HintLocation.Location == "Your Pocket" ? HintLocation.Location.ToUpper() : Locations.SimplifiedSceneNames[Locations.VanillaLocations[Locations.LocationDescriptionToId[HintLocation.Location]].Location.SceneName].ToUpper();
                         string ScenePrefix = Scene == "Trinket Well" ? "%rOi^" : "aht #uh";
                         Hint = $"bI #uh wA, I saw A \"{Item.ToUpper().Replace(" ", "\" \"")}\" #uh lahst tIm I wuhs {ScenePrefix} \"{Scene.Replace(" ", "\" \"")}.\"";
 
@@ -429,7 +429,7 @@ namespace TunicArchipelago {
 
                 if (MoneyInScene >= 200 && SceneItemCount < 10) {
                     string ScenePrefix = Vowels.Contains(Scene[0]) ? "#E" : "#uh";
-                    BarrenAndTreasureHints.Add($"ahn EzE plAs too fInd A \"LOT OF MONEY\" iz {ScenePrefix}\n\"{Scene}.\"");
+                    BarrenAndTreasureHints.Add($"ahn EzE plAs too fInd A \"LOT OF MONEY\" iz {ScenePrefix}\n\"{Scene.ToUpper()}.\"");
                 } else {
                     bool BarrenArea = true;
                     foreach(ArchipelagoItem Item in APItemsInScene) {
@@ -450,9 +450,9 @@ namespace TunicArchipelago {
                         string Hint = "";
                         if (Scene.Length > 15) {
                             string[] SceneSplit = Scene.Split(' ');
-                            Hint = $"if I wur yoo, I woud uhvoid \"{String.Join(" ", SceneSplit.Take(SceneSplit.Length - 1))}\"\n\"{SceneSplit[SceneSplit.Length - 1]}.\" #aht plAs iz \"NOT IMPORTANT.\"";
+                            Hint = $"if I wur yoo, I woud uhvoid \"{String.Join(" ", SceneSplit.Take(SceneSplit.Length - 1)).ToUpper()}\"\n\"{SceneSplit[SceneSplit.Length - 1].ToUpper()}.\" #aht plAs iz \"NOT IMPORTANT.\"";
                         } else {
-                            Hint = $"if I wur yoo, I woud uhvoid \"{Scene}.\"\n#aht plAs iz \"NOT IMPORTANT.\"";
+                            Hint = $"if I wur yoo, I woud uhvoid \"{Scene.ToUpper()}.\"\n#aht plAs iz \"NOT IMPORTANT.\"";
                         }
                         BarrenAndTreasureHints.Add(Hint);
                     }

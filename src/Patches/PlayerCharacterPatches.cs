@@ -130,6 +130,7 @@ namespace TunicArchipelago {
                 EnemyRandomizer.Enemies[Key].SetActive(false);
                 EnemyRandomizer.Enemies[Key].transform.position = new Vector3(-30000f, -30000f, -30000f);
             }
+
         }
 
 
