@@ -138,7 +138,7 @@ namespace TunicArchipelago {
             if (!Archipelago.instance.integration.connected) {
                 Archipelago.instance.Connect();
             }
-            Archipelago.instance.integration.lastProcessedItemIndex = SaveFile.GetInt("randomizer last processed item index");
+
             if (Locations.AllScenes.Count == 0) {
                 for (int i = 0; i < SceneManager.sceneCountInBuildSettings; i++) {
                     string SceneName = Path.GetFileNameWithoutExtension(SceneUtility.GetScenePathByBuildIndex(i));

@@ -29,7 +29,6 @@ namespace TunicArchipelago {
         private CancellationTokenSource cancellationTokenSource;
         private IEnumerator<bool> processIncomingItemsStateMachine;
         private IEnumerator<bool> processOutgoingItemsStateMachine;
-        public int lastProcessedItemIndex = -1;
         private ConcurrentQueue<(NetworkItem NetworkItem, int ItemIndex)> incomingItems;
         private ConcurrentQueue<NetworkItem> outgoingItems;
         private DeathLinkService deathLinkService;
@@ -39,7 +38,7 @@ namespace TunicArchipelago {
             if (!connected) {
                 return;
             }
-            if (SceneManager.GetActiveScene().name != "TitleScreen") {
+            if (SceneManager.GetActiveScene().name != "TitleScreen" && PlayerCharacter.instance != null) {
                 if (processIncomingItemsStateMachine != null) {
                     processIncomingItemsStateMachine.MoveNext();
                 }
@@ -134,7 +133,6 @@ namespace TunicArchipelago {
                 cancellationTokenSource = null;
                 processIncomingItemsStateMachine = null;
                 processOutgoingItemsStateMachine = null;
-                lastProcessedItemIndex = -1;
                 incomingItems = new ConcurrentQueue<(NetworkItem NetworkItem, int ItemIndex)>();
                 outgoingItems = new ConcurrentQueue<NetworkItem>();
                 deathLinkService = null;
@@ -151,10 +149,6 @@ namespace TunicArchipelago {
 
         private IEnumerator<bool> ProcessIncomingItemsStateMachine() {
             while (!cancellationTokenSource.IsCancellationRequested) {
-
-                while (SceneManager.GetActiveScene().name == "TitleScreen" || SceneLoaderPatches.SceneName == "TitleScreen") {
-                    yield return true;
-                }
 
                 if (!incomingItems.TryPeek(out var pendingItem)) {
                     yield return true;
@@ -191,14 +185,7 @@ namespace TunicArchipelago {
                         Logger.LogInfo("Recieved " + itemDisplayName + " from " + session.Players.GetPlayerName(networkItem.Player));
 
                         incomingItems.TryDequeue(out _);
-                        lastProcessedItemIndex = pendingItem.ItemIndex;
-                        SaveFile.SetInt("randomizer last processed item index", lastProcessedItemIndex);
                         SaveFile.SetInt($"randomizer processed item index {pendingItem.ItemIndex}", 1);
-/*                        // Wait for animation to finish
-                        var preInteractionStart = DateTime.Now;
-                        while (DateTime.Now < preInteractionStart + TimeSpan.FromSeconds(1.0)) {
-                            yield return true;
-                        }*/
 
                         // Wait for all interactions to finish
                         while (
@@ -206,12 +193,13 @@ namespace TunicArchipelago {
                             GenericPrompt.instance.isActiveAndEnabled ||
                             ItemPresentation.instance.isActiveAndEnabled ||
                             PageDisplay.instance.isActiveAndEnabled ||
-                            NPCDialogue.instance.isActiveAndEnabled || PlayerCharacter.InstanceIsDead) {
+                            NPCDialogue.instance.isActiveAndEnabled || 
+                            PlayerCharacter.InstanceIsDead) {
                             yield return true;
                         }
 
                         // Pause before processing next item
-                        var postInteractionStart = DateTime.Now;
+                        DateTime postInteractionStart = DateTime.Now;
                         while (DateTime.Now < postInteractionStart + TimeSpan.FromSeconds(2.5)) {
                             yield return true;
                         }
@@ -219,14 +207,13 @@ namespace TunicArchipelago {
                         break;
 
                     case ItemPatches.ItemResult.TemporaryFailure:
-                        Logger.LogDebug("Will retrying processing item " + itemDisplayName);
+                        Logger.LogDebug("Player is busy, will retry processing item: " + itemDisplayName);
                         break;
 
                     case ItemPatches.ItemResult.PermanentFailure:
                         Logger.LogWarning("Failed to process item " + itemDisplayName);
                         incomingItems.TryDequeue(out _);
-                        lastProcessedItemIndex = pendingItem.ItemIndex;
-                        SaveFile.SetInt("randomizer last processed item index", lastProcessedItemIndex);
+                        SaveFile.SetInt($"randomizer processed item index {pendingItem.ItemIndex}", 1);
                         break;
                 }
 

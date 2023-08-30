@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine.SceneManagement;
 using static TunicArchipelago.GhostHints;
+using Archipelago.MultiClient.Net.Enums;
 
 namespace TunicArchipelago {
     public class Hints {
@@ -32,13 +33,32 @@ namespace TunicArchipelago {
 
             int Player = Archipelago.instance.GetPlayerSlot();
 
-            ArchipelagoHint Lantern = Locations.MajorItemLocations["Lantern"][0];
-            if (Lantern.Player == Player) {
-                Scene = Lantern.Location == "Your Pocket" ? Lantern.Location.ToUpper() : Locations.SimplifiedSceneNames[Locations.VanillaLocations[Locations.LocationDescriptionToId[Lantern.Location]].Location.SceneName].ToUpper();
+            Dictionary<string, ArchipelagoItem> SphereOnePlayer = new Dictionary<string, ArchipelagoItem>();
+            Dictionary<string, ArchipelagoItem> SphereOneOthers = new Dictionary<string, ArchipelagoItem>();
+            foreach(string itemkey in ItemLookup.ItemList.Keys) {
+                ArchipelagoItem item = ItemLookup.ItemList[itemkey];
+                if (Archipelago.instance.GetPlayerGame(item.Player) == "Tunic" && ItemLookup.MajorItems.Contains(item.ItemName) && Locations.VanillaLocations[itemkey].Location.RequiredItems.Count == 0) {
+                    SphereOnePlayer.Add(itemkey, item);
+                }
+                if (item.Player != Archipelago.instance.GetPlayerSlot() && item.Classification == ItemFlags.Advancement && Locations.VanillaLocations[itemkey].Location.RequiredItems.Count == 0) {
+                    SphereOneOthers.Add(itemkey, item);
+                }
+            }
+            ArchipelagoItem mailboxitem = null;
+            string key = "";
+            if (SphereOnePlayer.Count > 0) {
+                key = SphereOnePlayer.Keys.ToList()[random.Next(SphereOnePlayer.Count)];
+                mailboxitem = SphereOnePlayer[key];
+            } else if (SphereOneOthers.Count > 0) {
+                key = SphereOneOthers.Keys.ToList()[random.Next(SphereOneOthers.Count)];
+                mailboxitem = SphereOneOthers[key];
+            }
+            if (mailboxitem != null) {
+                Scene = Locations.SimplifiedSceneNames[Locations.VanillaLocations[key].Location.SceneName].ToUpper();
                 Prefix = Vowels.Contains(Scene[0]) ? "#E" : "#uh";
-                Hint = $"lehjehnd sehz {Prefix} \"{Scene.ToUpper()}\"\nwil hehlp yoo \"<#00FFFF>LIGHT THE WAY<#ffffff>...\"";
+                Hint = $"lehjehnd sehz {Prefix} \"{Scene.ToUpper()}\"\nkuhntAnz wuhn uhv mehnE \"<#00FFFF>FIRST STEPS<#ffffff>\" ahn yor jurnE.";
             } else {
-                Hint = $"lehjehnd sehz \"{Archipelago.instance.GetPlayerName((int)Lantern.Player).ToUpper()}'S WORLD\"\nwil hehlp yoo \"<#00FFFF>LIGHT THE WAY<#ffffff>...\"";
+                Hint = $"yor frehndz muhst furst hehlp yoo fInd yor wA...\ngoud luhk, rooin sEkur.";
             }
             HintMessages.Add("Mailbox", Hint);
 
