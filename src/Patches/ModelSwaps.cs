@@ -1,6 +1,7 @@
 ﻿using Archipelago.MultiClient.Net.Enums;
 using Archipelago.MultiClient.Net.Models;
 using BepInEx.Logging;
+using HarmonyLib;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -34,8 +35,9 @@ namespace TunicArchipelago {
         public static GameObject GreenKeyMaterial;
         public static GameObject BlueKeyMaterial;
         public static GameObject HeroRelicMaterial;
-        public static bool DathStonePresentationAlreadySetup = false;
 
+        public static bool DathStonePresentationAlreadySetup = false;
+        public static bool OldHouseKeyPresentationAlreadySetup = false;
         public static GameObject GlowEffect;
         public static GameObject SpecialKeyPopup;
         public static void InitializeItems() {
@@ -96,7 +98,6 @@ namespace TunicArchipelago {
             Items["GoldenTrophy_12"] = ItemRoot.transform.GetChild(44).gameObject;
 
             Items["Key"] = ItemRoot.transform.GetChild(4).gameObject;
-            Items["Key (House)"] = ItemRoot.transform.GetChild(4).gameObject;
             Items["Vault Key (Red)"] = ItemRoot.transform.GetChild(23).gameObject;
 
             Items["Hexagon Red"] = ItemRoot.transform.GetChild(24).GetChild(0).gameObject;
@@ -158,6 +159,8 @@ namespace TunicArchipelago {
                 Cards[TrinketItem.name] = TrinketItem.CardGraphic;
             }
 
+            SetupOldHouseKeyItemPresentation();
+            Items["Key (House)"] = ItemRoot.transform.GetChild(48).gameObject;
             SetupDathStoneItemPresentation();
             LoadTexture();
             InitializeExtras();
@@ -931,6 +934,32 @@ namespace TunicArchipelago {
                 Inventory.GetItemByName("Hexagon Blue").collectionMessage.text = $"fownd ahn Itehm!";
             } catch (Exception e) {
                 Logger.LogInfo(e.Message);
+            }
+        }
+
+        public static void SetupOldHouseKeyItemPresentation() {
+            if (!OldHouseKeyPresentationAlreadySetup) {
+                try {
+                    Resources.FindObjectsOfTypeAll<ItemPresentationGraphic>().Where(item => item.gameObject.name == "key twist")
+                        .ToList()[0].gameObject.GetComponent<ItemPresentationGraphic>().items = new Item[] { Inventory.GetItemByName("Key") };
+                    GameObject housekey = GameObject.Instantiate(Resources.FindObjectsOfTypeAll<ItemPresentationGraphic>().Where(item => item.gameObject.name == "key twist (special)")
+                        .ToList()[0].gameObject);
+                    housekey.SetActive(false);
+                    housekey.transform.parent = Resources.FindObjectsOfTypeAll<ItemPresentationGraphic>().Where(item => item.gameObject.name == "key twist (special)")
+                        .ToList()[0].gameObject.transform.parent;
+                    housekey.transform.localPosition = Vector3.zero;
+                    housekey.GetComponent<ItemPresentationGraphic>().items = new Item[] { Inventory.GetItemByName("Key (House)") };
+                    GameObject.DontDestroyOnLoad(housekey);
+                    List<ItemPresentationGraphic> newipgs = new List<ItemPresentationGraphic>() { };
+                    foreach (ItemPresentationGraphic ipg in ItemPresentation.instance.itemGraphics) {
+                        newipgs.Add(ipg);
+                    }
+                    newipgs.Add(housekey.GetComponent<ItemPresentationGraphic>());
+                    ItemPresentation.instance.itemGraphics = newipgs.ToArray();
+                    OldHouseKeyPresentationAlreadySetup = true;
+                } catch (Exception e) { 
+                    
+                }
             }
         }
 

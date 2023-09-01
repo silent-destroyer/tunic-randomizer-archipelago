@@ -167,6 +167,7 @@ namespace TunicArchipelago {
                 Dat.floatDatabase["mpCost_Spear_mp2"] = 40f;
             }
             Inventory.GetItemByName("MoneyLevelItem").Quantity = 1;
+            Inventory.GetItemByName("Key (House)").icon = Inventory.GetItemByName("Key Special").icon;
 
             if (SaveFile.GetInt("randomizer sword progression enabled") != 0) {
                 int SwordLevel = SaveFile.GetInt("randomizer sword progression level");

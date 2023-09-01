@@ -34,7 +34,7 @@ namespace TunicArchipelago {
             GUI.DragWindow(new Rect(500f, 50f, 500f, 30f));
             GUI.Label(new Rect(10f, 20f, 500f, 30f), $"Player: {TunicArchipelago.Settings.ConnectionSettings.Player}");
             GUI.Label(new Rect(10f, 60f, 80f, 30f), $"Status:");
-            if (Archipelago.instance.integration.connected) {
+            if (Archipelago.instance.integration != null && Archipelago.instance.integration.connected) {
                 GUI.color = Color.green;
                 GUI.Label(new Rect(95f, 60f, 150f, 30f), $"Connected!");
                 GUI.color = Color.white;
@@ -60,7 +60,7 @@ namespace TunicArchipelago {
                 RefreshSettings();
             }
 
-            if (Archipelago.instance.integration.connected) {
+            if (Archipelago.instance.integration != null && Archipelago.instance.integration.connected) {
                 Dictionary<string, object> slotData = Archipelago.instance.GetPlayerSlotData();
                 GUI.Label(new Rect(10f, 180f, 500f, 30f), $"World Settings");
 

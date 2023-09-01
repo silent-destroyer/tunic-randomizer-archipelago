@@ -228,7 +228,8 @@ namespace TunicArchipelago {
                 }
             } else if (SceneName == "Overworld Redux") {
                 GameObject.Find("_Signposts/Signpost (3)/").GetComponent<Signpost>().message.text = $"#is wA too \"West Garden\"\n<#33FF33>[death] bEwAr uhv tArE [death]";
-                if (TunicArchipelago.Settings.HeroPathHintsEnabled && SaveFile.GetInt("randomizer got mailbox hint item") == 0) {
+                GameObject.Find("_Environment Special/Door (1)/door/key twist").GetComponent<MeshRenderer>().materials = ModelSwaps.Items["Key (House)"].GetComponent <MeshRenderer>().materials;
+                if (TunicArchipelago.Settings.HeroPathHintsEnabled && SaveFile.GetInt($"randomizer picked up {Hints.MailboxHintId}") == 0) {
                     GameObject.Find("_Environment/_Decorations/Mailbox (1)/mailbox flag").transform.rotation = new Quaternion(0.5f, -0.5f, 0.5f, 0.5f);
                 }
             } else if (SceneName == "Swamp Redux 2") {
@@ -314,6 +315,7 @@ namespace TunicArchipelago {
 
             }
 
+            ItemTracker.SaveTrackerFile();
         }
 
         public static void PauseMenu___button_ReturnToTitle_PostfixPatch(PauseMenu __instance) {

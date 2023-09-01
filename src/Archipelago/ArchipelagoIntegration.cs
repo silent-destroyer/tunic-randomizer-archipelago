@@ -17,6 +17,7 @@ using System.Globalization;
 using Archipelago.MultiClient.Net.Packets;
 using System.IO;
 using System.Runtime.InteropServices.ComTypes;
+using Archipelago.MultiClient.Net.Helpers;
 
 namespace TunicArchipelago {
     public class ArchipelagoIntegration {
@@ -26,25 +27,32 @@ namespace TunicArchipelago {
         public bool connected;
 
         public ArchipelagoSession session;
-        private CancellationTokenSource cancellationTokenSource;
-        private IEnumerator<bool> processIncomingItemsStateMachine;
-        private IEnumerator<bool> processOutgoingItemsStateMachine;
-        private ConcurrentQueue<(NetworkItem NetworkItem, int ItemIndex)> incomingItems;
+        private IEnumerator<bool> incomingItemHandler;
+        private IEnumerator<bool> outgoingItemHandler;
+        private IEnumerator<bool> checkItemsReceived;
+        private ConcurrentQueue<(NetworkItem NetworkItem, int index)> incomingItems;
         private ConcurrentQueue<NetworkItem> outgoingItems;
         private DeathLinkService deathLinkService;
         public Dictionary<string, object> slotData;
+        private int ItemIndex = 0;
 
         public void Update() {
             if (!connected) {
                 return;
             }
+
+            if (checkItemsReceived != null) {
+                checkItemsReceived.MoveNext();
+            }
+
             if (SceneManager.GetActiveScene().name != "TitleScreen" && PlayerCharacter.instance != null) {
-                if (processIncomingItemsStateMachine != null) {
-                    processIncomingItemsStateMachine.MoveNext();
+
+                if (incomingItemHandler != null) {
+                    incomingItemHandler.MoveNext();
                 }
 
-                if (processOutgoingItemsStateMachine != null) {
-                    processOutgoingItemsStateMachine.MoveNext();
+                if (outgoingItemHandler != null) {
+                    outgoingItemHandler.MoveNext();
                 }
             }
 
@@ -62,10 +70,10 @@ namespace TunicArchipelago {
             if (session == null) {
                 session = ArchipelagoSessionFactory.CreateSession(TunicArchipelago.Settings.ConnectionSettings.Hostname, TunicArchipelago.Settings.ConnectionSettings.Port);
             }
-            cancellationTokenSource = new CancellationTokenSource();
-            processIncomingItemsStateMachine = this.ProcessIncomingItemsStateMachine();
-            processOutgoingItemsStateMachine = this.ProcessOutgoingItemsStateMachine();
-            incomingItems = new ConcurrentQueue<(NetworkItem NetworkItem, int Index)>();
+            incomingItemHandler = IncomingItemHandler();
+            outgoingItemHandler = OutgoingItemHandler();
+            checkItemsReceived = CheckItemsReceived();
+            incomingItems = new ConcurrentQueue<(NetworkItem NetworkItem, int index)>();
             outgoingItems = new ConcurrentQueue<NetworkItem>();
 
             TunicArchipelago.Tracker = new ItemTracker();
@@ -75,13 +83,6 @@ namespace TunicArchipelago {
             } catch (Exception e) {
                 LoginResult = new LoginFailure(e.GetBaseException().Message);
             }
-            
-            session.Items.ItemReceived += (ReceivedItemsHelper) => {
-                NetworkItem Item = ReceivedItemsHelper.DequeueItem();
-                string ItemReceivedName = ReceivedItemsHelper.GetItemName(Item.Item);
-                int ItemIndex = ReceivedItemsHelper.Index;
-                incomingItems.Enqueue((Item, ItemIndex));
-            };
 
             if (LoginResult is LoginSuccessful LoginSuccess) {
 
@@ -102,6 +103,8 @@ namespace TunicArchipelago {
                     deathLinkService.EnableDeathLink();
                 }
 
+
+
             } else {
                 LoginFailure loginFailure = (LoginFailure)LoginResult;
                 Logger.LogInfo("Error connecting to Archipelago:");
@@ -119,25 +122,21 @@ namespace TunicArchipelago {
         public void TryDisconnect() {
 
             try {
-
-                if (cancellationTokenSource != null) {
-                    cancellationTokenSource.Cancel();
-                }
-
+                
                 if (session != null) {
                     session.Socket.DisconnectAsync();
                     session = null;
                 }
 
                 connected = false;
-                cancellationTokenSource = null;
-                processIncomingItemsStateMachine = null;
-                processOutgoingItemsStateMachine = null;
+                incomingItemHandler = null;
+                outgoingItemHandler = null;
+                checkItemsReceived = null;
                 incomingItems = new ConcurrentQueue<(NetworkItem NetworkItem, int ItemIndex)>();
                 outgoingItems = new ConcurrentQueue<NetworkItem>();
                 deathLinkService = null;
                 slotData = null;
-
+                ItemIndex = 0;
                 Locations.CheckedLocations.Clear();
                 ItemLookup.ItemList.Clear();
 
@@ -147,8 +146,24 @@ namespace TunicArchipelago {
             }
         }
 
-        private IEnumerator<bool> ProcessIncomingItemsStateMachine() {
-            while (!cancellationTokenSource.IsCancellationRequested) {
+        private IEnumerator<bool> CheckItemsReceived() {
+            while (connected) {
+                if (session.Items.AllItemsReceived.Count > ItemIndex) {
+                    NetworkItem Item = session.Items.AllItemsReceived[ItemIndex];
+                    string ItemReceivedName = session.Items.GetItemName(Item.Item);
+                    Logger.LogInfo("Placing item " + ItemReceivedName + " with index " + ItemIndex + " in queue.");
+                    incomingItems.Enqueue((Item, ItemIndex));
+                    ItemIndex++;
+                    yield return true;
+                } else {
+                    yield return true;
+                    continue;
+                }
+            }
+        }
+
+        private IEnumerator<bool> IncomingItemHandler() {
+            while (connected) {
 
                 if (!incomingItems.TryPeek(out var pendingItem)) {
                     yield return true;
@@ -157,16 +172,15 @@ namespace TunicArchipelago {
 
                 var networkItem = pendingItem.NetworkItem;
                 var itemName = session.Items.GetItemName(networkItem.Item);
-                var itemDisplayName = itemName + " (" + networkItem.Item + ") at index " + pendingItem.ItemIndex;
+                var itemDisplayName = itemName + " (" + networkItem.Item + ") at index " + pendingItem.index;
 
-                if (SaveFile.GetInt($"randomizer processed item index {pendingItem.ItemIndex}") == 1) {
+                if (SaveFile.GetInt($"randomizer processed item index {pendingItem.index}") == 1) {
                     incomingItems.TryDequeue(out _);
                     TunicArchipelago.Tracker.SetCollectedItem(itemName, false);
+                    Logger.LogInfo("Skipping item " + itemName + " at index " + pendingItem.index + " as it has already been processed.");
                     yield return true;
                     continue;
                 }
-
-                //ItemTracker.SaveTrackerFile();
 
                 // Delay until a few seconds after connecting/screen transition
                 while (SpeedrunData.inGameTime < SceneLoaderPatches.TimeOfLastSceneTransition + 3.0f) {
@@ -185,7 +199,7 @@ namespace TunicArchipelago {
                         Logger.LogInfo("Recieved " + itemDisplayName + " from " + session.Players.GetPlayerName(networkItem.Player));
 
                         incomingItems.TryDequeue(out _);
-                        SaveFile.SetInt($"randomizer processed item index {pendingItem.ItemIndex}", 1);
+                        SaveFile.SetInt($"randomizer processed item index {pendingItem.index}", 1);
 
                         // Wait for all interactions to finish
                         while (
@@ -213,7 +227,7 @@ namespace TunicArchipelago {
                     case ItemPatches.ItemResult.PermanentFailure:
                         Logger.LogWarning("Failed to process item " + itemDisplayName);
                         incomingItems.TryDequeue(out _);
-                        SaveFile.SetInt($"randomizer processed item index {pendingItem.ItemIndex}", 1);
+                        SaveFile.SetInt($"randomizer processed item index {pendingItem.index}", 1);
                         break;
                 }
 
@@ -221,8 +235,8 @@ namespace TunicArchipelago {
             }
         }
 
-        private IEnumerator<bool> ProcessOutgoingItemsStateMachine() {
-            while (!cancellationTokenSource.IsCancellationRequested) {
+        private IEnumerator<bool> OutgoingItemHandler() {
+            while (connected) {
                 if (!outgoingItems.TryDequeue(out var networkItem)) {
                     yield return true;
                     continue;

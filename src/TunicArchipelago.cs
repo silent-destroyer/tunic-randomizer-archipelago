@@ -25,7 +25,7 @@ namespace TunicArchipelago {
         public static string SettingsPath = Application.persistentDataPath + "/Randomizer/ArchipelagoSettings.json";
         public static string ItemTrackerPath = Application.persistentDataPath + "/Randomizer/ItemTracker.json";
         public static string SpoilerLogPath = Application.persistentDataPath + "/Randomizer/ArchipelagoSpoiler.log";
-        public static ItemTracker Tracker = new ItemTracker();
+        public static ItemTracker Tracker;
 
 
         public override void Load() {
@@ -34,6 +34,8 @@ namespace TunicArchipelago {
             
             Application.runInBackground = true;
             Profile.SetAccessibilityPref(Profile.AccessibilityPrefs.SpeedrunMode, true);
+
+            Tracker = new ItemTracker();
 
             ClassInjector.RegisterTypeInIl2Cpp<Archipelago>();
             ClassInjector.RegisterTypeInIl2Cpp<WaveSpell>();

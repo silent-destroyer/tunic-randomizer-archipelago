@@ -1,13 +1,15 @@
-﻿using Archipelago.MultiClient.Net.Models;
-using BepInEx.Logging;
+﻿using BepInEx.Logging;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using static TunicArchipelago.GhostHints;
 
 namespace TunicArchipelago {
 
     public class ItemTracker {
+        private static ManualLogSource Logger = TunicArchipelago.Logger;
+
         public struct SceneInfo {
             public int SceneId;
             public string SceneName;
@@ -171,7 +173,8 @@ namespace TunicArchipelago {
             {
                 SpoilerLog[Key] = new List<string>();
             }
-            foreach(string Key in ItemLookup.ItemList.Keys) {
+
+            foreach (string Key in ItemLookup.ItemList.Keys) {
                 ArchipelagoItem Item = ItemLookup.ItemList[Key];
 
                 string Spoiler = $"\t{(Locations.CheckedLocations[Key] ? "x" : "-")} {Locations.LocationIdToDescription[Key]}: {Item.ItemName} ({Archipelago.instance.GetPlayerName(Item.Player)})";
@@ -186,17 +189,16 @@ namespace TunicArchipelago {
             };
             foreach (string MajorItem in ItemLookup.MajorItems) {
                 if(MajorItem == "Gold Hexagon") { continue; }
-                bool HasItem = false;
                 if(Locations.MajorItemLocations.ContainsKey(MajorItem) && Locations.MajorItemLocations[MajorItem].Count > 0) {
-                    GhostHints.ArchipelagoHint Hint = Locations.MajorItemLocations[MajorItem][0];
-                    foreach (NetworkItem item in Archipelago.instance.integration.session.Items.AllItemsReceived) {
-                        if (Archipelago.instance.integration.session.Items.GetItemName(item.Item) == MajorItem && item.Player == Archipelago.instance.GetPlayerSlot()) {
+                    foreach (ArchipelagoHint apHint in Locations.MajorItemLocations[MajorItem]) {
+
+                        bool HasItem = false;
+                        if (Archipelago.instance.integration.session.Locations.AllLocationsChecked.Contains(Archipelago.instance.integration.session.Locations.GetLocationIdFromName(Archipelago.instance.GetPlayerGame((int)apHint.Player), apHint.Location))) { 
                             HasItem = true;
                         }
+                        string Spoiler = $"\t{(HasItem ? "x" : "-")} {MajorItem}: {apHint.Location} ({Archipelago.instance.GetPlayerName((int)apHint.Player)}'s World)";
+                        SpoilerLogLines.Add(Spoiler);
                     }
-
-                    string Spoiler = $"\t{(HasItem ? "x" : "-")} {MajorItem}: {Hint.Location} ({Archipelago.instance.GetPlayerName((int)Hint.Player)}'s World)";
-                    SpoilerLogLines.Add(Spoiler);
                 }
             }
             foreach (string Key in SpoilerLog.Keys) {
@@ -212,6 +214,7 @@ namespace TunicArchipelago {
                 File.Delete(TunicArchipelago.SpoilerLogPath);
                 File.WriteAllLines(TunicArchipelago.SpoilerLogPath, SpoilerLogLines);
             }
+            Logger.LogInfo("Wrote spoiler log to " + TunicArchipelago.SpoilerLogPath);
         }
     }
 }

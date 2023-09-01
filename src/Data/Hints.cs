@@ -23,6 +23,8 @@ namespace TunicArchipelago {
 
         public static Dictionary<string, string> HintMessages = new Dictionary<string, string>();
 
+        public static String MailboxHintId = "";
+
         public static void PopulateHints() {
             HintMessages.Clear();
             System.Random random = new System.Random(SaveFile.GetInt("seed"));
@@ -32,12 +34,12 @@ namespace TunicArchipelago {
             List<char> Vowels = new List<char>() { 'A', 'E', 'I', 'O', 'U' };
 
             int Player = Archipelago.instance.GetPlayerSlot();
-
+            List<string> MailboxItems = new List<string>() { "Stick", "Sword", "Sword Upgrade", "Magic Dagger", "Magic Wand", "Magic Orb", "Lantern", "Shotgun", "Scavenger Mask", "Pages 24-25 (Prayer)", "Pages 42-43 (Holy Cross)" };
             Dictionary<string, ArchipelagoItem> SphereOnePlayer = new Dictionary<string, ArchipelagoItem>();
             Dictionary<string, ArchipelagoItem> SphereOneOthers = new Dictionary<string, ArchipelagoItem>();
             foreach(string itemkey in ItemLookup.ItemList.Keys) {
                 ArchipelagoItem item = ItemLookup.ItemList[itemkey];
-                if (Archipelago.instance.GetPlayerGame(item.Player) == "Tunic" && ItemLookup.MajorItems.Contains(item.ItemName) && Locations.VanillaLocations[itemkey].Location.RequiredItems.Count == 0) {
+                if (Archipelago.instance.GetPlayerGame(item.Player) == "Tunic" && MailboxItems.Contains(item.ItemName) && Locations.VanillaLocations[itemkey].Location.RequiredItems.Count == 0) {
                     SphereOnePlayer.Add(itemkey, item);
                 }
                 if (item.Player != Archipelago.instance.GetPlayerSlot() && item.Classification == ItemFlags.Advancement && Locations.VanillaLocations[itemkey].Location.RequiredItems.Count == 0) {
@@ -49,9 +51,11 @@ namespace TunicArchipelago {
             if (SphereOnePlayer.Count > 0) {
                 key = SphereOnePlayer.Keys.ToList()[random.Next(SphereOnePlayer.Count)];
                 mailboxitem = SphereOnePlayer[key];
+                MailboxHintId = key;
             } else if (SphereOneOthers.Count > 0) {
                 key = SphereOneOthers.Keys.ToList()[random.Next(SphereOneOthers.Count)];
                 mailboxitem = SphereOneOthers[key];
+                MailboxHintId = key;
             }
             if (mailboxitem != null) {
                 Scene = Locations.SimplifiedSceneNames[Locations.VanillaLocations[key].Location.SceneName].ToUpper();

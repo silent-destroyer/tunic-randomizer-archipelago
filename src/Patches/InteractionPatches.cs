@@ -30,6 +30,13 @@ namespace TunicArchipelago {
                 }
                 return false;
             }
+            if (SceneLoaderPatches.SceneName == "Overworld Redux" && __instance.transform.position.ToString() == "(-38.0, 29.0, -55.0)") {
+                PlayerCharacter.instance.transform.GetChild(0).GetChild(0).GetChild(10).GetChild(0).gameObject.GetComponent<MeshRenderer>().materials = ModelSwaps.Items["Key (House)"].GetComponent<MeshRenderer>().materials;
+            }
+            if ((SceneLoaderPatches.SceneName == "Overworld Redux" && __instance.transform.position.ToString() == "(21.0, 20.0, -122.0)") || 
+                (SceneLoaderPatches.SceneName == "Atoll Redux") && __instance.transform.position.ToString() == "(64.0, 4.0, 0.0)") {
+                PlayerCharacter.instance.transform.GetChild(0).GetChild(0).GetChild(10).GetChild(0).gameObject.GetComponent<MeshRenderer>().materials = ModelSwaps.Items["Key"].GetComponent<MeshRenderer>().materials;
+            }
             if (SaveFile.GetInt("randomizer hexagon quest enabled") == 1) {
                 if (__instance.transform.position.ToString() == "(0.0, 0.0, 0.0)" && SceneLoaderPatches.SceneName == "Spirit Arena" && TunicArchipelago.Tracker.ImportantItems["Hexagon Gold"] < 20) {
                     GenericMessage.ShowMessage($"\"<#EAA615>Sealed Forever.\"");

@@ -166,6 +166,7 @@ namespace TunicArchipelago {
             InShopPlayerMoneyDisplay.Show = false;
             return false;
         }
+
         public static void TrinketWell_TossedInCoin_PostfixPatch(TrinketWell __instance) {
             TunicArchipelago.Tracker.ImportantItems["Coins Tossed"]++;
             ItemTracker.SaveTrackerFile();
@@ -216,7 +217,6 @@ namespace TunicArchipelago {
 
                     CoinSpawner.SpawnCoins(AmountToGive, PlayerCharacter.instance.transform.position);
                 }
-
             }
 
             if (Item.Type == ItemTypes.INVENTORY || Item.Type == ItemTypes.TRINKET) {
@@ -327,8 +327,7 @@ namespace TunicArchipelago {
                     SaveFile.SetFloat("randomizer prayer unlocked time", SpeedrunData.inGameTime);
                     ShowNotification($"\"PRAYER Unlocked\"", $"Jahnuhl yor wizduhm, rooin sEkur");
                 }
-                if (GoldHexes == SaveFile.GetInt("randomizer hexagon quest holy cross requirement"))
-                {
+                if (GoldHexes == SaveFile.GetInt("randomizer hexagon quest holy cross requirement")) {
                     SaveFile.SetInt("randomizer holy cross unlocked", 1);
                     SaveFile.SetFloat("randomizer holy cross unlocked time", SpeedrunData.inGameTime);
                     ShowNotification($"\"HOLY CROSS Unlocked\"", $"sEk wuht iz rItfuhlE yorz");
@@ -367,7 +366,6 @@ namespace TunicArchipelago {
                 SFX.PlayAudioClipAtFox(PlayerCharacter.instance.bigHurtSFX);
                 PlayerCharacter.instance.IDamageable_ReceiveDamage(PlayerCharacter.instance.hp / 3, 0, Vector3.zero, 0, 0);
                 ShowNotification($"yoo R A \"<#ffd700>FOOL<#ffffff>!!\"", $"\"(\"it wuhz A swRm uhv <#ffd700>bEz\"...)\"");
-                //GenericMessage.ShowMessage($"yoo R A \"<#ffd700>FOOL<#ffffff>!!\"\n\"(\"it wuhz A swRm uhv <#ffd700>bEz\"...)\"");
                 PlayerCharacterPatches.StungByBee = true;
                 PlayerCharacter.instance.Flinch(true);
             } else if (FoolType >= 20 && FoolType < 50) {
@@ -376,7 +374,6 @@ namespace TunicArchipelago {
                 PlayerCharacter.instance.cachedFireController.FireAmount = 3f;
                 SFX.PlayAudioClipAtFox(PlayerCharacter.instance.bigHurtSFX);
                 ShowNotification($"yoo R A \"<#FF3333>FOOL<#ffffff>!!\"", $"iz it hawt in hEr?");
-                //GenericMessage.ShowMessage($"yoo R A \"<#FF3333>FOOL<#ffffff>!!\"");
                 PlayerCharacter.instance.Flinch(true);
             } else if (FoolType >= 50) {
                 PlayerCharacter.ApplyRadiationAsDamageInHP(PlayerCharacter.instance.maxhp * .2f);
