@@ -94,9 +94,11 @@ namespace TunicArchipelago {
                 deathLinkService = session.CreateDeathLinkService();
 
                 deathLinkService.OnDeathLinkReceived += (deathLinkObject) => {
-                    Logger.LogInfo("Death link received");
-                    SaveFile.SetInt("hp_lost", 1000);
-                    PlayerCharacter.instance.gameObject.GetComponent<FireController>().FireAmount = 3;
+                    if (SceneManager.GetActiveScene().name != "TitleScreen") {
+                        Logger.LogInfo("Death link received");
+                        PlayerCharacterPatches.DeathLinkMessage = deathLinkObject.Cause == null ? $"\"{deathLinkObject.Source} died and took you with them.\"": $"\"{deathLinkObject.Cause}\"";
+                        PlayerCharacterPatches.DiedToDeathLink = true;
+                    }
                 };
 
                 if (TunicArchipelago.Settings.DeathLinkEnabled) {
@@ -297,41 +299,43 @@ namespace TunicArchipelago {
 
         public void EnableDeathLink() {
             if (deathLinkService == null) {
-                Logger.LogDebug("Cannot enable death link service as it is null.");
+                Logger.LogWarning("Cannot enable death link service as it is null.");
             }
             
-            Logger.LogDebug("Enabled death link service");
+            Logger.LogInfo("Enabled death link service");
             deathLinkService.EnableDeathLink();
         }
 
         public void DisableDeathLink() {
-            if (deathLinkService != null) {
-                Logger.LogDebug("Cannot disable death link service as it is null.");
+            if (deathLinkService == null) {
+                Logger.LogWarning("Cannot disable death link service as it is null.");
             }
 
-            Logger.LogDebug("Disabled death link service");
+            Logger.LogInfo("Disabled death link service");
             deathLinkService.DisableDeathLink();
         }
 
         public void SendDeathLink() {
             string Player = TunicArchipelago.Settings.ConnectionSettings.Player;
-/*            List<string> Causes = new List<string>() {
-                $"{Player} was chomped by Terry.",
-                $"{Player} died to Siege Engine.",
-                $"{Player} died to The Librarian.",
-                $"{Player} died to Boss Scavenger.",
-                $"{Player} died to The Heir.",
-                $"{Player} didn't share their wisdom.",
-                $"{Player}'s prayer went unheard.",
-                $"{Player}'s HP fell to 0.",
-                $"{Player} blew themself up.",
-                $"{Player} died to frogs.",
-                $"{Player} withered away from miasma.",
-            };*/
-            deathLinkService.SendDeathLink(new DeathLink(TunicArchipelago.Settings.ConnectionSettings.Player, "Was chomped by Terry."));
+            string AreaDiedIn = "";
+            if (DeathLinkMessages.Causes.ContainsKey(SceneLoaderPatches.SceneName)) {
+                AreaDiedIn = SceneLoaderPatches.SceneName;
+            } else {
+                foreach (string key in Locations.MainAreasToSubAreas.Keys) {
+                    if (Locations.MainAreasToSubAreas[key].Contains(SceneLoaderPatches.SceneName)) {
+                        AreaDiedIn = key;
+                        break;
+                    }
+                }
+            }
+            if (AreaDiedIn == "") {
+                AreaDiedIn = "Generic";
+            }
+
+            deathLinkService.SendDeathLink(new DeathLink(Player, $"{Player}{DeathLinkMessages.Causes[AreaDiedIn][new System.Random().Next(DeathLinkMessages.Causes[AreaDiedIn].Count)]}"));
         }
 
-        private void ShowNotification(string topLine, string bottomLine) {
+        public void ShowNotification(string topLine, string bottomLine) {
             var topLineObject = ScriptableObject.CreateInstance<LanguageLine>();
             topLineObject.text = topLine;
 

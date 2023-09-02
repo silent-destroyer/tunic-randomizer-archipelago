@@ -24,6 +24,7 @@ namespace TunicArchipelago {
         public static bool StungByBee = false;
         public static bool IsTeleporting = false;
         public static bool DiedToDeathLink = false;
+        public static string DeathLinkMessage = "";
         public static int index = 0;
 
         public static bool LoadSecondSword = false;
@@ -39,6 +40,13 @@ namespace TunicArchipelago {
         public static void PlayerCharacter_Update_PostfixPatch(PlayerCharacter __instance) {
             Cheats.FastForward = Input.GetKey(KeyCode.Backslash);
 
+            if (DiedToDeathLink) {
+                if (DeathLinkMessage != "") {
+                    Archipelago.instance.integration.ShowNotification(DeathLinkMessage, DeathLinkMessages.SecondaryMessages[new System.Random().Next(DeathLinkMessages.SecondaryMessages.Count)]);
+                    DeathLinkMessage = "";
+                }
+                __instance.hp = -1;
+            }
             if (Input.GetKeyDown(KeyCode.Alpha1)) {
                 if (GameObject.Find("_FinishlineDisplay(Clone)/").transform.childCount >= 3) {
                     GameObject.Find("_FinishlineDisplay(Clone)/").transform.GetChild(2).gameObject.SetActive(!GameObject.Find("_FinishlineDisplay(Clone)/").transform.GetChild(2).gameObject.active);
@@ -56,7 +64,7 @@ namespace TunicArchipelago {
             if (Input.GetKeyDown(KeyCode.Alpha6)) {
                 PaletteEditor.LoadCustomTexture();
             }
-
+ 
             if (StungByBee) {
                 __instance.gameObject.transform.Find("Fox/root/pelvis/chest/head").localScale = new Vector3(3f, 3f, 3f);
             }
@@ -137,6 +145,12 @@ namespace TunicArchipelago {
         public static void PlayerCharacter_Start_PostfixPatch(PlayerCharacter __instance) {
             if (!Archipelago.instance.integration.connected) {
                 Archipelago.instance.Connect();
+            } else {
+                if (TunicArchipelago.Settings.DeathLinkEnabled) {
+                    Archipelago.instance.integration.EnableDeathLink();
+                } else {
+                    Archipelago.instance.integration.DisableDeathLink();
+                }
             }
 
             if (Locations.AllScenes.Count == 0) {
