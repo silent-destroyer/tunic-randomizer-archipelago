@@ -63,13 +63,16 @@ namespace TunicArchipelago {
                 GUI.Toggle(new Rect(240f, 180f, 210f, 30f), slotData["sword_progression"].ToString() == "1", "Sword Progression");
                 GUI.Toggle(new Rect(10f, 220f, 175f, 30f), slotData["start_with_sword"].ToString() == "1", "Start With Sword");
                 GUI.Toggle(new Rect(240f, 220f, 175f, 30f), slotData["ability_shuffling"].ToString() == "1", "Shuffle Abilities");
+                GUI.Toggle(new Rect(10, 260f, 175f, 30f), slotData["hexagon_quest"].ToString() == "1", "Hexagon Quest");
             }
 
-            GUI.Label(new Rect(10f, 260f, 200f, 30f), $"Other Settings");
-            bool DeathLink = GUI.Toggle(new Rect(10f, 300f, 125f, 30f), TunicArchipelago.Settings.DeathLinkEnabled, "Death Link");
+            GUI.Label(new Rect(10f, 300f, 200f, 30f), $"Other Settings");
+            bool DeathLink = GUI.Toggle(new Rect(10f, 340f, 115f, 30f), TunicArchipelago.Settings.DeathLinkEnabled, "Death Link");
             TunicArchipelago.Settings.DeathLinkEnabled = DeathLink;
+            bool EnemyRandomizer = GUI.Toggle(new Rect(150f, 340f, 180f, 30f), TunicArchipelago.Settings.EnemyRandomizerEnabled, "Enemy Randomizer");
+            TunicArchipelago.Settings.EnemyRandomizerEnabled = EnemyRandomizer;
             GUI.skin.label.fontSize = 20;
-            GUI.Label(new Rect(10f, 340f, 500f, 30f), $"More settings in options menu!");
+            GUI.Label(new Rect(10f, 370f, 500f, 30f), $"More settings in options menu!");
         }
 
     }

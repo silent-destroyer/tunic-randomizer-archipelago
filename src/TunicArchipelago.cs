@@ -57,7 +57,7 @@ namespace TunicArchipelago {
             });
             if (!File.Exists(SettingsPath)) {
                 Settings = new RandomizerSettings();
-                File.WriteAllText(SettingsPath, JsonConvert.SerializeObject(Settings));
+                File.WriteAllText(SettingsPath, JsonConvert.SerializeObject(Settings, Formatting.Indented));
             } else {
                 Settings = JsonConvert.DeserializeObject<RandomizerSettings>(File.ReadAllText(SettingsPath));
                 Log.LogInfo("Loaded settings from file: " + JsonConvert.DeserializeObject<RandomizerSettings>(File.ReadAllText(SettingsPath)));

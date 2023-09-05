@@ -140,8 +140,8 @@ namespace TunicArchipelago {
             FoolTrapIntensity = FoolTrapOption.NORMAL;
 
             EnemyRandomizerEnabled = false;
-            EnemyDifficulty = EnemyRandomizationType.RANDOM;
-            EnemyGeneration = EnemyGenerationType.RANDOM;
+            EnemyDifficulty = EnemyRandomizationType.BALANCED;
+            EnemyGeneration = EnemyGenerationType.SEEDED;
             ExtraEnemiesEnabled = false;
 
             RandomFoxColorsEnabled = true;
