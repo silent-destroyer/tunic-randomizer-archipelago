@@ -301,17 +301,12 @@ namespace TunicArchipelago {
                 if (TunicArchipelago.Settings.BonusStatUpgradesEnabled) {
                     Inventory.GetItemByName(ItemLookup.BonusUpgrades[Item.ItemNameForInventory].LevelUp).Quantity += 1;
                 }
-                Item ItemToPresent = Inventory.GetItemByName(ItemLookup.HeroRelicLookup[Item.ItemNameForInventory].ItemPresentedOnCollection);
 
                 // Apply custom pickup text
-                LanguageLine OriginalText = ItemToPresent.CollectionMessage;
-                ItemToPresent.collectionMessage = new LanguageLine();
-                ItemToPresent.collectionMessage.text = ItemLookup.BonusUpgrades[Item.ItemNameForInventory].CustomPickupMessage;
+                RelicItem.collectionMessage = new LanguageLine();
+                RelicItem.collectionMessage.text = ItemLookup.BonusUpgrades[Item.ItemNameForInventory].CustomPickupMessage;
                 
-                ItemPresentation.PresentItem(ItemToPresent);
-
-                // Revert pickup text for regular stat upgrades
-                ItemToPresent.collectionMessage = OriginalText;
+                ItemPresentation.PresentItem(RelicItem);
             }
 
             if (Item.Type == ItemTypes.SPECIAL) {

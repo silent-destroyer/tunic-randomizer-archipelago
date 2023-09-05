@@ -265,20 +265,44 @@ namespace TunicArchipelago {
         public static void InitializeHeroRelics() {
             GameObject ItemRoot = Resources.FindObjectsOfTypeAll<GameObject>().Where(Item => Item.name == "User Rotation Root").ToList()[0];
 
-            Material RelicMaterial = FindMaterial("ghost material_offerings");
-            List<string> RelicItems = new List<string>() { "Relic - Hero Sword", "Relic - Hero Crown", "Relic - Hero Pendant HP", "Relic - Hero Pendant MP", "Relic - Hero Water", "Relic - Hero Pendant SP" };
-            List<int> ItemPositions = new List<int>() { 15, 13, 18, 19, 12, 14 };
-            for (int i = 0; i < RelicItems.Count; i++) {
-                Items[RelicItems[i]] = GameObject.Instantiate(ItemRoot.transform.GetChild(ItemPositions[i]).gameObject);
-                if (Items[RelicItems[i]].GetComponent<MeshRenderer>() != null) {
-                    Items[RelicItems[i]].GetComponent<MeshRenderer>().material = RelicMaterial;
-                }
-                for (int j = 0; j < Items[RelicItems[i]].transform.childCount; j++) {
-                    Items[RelicItems[i]].transform.GetChild(j).GetComponent<MeshRenderer>().material = RelicMaterial;
-                }
-                Items[RelicItems[i]].SetActive(false);
-                GameObject.DontDestroyOnLoad(Items[RelicItems[i]]);
+            Items["Relic - Hero Sword"] = SetupRelicItemPresentation(ItemRoot.transform, 15, "Relic - Hero Sword");
+            Items["Relic - Hero Crown"] = SetupRelicItemPresentation(ItemRoot.transform, 13, "Relic - Hero Crown");
+            Items["Relic - Hero Pendant HP"] = SetupRelicItemPresentation(ItemRoot.transform, 18, "Relic - Hero Pendant HP");
+            Items["Relic - Hero Pendant MP"] = SetupRelicItemPresentation(ItemRoot.transform, 19, "Relic - Hero Pendant MP");
+            Items["Relic - Hero Water"] = SetupRelicItemPresentation(ItemRoot.transform, 12, "Relic - Hero Water");
+            Items["Relic - Hero Pendant SP"] = SetupRelicItemPresentation(ItemRoot.transform, 14, "Relic - Hero Pendant SP");
+
+            List<ItemPresentationGraphic> newipgs = new List<ItemPresentationGraphic>() { };
+            foreach (ItemPresentationGraphic ipg in ItemPresentation.instance.itemGraphics) {
+                newipgs.Add(ipg);
             }
+            newipgs.Add(Items["Relic - Hero Sword"].GetComponent<ItemPresentationGraphic>());
+            newipgs.Add(Items["Relic - Hero Crown"].GetComponent<ItemPresentationGraphic>());
+            newipgs.Add(Items["Relic - Hero Pendant HP"].GetComponent<ItemPresentationGraphic>());
+            newipgs.Add(Items["Relic - Hero Pendant MP"].GetComponent<ItemPresentationGraphic>());
+            newipgs.Add(Items["Relic - Hero Water"].GetComponent<ItemPresentationGraphic>());
+            newipgs.Add(Items["Relic - Hero Pendant SP"].GetComponent<ItemPresentationGraphic>());
+            ItemPresentation.instance.itemGraphics = newipgs.ToArray();
+        }
+
+        private static GameObject SetupRelicItemPresentation(Transform parent, int index, string itemname) {
+            GameObject relic = GameObject.Instantiate(parent.GetChild(index).gameObject);
+            relic.transform.parent = parent;
+            relic.SetActive(false);
+            relic.transform.localPosition = Vector3.zero;
+            relic.GetComponent<ItemPresentationGraphic>().items = new Item[] { Inventory.GetItemByName(itemname) };
+
+            Material RelicMaterial = FindMaterial("ghost material_offerings");
+
+            if (relic.GetComponent<MeshRenderer>() != null) {
+                relic.GetComponent<MeshRenderer>().material = RelicMaterial;
+            }
+
+            for (int i = 0; i < relic.transform.childCount; i++) {
+                relic.transform.GetChild(i).gameObject.GetComponent<MeshRenderer>().material = RelicMaterial;
+            }
+            GameObject.DontDestroyOnLoad(relic);
+            return relic;
         }
 
         public static void InitializeChestType(string ChestType) {
