@@ -127,5 +127,14 @@ namespace TunicArchipelago {
             Sword.transform.localPosition = Vector3.zero;
             PlayerCharacterPatches.LoadThirdSword = false;
         }
+
+        public static bool HitReceiver_ReceiveHit_PrefixPatch(HitReceiver __instance, ref bool unblockable) {
+
+            if (__instance.GetComponent<TuningForkBell>() != null) {
+                unblockable = false;
+            }
+
+            return true;
+        }
     }
 }

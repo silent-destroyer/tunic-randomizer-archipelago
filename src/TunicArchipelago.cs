@@ -13,6 +13,8 @@ using HarmonyLib;
 using Archipelago;
 using Newtonsoft.Json;
 using UnhollowerRuntimeLib;
+using Newtonsoft.Json.Bson;
+using UnityEngine.InputSystem.Utilities;
 
 namespace TunicArchipelago {
 
@@ -22,11 +24,10 @@ namespace TunicArchipelago {
         public static ManualLogSource Logger;
         public static RandomizerSettings Settings = new RandomizerSettings();
 
-        public static string SettingsPath = Application.persistentDataPath + "/Randomizer/ArchipelagoSettings.json";
+        public static string SettingsPath = Application.dataPath + "/../BepInEx/plugins/Tunic Archipelago/ArchipelagoSettings.json";
         public static string ItemTrackerPath = Application.persistentDataPath + "/Randomizer/ItemTracker.json";
         public static string SpoilerLogPath = Application.persistentDataPath + "/Randomizer/ArchipelagoSpoiler.log";
         public static ItemTracker Tracker;
-
 
         public override void Load() {
             Logger = Log;
@@ -54,25 +55,14 @@ namespace TunicArchipelago {
             }) {
                 hideFlags = HideFlags.HideAndDontSave
             });
-            try {
+            if (!File.Exists(SettingsPath)) {
+                Settings = new RandomizerSettings();
+                File.WriteAllText(SettingsPath, JsonConvert.SerializeObject(Settings));
+            } else {
                 Settings = JsonConvert.DeserializeObject<RandomizerSettings>(File.ReadAllText(SettingsPath));
-            } catch (System.Exception ex) {
-                Settings = new RandomizerSettings();
-                if (!File.Exists(TunicArchipelago.SettingsPath)) {
-                    File.WriteAllText(TunicArchipelago.SettingsPath, JsonConvert.SerializeObject(TunicArchipelago.Settings, Formatting.Indented));
-                } else {
-                    File.Delete(TunicArchipelago.SettingsPath);
-                    File.WriteAllText(TunicArchipelago.SettingsPath, JsonConvert.SerializeObject(TunicArchipelago.Settings, Formatting.Indented));
-                }
-            }
-            try { 
-                
-            } catch (System.Exception ex) {
-                Settings = new RandomizerSettings();
+                Log.LogInfo("Loaded settings from file: " + JsonConvert.DeserializeObject<RandomizerSettings>(File.ReadAllText(SettingsPath)));
             }
 
-
-            
             Harmony Harmony = new Harmony(PluginInfo.GUID);
 
             // Player Character
@@ -179,6 +169,8 @@ namespace TunicArchipelago {
             Harmony.Patch(AccessTools.Method(typeof(BloodstainChest), "IInteractionReceiver_Interact"), new HarmonyMethod(AccessTools.Method(typeof(InteractionPatches), "BloodstainChest_IInteractionReceiver_Interact_PrefixPatch")));
 
             Harmony.Patch(AccessTools.Method(typeof(CreditsCardController), "Awake"), null, new HarmonyMethod(AccessTools.Method(typeof(SpeedrunFinishlineDisplayPatches), "CreditsCardController_Awake_PostfixPatch")));
+
+            Harmony.Patch(AccessTools.Method(typeof(HitReceiver), "ReceiveHit"), new HarmonyMethod(AccessTools.Method(typeof(SwordProgression), "HitReceiver_ReceiveHit_PrefixPatch")));
 
         }
     }

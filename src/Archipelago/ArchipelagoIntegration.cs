@@ -45,7 +45,7 @@ namespace TunicArchipelago {
                 checkItemsReceived.MoveNext();
             }
 
-            if (SceneManager.GetActiveScene().name != "TitleScreen" && PlayerCharacter.instance != null) {
+            if (SceneManager.GetActiveScene().name != "TitleScreen" && SceneManager.GetActiveScene().name != "Loading" && PlayerCharacter.instance != null) {
 
                 if (incomingItemHandler != null) {
                     incomingItemHandler.MoveNext();

@@ -266,7 +266,9 @@ namespace TunicArchipelago {
                         SaveFile.SetFloat($"{pagesForAbilities[Item.ItemNameForInventory]} time", SpeedrunData.inGameTime);
                         if(Item.ItemNameForInventory == "21") {
                             foreach (ToggleObjectBySpell SpellToggle in Resources.FindObjectsOfTypeAll<ToggleObjectBySpell>()) {
-                                SpellToggle.gameObject.GetComponent<ToggleObjectBySpell>().enabled = true;
+                                foreach (ToggleObjectBySpell Spell in SpellToggle.gameObject.GetComponents<ToggleObjectBySpell>()) {
+                                    Spell.enabled = true;
+                                }
                             }
                         }
                     }
@@ -332,7 +334,9 @@ namespace TunicArchipelago {
                     SaveFile.SetFloat("randomizer holy cross unlocked time", SpeedrunData.inGameTime);
                     ShowNotification($"\"HOLY CROSS Unlocked\"", $"sEk wuht iz rItfuhlE yorz");
                     foreach (ToggleObjectBySpell SpellToggle in Resources.FindObjectsOfTypeAll<ToggleObjectBySpell>()) {
-                        SpellToggle.gameObject.GetComponent<ToggleObjectBySpell>().enabled = true;
+                        foreach (ToggleObjectBySpell Spell in SpellToggle.gameObject.GetComponents<ToggleObjectBySpell>()) {
+                            Spell.enabled = true;
+                        }
                     }
                 }
                 if (GoldHexes == SaveFile.GetInt("randomizer hexagon quest ice rod requirement")) {
@@ -381,7 +385,6 @@ namespace TunicArchipelago {
                 SFX.PlayAudioClipAtFox(PlayerCharacter.standardFreezeSFX);
                 PlayerCharacter.instance.AddFreezeTime(3f);
                 ShowNotification($"yoo R A \"<#86A5FF>FOOL<#ffffff>!!\"", $"hahvi^ ahn Is tIm?");
-                GenericMessage.ShowMessage($"yoo R A \"<#86A5FF>FOOL<#ffffff>!!\"");
             }
         }
 

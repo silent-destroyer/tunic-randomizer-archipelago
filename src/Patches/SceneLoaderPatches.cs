@@ -143,23 +143,21 @@ namespace TunicArchipelago {
                 Camera.main.transform.parent.gameObject.AddComponent<CycleController>();
             }
 
+            Logger.LogInfo("Entering scene " + loadingScene.name + " (" + loadingScene.buildIndex + ")");
+            SceneName = loadingScene.name;
+            SceneId = loadingScene.buildIndex;
+
             if (SceneName == "Overworld Redux" && (StateVariable.GetStateVariableByName("Has Been Betrayed").BoolValue || 
                 StateVariable.GetStateVariableByName("Has Died To God").BoolValue) && SaveFile.GetInt("randomizer died to heir") != 1 && SaveFile.GetInt("randomizer hexagon quest enabled") == 0) {
                 PlayerCharacterPatches.ResetDayNightTimer = 0.0f;
                 Logger.LogInfo("Resetting time of day to daytime!");
             }
 
-            Logger.LogInfo("Entering scene " + loadingScene.name + " (" + loadingScene.buildIndex + ")");
-            SceneName = loadingScene.name;
-            SceneId = loadingScene.buildIndex;
-
             PlayerCharacterPatches.StungByBee = false;
             // Fur, Puff, Details, Tunic, Scarf
             if (TunicArchipelago.Settings.RandomFoxColorsEnabled) {
                 PaletteEditor.RandomizeFoxColors();
             }
-
-
 
             if (PlayerCharacterPatches.IsTeleporting) {
                 PlayerCharacter.instance.cheapIceParticleSystemEmission.enabled = false;
@@ -171,6 +169,11 @@ namespace TunicArchipelago {
                 GameObject.Destroy(PlayerCharacter.instance.gameObject.GetComponent<Rotate>());
             }
 
+            // Failsafe for potion flasks not combining due to receiving 3rd shard during a load zone or at some other weird moment
+            if (Inventory.GetItemByName("Flask Shard").Quantity >= 3) {
+                Inventory.GetItemByName("Flask Shard").Quantity -= 3;
+                Inventory.GetItemByName("Flask Container").Quantity += 1;
+            }
 
             if (SceneName == "Waterfall") {
                 List<string> RandomObtainedFairies = new List<string>();
@@ -241,6 +244,12 @@ namespace TunicArchipelago {
                 DoorSecret.text = $"$$$... dOnt tehl ehnEwuhn, buht #aht \"DOOR\" bahk #Ar\nkahn bE \"OPENED\" fruhm #E \"OUTSIDE...\"";
                 DoorHint.GetComponent<NPC>().script = DoorSecret;
                 DoorHint.SetActive(true);
+
+                // Removes the barricades from the swamp shop during the day 
+                if (GameObject.Find("_Setpieces Etc/plank_4u") != null && GameObject.Find("_Setpieces Etc/plank_4u (1)") != null) {
+                    GameObject.Find("_Setpieces Etc/plank_4u").SetActive(false);
+                    GameObject.Find("_Setpieces Etc/plank_4u (1)").SetActive(false);
+                }
             } else if (SceneName == "g_elements") {
                 if (SaveFile.GetInt("randomizer sent lost fox home") == 0) {
                     GhostHints.GhostFox.GetComponent<NPC>().nPCAnimState = NPC.NPCAnimState.SIT;
@@ -314,7 +323,9 @@ namespace TunicArchipelago {
 
                 if (SaveFile.GetInt("randomizer shuffled abilities") == 1 && SaveFile.GetInt("randomizer holy cross unlocked") == 0) {
                     foreach (ToggleObjectBySpell SpellToggle in Resources.FindObjectsOfTypeAll<ToggleObjectBySpell>()) {
-                        SpellToggle.gameObject.GetComponent<ToggleObjectBySpell>().enabled = false;
+                        foreach (ToggleObjectBySpell Spell in SpellToggle.gameObject.GetComponents<ToggleObjectBySpell>()) {
+                            Spell.enabled = false;
+                        }
                     }
                 }
 

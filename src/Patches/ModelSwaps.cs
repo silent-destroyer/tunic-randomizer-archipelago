@@ -947,7 +947,7 @@ namespace TunicArchipelago {
                     housekey.SetActive(false);
                     housekey.transform.parent = Resources.FindObjectsOfTypeAll<ItemPresentationGraphic>().Where(item => item.gameObject.name == "key twist (special)")
                         .ToList()[0].gameObject.transform.parent;
-                    housekey.transform.localPosition = Vector3.zero;
+                    housekey.transform.localPosition = new Vector3(-0.071f, -0.123f, 0f);
                     housekey.GetComponent<ItemPresentationGraphic>().items = new Item[] { Inventory.GetItemByName("Key (House)") };
                     GameObject.DontDestroyOnLoad(housekey);
                     List<ItemPresentationGraphic> newipgs = new List<ItemPresentationGraphic>() { };

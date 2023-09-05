@@ -55,35 +55,22 @@ namespace TunicArchipelago {
                 Archipelago.instance.Disconnect();
             }
 
-            bool ReloadSettings = GUI.Button(new Rect(10f, 140f, 200f, 30f), "Reload Settings");
-            if(ReloadSettings) {
-                RefreshSettings();
-            }
-
             if (Archipelago.instance.integration != null && Archipelago.instance.integration.connected) {
                 Dictionary<string, object> slotData = Archipelago.instance.GetPlayerSlotData();
-                GUI.Label(new Rect(10f, 180f, 500f, 30f), $"World Settings");
+                GUI.Label(new Rect(10f, 140f, 200f, 30f), $"World Settings");
 
-                GUI.Toggle(new Rect(10f, 220f, 180f, 30f), slotData["keys_behind_bosses"].ToString() == "1", "Keys Behind Bosses");
-                GUI.Toggle(new Rect(240f, 220f, 210f, 30f), slotData["sword_progression"].ToString() == "1", "Sword Progression");
-                GUI.Toggle(new Rect(10f, 260f, 175f, 30f), slotData["start_with_sword"].ToString() == "1", "Start With Sword");
-                GUI.Toggle(new Rect(240f, 260f, 175f, 30f), slotData["ability_shuffling"].ToString() == "1", "Shuffle Abilities");
+                GUI.Toggle(new Rect(10f, 180f, 180f, 30f), slotData["keys_behind_bosses"].ToString() == "1", "Keys Behind Bosses");
+                GUI.Toggle(new Rect(240f, 180f, 210f, 30f), slotData["sword_progression"].ToString() == "1", "Sword Progression");
+                GUI.Toggle(new Rect(10f, 220f, 175f, 30f), slotData["start_with_sword"].ToString() == "1", "Start With Sword");
+                GUI.Toggle(new Rect(240f, 220f, 175f, 30f), slotData["ability_shuffling"].ToString() == "1", "Shuffle Abilities");
             }
 
-            GUI.Label(new Rect(10f, 300f, 200f, 30f), $"Other Settings");
-            bool DeathLink = GUI.Toggle(new Rect(10f, 340f, 125f, 30f), TunicArchipelago.Settings.DeathLinkEnabled, "Death Link");
+            GUI.Label(new Rect(10f, 260f, 200f, 30f), $"Other Settings");
+            bool DeathLink = GUI.Toggle(new Rect(10f, 300f, 125f, 30f), TunicArchipelago.Settings.DeathLinkEnabled, "Death Link");
             TunicArchipelago.Settings.DeathLinkEnabled = DeathLink;
             GUI.skin.label.fontSize = 20;
-            GUI.Label(new Rect(10f, 370f, 500f, 30f), $"More settings in options menu!");
+            GUI.Label(new Rect(10f, 340f, 500f, 30f), $"More settings in options menu!");
         }
 
-        private static void RefreshSettings() {
-            RandomizerSettings settings = JsonConvert.DeserializeObject<RandomizerSettings>(File.ReadAllText(TunicArchipelago.SettingsPath));
-            if (settings.ConnectionSettings.Player != TunicArchipelago.Settings.ConnectionSettings.Player || settings.ConnectionSettings.Hostname != TunicArchipelago.Settings.ConnectionSettings.Hostname
-                || settings.ConnectionSettings.Port != TunicArchipelago.Settings.ConnectionSettings.Port) {
-                Archipelago.instance.Disconnect();
-            }
-            TunicArchipelago.Settings.ConnectionSettings = settings.ConnectionSettings;
-        }
     }
 }
