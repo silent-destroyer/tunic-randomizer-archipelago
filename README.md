@@ -15,14 +15,30 @@ The Archipelago version of the TUNIC Randomizer is still very much a work-in-pro
 
   ![image](https://user-images.githubusercontent.com/110704408/188519149-d9476aa9-55f6-4f38-9ce9-93d137fa71af.png)
 - Extract the zip folder you downloaded from the previous step into your game's install directory (For example: C:\Program Files (x86)\Steam\steamapps\common\TUNIC)
-  - For the PC Game Pass version, extract the zip into the "Content" folder, i.e. C:\XboxGames\Tunic\Content
+  - For the PC Game Pass version, extract the zip into the `Content` folder, i.e. C:\XboxGames\Tunic\Content
 - Launch the game and close it. This will finalize the BepInEx installation.
-- [Download the TunicArchipelago.zip file from the latest release](https://github.com/silent-destroyer/tunic-randomizer-archipelago/releases/latest).
-    - Copy the "Tunic Archipelago" folder from the release zip into BepInEx/plugins under your game's install directory.
-    - Copy the "ArchipelagoSettings.json" file from the release zip into the following directory: %localappdata%low\Andrew Shouldice\Secret Legend\Randomizer
-        - This settings file is where you will configure you Archipelago connection settings, including Player name, hostname and port, and password if required.
-- Launch the game again and you should see "Randomizer + Archipelago Mod Ver. x.y.z" on the top left of the title screen!
-- To uninstall the mod, either remove/delete the "Tunic Archipelago" folder from the plugins folder or rename the winhttp.dll file located in the game's root directory (this will disable all installed mods from running).
+- [Download and extract the TunicArchipelago.zip file from the latest release.](https://github.com/silent-destroyer/tunic-randomizer-archipelago/releases/latest)
+  - Copy the `Tunic Archipelago` folder from the release zip into BepInEx/plugins under your game's install directory.
+    - This folder contains an `ArchipelagoSettings.json` file, which is where you will fill in your PlayerName, Hostname, Port, and Password (if needed).
+  - The release download contains two files called `tunic.apworld` and `tunic.yaml`. These are not needed for the mod itself but are used in the next section for setting up a multiworld game. See "Generating a Multiworld".
+- Launch the game again and you should see `Randomizer + Archipelago Mod Ver. x.y.z` on the top left of the title screen!
+- To uninstall the mod, either remove/delete the `Tunic Archipelago` folder from the plugins folder or rename the winhttp.dll file located in the game's root directory (this will disable all installed mods from running).
+
+
+## Generating a Multiworld
+- In order to setup a multiworld you must first install the latest release of [Archipelago](https://github.com/ArchipelagoMW/Archipelago/releases/latest).
+  - When running the Archipelago Setup exe, you'll at least want to install the Generator and Text Client, but can install any other components you may need as well for other games.
+- After installing, run `Archipelago Launcher` and click on `Browse Files`.
+  - This will open the local file directory for your Archipelago installation.
+- Place `tunic.yaml` from the TunicArchipelago release inside of the `Players` folder.
+  - `tunic.yaml` needs to be configured before you can generate a game. Open the file in a text editor and fill in your player name and choose the settings you want.
+  - You will also need to get the .yaml files for everyone who is joining your multiworld and place them inside of the `Players` folder as well.
+- Place `tunic.apworld` from the TunicArchipelago release inside of `lib/worlds`.
+- Once all of the .yaml fies have been configured and placed into `Players`, click `Generate` in the Archipelago Launcher.
+- A .zip file will be created in the `output` folder containing the information for your multiworld. In order to host your game, go to [https://archipelago.gg/uploads](https://archipelago.gg/uploads) and upload the .zip file, then click `Create New Room`.
+- Configure your `ArchipelagoSettings.json` from before with your player name and the hostname/port you see in the newly created room (Ex: archipelago.gg:32517, the hostname is `archipelago.gg` and the port is `32517`).
+- All that's left is to launch the game and, if it says `Connected`, start a New Game and being your game!
+- For more information, see the official [Archipelago Setup Guide](https://archipelago.gg/tutorial/Archipelago/setup/en).
 
 ## Helpful Tips
 - Regarding Logic:
