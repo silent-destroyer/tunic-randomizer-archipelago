@@ -55,6 +55,11 @@ namespace TunicArchipelago {
             }) {
                 hideFlags = HideFlags.HideAndDontSave
             });
+            
+            if (!Directory.Exists(Application.persistentDataPath + "/Randomizer/")) {
+                Directory.CreateDirectory(Application.persistentDataPath + "/Randomizer/");
+            }
+
             if (!File.Exists(SettingsPath)) {
                 Settings = new RandomizerSettings();
                 File.WriteAllText(SettingsPath, JsonConvert.SerializeObject(Settings, Formatting.Indented));
