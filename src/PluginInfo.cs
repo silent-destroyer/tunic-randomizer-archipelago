@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace TunicArchipelago {
+﻿namespace TunicArchipelago {
     public class PluginInfo {
         public const string NAME = "Tunic Archipelago";
-        public const string VERSION = "0.0.2";
+        public const string VERSION = "0.0.3";
         public const string GUID = "com.silentdestroyer.tunicarchipelago";
     }
 }
