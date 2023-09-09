@@ -197,26 +197,18 @@ namespace TunicArchipelago {
             if (Item.Type == ItemTypes.MONEY) {
                 int AmountToGive = Item.QuantityToGive;
 
-                RandomizerSettings.FoolTrapOption FoolOption = TunicArchipelago.Settings.FoolTrapIntensity;
-
-                if ((FoolOption == RandomizerSettings.FoolTrapOption.NORMAL && AmountToGive < 20) ||
-                    (FoolOption == RandomizerSettings.FoolTrapOption.DOUBLE && AmountToGive <= 20) ||
-                    (FoolOption == RandomizerSettings.FoolTrapOption.ONSLAUGHT && AmountToGive <= 30)) {
-                    ApplyFoolEffect();
-                } else {
-                    Dictionary<string, int> OriginalShopPrices = new Dictionary<string, int>() {
-                        { "Shop - Potion 1", 300 },
-                        { "Shop - Potion 2", 1000 },
-                        { "Shop - Coin 1", 999 },
-                        { "Shop - Coin 2", 999 }
-                    };
-                    // If buying your own money item from the shop, increase amount rewarded
-                    if (OriginalShopPrices.ContainsKey(LocationId) && (networkItem.Player == Archipelago.instance.GetPlayerSlot())) {
-                        AmountToGive += OriginalShopPrices[LocationId];
-                    }
-
-                    CoinSpawner.SpawnCoins(AmountToGive, PlayerCharacter.instance.transform.position);
+                Dictionary<string, int> OriginalShopPrices = new Dictionary<string, int>() {
+                    { "Shop - Potion 1", 300 },
+                    { "Shop - Potion 2", 1000 },
+                    { "Shop - Coin 1", 999 },
+                    { "Shop - Coin 2", 999 }
+                };
+                // If buying your own money item from the shop, increase amount rewarded
+                if (OriginalShopPrices.ContainsKey(LocationId) && (networkItem.Player == Archipelago.instance.GetPlayerSlot())) {
+                    AmountToGive += TunicArchipelago.Settings.CheaperShopItemsEnabled ? 300 : OriginalShopPrices[LocationId];
                 }
+
+                CoinSpawner.SpawnCoins(AmountToGive, PlayerCharacter.instance.transform.position);
             }
 
             if (Item.Type == ItemTypes.INVENTORY || Item.Type == ItemTypes.TRINKET) {
@@ -309,6 +301,10 @@ namespace TunicArchipelago {
                 ItemPresentation.PresentItem(RelicItem);
             }
 
+            if (Item.Type == ItemTypes.FOOLTRAP) {
+                ApplyFoolEffect();
+            }
+
             if (Item.Type == ItemTypes.SPECIAL) {
                 Inventory.GetItemByName("Homeward Bone Statue").Quantity += Item.QuantityToGive;
                 ItemPresentation.PresentItem(Inventory.GetItemByName("Key Special"));
@@ -361,13 +357,13 @@ namespace TunicArchipelago {
         private static void ApplyFoolEffect() {
             System.Random Random = new System.Random();
             int FoolType = PlayerCharacterPatches.StungByBee ? Random.Next(21, 100) : Random.Next(100);
-            if (FoolType < 20) {
+            if (FoolType < 35) {
                 SFX.PlayAudioClipAtFox(PlayerCharacter.instance.bigHurtSFX);
                 PlayerCharacter.instance.IDamageable_ReceiveDamage(PlayerCharacter.instance.hp / 3, 0, Vector3.zero, 0, 0);
                 ShowNotification($"yoo R A \"<#ffd700>FOOL<#ffffff>!!\"", $"\"(\"it wuhz A swRm uhv <#ffd700>bEz\"...)\"");
                 PlayerCharacterPatches.StungByBee = true;
                 PlayerCharacter.instance.Flinch(true);
-            } else if (FoolType >= 20 && FoolType < 50) {
+            } else if (FoolType >= 35 && FoolType < 50) {
                 PlayerCharacter.ApplyRadiationAsDamageInHP(0f);
                 PlayerCharacter.instance.stamina = 0;
                 PlayerCharacter.instance.cachedFireController.FireAmount = 3f;
@@ -412,6 +408,5 @@ namespace TunicArchipelago {
 
             AreaLabel.ShowLabel(areaData);
         }
-
     }
 }

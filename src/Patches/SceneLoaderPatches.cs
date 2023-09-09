@@ -258,11 +258,7 @@ namespace TunicArchipelago {
                     LostFox.transform.transform.rotation = new Quaternion(0f, 0f, 0f, 1f);
 
                     LanguageLine LostFoxScript = ScriptableObject.CreateInstance<LanguageLine>();
-                    if (Inventory.GetItemByName("Homeward Bone Statue").Quantity == 0) {
-                        LostFoxScript.text = $"I lawst mI mahjik stOn ahnd kahnt gO hOm...---if yoo fInd it, kahn yoo bri^ it too mE?\nitz smawl ahnd grA.";
-                    } else {
-                        LostFoxScript.text = $"I lawst mI mahjik stOn ahnd kahnt gO hOm...---... wAt, yoo fownd it! plEz, yooz it now!";
-                    }
+                    LostFoxScript.text = $"\"...\"";
                     LostFox.GetComponent<NPC>().script = LostFoxScript;
 
                     LostFox.SetActive(true);

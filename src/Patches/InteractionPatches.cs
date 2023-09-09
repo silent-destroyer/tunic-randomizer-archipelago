@@ -4,12 +4,21 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace TunicArchipelago {
     public class InteractionPatches {
 
         public static bool InteractionTrigger_Interact_PrefixPatch(Item item, InteractionTrigger __instance) {
             string InteractionLocation = SceneLoaderPatches.SceneName + " " + __instance.transform.position;
+
+            if (__instance.gameObject.GetComponent<NPC>() != null && SceneManager.GetActiveScene().name == "g_elements") {
+                if (Inventory.GetItemByName("Homeward Bone Statue").Quantity == 0) {
+                    __instance.gameObject.GetComponent<NPC>().script.text = $"I lawst mI mahjik stOn ahnd kahnt gO hOm...---if yoo fInd it, kahn yoo bri^ it too mE?\nitz smawl ahnd grA.";
+                } else {
+                    __instance.gameObject.GetComponent<NPC>().script.text = $"I lawst mI mahjik stOn ahnd kahnt gO hOm...---... wAt, yoo fownd it! plEz, yooz it now!";
+                }
+            }
             if (Hints.HintLocations.ContainsKey(InteractionLocation) && TunicArchipelago.Settings.HeroPathHintsEnabled) {
                 LanguageLine Hint = ScriptableObject.CreateInstance<LanguageLine>();
                 Hint.text = Hints.HintMessages[Hints.HintLocations[InteractionLocation]];

@@ -128,9 +128,9 @@ namespace TunicArchipelago {
             PlayerCharacterPatches.LoadThirdSword = false;
         }
 
-        public static bool HitReceiver_ReceiveHit_PrefixPatch(HitReceiver __instance, ref bool unblockable) {
+        public static bool HitReceiver_ReceiveHit_PrefixPatch(HitReceiver __instance, ref HitType hitType, ref bool unblockable, ref bool isPlayerCharacterMelee) {
 
-            if (__instance.GetComponent<TuningForkBell>() != null) {
+            if (__instance.GetComponent<TuningForkBell>() != null && isPlayerCharacterMelee) {
                 unblockable = false;
             }
 

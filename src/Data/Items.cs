@@ -13,7 +13,7 @@ namespace TunicArchipelago {
         PAGE,
         RELIC,
         SPECIAL,
-        FOOL,
+        FOOLTRAP,
         HEXAGONQUEST
     }
 
@@ -202,6 +202,9 @@ namespace TunicArchipelago {
             { "Dusty", new ItemData("Dusty", "useful", "GoldenTrophy_11", ItemTypes.GOLDENTROPHY, 1) },
             { "Forever Friend", new ItemData("Forever Friend", "useful", "GoldenTrophy_12", ItemTypes.GOLDENTROPHY, 1) },
 
+            // Fool Trap
+            { "Fool Trap", new ItemData("Fool Trap", "trap", "Fool Trap", ItemTypes.FOOLTRAP, 1) },
+
             // Money
             { "Money x1", new ItemData("Money x1", "useful", "money", ItemTypes.MONEY, 1) },
             { "Money x10", new ItemData("Money x10", "useful", "money", ItemTypes.MONEY, 10) },
@@ -323,7 +326,7 @@ namespace TunicArchipelago {
             {"money", "Money"},
             {"Berry_HP", "HP Berry"},
             {"Berry_MP", "MP Berry"},
-            {"Fool", "Fool Trap"},
+            {"Fool Trap", "Fool Trap"},
             {"Stick", "Stick"},
             {"Sword", "Sword"},
             {"Sword Progression", "Sword Upgrade"},

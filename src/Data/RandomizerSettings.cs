@@ -58,11 +58,6 @@ namespace TunicArchipelago {
             set;
         }
 
-        public FoolTrapOption FoolTrapIntensity {
-            get;
-            set;
-        }
-
         // Enemy Randomization Settings
         public bool EnemyRandomizerEnabled {
             get;
@@ -137,7 +132,6 @@ namespace TunicArchipelago {
             CheaperShopItemsEnabled = true;
             BonusStatUpgradesEnabled = true;
             DisableChestInterruption = false;
-            FoolTrapIntensity = FoolTrapOption.NORMAL;
 
             EnemyRandomizerEnabled = false;
             EnemyDifficulty = EnemyRandomizationType.BALANCED;
@@ -154,11 +148,10 @@ namespace TunicArchipelago {
             RandomFoxColorsEnabled = randomFoxColorsEnabled;
         }
 
-        public RandomizerSettings(bool hintsEnabled, bool randomFoxColorsEnabled, bool heirAssistEnaled, FoolTrapOption foolTrapIntensity) {
+        public RandomizerSettings(bool hintsEnabled, bool randomFoxColorsEnabled, bool heirAssistEnaled) {
             HeroPathHintsEnabled = hintsEnabled;
             RandomFoxColorsEnabled = randomFoxColorsEnabled;
             HeirAssistModeEnabled = heirAssistEnaled;
-            FoolTrapIntensity = foolTrapIntensity;
         }
     }
 }

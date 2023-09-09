@@ -69,7 +69,6 @@ namespace TunicArchipelago {
             OptionsGUI.addToggle("Cheaper Shop Items", "Off", "On", TunicArchipelago.Settings.CheaperShopItemsEnabled ? 1 : 0, (OptionsGUIMultiSelect.MultiSelectAction)ToggleCheaperShopItems);
             OptionsGUI.addToggle("Bonus Upgrades", "Off", "On", TunicArchipelago.Settings.BonusStatUpgradesEnabled ? 1 : 0, (OptionsGUIMultiSelect.MultiSelectAction)ToggleBonusStatUpgrades);
             OptionsGUI.addToggle("Disable Chest Interruption", "Off", "On", TunicArchipelago.Settings.DisableChestInterruption ? 1 : 0, (OptionsGUIMultiSelect.MultiSelectAction)ToggleChestInterruption);
-            OptionsGUI.addMultiSelect("Fool Traps", FoolTrapOptions, GetFoolTrapIndex(), (OptionsGUIMultiSelect.MultiSelectAction)ChangeFoolTrapFrequency).wrap = true;
             OptionsGUI.addToggle("???", "Off", "On", CameraController.Flip ? 1 : 0, (OptionsGUIMultiSelect.MultiSelectAction)ToggleWeirdMode);
         }
 
@@ -193,17 +192,6 @@ namespace TunicArchipelago {
 
         public static void ToggleChestInterruption(int index) {
             TunicArchipelago.Settings.DisableChestInterruption = !TunicArchipelago.Settings.DisableChestInterruption;
-            SaveSettings();
-        }
-
-        public static int GetFoolTrapIndex() {
-
-            return (int)TunicArchipelago.Settings.FoolTrapIntensity;
-        }
-
-        public static void ChangeFoolTrapFrequency(int index) {
-
-            TunicArchipelago.Settings.FoolTrapIntensity = (RandomizerSettings.FoolTrapOption)index;
             SaveSettings();
         }
 

@@ -373,6 +373,7 @@ namespace TunicArchipelago {
                     SwapSiegeEngineCrown();
                 }
             }
+            ItemLookup.Items["Fool Trap"].QuantityToGive = 1;
             SwappedThisSceneAlready = true;
         }
 
@@ -483,7 +484,7 @@ namespace TunicArchipelago {
                                 TransformData = ItemPositions.SpecificItemPlacement[ItemPickup.itemToGive.name]["Trinket Card"];
                             } else if (ItemData.Type == ItemTypes.PAGE || ItemData.Type == ItemTypes.FAIRY) {
                                 TransformData = ItemPositions.SpecificItemPlacement[ItemPickup.itemToGive.name][Enum.GetName(typeof(ItemTypes), ItemData.Type)];
-                            } else if (ItemData.Type == ItemTypes.MONEY) {
+                            } else if (ItemData.Type == ItemTypes.MONEY || ItemData.Type == ItemTypes.FOOLTRAP) {
                                 if (ItemData.QuantityToGive < 30) {
                                     TransformData = ItemPositions.SpecificItemPlacement[ItemPickup.itemToGive.name]["money small"];
                                 } else if (ItemData.QuantityToGive >= 30 && ItemData.QuantityToGive < 100) {
@@ -527,9 +528,11 @@ namespace TunicArchipelago {
                     }
                     int Player = Archipelago.instance.GetPlayerSlot();
                     ArchipelagoItem APItem = ItemLookup.ItemList[ItemId];
+
                     if (APItem.Player == Player && ItemLookup.Items.ContainsKey(APItem.ItemName) && ItemLookup.Items[APItem.ItemName].Type == ItemTypes.PAGE) {
                         return;
                     }
+
                     Page.transform.localScale = Vector3.one;
                     GameObject.Destroy(Page.transform.GetChild(1));
                     GameObject.Destroy(Page.GetComponent<MeshFilter>());
@@ -548,9 +551,10 @@ namespace TunicArchipelago {
                         PagePickup.transform.GetChild(2).GetComponent<Rotate>().eulerAnglesPerSecond = new Vector3(0f, 45f, 0f);
                     } else {
                         ItemData Item = ItemLookup.Items[APItem.ItemName];
+
                         if (Item.Type == ItemTypes.TRINKET) {
                             TransformData = ItemPositions.Techbow["Trinket Card"];
-                        } else if (Item.Type == ItemTypes.MONEY) {
+                        } else if (Item.Type == ItemTypes.MONEY || Item.Type == ItemTypes.FOOLTRAP) {
                             if (Item.QuantityToGive < 30) {
                                 TransformData = ItemPositions.Techbow["money small"];
                             } else if (Item.QuantityToGive >= 30 && Item.QuantityToGive < 100) {
@@ -600,7 +604,10 @@ namespace TunicArchipelago {
                 if (Item.Type == ItemTypes.TRINKET) {
                     NewItem = GameObject.Instantiate(Items["Trinket Card"], Parent.transform.position, Parent.transform.rotation);
                     NewItem.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = Cards[Item.ItemNameForInventory];
-                } else if (Item.Type == ItemTypes.MONEY) {
+                } else if (Item.Type == ItemTypes.MONEY || Item.Type == ItemTypes.FOOLTRAP) {
+                    if (Item.Type == ItemTypes.FOOLTRAP) {
+                        Item.QuantityToGive = new System.Random().Next(150);
+                    }
                     NewItem = MoneyObject(Parent, Item.QuantityToGive);
                 } else if (Item.Type == ItemTypes.PAGE) {
                     NewItem = GameObject.Instantiate(PagePickup, Parent.transform.position, Parent.transform.rotation);
@@ -675,7 +682,7 @@ namespace TunicArchipelago {
                     ItemData HexagonItem = ItemLookup.Items[Item.ItemName];
                     if (HexagonItem.Type == ItemTypes.TRINKET) {
                         TransformData = ItemPositions.HexagonRed["Trinket Card"];
-                    } else if (HexagonItem.Type == ItemTypes.MONEY) {
+                    } else if (HexagonItem.Type == ItemTypes.MONEY || HexagonItem.Type == ItemTypes.FOOLTRAP) {
                         if (HexagonItem.QuantityToGive < 30) {
                             TransformData = ItemPositions.HexagonRed["money small"];
                         } else if (HexagonItem.QuantityToGive >= 30 && HexagonItem.QuantityToGive < 100) {
@@ -728,7 +735,7 @@ namespace TunicArchipelago {
                     ItemData HexagonItem = ItemLookup.Items[Item.ItemName];
                     if (HexagonItem.Type == ItemTypes.TRINKET) {
                         TransformData = ItemPositions.HexagonRed["Trinket Card"];
-                    } else if (HexagonItem.Type == ItemTypes.MONEY) {
+                    } else if (HexagonItem.Type == ItemTypes.MONEY || HexagonItem.Type == ItemTypes.FOOLTRAP) {
                         if (HexagonItem.QuantityToGive < 30) {
                             TransformData = ItemPositions.HexagonRed["money small"];
                         } else if (HexagonItem.QuantityToGive >= 30 && HexagonItem.QuantityToGive < 100) {
@@ -784,7 +791,7 @@ namespace TunicArchipelago {
                     ItemData VaultKeyItem = ItemLookup.Items[Item.ItemName];
                     if (VaultKeyItem.Type == ItemTypes.TRINKET) {
                         TransformData = ItemPositions.VaultKeyRed["Trinket Card"];
-                    } else if (VaultKeyItem.Type == ItemTypes.MONEY) {
+                    } else if (VaultKeyItem.Type == ItemTypes.MONEY || VaultKeyItem.Type == ItemTypes.FOOLTRAP) {
                         if (VaultKeyItem.QuantityToGive < 30) {
                             TransformData = ItemPositions.VaultKeyRed["money small"];
                         } else if (VaultKeyItem.QuantityToGive >= 30 && VaultKeyItem.QuantityToGive < 100) {
@@ -851,7 +858,7 @@ namespace TunicArchipelago {
                         ItemData Item = ItemLookup.Items[APItem.ItemName];
                         if (Item.Type == ItemTypes.TRINKET) {
                             TransformData = ItemPositions.Shop["Trinket Card"];
-                        } else if (Item.Type == ItemTypes.MONEY) {
+                        } else if (Item.Type == ItemTypes.MONEY || Item.Type == ItemTypes.FOOLTRAP) {
                             if (Item.QuantityToGive < 30) {
                                 TransformData = ItemPositions.Shop["money small"];
                             } else if (Item.QuantityToGive >= 30 && Item.QuantityToGive < 100) {
@@ -914,6 +921,7 @@ namespace TunicArchipelago {
                     NewItem.transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
                 } else {
                     ItemData Item = ItemLookup.Items[APItem.ItemName];
+
                     NewItem.transform.localRotation = ItemPositions.ItemPickupRotations.ContainsKey(Item.ItemNameForInventory) ? ItemPositions.ItemPickupRotations[Item.ItemNameForInventory] : Quaternion.Euler(0, 0, 0);
                     NewItem.transform.localPosition = ItemPositions.ItemPickupPositions.ContainsKey(Item.ItemNameForInventory) ? ItemPositions.ItemPickupPositions[Item.ItemNameForInventory] : Vector3.zero;
                     if (Item.Type == ItemTypes.SWORDUPGRADE && SaveFile.GetInt("randomizer sword progression enabled") == 1 && APItem.Player == Archipelago.instance.GetPlayerSlot()) {
@@ -924,6 +932,9 @@ namespace TunicArchipelago {
                         NewItem.transform.localScale = TransformData.scale;
                     }
                     NewItem.transform.localScale *= 2;
+                    if ((Item.Type == ItemTypes.MONEY || Item.Type == ItemTypes.FOOLTRAP) && Item.QuantityToGive >= 100) {
+                        NewItem.transform.localScale *= 3;
+                    }
                     if (Item.Type == ItemTypes.FAIRY) {
                         NewItem.transform.localScale = Vector3.one;
                     }

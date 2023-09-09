@@ -15,6 +15,8 @@ namespace TunicArchipelago {
 
         public static int CustomSeed = 0;
         public static Font OdinRounded;
+        public static List<string> FoolChoices = new List<string>() { "Off", "Normal", "Double", "<size=19>Onslaught</size>" };
+        public static List<string> FoolColors = new List<string>() { "white", "#4FF5D4", "#E3D457", "#FF3333" };
 
         private void OnGUI() {
             if (SceneLoaderPatches.SceneName == "TitleScreen" && GameObject.FindObjectOfType<TitleScreen>() != null) {
@@ -60,10 +62,23 @@ namespace TunicArchipelago {
                 GUI.Label(new Rect(10f, 140f, 200f, 30f), $"World Settings");
 
                 GUI.Toggle(new Rect(10f, 180f, 180f, 30f), slotData["keys_behind_bosses"].ToString() == "1", "Keys Behind Bosses");
-                GUI.Toggle(new Rect(240f, 180f, 210f, 30f), slotData["sword_progression"].ToString() == "1", "Sword Progression");
+                GUI.Toggle(new Rect(220f, 180f, 210f, 30f), slotData["sword_progression"].ToString() == "1", "Sword Progression");
                 GUI.Toggle(new Rect(10f, 220f, 175f, 30f), slotData["start_with_sword"].ToString() == "1", "Start With Sword");
-                GUI.Toggle(new Rect(240f, 220f, 175f, 30f), slotData["ability_shuffling"].ToString() == "1", "Shuffle Abilities");
-                GUI.Toggle(new Rect(10, 260f, 175f, 30f), slotData["hexagon_quest"].ToString() == "1", "Hexagon Quest");
+                GUI.Toggle(new Rect(220f, 220f, 175f, 30f), slotData["ability_shuffling"].ToString() == "1", "Shuffle Abilities");
+                GUI.Toggle(new Rect(10f, 260f, 175f, 30f), slotData["hexagon_quest"].ToString() == "1", "Hexagon Quest");
+                int FoolIndex = int.Parse(slotData["fool_traps"].ToString());
+                GUI.Toggle(new Rect(220f, 260f, 195f, 60f), FoolIndex != 0, $"Fool Traps: {(FoolIndex == 0 ? "Off" : $"<color={FoolColors[FoolIndex]}>{FoolChoices[FoolIndex]}</color>")}");
+
+            } else {
+                GUI.Label(new Rect(10f, 140f, 200f, 30f), $"World Settings");
+
+                GUI.Toggle(new Rect(10f, 180f, 180f, 30f), false, "Keys Behind Bosses");
+                GUI.Toggle(new Rect(220f, 180f, 210f, 30f), false, "Sword Progression");
+                GUI.Toggle(new Rect(10f, 220f, 175f, 30f), false, "Start With Sword");
+                GUI.Toggle(new Rect(220f, 220f, 175f, 30f), false, "Shuffle Abilities");
+                GUI.Toggle(new Rect(10f, 260f, 175f, 30f), false, "Hexagon Quest");
+                GUI.Toggle(new Rect(220f, 260f, 175f, 30f), false, "Fool Traps: Off");
+
             }
 
             GUI.Label(new Rect(10f, 300f, 200f, 30f), $"Other Settings");
