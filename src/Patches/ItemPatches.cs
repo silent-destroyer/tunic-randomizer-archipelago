@@ -186,7 +186,7 @@ namespace TunicArchipelago {
                 GameObject.Find("_GameGUI(Clone)/PauseMenu/") != null || GameObject.Find("_OptionsGUI(Clone)") != null || PlayerCharacter.InstanceIsDead) {
                 return ItemResult.TemporaryFailure;
             }
-
+            
             if (!ItemLookup.Items.ContainsKey(ItemName)) {
                 return ItemResult.PermanentFailure;
             }
@@ -302,7 +302,7 @@ namespace TunicArchipelago {
             }
 
             if (Item.Type == ItemTypes.FOOLTRAP) {
-                ApplyFoolEffect();
+                ApplyFoolEffect(networkItem.Player);
             }
 
             if (Item.Type == ItemTypes.SPECIAL) {
@@ -354,13 +354,16 @@ namespace TunicArchipelago {
             return ItemResult.Success;
         }
 
-        private static void ApplyFoolEffect() {
+        private static void ApplyFoolEffect(int Player) {
             System.Random Random = new System.Random();
             int FoolType = PlayerCharacterPatches.StungByBee ? Random.Next(21, 100) : Random.Next(100);
+            string FoolMessageTop = $"";
+            string FoolMessageBottom = $"";
             if (FoolType < 35) {
                 SFX.PlayAudioClipAtFox(PlayerCharacter.instance.bigHurtSFX);
                 PlayerCharacter.instance.IDamageable_ReceiveDamage(PlayerCharacter.instance.hp / 3, 0, Vector3.zero, 0, 0);
-                ShowNotification($"yoo R A \"<#ffd700>FOOL<#ffffff>!!\"", $"\"(\"it wuhz A swRm uhv <#ffd700>bEz\"...)\"");
+                FoolMessageTop = $"yoo R A \"<#ffd700>FOOL<#ffffff>!!\"";
+                FoolMessageBottom = $"\"(\"it wuhz A swRm uhv <#ffd700>bEz\"...)\"";
                 PlayerCharacterPatches.StungByBee = true;
                 PlayerCharacter.instance.Flinch(true);
             } else if (FoolType >= 35 && FoolType < 50) {
@@ -368,15 +371,22 @@ namespace TunicArchipelago {
                 PlayerCharacter.instance.stamina = 0;
                 PlayerCharacter.instance.cachedFireController.FireAmount = 3f;
                 SFX.PlayAudioClipAtFox(PlayerCharacter.instance.bigHurtSFX);
-                ShowNotification($"yoo R A \"<#FF3333>FOOL<#ffffff>!!\"", $"iz it hawt in hEr?");
+                FoolMessageTop = $"yoo R A \"<#FF3333>FOOL<#ffffff>!!\"";
+                FoolMessageBottom = $"iz it hawt in hEr?";
                 PlayerCharacter.instance.Flinch(true);
             } else if (FoolType >= 50) {
                 PlayerCharacter.ApplyRadiationAsDamageInHP(PlayerCharacter.instance.maxhp * .2f);
                 SFX.PlayAudioClipAtFox(PlayerCharacter.instance.bigHurtSFX);
                 SFX.PlayAudioClipAtFox(PlayerCharacter.standardFreezeSFX);
                 PlayerCharacter.instance.AddFreezeTime(3f);
-                ShowNotification($"yoo R A \"<#86A5FF>FOOL<#ffffff>!!\"", $"hahvi^ ahn Is tIm?");
+                FoolMessageTop = $"yoo R A \"<#86A5FF>FOOL<#ffffff>!!\"";
+                FoolMessageBottom = $"hahvi^ ahn Is tIm?";
             }
+
+            if (Player != Archipelago.instance.GetPlayerSlot()) {
+                FoolMessageTop = $"\"{Archipelago.instance.GetPlayerName(Player)}\" %i^ks {FoolMessageTop}";
+            }
+            ShowNotification(FoolMessageTop, FoolMessageBottom);
         }
 
         public static void PotionCombine_Show_PostFixPatch(PotionCombine __instance) {
