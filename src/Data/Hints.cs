@@ -34,7 +34,7 @@ namespace TunicArchipelago {
             List<char> Vowels = new List<char>() { 'A', 'E', 'I', 'O', 'U' };
 
             int Player = Archipelago.instance.GetPlayerSlot();
-            List<string> MailboxItems = new List<string>() { "Stick", "Sword", "Sword Upgrade", "Magic Dagger", "Magic Wand", "Magic Orb", "Lantern", "Shotgun", "Scavenger Mask", "Pages 24-25 (Prayer)", "Pages 42-43 (Holy Cross)" };
+            List<string> MailboxItems = new List<string>() { "Stick", "Sword", "Sword Upgrade", "Magic Dagger", "Magic Wand", "Magic Orb", "Lantern", "Gun", "Scavenger Mask", "Pages 24-25 (Prayer)", "Pages 42-43 (Holy Cross)" };
             Dictionary<string, ArchipelagoItem> SphereOnePlayer = new Dictionary<string, ArchipelagoItem>();
             Dictionary<string, ArchipelagoItem> SphereOneOthers = new Dictionary<string, ArchipelagoItem>();
             foreach(string itemkey in ItemLookup.ItemList.Keys) {
@@ -67,13 +67,16 @@ namespace TunicArchipelago {
             HintMessages.Add("Mailbox", Hint);
 
             ArchipelagoHint Hyperdash = Locations.MajorItemLocations["Hero's Laurels"][0];
-            Hint = $"lehjehnd sehz <#FF00FF>suhm%i^ ehkstruhordinArE<#FFFFFF>\nuhwAts yoo in ";
+            Hint = $"lehjehnd sehz <#FF00FF>suhm%i^ ehkstruhordinArE<#FFFFFF>";
             if (Hyperdash.Player == Player) {
                 Scene = Hyperdash.Location == "Your Pocket" ? Hyperdash.Location.ToUpper() : Locations.SimplifiedSceneNames[Locations.VanillaLocations[Locations.LocationDescriptionToId[Hyperdash.Location]].Location.SceneName].ToUpper();
                 Prefix = Vowels.Contains(Scene[0]) ? "#E" : "#uh";
-                Hint += $"{Prefix} \"{Scene}...\"";
+                Hint += $"\nuhwAts yoo in {Prefix} \"{Scene}...\"";
+            } else if (Archipelago.instance.GetPlayerGame((int)Hyperdash.Player) == "Tunic") {
+                Scene = Locations.SimplifiedSceneNames[Locations.VanillaLocations[Locations.LocationDescriptionToId[Hyperdash.Location]].Location.SceneName].ToUpper();
+                Hint += $"\nuhwAts yoo in \"{Archipelago.instance.GetPlayerName((int)Hyperdash.Player).ToUpper()}'S\"\n\"{Scene}...\"";
             } else {
-                Hint += $"\"{Archipelago.instance.GetPlayerName((int)Hyperdash.Player).ToUpper()}'S WORLD...\"";  
+                Hint += $" uhwAts yoo aht\n\"{Hyperdash.Location.ToUpper()}\"\nin\"{Archipelago.instance.GetPlayerName((int)Hyperdash.Player).ToUpper()}'S WORLD...\"";  
             }
             HintMessages.Add("Temple Statue", Hint);
 
@@ -96,8 +99,11 @@ namespace TunicArchipelago {
                     }
                     Prefix = Vowels.Contains(Scene[0]) ? "#E" : "#uh";
                     Hint = $"lehjehnd sehz {Prefix} \"{Scene}\"";
+                } else if (Archipelago.instance.GetPlayerGame((int)ItemHint.Player) == "Tunic") {
+                    Scene = Locations.SimplifiedSceneNames[Locations.VanillaLocations[Locations.LocationDescriptionToId[ItemHint.Location]].Location.SceneName].ToUpper();
+                    Hint = $"lehjehnd sehz \"{Archipelago.instance.GetPlayerName((int)ItemHint.Player).ToUpper()}'S\"\n\"{Scene}\"";
                 } else {
-                    Hint = $"lehjehnd sehz \"{Archipelago.instance.GetPlayerName((int)ItemHint.Player).ToUpper()}'S WORLD\"";
+                    Hint = $"lehjehnd sehz \"{Archipelago.instance.GetPlayerName((int)ItemHint.Player).ToUpper()}'S WORLD\" aht\n\"{ItemHint.Location.ToUpper()}\"";
                 }
                 Hint += $"\niz lOkAtid awn #uh \"<#ffd700>PATH OF THE HERO<#ffffff>...\"";
                 Hints.HintMessages.Add(HintGrave, Hint);
@@ -107,25 +113,29 @@ namespace TunicArchipelago {
             }
 
             List<string> Hexagons;
-            Dictionary<string, string> HexagonColors = new Dictionary<string, string>() { { "Red Hexagon", "<#FF3333>" }, { "Green Hexagon", "<#33FF33>" }, { "Blue Hexagon", "<#3333FF>" }, { "Gold Hexagon", "<#ffd700>" } };
+            Dictionary<string, string> HexagonColors = new Dictionary<string, string>() { { "Red Questagon", "<#FF3333>" }, { "Green Questagon", "<#33FF33>" }, { "Blue Questagon", "<#3333FF>" }, { "Gold Questagon", "<#ffd700>" } };
             if (SaveFile.GetInt("randomizer hexagon quest enabled") == 1) {
-                Hexagons = new List<string>() { "Gold Hexagon", "Gold Hexagon", "Gold Hexagon" };
+                Hexagons = new List<string>() { "Gold Questagon", "Gold Questagon", "Gold Questagon" };
             } else {
-                Hexagons = new List<string>() { "Red Hexagon", "Green Hexagon", "Blue Hexagon" };
+                Hexagons = new List<string>() { "Red Questagon", "Green Questagon", "Blue Questagon" };
             }
-
+            List<string> strings = new List<string>();
             List<string> HexagonHintGraves = new List<string>() { "Swamp Relic", "Library Relic", "Monastery Relic" };
             for (int i = 0; i < 3; i++) {
                 string Hexagon = Hexagons[random.Next(Hexagons.Count)];
                 string HexagonHintArea = HexagonHintGraves[random.Next(HexagonHintGraves.Count)];
-                ArchipelagoHint HexHint = Hexagon == "Gold Hexagon" ? Locations.MajorItemLocations[Hexagon][i] : Locations.MajorItemLocations[Hexagon][0];
+                ArchipelagoHint HexHint = Hexagon == "Gold Questagon" ? Locations.MajorItemLocations[Hexagon][i] : Locations.MajorItemLocations[Hexagon][0];
 
                 if (HexHint.Player == Player) {
                     Scene = HexHint.Location == "Your Pocket" ? HexHint.Location.ToUpper() : Locations.SimplifiedSceneNames[Locations.VanillaLocations[Locations.LocationDescriptionToId[HexHint.Location]].Location.SceneName].ToUpper();
                     Prefix = Vowels.Contains(Scene[0]) ? "#E" : "#uh";
                     Hint = $"#A sA {Prefix} \"{Scene.ToUpper()}\" iz \nwAr #uh {HexagonColors[Hexagon]}kwehstuhgawn [hexagram]<#FFFFFF> iz fownd\"...\"";
+                } else if (Archipelago.instance.GetPlayerGame((int)HexHint.Player) == "Tunic") {
+                    Scene = Locations.SimplifiedSceneNames[Locations.VanillaLocations[Locations.LocationDescriptionToId[HexHint.Location]].Location.SceneName].ToUpper();
+                    Prefix = Vowels.Contains(Scene[0]) ? "#E" : "#uh";
+                    Hint = $"#A sA \"{Archipelago.instance.GetPlayerName((int)HexHint.Player).ToUpper()}'S\"\n\"{Scene}\"\niz wAr #uh {HexagonColors[Hexagon]}kwehstuhgawn [hexagram]<#FFFFFF> iz fownd\"...\"";
                 } else {
-                    Hint = $"#A sA \"{Archipelago.instance.GetPlayerName((int)HexHint.Player).ToUpper()}'S WORLD\" iz \nwAr #uh {HexagonColors[Hexagon]}kwehstuhgawn [hexagram]<#FFFFFF> iz fownd\"...\"";
+                    Hint = $"#A sA #uh {HexagonColors[Hexagon]}kwehstuhgawn [hexagram]<#FFFFFF> iz fownd aht\n\"{HexHint.Location.ToUpper()}\"\nin \"{Archipelago.instance.GetPlayerName((int)HexHint.Player).ToUpper()}'S WORLD...\"";
                 }
                 
                 Hints.HintMessages.Add(HexagonHintArea, Hint);

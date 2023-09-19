@@ -188,7 +188,7 @@ namespace TunicArchipelago {
                 "Major Items"
             };
             foreach (string MajorItem in ItemLookup.MajorItems) {
-                if(MajorItem == "Gold Hexagon") { continue; }
+                if(MajorItem == "Gold Questagon") { continue; }
                 if(Locations.MajorItemLocations.ContainsKey(MajorItem) && Locations.MajorItemLocations[MajorItem].Count > 0) {
                     foreach (ArchipelagoHint apHint in Locations.MajorItemLocations[MajorItem]) {
 

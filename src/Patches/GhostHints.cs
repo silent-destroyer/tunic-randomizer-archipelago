@@ -73,7 +73,7 @@ namespace TunicArchipelago {
         public static List<string> HintableItemNames = new List<string>() {
             "Stick",
             "Sword",
-            "Shotgun",
+            "Gun",
             "Shield",
             "Hourglass",
             "Scavenger Mask",

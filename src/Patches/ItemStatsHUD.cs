@@ -227,8 +227,8 @@ namespace TunicArchipelago {
                 ThisArea.GetComponent<TextMeshProUGUI>().color = (ObtainedItemCountInCurrentScene == TotalItemCountInCurrentScene) ? new Color(0.917f, 0.65f, .08f) : Color.white;
                 Total.GetComponent<TextMeshProUGUI>().text = $"Total:\t\t  {ObtainedItemCount}/302";
                 if (GoldHexagons != null) {
-                    GoldHexagons.GetComponent<TextMeshProUGUI>().text = $"{TunicArchipelago.Tracker.ImportantItems["Hexagon Gold"]}/20";
-                    GoldHexagons.GetComponent<TextMeshProUGUI>().color = TunicArchipelago.Tracker.ImportantItems["Hexagon Gold"] >= 20 ? new Color(0.917f, 0.65f, .08f) : Color.white;
+                    GoldHexagons.GetComponent<TextMeshProUGUI>().text = $"{SaveFile.GetInt("randomizer inventory quantity Hexagon Gold")}/{SaveFile.GetInt("randomizer hexagon quest goal")}";
+                    GoldHexagons.GetComponent<TextMeshProUGUI>().color = SaveFile.GetInt("randomizer inventory quantity Hexagon Gold") >= SaveFile.GetInt("randomizer hexagon quest goal") ? new Color(0.917f, 0.65f, .08f) : Color.white;
                 }
                 if (Inventory.GetItemByName("Spear").Quantity == 1) {
                     QuestionMark.SetActive(false);

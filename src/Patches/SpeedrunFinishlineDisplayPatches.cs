@@ -312,13 +312,15 @@ namespace TunicArchipelago {
                 List<float> HexTimes = new List<float>();
                 List<string> Times = new List<string>();
                 if (SaveFile.GetInt("randomizer hexagon quest enabled") == 1) {
-                    Text += $"1st Hex:\t{FormatTime(SaveFile.GetFloat("randomizer Gold Hexagon 1 time"), true)}\t" +
-                            $"10th Hex:\t{FormatTime(SaveFile.GetFloat("randomizer Gold Hexagon 10 time"), true)}\n" +
-                            $"20th Hex:\t{FormatTime(SaveFile.GetFloat("randomizer Gold Hexagon 20 time"), true)}\t";
+                    int HexGoal = SaveFile.GetInt("randomizer hexagon quest goal");
+                    int HalfGoal = HexGoal / 2;
+                    Text += $"1st Hex:\t{FormatTime(SaveFile.GetFloat("randomizer Gold Questagon 1 time"), true)}\t" +
+                            $"{HalfGoal}{GetOrdinalSuffix(HalfGoal)} Hex:\t{FormatTime(SaveFile.GetFloat($"randomizer Gold Questagon {HalfGoal} time"), true)}\n" +
+                            $"{HexGoal}{GetOrdinalSuffix(HexGoal)} Hex:\t{FormatTime(SaveFile.GetFloat($"randomizer Gold Questagon {SaveFile.GetInt("randomizer hexagon quest goal")} time"), true)}\t";
                 } else {
-                    Text += $"Red Hex:\t{FormatTime(SaveFile.GetFloat("randomizer Red Hexagon 1 time"), true)}\t" +
-                            $"Green Hex:\t{FormatTime(SaveFile.GetFloat("randomizer Green Hexagon 1 time"), true)}\n" +
-                            $"Blue Hex:\t{FormatTime(SaveFile.GetFloat("randomizer Blue Hexagon 1 time"), true)}\t";
+                    Text += $"Red Hex:\t{FormatTime(SaveFile.GetFloat("randomizer Red Questagon 1 time"), true)}\t" +
+                            $"Green Hex:\t{FormatTime(SaveFile.GetFloat("randomizer Green Questagon 1 time"), true)}\n" +
+                            $"Blue Hex:\t{FormatTime(SaveFile.GetFloat("randomizer Blue Questagon 1 time"), true)}\t";
                 }
                 System.Random random = new System.Random();
                 float SwordTime = SaveFile.GetInt("randomizer sword progression enabled") == 1 ? SaveFile.GetFloat("randomizer Sword Progression 2 time") : SaveFile.GetFloat("randomizer Sword 1 time");
@@ -350,6 +352,15 @@ namespace TunicArchipelago {
             TimeSpan TimeSpan = TimeSpan.FromSeconds(Seconds);
             string TimeString = $"{TimeSpan.Hours.ToString().PadLeft(2, '0')}:{TimeSpan.Minutes.ToString().PadLeft(2, '0')}:{TimeSpan.Seconds.ToString().PadLeft(2, '0')}";
             return TimeString.PadRight(10).Replace(":", "<size=100%>:<size=80%>");
+        }
+
+        private static string GetOrdinalSuffix(int num) {
+            string number = num.ToString();
+            if (number.EndsWith("11") || number.EndsWith("12") || number.EndsWith("13")) return "th";
+            if (number.EndsWith("1")) return "st";
+            if (number.EndsWith("2")) return "nd";
+            if (number.EndsWith("3")) return "rd";
+            return "th";
         }
 
         public static bool GameOverDecision___retry_PrefixPatch(GameOverDecision __instance) {

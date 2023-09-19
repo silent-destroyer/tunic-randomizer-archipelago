@@ -213,6 +213,10 @@ namespace TunicArchipelago {
                         StateVariable.GetStateVariableByName("Placed Hexagons ALL").BoolValue = true;
                         StateVariable.GetStateVariableByName("Has Been Betrayed").BoolValue = true;
                         StateVariable.GetStateVariableByName("Has Died To God").BoolValue = true;
+                        
+                        if(slotData.TryGetValue("Hexagon Quest Goal", out var hexagonGoal)) {
+                            SaveFile.SetInt("randomizer hexagon quest goal", int.Parse(hexagonGoal.ToString()));
+                        }
                     }
                 }
                 if (slotData.TryGetValue("start_with_sword", out var startWithSword)) {
@@ -254,6 +258,7 @@ namespace TunicArchipelago {
                 if(slotData.TryGetValue("seed", out var Seed)) {
                     if (SaveFile.GetInt("seed") == 0) {
                         SaveFile.SetInt("seed", int.Parse(Seed.ToString(), CultureInfo.InvariantCulture));
+                        EnemyRandomizer.CreateAreaSeeds();
                         Logger.LogInfo("Imported seed from archipelago: " + Seed);
                     } else {
                         Logger.LogInfo("Loading seed: " + SaveFile.GetInt("seed"));

@@ -140,7 +140,7 @@ namespace TunicArchipelago {
             { "Magic Orb", new ItemData("Magic Orb", "progression", "Wand", ItemTypes.INVENTORY, 1) },
             { "Hero's Laurels", new ItemData("Hero's Laurels", "progression", "Hyperdash", ItemTypes.INVENTORY, 1) },
             { "Lantern", new ItemData("Lantern", "progression", "Lantern", ItemTypes.INVENTORY, 1) },
-            { "Shotgun", new ItemData("Shotgun", "useful", "Shotgun", ItemTypes.INVENTORY, 1) },
+            { "Gun", new ItemData("Gun", "useful", "Shotgun", ItemTypes.INVENTORY, 1) },
             { "Shield", new ItemData("Shield", "useful", "Shield", ItemTypes.INVENTORY, 1) },
             { "Dath Stone", new ItemData("Dath Stone", "useful", "Dath Stone", ItemTypes.SPECIAL, 1) },
             { "Hourglass", new ItemData("Hourglass", "useful", "SlowmoItem", ItemTypes.INVENTORY, 1) },
@@ -151,10 +151,10 @@ namespace TunicArchipelago {
             { "Potion Flask", new ItemData("Potion Flask", "useful", "Flask Container", ItemTypes.INVENTORY, 1) },
             { "Golden Coin", new ItemData("Golden Coin", "progression", "Trinket Coin", ItemTypes.INVENTORY, 1) },
             { "Card Slot", new ItemData("Card Slot", "useful", "Trinket Slot", ItemTypes.INVENTORY, 1) },
-            { "Red Hexagon", new ItemData("Red Hexagon", "useful", "Hexagon Red", ItemTypes.INVENTORY, 1) },
-            { "Green Hexagon", new ItemData("Green Hexagon", "useful", "Hexagon Green", ItemTypes.INVENTORY, 1) },
-            { "Blue Hexagon", new ItemData("Blue Hexagon", "useful", "Hexagon Blue", ItemTypes.INVENTORY, 1) },
-            { "Gold Hexagon", new ItemData("Gold Hexagon", "useful", "Hexagon Gold", ItemTypes.HEXAGONQUEST, 1) },
+            { "Red Questagon", new ItemData("Red Questagon", "useful", "Hexagon Red", ItemTypes.INVENTORY, 1) },
+            { "Green Questagon", new ItemData("Green Questagon", "useful", "Hexagon Green", ItemTypes.INVENTORY, 1) },
+            { "Blue Questagon", new ItemData("Blue Questagon", "useful", "Hexagon Blue", ItemTypes.INVENTORY, 1) },
+            { "Gold Questagon", new ItemData("Gold Questagon", "useful", "Hexagon Gold", ItemTypes.HEXAGONQUEST, 1) },
 
             // Upgrades and Relics
             { "ATT Offering", new ItemData("ATT Offering", "useful", "Upgrade Offering - Attack - Tooth", ItemTypes.INVENTORY, 1) },
@@ -310,9 +310,9 @@ namespace TunicArchipelago {
             {"Relic - Hero Sword", new HeroRelic("SV_RelicVoid_Got_Sword_ATT", "Upgrade Offering - Attack - Tooth", "Hero Relic - <#e99d4c>ATT", "Relic PIckup (6) Sword) [RelicVoid]", "Level Up - Attack")},
         };
 
-        public static List<string> MajorItems = new List<string>() { "Stick", "Sword", "Sword Upgrade", "Magic Dagger", "Magic Wand", "Magic Orb", "Hero's Laurels", "Lantern", "Shield", "Shotgun", "Scavenger Mask",
+        public static List<string> MajorItems = new List<string>() { "Stick", "Sword", "Sword Upgrade", "Magic Dagger", "Magic Wand", "Magic Orb", "Hero's Laurels", "Lantern", "Shield", "Gun", "Scavenger Mask",
                 "Old House Key", "Fortress Vault Key", "Dath Stone", "Hourglass", "Hero Relic - ATT", "Hero Relic - DEF", "Hero Relic - POTION", "Hero Relic - HP", "Hero Relic - SP",
-                "Hero Relic - MP", "Red Hexagon", "Green Hexagon", "Blue Hexagon", "Gold Hexagon", "Pages 24-25 (Prayer)", "Pages 42-43 (Holy Cross)", "Pages 52-53 (Ice Rod)"
+                "Hero Relic - MP", "Red Questagon", "Green Questagon", "Blue Questagon", "Gold Questagon", "Pages 24-25 (Prayer)", "Pages 42-43 (Holy Cross)", "Pages 52-53 (Ice Rod)"
         };
 
         public static Dictionary<string, string> SimplifiedItemNames = new Dictionary<string, string>() {
@@ -335,7 +335,7 @@ namespace TunicArchipelago {
             {"Wand", "Magic Orb"},
             {"Hyperdash", "Hero's Laurels"},
             {"Lantern", "Lantern"},
-            {"Shotgun", "Shotgun"},
+            {"Shotgun", "Gun"},
             {"Shield", "Shield"},
             {"Dath Stone", "Dath Stone"},
             {"SlowmoItem", "Hourglass"},
@@ -346,10 +346,10 @@ namespace TunicArchipelago {
             {"Flask Container", "Potion Flask"},
             {"Trinket Coin", "Golden Coin"},
             {"Trinket Slot", "Card Slot"},
-            {"Hexagon Red", "Red Hexagon"},
-            {"Hexagon Green", "Green Hexagon"},
-            {"Hexagon Blue", "Blue Hexagon"},
-            {"Hexagon Gold", "Gold Hexagon"},
+            {"Hexagon Red", "Red Questagon"},
+            {"Hexagon Green", "Green Questagon"},
+            {"Hexagon Blue", "Blue Questagon"},
+            {"Hexagon Gold", "Gold Questagon"},
             {"Upgrade Offering - Attack - Tooth", "ATT Offering"},
             {"Upgrade Offering - DamageResist - Effigy", "DEF Offering"},
             {"Upgrade Offering - PotionEfficiency Swig - Ash", "Potion Offering"},

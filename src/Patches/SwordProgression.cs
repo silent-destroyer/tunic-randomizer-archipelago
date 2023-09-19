@@ -86,51 +86,68 @@ namespace TunicArchipelago {
         public static void EnableSecondSword() {
             string SwordPath = "_Fox(Clone)/Fox/root/pelvis/chest/arm_upper.R/arm_lower.R/hand.R/sword_proxy/";
             GameObject SwordProxy = GameObject.Find(SwordPath);
-            GameObject.Destroy(SwordProxy.GetComponent<MeshFilter>());
-            GameObject.Destroy(SwordProxy.GetComponent<MeshRenderer>());
-            SwordProxy.transform.GetChild(0).localPosition = new Vector3(0f, 1.7f, 0f);
-            SwordProxy.transform.GetChild(1).GetComponent<BoxCollider>().size = new Vector3(0.66f, 4.16f, 2f);
-            SwordProxy.transform.GetChild(2).GetComponent<BoxCollider>().size = new Vector3(0.4f, 4.4f, 0.4f);
-            if (SwordProxy.transform.childCount == 5) {
-                GameObject.Destroy(SwordProxy.transform.GetChild(4).gameObject);
+            if (SwordProxy != null) {
+                if (SwordProxy.GetComponent<MeshFilter>() != null && SwordProxy.GetComponent<MeshRenderer>() != null) {
+                    GameObject.Destroy(SwordProxy.GetComponent<MeshFilter>());
+                    GameObject.Destroy(SwordProxy.GetComponent<MeshRenderer>());
+                }
+                if (SwordProxy.transform.childCount >= 3) {
+                    SwordProxy.transform.GetChild(0).localPosition = new Vector3(0f, 1.7f, 0f);
+                    SwordProxy.transform.GetChild(1).GetComponent<BoxCollider>().size = new Vector3(0.66f, 4.16f, 2f);
+                    SwordProxy.transform.GetChild(2).GetComponent<BoxCollider>().size = new Vector3(0.4f, 4.4f, 0.4f);
+                }
+
+                if (SwordProxy.transform.childCount == 5) {
+                    GameObject.Destroy(SwordProxy.transform.GetChild(4).gameObject);
+                }
+                GameObject Sword = new GameObject("sword");
+                Sword.AddComponent<MeshFilter>().mesh = ModelSwaps.SecondSword.GetComponent<MeshFilter>().mesh;
+                Sword.AddComponent<MeshRenderer>().materials = ModelSwaps.SecondSword.GetComponent<MeshRenderer>().materials;
+                Sword.transform.parent = SwordProxy.transform;
+                Sword.transform.localScale = new Vector3(0.5f, 0.3f, 0.5f);
+                Sword.transform.localRotation = Quaternion.identity;
+                Sword.transform.localPosition = Vector3.zero;
+                PlayerCharacterPatches.LoadSecondSword = false;
+            } else {
+                Logger.LogError("Could not find sword object to replace with Sword Lvl 3!");
             }
-            GameObject Sword = new GameObject("sword");
-            Sword.AddComponent<MeshFilter>().mesh = ModelSwaps.SecondSword.GetComponent<MeshFilter>().mesh;
-            Sword.AddComponent<MeshRenderer>().materials = ModelSwaps.SecondSword.GetComponent<MeshRenderer>().materials;
-            Sword.transform.parent = SwordProxy.transform;
-            Sword.transform.localScale = new Vector3(0.5f, 0.3f, 0.5f);
-            Sword.transform.localRotation = Quaternion.identity;
-            Sword.transform.localPosition = Vector3.zero;
-            PlayerCharacterPatches.LoadSecondSword = false;
         }
 
         public static void EnableThirdSword() {
 
             string SwordPath = "_Fox(Clone)/Fox/root/pelvis/chest/arm_upper.R/arm_lower.R/hand.R/sword_proxy/";
             GameObject SwordProxy = GameObject.Find(SwordPath);
-            GameObject.Destroy(SwordProxy.GetComponent<MeshFilter>());
-            GameObject.Destroy(SwordProxy.GetComponent<MeshRenderer>());
-            SwordProxy.transform.GetChild(0).localPosition = new Vector3(0f, 1.85f, 0f);
-            SwordProxy.transform.GetChild(1).GetComponent<BoxCollider>().size = new Vector3(0.66f, 4.36f, 2f);
-            SwordProxy.transform.GetChild(2).GetComponent<BoxCollider>().size = new Vector3(0.4f, 4.6f, 0.4f);
-            SwordProxy.transform.GetChild(1).GetComponent<HitTrigger>().unblockable = true;
-            SwordProxy.transform.GetChild(2).GetComponent<HitTrigger>().unblockable = true;
-            if (SwordProxy.transform.childCount == 5) {
-                GameObject.Destroy(SwordProxy.transform.GetChild(4).gameObject);
+            if (SwordProxy != null) {
+                if(SwordProxy.GetComponent<MeshFilter>() != null && SwordProxy.GetComponent<MeshRenderer>() != null) {
+                    GameObject.Destroy(SwordProxy.GetComponent<MeshFilter>());
+                    GameObject.Destroy(SwordProxy.GetComponent<MeshRenderer>());
+                }
+                if (SwordProxy.transform.childCount >= 3) {
+                    SwordProxy.transform.GetChild(0).localPosition = new Vector3(0f, 1.85f, 0f);
+                    SwordProxy.transform.GetChild(1).GetComponent<BoxCollider>().size = new Vector3(0.66f, 4.36f, 2f);
+                    SwordProxy.transform.GetChild(2).GetComponent<BoxCollider>().size = new Vector3(0.4f, 4.6f, 0.4f);
+                    SwordProxy.transform.GetChild(1).GetComponent<HitTrigger>().unblockable = true;
+                    SwordProxy.transform.GetChild(2).GetComponent<HitTrigger>().unblockable = true;
+                }
+                if (SwordProxy.transform.childCount == 5) {
+                    GameObject.Destroy(SwordProxy.transform.GetChild(4).gameObject);
+                }
+                GameObject Sword = new GameObject("sword");
+                Sword.AddComponent<MeshFilter>().mesh = ModelSwaps.ThirdSword.GetComponent<MeshFilter>().mesh;
+                Sword.AddComponent<MeshRenderer>().materials = ModelSwaps.ThirdSword.GetComponent<MeshRenderer>().materials;
+                Sword.transform.parent = SwordProxy.transform;
+                Sword.transform.localScale = new Vector3(0.3f, 0.3f, 0.3f);
+                Sword.transform.localRotation = new Quaternion(0.7071f, 0f, 0f, -0.7071f);
+                Sword.transform.localPosition = Vector3.zero;
+                PlayerCharacterPatches.LoadThirdSword = false;
+            } else {
+                Logger.LogError("Could not find sword object to replace with Sword Lvl 4!");
             }
-            GameObject Sword = new GameObject("sword");
-            Sword.AddComponent<MeshFilter>().mesh = ModelSwaps.ThirdSword.GetComponent<MeshFilter>().mesh;
-            Sword.AddComponent<MeshRenderer>().materials = ModelSwaps.ThirdSword.GetComponent<MeshRenderer>().materials;
-            Sword.transform.parent = SwordProxy.transform;
-            Sword.transform.localScale = new Vector3(0.3f, 0.3f, 0.3f);
-            Sword.transform.localRotation = new Quaternion(0.7071f, 0f, 0f, -0.7071f);
-            Sword.transform.localPosition = Vector3.zero;
-            PlayerCharacterPatches.LoadThirdSword = false;
         }
 
         public static bool HitReceiver_ReceiveHit_PrefixPatch(HitReceiver __instance, ref HitType hitType, ref bool unblockable, ref bool isPlayerCharacterMelee) {
 
-            if (__instance.GetComponent<TuningForkBell>() != null && isPlayerCharacterMelee) {
+            if ((__instance.GetComponent<TuningForkBell>() != null || __instance.GetComponent<PowerSwitch>() != null) && isPlayerCharacterMelee) {
                 unblockable = false;
             }
 

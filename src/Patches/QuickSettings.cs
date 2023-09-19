@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace TunicArchipelago {
     public class QuickSettings : MonoBehaviour {
@@ -22,7 +23,7 @@ namespace TunicArchipelago {
             if (SceneLoaderPatches.SceneName == "TitleScreen" && GameObject.FindObjectOfType<TitleScreen>() != null) {
                 GUI.skin.font = PaletteEditor.OdinRounded == null ? GUI.skin.font : PaletteEditor.OdinRounded;
                 Cursor.visible = true;
-                GUI.Window(101, new Rect(20f, 150f, 430f, 410f), new Action<int>(QuickSettingsWindow), "Quick Settings");
+                GUI.Window(101, new Rect(20f, 150f, 430f, 450f), new Action<int>(QuickSettingsWindow), "Quick Settings");
             }
         }
 
@@ -51,43 +52,51 @@ namespace TunicArchipelago {
             if (Connect) {
                 Archipelago.instance.Connect();
             }
-            
+
             bool Disconnect = GUI.Button(new Rect(220f, 100f, 200f, 30f), "Disconnect");
             if (Disconnect) {
                 Archipelago.instance.Disconnect();
             }
 
+            bool OpenSettings = GUI.Button(new Rect(10f, 140f, 200f, 30f), "Open Settings File");
+            if (OpenSettings) {
+                try {
+                    System.Diagnostics.Process.Start(TunicArchipelago.SettingsPath);
+                } catch (Exception e) {
+                    Logger.LogError(e);
+                }
+            }
+
+            GUI.Label(new Rect(10f, 180f, 200f, 30f), $"World Settings");
+
             if (Archipelago.instance.integration != null && Archipelago.instance.integration.connected) {
                 Dictionary<string, object> slotData = Archipelago.instance.GetPlayerSlotData();
-                GUI.Label(new Rect(10f, 140f, 200f, 30f), $"World Settings");
-
-                GUI.Toggle(new Rect(10f, 180f, 180f, 30f), slotData["keys_behind_bosses"].ToString() == "1", "Keys Behind Bosses");
-                GUI.Toggle(new Rect(220f, 180f, 210f, 30f), slotData["sword_progression"].ToString() == "1", "Sword Progression");
-                GUI.Toggle(new Rect(10f, 220f, 175f, 30f), slotData["start_with_sword"].ToString() == "1", "Start With Sword");
-                GUI.Toggle(new Rect(220f, 220f, 175f, 30f), slotData["ability_shuffling"].ToString() == "1", "Shuffle Abilities");
-                GUI.Toggle(new Rect(10f, 260f, 175f, 30f), slotData["hexagon_quest"].ToString() == "1", "Hexagon Quest");
+                GUI.Toggle(new Rect(10f, 220f, 180f, 30f), slotData["keys_behind_bosses"].ToString() == "1", "Keys Behind Bosses");
+                GUI.Toggle(new Rect(220f, 220f, 210f, 30f), slotData["sword_progression"].ToString() == "1", "Sword Progression");
+                GUI.Toggle(new Rect(10f, 260f, 175f, 30f), slotData["start_with_sword"].ToString() == "1", "Start With Sword");
+                GUI.Toggle(new Rect(220f, 260f, 175f, 30f), slotData["ability_shuffling"].ToString() == "1", "Shuffle Abilities");
+                GUI.Toggle(new Rect(10f, 300f, 185f, 30f), slotData["hexagon_quest"].ToString() == "1", slotData["hexagon_quest"].ToString() == "1" ? 
+                    $"Hexagon Quest (<color=#E3D457>{slotData["Hexagon Quest Goal"].ToString()}</color>)" : $"Hexagon Quest");
                 int FoolIndex = int.Parse(slotData["fool_traps"].ToString());
-                GUI.Toggle(new Rect(220f, 260f, 195f, 60f), FoolIndex != 0, $"Fool Traps: {(FoolIndex == 0 ? "Off" : $"<color={FoolColors[FoolIndex]}>{FoolChoices[FoolIndex]}</color>")}");
+                GUI.Toggle(new Rect(220f, 300f, 195f, 60f), FoolIndex != 0, $"Fool Traps: {(FoolIndex == 0 ? "Off" : $"<color={FoolColors[FoolIndex]}>{FoolChoices[FoolIndex]}</color>")}");
 
             } else {
-                GUI.Label(new Rect(10f, 140f, 200f, 30f), $"World Settings");
-
-                GUI.Toggle(new Rect(10f, 180f, 180f, 30f), false, "Keys Behind Bosses");
-                GUI.Toggle(new Rect(220f, 180f, 210f, 30f), false, "Sword Progression");
-                GUI.Toggle(new Rect(10f, 220f, 175f, 30f), false, "Start With Sword");
-                GUI.Toggle(new Rect(220f, 220f, 175f, 30f), false, "Shuffle Abilities");
-                GUI.Toggle(new Rect(10f, 260f, 175f, 30f), false, "Hexagon Quest");
-                GUI.Toggle(new Rect(220f, 260f, 175f, 30f), false, "Fool Traps: Off");
+                GUI.Toggle(new Rect(10f, 220f, 180f, 30f), false, "Keys Behind Bosses");
+                GUI.Toggle(new Rect(220f, 220f, 210f, 30f), false, "Sword Progression");
+                GUI.Toggle(new Rect(10f, 260f, 175f, 30f), false, "Start With Sword");
+                GUI.Toggle(new Rect(220f, 260f, 175f, 30f), false, "Shuffle Abilities");
+                GUI.Toggle(new Rect(10f, 300f, 175f, 30f), false, "Hexagon Quest");
+                GUI.Toggle(new Rect(220f, 300f, 175f, 30f), false, "Fool Traps: Off");
 
             }
 
-            GUI.Label(new Rect(10f, 300f, 200f, 30f), $"Other Settings");
-            bool DeathLink = GUI.Toggle(new Rect(10f, 340f, 115f, 30f), TunicArchipelago.Settings.DeathLinkEnabled, "Death Link");
+            GUI.Label(new Rect(10f, 340f, 200f, 30f), $"Other Settings");
+            bool DeathLink = GUI.Toggle(new Rect(10f, 380f, 115f, 30f), TunicArchipelago.Settings.DeathLinkEnabled, "Death Link");
             TunicArchipelago.Settings.DeathLinkEnabled = DeathLink;
-            bool EnemyRandomizer = GUI.Toggle(new Rect(150f, 340f, 180f, 30f), TunicArchipelago.Settings.EnemyRandomizerEnabled, "Enemy Randomizer");
+            bool EnemyRandomizer = GUI.Toggle(new Rect(150f, 380f, 180f, 30f), TunicArchipelago.Settings.EnemyRandomizerEnabled, "Enemy Randomizer");
             TunicArchipelago.Settings.EnemyRandomizerEnabled = EnemyRandomizer;
             GUI.skin.label.fontSize = 20;
-            GUI.Label(new Rect(10f, 370f, 500f, 30f), $"More settings in options menu!");
+            GUI.Label(new Rect(10f, 410f, 500f, 30f), $"More settings in options menu!");
         }
 
     }

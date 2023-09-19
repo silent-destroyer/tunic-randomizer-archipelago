@@ -26,7 +26,7 @@ namespace TunicArchipelago {
                     if (GameObject.FindObjectOfType<TrinketWell>() != null) {
                         int CoinCount = Inventory.GetItemByName("Trinket Coin").Quantity + TunicArchipelago.Tracker.ImportantItems["Coins Tossed"];
                         Dictionary<int, int> CoinLevels = new Dictionary<int, int>() { { 0, 3 }, { 1, 6 }, { 2, 10 }, { 3, 15 }, { 4, 20 } };
-                        int CoinsNeededForNextReward = CoinLevels[Locations.VanillaLocations.Keys.Where(ItemId => Locations.VanillaLocations[ItemId].Location.SceneName == "Trinket Well" && SaveFile.GetInt($"randomizer picked up {ItemId}") == 0).ToList().Count];
+                        int CoinsNeededForNextReward = CoinLevels[Locations.VanillaLocations.Keys.Where(ItemId => Locations.VanillaLocations[ItemId].Location.SceneName == "Trinket Well" && SaveFile.GetInt($"randomizer picked up {ItemId}") == 1).ToList().Count];
 
                         if ((Inventory.GetItemByName("Trinket Coin").Quantity + TunicArchipelago.Tracker.ImportantItems["Coins Tossed"]) > CoinsNeededForNextReward) {
                             CreateFairyTarget($"fairy target Well Reward ({CoinsNeededForNextReward} Coins)", GameObject.FindObjectOfType<TrinketWell>().transform.position);

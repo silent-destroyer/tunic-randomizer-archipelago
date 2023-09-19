@@ -47,7 +47,7 @@ namespace TunicArchipelago {
                 PlayerCharacter.instance.transform.GetChild(0).GetChild(0).GetChild(10).GetChild(0).gameObject.GetComponent<MeshRenderer>().materials = ModelSwaps.Items["Key"].GetComponent<MeshRenderer>().materials;
             }
             if (SaveFile.GetInt("randomizer hexagon quest enabled") == 1) {
-                if (__instance.transform.position.ToString() == "(0.0, 0.0, 0.0)" && SceneLoaderPatches.SceneName == "Spirit Arena" && TunicArchipelago.Tracker.ImportantItems["Hexagon Gold"] < 20) {
+                if (__instance.transform.position.ToString() == "(0.0, 0.0, 0.0)" && SceneLoaderPatches.SceneName == "Spirit Arena" && SaveFile.GetInt("randomizer inventory quantity Hexagon Gold") < SaveFile.GetInt("randomizer hexagon quest goal")) {
                     GenericMessage.ShowMessage($"\"<#EAA615>Sealed Forever.\"");
                     return false;
                 }

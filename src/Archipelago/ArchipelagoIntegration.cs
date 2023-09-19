@@ -59,6 +59,8 @@ namespace TunicArchipelago {
         }
 
         public void TryConnect() {
+            
+            TryDisconnect();
 
             RandomizerSettings settings = JsonConvert.DeserializeObject<RandomizerSettings>(File.ReadAllText(TunicArchipelago.SettingsPath));
             TunicArchipelago.Settings.ConnectionSettings = settings.ConnectionSettings;
