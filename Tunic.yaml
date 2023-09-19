@@ -1,4 +1,13 @@
-﻿name: Ruin Seeker
+﻿# _________  ___  ___  ________   ________     
+#|\___   ___\\  \|\  \|\   ___  \|\   ____\    
+#\|___ \  \_\ \  \\\  \ \  \\ \  \ \  \___|    
+#     \ \  \ \ \  \\\  \ \  \\ \  \ \  \       
+#      \ \  \ \ \  \\\  \ \  \\ \  \ \  \____  
+#       \ \__\ \ \_______\ \__\\ \__\ \_______\
+#        \|__|  \|_______|\|__| \|__|\|_______|
+#
+name: Ruin Seeker
+description: tunc
 game: Tunic
 requires:
   version: 0.4.2
@@ -12,51 +21,26 @@ Tunic:
   # Lock the ability to use prayer, holy cross, and ice rod until their corresponding manual page is found.
   # If playing with Hexagon Quest, abilities are instead unlocked after finding 5, 10, and 15 Gold Hexagons.
   ability_shuffling: 'true'
-  # Alternate goal akin to Triforce Hunt. Find 20 of 30 Gold Hexagons to win.
-  hexagon_quest: 'false'
   # Replaces low-to-medium value money rewards in the item pool with fool traps, which cause random negative
   # effects to the player. Options are off (0), normal (15), double (32), and onslaught (50).
   fool_traps: normal
-
+  # Alternate goal akin to Triforce Hunt. Find 20 of 30 Gold Hexagons to win.
+  hexagon_quest: 'false'
+  # The required amount of Gold Hexagons needed to win Hexagon Quest. Goal can be anywhere between 15 and 50.
+  hexagon_goal: 20
+  # The amount of extra Gold Hexagons in the item pool in Hexagon Quest.
+  # Calculated as a percentage of the required goal amount (50 = 50%, so if hexagon_goal is 20 and extra_hexagon_percentage = 50, there will be 30 hexagons total in the item pool)
+  extra_hexagon_percentage: 50
   progression_balancing: 50
-
   accessibility:
-    # Set rules for reachability of your items/locations.
-    # Locations: ensure everything can be reached and acquired.
-    # Items: ensure all logically relevant items can be acquired.
-    # Minimal: ensure what is needed to reach your goal can be acquired.
     locations: 0
     items: 50
     minimal: 0
-
-  local_items:
-    # Forces these items to be in their native world.
-    []
-
-  non_local_items:
-    # Forces these items to be outside their native world.
-    []
-
-  start_inventory:
-    # Start with these items.
-    {}
-
-  start_inventory_from_pool:
-    # Start with these items and remove them from the item pool.
-    {}
-
-  start_hints:
-    # Start with these item's locations prefilled into the !hint command.
-    []
-
-  start_location_hints:
-    # Start with these locations and their item prefilled into the !hint command
-    []
-
-  exclude_locations:
-    # Prevent these locations from having an important item
-    []
-
-  priority_locations:
-    # Prevent these locations from having an unimportant item
-    []
+  local_items: []
+  non_local_items: []
+  start_inventory: {}
+  start_inventory_from_pool: {}
+  start_hints: []
+  start_location_hints: []
+  exclude_locations: []
+  priority_locations: []
