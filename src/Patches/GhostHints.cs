@@ -5,7 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 using BepInEx.Logging;
-
+using static TunicArchipelago.SaveFlags;
+using UnityEngine.SceneManagement;
 
 namespace TunicArchipelago {
 
@@ -73,6 +74,7 @@ namespace TunicArchipelago {
         public static List<string> HintableItemNames = new List<string>() {
             "Stick",
             "Sword",
+            "Sword Upgrade",
             "Gun",
             "Shield",
             "Hourglass",
@@ -304,18 +306,19 @@ namespace TunicArchipelago {
 
             List<string> Hints = new List<string>();
             for (int i = 0; i < 5; i++) {
-                
                 string LocationHint = LocationHints[random.Next(LocationHints.Count)];
                 Hints.Add(LocationHint);
                 LocationHints.Remove(LocationHint);
-
+            }
+            for (int i = 0; i < 7; i++) {
                 if (ItemHints.Count > 0) {
                     string ItemHint = ItemHints[random.Next(ItemHints.Count)];
                     Hints.Add(ItemHint);
                     ItemHints.Remove(ItemHint);
                 }
-
-                if(BarrenAndTreasureHints.Count > 0) {
+            }
+            for (int i = 0; i < 3; i++) {
+                if (BarrenAndTreasureHints.Count > 0) {
                     string BarrenHint = BarrenAndTreasureHints[random.Next(BarrenAndTreasureHints.Count)];
                     Hints.Add(BarrenHint);
                     BarrenAndTreasureHints.Remove(BarrenHint);
@@ -323,12 +326,17 @@ namespace TunicArchipelago {
             }
 
             while (Hints.Count < 15) {
-                if (LocationHints.Count == 0) {
+                if (ItemHints.Count > 0) {
+                    string ItemHint = ItemHints[random.Next(ItemHints.Count)];
+                    Hints.Add(ItemHint);
+                    ItemHints.Remove(ItemHint);
+                } else if (LocationHints.Count > 0) {
+                    string LocationHint = LocationHints[random.Next(LocationHints.Count)];
+                    Hints.Add(LocationHint);
+                    LocationHints.Remove(LocationHint);
+                } else {
                     break;
                 }
-                string LocationHint = LocationHints[random.Next(LocationHints.Count)];
-                Hints.Add(LocationHint);
-                LocationHints.Remove(LocationHint);
             }
             if (Hints.Count < 15) {
                 HintGhosts = HintGhosts.Take(Hints.Count).ToList();
@@ -343,7 +351,7 @@ namespace TunicArchipelago {
         public static void GenerateLocationHints() {
             LocationHints.Clear();
             List<String> HintableLocations = HintableLocationIds.Keys.ToList();
-            if(SaveFile.GetInt("randomizer keys behind bosses") == 1) {
+            if(SaveFile.GetInt(KeysBehindBosses) == 1) {
                 // Remove boss hints if keys behind bosses is on
                 HintableLocations.Remove("Vault Key (Red) [Fortress Arena]");
                 HintableLocations.Remove("Hexagon Green [Library Arena]");
@@ -363,9 +371,11 @@ namespace TunicArchipelago {
 
         public static void GenerateItemHints() {
             ItemHints.Clear();
-            
+
+            string Hint = "";
+
             List<string> HintableItems = new List<string>(HintableItemNames);
-            if (SaveFile.GetInt("randomizer shuffled abilities") == 1) {
+            if (SaveFile.GetInt(AbilityShuffle) == 1) {
                 HintableItems.Add("Pages 52-53 (Ice Rod)");
             }
             for (int i = 0; i < HintableItems.Count; i++) {
@@ -373,10 +383,6 @@ namespace TunicArchipelago {
                 List<ArchipelagoHint> ItemLocations = Locations.MajorItemLocations[Item];
                 foreach(ArchipelagoHint HintLocation in ItemLocations) {
                     if (HintLocation.Player == Archipelago.instance.GetPlayerSlot()) {
-                        string Hint = "";
-                        if (SaveFile.GetInt("randomizer sword progression enabled") == 1 && (Item == "Sword" || Item == "Stick")) {
-                            Item = "Sword Upgrade";
-                        }
                         string Scene = HintLocation.Location == "Your Pocket" ? HintLocation.Location.ToUpper() : Locations.SimplifiedSceneNames[Locations.VanillaLocations[Locations.LocationDescriptionToId[HintLocation.Location]].Location.SceneName].ToUpper();
                         string ScenePrefix = Scene == "Trinket Well" ? "%rOi^" : "aht #uh";
                         Hint = $"bI #uh wA, I saw A \"{Item.ToUpper().Replace(" ", "\" \"")}\" #uh lahst tIm I wuhs {ScenePrefix} \"{Scene.Replace(" ", "\" \"")}.\"";
@@ -384,6 +390,11 @@ namespace TunicArchipelago {
                         ItemHints.Add(WordWrapString(Hint));
                     }
                 }
+            }
+            if (SaveFile.GetInt(HexagonQuestEnabled) == 1 && SaveFile.GetInt(AbilityShuffle) == 1) {
+                ItemHints.Add($"bI #uh wA, I hurd #aht \"{SaveFile.GetInt(HexagonQuestPrayer)} GOLD QUESTAGONS\"\nwil grahnt yoo #uh powur uhv \"PRAYER.\"");
+                ItemHints.Add($"bI #uh wA, I hurd #aht \"{SaveFile.GetInt(HexagonQuestHolyCross)} GOLD QUESTAGONS\"\nwil grahnt yoo #uh powur uhv #uh \"HOLY CROSS.\"");
+                ItemHints.Add($"bI #uh wA, I hurd #aht \"{SaveFile.GetInt(HexagonQuestIceRod)} GOLD QUESTAGONS\"\nwil grahnt yoo #uh #uh powur uhv #uh \"ICE ROD.\"");
             }
         }
 

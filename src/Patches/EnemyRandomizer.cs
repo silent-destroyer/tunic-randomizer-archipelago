@@ -7,6 +7,7 @@ using UnityEngine;
 using BepInEx.Logging;
 using UnhollowerBaseLib;
 using UnityEngine.SceneManagement;
+using static TunicArchipelago.SaveFlags;
 
 namespace TunicArchipelago {
 
@@ -308,7 +309,6 @@ namespace TunicArchipelago {
                 if (EnemyName == "voidling redux") {
                     Enemies[EnemyName] = GameObject.Instantiate(Monsters.Where(Monster => Monster.name == LocationEnemy && Monster.transform.parent.name == "_Night Encounters").ToList()[0].gameObject);
                     Enemies[EnemyName].GetComponent<Voidling>().replacementMonster = null;
-
                 } else {
                     Enemies[EnemyName] = GameObject.Instantiate(Monsters.Where(Monster => Monster.name == LocationEnemy).ToList()[0].gameObject);
                 }
@@ -391,15 +391,24 @@ namespace TunicArchipelago {
                     List<string> EnemyKeys = Enemies.Keys.ToList();
                     if (CurrentScene == "Cathedral Arena") {
                         EnemyKeys.Remove("administrator_servant");
-                        EnemyKeys.Remove("administrator");
                         EnemyKeys.Remove("Hedgehog Trap");
+                        if (Inventory.GetItemByName("Wand").Quantity == 0) {
+                            EnemyKeys.Remove("Crabbit with Shell");
+                        }
+                        if (Enemy.transform.parent.name.Contains("Wave")) {
+                            Enemy.transform.position = Vector3.zero;
+                        }
                     }
                     if (CurrentScene == "ziggurat2020_1" && Enemy.GetComponent<Administrator>() != null) {
                         EnemyKeys.Remove("Hedgehog Trap");
+                        EnemyKeys.Remove("administrator_servant");
                     }
-                    if (SceneLoaderPatches.SceneName == "Forest Boss Room" && Enemy.GetComponent<BossAnnounceOnAggro>() != null) {
+                    if (CurrentScene == "Forest Boss Room" && Enemy.GetComponent<BossAnnounceOnAggro>() != null) {
                         EnemyKeys.Remove("administrator_servant");
                         EnemyKeys.Remove("Hedgehog Trap");
+                    }
+                    if (CurrentScene == "Sewer" && Enemy.name.Contains("Spinnerbot") && !Enemy.name.Contains("Corrupted")) {
+                        Enemy.name = Enemy.name.Replace("Spinnerbot", "Spinnerbot Corrupted");
                     }
                     if (TunicArchipelago.Settings.ExtraEnemiesEnabled) {
                         if (Enemy.transform.parent != null && Enemy.transform.parent.name.Contains("NG+")) {
@@ -407,7 +416,7 @@ namespace TunicArchipelago {
                         }
                     }
                     string NewEnemyName = "";
-                    if (TunicArchipelago.Settings.EnemyDifficulty == RandomizerSettings.EnemyRandomizationType.RANDOM || CurrentScene == "Cathedral Arena") {
+                    if (TunicArchipelago.Settings.EnemyDifficulty == RandomizerSettings.EnemyRandomizationType.RANDOM) {
                         NewEnemy = GameObject.Instantiate(Enemies[EnemyKeys[Random.Next(EnemyKeys.Count)]]);
                     } else if (TunicArchipelago.Settings.EnemyDifficulty == RandomizerSettings.EnemyRandomizationType.BALANCED) {
                         List<string> EnemyTypes = null;
@@ -437,6 +446,13 @@ namespace TunicArchipelago {
                         if (EnemyTypes == null) {
                             NewEnemy = GameObject.Instantiate(Enemies[EnemyKeys[Random.Next(EnemyKeys.Count)]]);
                         } else {
+                            if (CurrentScene == "Cathedral Arena") {
+                                EnemyTypes.Remove("administrator_servant");
+                                EnemyTypes.Remove("Hedgehog Trap");
+                                if (Inventory.GetItemByName("Wand").Quantity == 0) {
+                                    EnemyTypes.Remove("Crabbit with Shell");
+                                }
+                            }
                             NewEnemy = GameObject.Instantiate(Enemies[EnemyTypes[Random.Next(EnemyTypes.Count)]]);
                         }
                     } else {
@@ -526,11 +542,11 @@ namespace TunicArchipelago {
 
         public static void Monster_Die_MoveNext_PostfixPatch(Monster._Die_d__77 __instance, ref bool __result) {
             if (!__result) {
-                int EnemiesDefeated = SaveFile.GetInt("randomizer enemies defeated");
-                SaveFile.SetInt("randomizer enemies defeated", EnemiesDefeated + 1);
+                int EnemiesDefeated = SaveFile.GetInt(EnemiesDefeatedCount);
+                SaveFile.SetInt(EnemiesDefeatedCount, EnemiesDefeated + 1);
 
-                if (TunicArchipelago.Settings.EnemyRandomizerEnabled) {
-                    string SceneName = SceneLoaderPatches.SceneName;
+                string SceneName = SceneLoaderPatches.SceneName;
+                if (TunicArchipelago.Settings.EnemyRandomizerEnabled && SceneName != "Cathedral Arena") {
                     if (!DefeatedEnemyTracker.ContainsKey(SceneName)) {
                         DefeatedEnemyTracker.Add(SceneName, new List<string>());
                     }

@@ -7,6 +7,7 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
 using BepInEx.Logging;
+using static TunicArchipelago.SaveFlags;
 
 namespace TunicArchipelago {
     public class ItemStatsHUD {
@@ -227,8 +228,8 @@ namespace TunicArchipelago {
                 ThisArea.GetComponent<TextMeshProUGUI>().color = (ObtainedItemCountInCurrentScene == TotalItemCountInCurrentScene) ? new Color(0.917f, 0.65f, .08f) : Color.white;
                 Total.GetComponent<TextMeshProUGUI>().text = $"Total:\t\t  {ObtainedItemCount}/302";
                 if (GoldHexagons != null) {
-                    GoldHexagons.GetComponent<TextMeshProUGUI>().text = $"{SaveFile.GetInt("randomizer inventory quantity Hexagon Gold")}/{SaveFile.GetInt("randomizer hexagon quest goal")}";
-                    GoldHexagons.GetComponent<TextMeshProUGUI>().color = SaveFile.GetInt("randomizer inventory quantity Hexagon Gold") >= SaveFile.GetInt("randomizer hexagon quest goal") ? new Color(0.917f, 0.65f, .08f) : Color.white;
+                    GoldHexagons.GetComponent<TextMeshProUGUI>().text = $"{SaveFile.GetInt(GoldHexagonQuantity)}/{SaveFile.GetInt(HexagonQuestGoal)}";
+                    GoldHexagons.GetComponent<TextMeshProUGUI>().color = SaveFile.GetInt(GoldHexagonQuantity) >= SaveFile.GetInt(HexagonQuestGoal) ? new Color(0.917f, 0.65f, .08f) : Color.white;
                 }
                 if (Inventory.GetItemByName("Spear").Quantity == 1) {
                     QuestionMark.SetActive(false);
@@ -261,19 +262,19 @@ namespace TunicArchipelago {
                 BlueHexagon.GetComponent<Image>().color = Color.white;
                 if (Inventory.GetItemByName("Hexagon Red").Quantity == 1 || StateVariable.GetStateVariableByName("Placed Hexagon 1 Red").BoolValue) {
                     __instance.hexagonImages[0].enabled = true;
-                    RedHexagon.GetComponent<Image>().color = SaveFile.GetInt("randomizer hexagon quest enabled") == 1 ? new Color(0.917f, 0.65f, .08f) : new Color(1f, 0f, 0f, 0.75f);
+                    RedHexagon.GetComponent<Image>().color = SaveFile.GetInt(HexagonQuestEnabled) == 1 ? new Color(0.917f, 0.65f, .08f) : new Color(1f, 0f, 0f, 0.75f);
                 } else {
                     __instance.hexagonImages[0].enabled = false;
                 }
                 if (Inventory.GetItemByName("Hexagon Green").Quantity == 1 || StateVariable.GetStateVariableByName("Placed Hexagon 2 Green").BoolValue) {
                     __instance.hexagonImages[1].enabled = true;
-                    GreenHexagon.GetComponent<Image>().color = SaveFile.GetInt("randomizer hexagon quest enabled") == 1 ? new Color(0.917f, 0.65f, .08f) : new Color(0f, 1f, 0f, 0.75f);
+                    GreenHexagon.GetComponent<Image>().color = SaveFile.GetInt(HexagonQuestEnabled) == 1 ? new Color(0.917f, 0.65f, .08f) : new Color(0f, 1f, 0f, 0.75f);
                 } else {
                     __instance.hexagonImages[1].enabled = false;
                 }
                 if (Inventory.GetItemByName("Hexagon Blue").Quantity == 1 || StateVariable.GetStateVariableByName("Placed Hexagon 3 Blue").BoolValue) {
                     __instance.hexagonImages[2].enabled = true;
-                    BlueHexagon.GetComponent<Image>().color = SaveFile.GetInt("randomizer hexagon quest enabled") == 1 ? new Color(0.917f, 0.65f, .08f) : new Color(0f, 0f, 1f, 1f);
+                    BlueHexagon.GetComponent<Image>().color = SaveFile.GetInt(HexagonQuestEnabled) == 1 ? new Color(0.917f, 0.65f, .08f) : new Color(0f, 0f, 1f, 1f);
                 } else {
                     __instance.hexagonImages[2].enabled = false;
                 }
@@ -316,13 +317,13 @@ namespace TunicArchipelago {
                     if (Equipment.transform.GetChild(i).GetChild(1).GetComponent<Image>().sprite.name == "Inventory items_sword") {
                         if (Equipment.transform.GetChild(i).childCount == 3) {
                         } else {
-                            if (SaveFile.GetInt("randomizer sword progression level") == 3) {
+                            if (SaveFile.GetInt(SwordProgressionLevel) == 3) {
                                 GameObject NewSword = GameObject.Instantiate(ModelSwaps.SecondSwordImage);
                                 NewSword.transform.parent = Equipment.transform.GetChild(i);
                                 NewSword.transform.localScale = new Vector3(2f, 2f, 2f);
                                 NewSword.transform.localPosition = Vector3.zero;
                                 Equipment.transform.GetChild(i).GetChild(1).gameObject.SetActive(false);
-                            } else if (SaveFile.GetInt("randomizer sword progression level") >= 4) {
+                            } else if (SaveFile.GetInt(SwordProgressionLevel) >= 4) {
                                 GameObject NewSword = GameObject.Instantiate(ModelSwaps.ThirdSwordImage);
                                 NewSword.transform.parent = Equipment.transform.GetChild(i);
                                 NewSword.transform.localScale = new Vector3(2f, 2f, 2f);
@@ -342,11 +343,11 @@ namespace TunicArchipelago {
                     GameObject EquipButton = EquipButtons[i];
                     if (EquipButton.transform.GetChild(0).GetComponent<Image>().enabled && EquipButton.transform.GetChild(0).GetComponent<Image>().sprite != null && EquipButton.transform.GetChild(0).GetComponent<Image>().sprite.name == "Inventory items_sword") {
 
-                        if (SaveFile.GetInt("randomizer sword progression level") == 3) {
+                        if (SaveFile.GetInt(SwordProgressionLevel) == 3) {
                             EquipButton.transform.GetChild(0).gameObject.SetActive(false);
                             EquipButton.transform.GetChild(2).gameObject.SetActive(true);
                             EquipButton.transform.GetChild(3).gameObject.SetActive(false);
-                        } else if (SaveFile.GetInt("randomizer sword progression level") >= 4) {
+                        } else if (SaveFile.GetInt(SwordProgressionLevel) >= 4) {
                             EquipButton.transform.GetChild(0).gameObject.SetActive(false);
                             EquipButton.transform.GetChild(2).gameObject.SetActive(false);
                             EquipButton.transform.GetChild(3).gameObject.SetActive(true);
@@ -358,7 +359,7 @@ namespace TunicArchipelago {
                     }
                 }
             }
-            if (SaveFile.GetInt("randomizer hexagon quest enabled") == 1) {
+            if (SaveFile.GetInt(HexagonQuestEnabled) == 1) {
                 HexagonQuest.SetActive(true);
             } else {
                 HexagonQuest.SetActive(false);

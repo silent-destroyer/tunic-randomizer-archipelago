@@ -5,13 +5,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
+using static TunicArchipelago.SaveFlags;
 
 namespace TunicArchipelago {
     public class SwordProgression {
         private static ManualLogSource Logger = TunicArchipelago.Logger;
         public static void UpgradeSword(int SwordLevel) {
             
-            SaveFile.SetInt("randomizer sword progression level", SwordLevel);
+            SaveFile.SetInt(SwordProgressionLevel, SwordLevel);
 
             GameObject SwordPresentation = Resources.FindObjectsOfTypeAll<GameObject>().Where(Item => Item.name == "User Rotation Root").ToList()[0].transform.GetChild(9).gameObject;
             if (SwordLevel == 1) {

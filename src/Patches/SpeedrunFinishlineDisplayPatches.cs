@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using static TunicArchipelago.SaveFlags;
 
 namespace TunicArchipelago {
     public class SpeedrunFinishlineDisplayPatches {
@@ -71,6 +72,7 @@ namespace TunicArchipelago {
         };
 
         public static GameObject CompletionRate;
+        public static GameObject CompletionCanvas;
 
         public static bool ShowSwordAfterDelay = false;
         public static bool ShowCompletionStatsAfterDelay = false;
@@ -157,8 +159,8 @@ namespace TunicArchipelago {
                     }
                     // Change sword icon for custom swords
                     if (SpriteName == "Inventory items_sword") {
-                        if (SaveFile.GetInt("randomizer sword progression enabled") == 1) {
-                            int SwordLevel = SaveFile.GetInt("randomizer sword progression level");
+                        if (SaveFile.GetInt(SwordProgressionEnabled) == 1) {
+                            int SwordLevel = SaveFile.GetInt(SwordProgressionLevel);
                             if (SwordLevel >= 3) {
                                 Icon.transform.GetChild(2).GetComponent<TMPro.TextMeshProUGUI>().faceColor = SwordLevel == 3 ? new Color32(255, 50, 150, 255) : new Color32(93, 231, 207, 255);
                                 ShowSwordAfterDelay = true;
@@ -167,9 +169,15 @@ namespace TunicArchipelago {
                     }
                 }
             } catch (Exception ex) { }
+        }
+
+        public static void SetupCompletionStatsDisplay() {
 
             if (CompletionRate != null) {
                 GameObject.Destroy(CompletionRate.gameObject);
+            }
+            if (CompletionCanvas != null) {
+                GameObject.Destroy(CompletionCanvas.gameObject);
             }
             CompletionRate = new GameObject("completion rate");
             CompletionRate.transform.parent = GameObject.Find("_FinishlineDisplay(Clone)/").transform.GetChild(0).GetChild(0);
@@ -181,7 +189,7 @@ namespace TunicArchipelago {
             CompletionRate.transform.position = new Vector3(-345f, 142.5f, 55f);
             CompletionRate.transform.localScale = new Vector3(5f, 5f, 5f);
             CompletionRate.SetActive(false);
-            GameObject CompletionCanvas = new GameObject("completion stats");
+            CompletionCanvas = new GameObject("completion stats");
             CompletionCanvas.layer = 5;
             CompletionCanvas.transform.parent = GameObject.Find("_FinishlineDisplay(Clone)/").transform;
             CompletionCanvas.AddComponent<Canvas>();
@@ -224,6 +232,10 @@ namespace TunicArchipelago {
                 SetupCompletionCount(Columns[3][i], i, Spacings[3]);
             }
 
+            CompletionCanvas.transform.parent = GameObject.Find("_GameGUI(Clone)/AreaLabels/").transform;
+            CompletionCanvas.transform.localScale = new Vector3(2, 2, 2);
+            CompletionCanvas.transform.position = new Vector3(0, 0, 200);
+
             ShowCompletionStatsAfterDelay = true;
         }
 
@@ -256,7 +268,7 @@ namespace TunicArchipelago {
                 AreaCount.GetComponent<TextMeshPro>().text = $"{(AreaChecksFound == TotalAreaChecks ? StatsScreenSecret[Area] : Area)}\n<size=80%>{TimeString}\n{Color}{AreaChecksFound} / {TotalAreaChecks} ({(int)Percentage}%)";
 
                 if (Area == "Swamp") {
-                    AreaCount.GetComponent<TextMeshPro>().text += "\n<size=100%><#FFFFFF>(Press 1 to hide stats)";
+                    AreaCount.GetComponent<TextMeshPro>().text += "\n<size=100%><#FFFFFF>Press 1 to hide stats.\nPress R to release items.\nPress C to collect items.";
                 }
                 if (Area == "Far Shore/Hero's Grave") {
                     AreaCount.GetComponent<TextMeshPro>().text = $"<size=90%>{AreaCount.GetComponent<TextMeshPro>().text}";
@@ -285,7 +297,7 @@ namespace TunicArchipelago {
             }
 
             if (Area == "Player Deaths") {
-                AreaCount.GetComponent<TextMeshPro>().text = $"{StatsScreenSecret[Area]}\n{SaveFile.GetInt("randomizer death count")}";
+                AreaCount.GetComponent<TextMeshPro>().text = $"{StatsScreenSecret[Area]}\n{SaveFile.GetInt(PlayerDeathCount)}";
             }
 
             if (Area == "Bosses Defeated") {
@@ -304,35 +316,35 @@ namespace TunicArchipelago {
                 }
                 string Color = BossesDefeated == 5 ? $"<#eaa614>" : "<#FFFFFF>";
 
-                AreaCount.GetComponent<TextMeshPro>().text = $"{(BossesDefeated == 5 ? StatsScreenSecret[Area] : Area)}\n<size=80%>{Color}{BossesDefeated} / 5 ({(BossesDefeated * 100) / 5}%)\n<#FFFFFF>Enemies Defeated: {SaveFile.GetInt("randomizer enemies defeated")}";
+                AreaCount.GetComponent<TextMeshPro>().text = $"{(BossesDefeated == 5 ? StatsScreenSecret[Area] : Area)}\n<size=80%>{Color}{BossesDefeated} / 5 ({(BossesDefeated * 100) / 5}%)\n<#FFFFFF>Enemies Defeated: {SaveFile.GetInt(EnemiesDefeatedCount)}";
             }
 
             if (Area == "Time Found") {
                 string Text = $"<size=78%><#FFFFFF>";
                 List<float> HexTimes = new List<float>();
                 List<string> Times = new List<string>();
-                if (SaveFile.GetInt("randomizer hexagon quest enabled") == 1) {
-                    int HexGoal = SaveFile.GetInt("randomizer hexagon quest goal");
+                if (SaveFile.GetInt(HexagonQuestEnabled) == 1) {
+                    int HexGoal = SaveFile.GetInt(HexagonQuestGoal);
                     int HalfGoal = HexGoal / 2;
                     Text += $"1st Hex:\t{FormatTime(SaveFile.GetFloat("randomizer Gold Questagon 1 time"), true)}\t" +
                             $"{HalfGoal}{GetOrdinalSuffix(HalfGoal)} Hex:\t{FormatTime(SaveFile.GetFloat($"randomizer Gold Questagon {HalfGoal} time"), true)}\n" +
-                            $"{HexGoal}{GetOrdinalSuffix(HexGoal)} Hex:\t{FormatTime(SaveFile.GetFloat($"randomizer Gold Questagon {SaveFile.GetInt("randomizer hexagon quest goal")} time"), true)}\t";
+                            $"{HexGoal}{GetOrdinalSuffix(HexGoal)} Hex:\t{FormatTime(SaveFile.GetFloat($"randomizer Gold Questagon {SaveFile.GetInt(HexagonQuestGoal)} time"), true)}\t";
                 } else {
                     Text += $"Red Hex:\t{FormatTime(SaveFile.GetFloat("randomizer Red Questagon 1 time"), true)}\t" +
                             $"Green Hex:\t{FormatTime(SaveFile.GetFloat("randomizer Green Questagon 1 time"), true)}\n" +
                             $"Blue Hex:\t{FormatTime(SaveFile.GetFloat("randomizer Blue Questagon 1 time"), true)}\t";
                 }
                 System.Random random = new System.Random();
-                float SwordTime = SaveFile.GetInt("randomizer sword progression enabled") == 1 ? SaveFile.GetFloat("randomizer Sword Progression 2 time") : SaveFile.GetFloat("randomizer Sword 1 time");
+                float SwordTime = SaveFile.GetInt(SwordProgressionEnabled) == 1 ? SaveFile.GetFloat("randomizer Sword Progression 2 time") : SaveFile.GetFloat("randomizer Sword 1 time");
                 float GrappleTime = SaveFile.GetFloat("randomizer Magic Orb 1 time");
                 float HyperdashTime = SaveFile.GetFloat("randomizer Hero's Laurels 1 time");
                 Text += $"Sword:\t{FormatTime(SwordTime, true)}\n" +
                         $"Grapple:\t{FormatTime(GrappleTime, true)}\t" +
                         $"Laurels:\t{FormatTime(HyperdashTime, true)}\n";
                 int Total = 6;
-                if (SaveFile.GetInt("randomizer shuffled abilities") == 1) {
-                    float PrayerTime = SaveFile.GetFloat("randomizer prayer unlocked time");
-                    float HolyCrossTime = SaveFile.GetFloat("randomizer holy cross unlocked time");
+                if (SaveFile.GetInt(AbilityShuffle) == 1) {
+                    float PrayerTime = SaveFile.GetFloat(PrayerUnlockedTime);
+                    float HolyCrossTime = SaveFile.GetFloat(HolyCrossUnlockedTime);
                     Text += $"Prayer:\t{FormatTime(PrayerTime, true)}\t" +
                             $"Holy Cross:\t{FormatTime(HolyCrossTime, true)}";
                     Total = 8;
@@ -367,6 +379,26 @@ namespace TunicArchipelago {
             for (int i = 0; i < 28; i++) {
                 SaveFile.SetInt("unlocked page " + i, SaveFile.GetInt("randomizer picked up page " + i) == 1 ? 1 : 0);
             }
+            if (CompletionCanvas != null) {
+                GameObject.Destroy(CompletionCanvas);
+            }
+            if (Archipelago.instance != null && Archipelago.instance.integration != null) {
+                Archipelago.instance.integration.sentCompletion = false;
+                Archipelago.instance.integration.sentCollect = false;
+                Archipelago.instance.integration.sentRelease = false;
+            }
+            return true;
+        }
+
+        public static bool GameOverDecision___newgame_PrefixPatch(GameOverDecision __instance) {
+            if (CompletionCanvas != null) {
+                GameObject.Destroy(CompletionCanvas);
+            }
+            if (Archipelago.instance != null && Archipelago.instance.integration != null) {
+                Archipelago.instance.integration.sentCompletion = false;
+                Archipelago.instance.integration.sentCollect = false;
+                Archipelago.instance.integration.sentRelease = false;
+            }
             return true;
         }
 
@@ -375,10 +407,6 @@ namespace TunicArchipelago {
             __instance.retryKey_plural = $"Missing {MissingPageCount} pages. Return to seek another path.";
             __instance.retryKey_single = $"Missing {MissingPageCount} page. Return to seek another path.";
         }
-
-        public static void CreditsCardController_Awake_PostfixPatch(CreditsCardController __instance) {
-            Archipelago.instance.integration.SendCompletion();
-        }
-
+    
     }
 }

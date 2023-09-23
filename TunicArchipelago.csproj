@@ -163,6 +163,7 @@
     <Compile Include="src\Data\Locations.cs" />
     <Compile Include="src\Data\ConnectionSettings.cs" />
     <Compile Include="src\Data\RandomizerSettings.cs" />
+    <Compile Include="src\Data\SaveFlags.cs" />
     <Compile Include="src\Data\VanillaCheck.cs" />
     <Compile Include="src\Patches\EnemyRandomizer.cs" />
     <Compile Include="src\Patches\FairyTargets.cs" />

@@ -40,6 +40,14 @@ namespace TunicArchipelago {
             this.integration.ActivateCheck(LocationId);
         }
 
+        public void Release() {
+            integration.Release();
+        }
+
+        public void Collect() {
+            integration.Collect();
+        }
+
         public Dictionary<string, object> GetPlayerSlotData() {
             return integration.slotData;
         }

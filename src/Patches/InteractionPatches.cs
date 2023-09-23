@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using static TunicArchipelago.SaveFlags;
 
 namespace TunicArchipelago {
     public class InteractionPatches {
@@ -46,8 +47,8 @@ namespace TunicArchipelago {
                 (SceneLoaderPatches.SceneName == "Atoll Redux") && __instance.transform.position.ToString() == "(64.0, 4.0, 0.0)") {
                 PlayerCharacter.instance.transform.GetChild(0).GetChild(0).GetChild(10).GetChild(0).gameObject.GetComponent<MeshRenderer>().materials = ModelSwaps.Items["Key"].GetComponent<MeshRenderer>().materials;
             }
-            if (SaveFile.GetInt("randomizer hexagon quest enabled") == 1) {
-                if (__instance.transform.position.ToString() == "(0.0, 0.0, 0.0)" && SceneLoaderPatches.SceneName == "Spirit Arena" && SaveFile.GetInt("randomizer inventory quantity Hexagon Gold") < SaveFile.GetInt("randomizer hexagon quest goal")) {
+            if (SaveFile.GetInt(HexagonQuestEnabled) == 1) {
+                if (__instance.transform.position.ToString() == "(0.0, 0.0, 0.0)" && SceneLoaderPatches.SceneName == "Spirit Arena" && SaveFile.GetInt(GoldHexagonQuantity) < SaveFile.GetInt(HexagonQuestGoal)) {
                     GenericMessage.ShowMessage($"\"<#EAA615>Sealed Forever.\"");
                     return false;
                 }

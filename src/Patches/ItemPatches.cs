@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using static UnityEngine.InputSystem.LowLevel.InputStateHistory;
+using static TunicArchipelago.SaveFlags;
 
 namespace TunicArchipelago {
 
@@ -223,8 +223,8 @@ namespace TunicArchipelago {
 
             if (Item.Type == ItemTypes.SWORDUPGRADE) {
 
-                if (SaveFile.GetInt("randomizer sword progression enabled") == 1 && Item.Name == "Sword Upgrade") {
-                    int SwordLevel = SaveFile.GetInt("randomizer sword progression level");
+                if (SaveFile.GetInt(SwordProgressionEnabled) == 1 && Item.Name == "Sword Upgrade") {
+                    int SwordLevel = SaveFile.GetInt(SwordProgressionLevel);
                     SwordProgression.UpgradeSword(SwordLevel+1);
                 }
                 if (TunicArchipelago.Settings.ShowItemsEnabled) {
@@ -245,11 +245,11 @@ namespace TunicArchipelago {
 
             if (Item.Type == ItemTypes.PAGE) {
                 SaveFile.SetInt($"randomizer obtained page {Item.ItemNameForInventory}", 1);
-                if (SaveFile.GetInt("randomizer shuffled abilities") == 1) {
+                if (SaveFile.GetInt(AbilityShuffle) == 1) {
                     Dictionary<string, string> pagesForAbilities = new Dictionary<string, string>() {
-                        { "12", "randomizer prayer unlocked" },
-                        { "21", "randomizer holy cross unlocked" },
-                        { "26", "randomizer ice rod unlocked" },
+                        { "12", PrayerUnlocked },
+                        { "21", HolyCrossUnlocked },
+                        { "26", IceRodUnlocked },
                     };
                     if (pagesForAbilities.ContainsKey(Item.ItemNameForInventory)) {
                         PageDisplayPatches.ShowAbilityUnlock = true;
@@ -311,18 +311,18 @@ namespace TunicArchipelago {
             }
 
             if(Item.Type == ItemTypes.HEXAGONQUEST) {
-                SaveFile.SetInt("randomizer inventory quantity Hexagon Gold", SaveFile.GetInt("randomizer inventory quantity Hexagon Gold") + 1);
+                SaveFile.SetInt(GoldHexagonQuantity, SaveFile.GetInt(GoldHexagonQuantity) + 1);
 
-                int GoldHexes = SaveFile.GetInt("randomizer inventory quantity Hexagon Gold");
+                int GoldHexes = SaveFile.GetInt(GoldHexagonQuantity);
 
-                if (GoldHexes == SaveFile.GetInt("randomizer hexagon quest prayer requirement")) {
-                    SaveFile.SetInt("randomizer prayer unlocked", 1);
-                    SaveFile.SetFloat("randomizer prayer unlocked time", SpeedrunData.inGameTime);
+                if (GoldHexes == SaveFile.GetInt(HexagonQuestPrayer)) {
+                    SaveFile.SetInt(PrayerUnlocked, 1);
+                    SaveFile.SetFloat(PrayerUnlockedTime, SpeedrunData.inGameTime);
                     ShowNotification($"\"PRAYER Unlocked\"", $"Jahnuhl yor wizduhm, rooin sEkur");
                 }
-                if (GoldHexes == SaveFile.GetInt("randomizer hexagon quest holy cross requirement")) {
-                    SaveFile.SetInt("randomizer holy cross unlocked", 1);
-                    SaveFile.SetFloat("randomizer holy cross unlocked time", SpeedrunData.inGameTime);
+                if (GoldHexes == SaveFile.GetInt(HexagonQuestHolyCross)) {
+                    SaveFile.SetInt(HolyCrossUnlocked, 1);
+                    SaveFile.SetFloat(HolyCrossUnlockedTime, SpeedrunData.inGameTime);
                     ShowNotification($"\"HOLY CROSS Unlocked\"", $"sEk wuht iz rItfuhlE yorz");
                     foreach (ToggleObjectBySpell SpellToggle in Resources.FindObjectsOfTypeAll<ToggleObjectBySpell>()) {
                         foreach (ToggleObjectBySpell Spell in SpellToggle.gameObject.GetComponents<ToggleObjectBySpell>()) {
@@ -330,17 +330,17 @@ namespace TunicArchipelago {
                         }
                     }
                 }
-                if (GoldHexes == SaveFile.GetInt("randomizer hexagon quest ice rod requirement")) {
-                    SaveFile.SetInt("randomizer ice rod unlocked", 1);
-                    SaveFile.SetFloat("randomizer ice rod unlocked time", SpeedrunData.inGameTime);
+                if (GoldHexes == SaveFile.GetInt(HexagonQuestIceRod)) {
+                    SaveFile.SetInt(IceRodUnlocked, 1);
+                    SaveFile.SetFloat(IceRodUnlockedTime, SpeedrunData.inGameTime);
                     ShowNotification($"\"ICE ROD Unlocked\"", $"#A wOnt nO wuht hit #ehm");
                 }
                 ItemPresentation.PresentItem(Inventory.GetItemByName("Hexagon Blue"));
             }
 
             if (ItemLookup.MajorItems.Contains(Item.Name)) {
-                if (Item.Type == ItemTypes.SWORDUPGRADE && SaveFile.GetInt("randomizer sword progression enabled") == 1) {
-                    SaveFile.SetFloat($"randomizer Sword Progression {SaveFile.GetInt("randomizer sword progression level")} time", SpeedrunData.inGameTime);
+                if (Item.Type == ItemTypes.SWORDUPGRADE && SaveFile.GetInt(SwordProgressionEnabled) == 1) {
+                    SaveFile.SetFloat($"randomizer Sword Progression {SaveFile.GetInt(SwordProgressionLevel)} time", SpeedrunData.inGameTime);
                 }
                 if (Item.Type == ItemTypes.PAGE) {
                     SaveFile.SetFloat($"randomizer {Item.Name} 1 time", SpeedrunData.inGameTime);

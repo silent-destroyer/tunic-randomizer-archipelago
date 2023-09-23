@@ -15,6 +15,7 @@ using Newtonsoft.Json;
 using UnhollowerRuntimeLib;
 using Newtonsoft.Json.Bson;
 using UnityEngine.InputSystem.Utilities;
+using UnityEngine.SceneManagement;
 
 namespace TunicArchipelago {
 
@@ -34,7 +35,6 @@ namespace TunicArchipelago {
             Logger.LogInfo(PluginInfo.NAME+ " v" + PluginInfo.VERSION + " loaded!");
             
             Application.runInBackground = true;
-            Profile.SetAccessibilityPref(Profile.AccessibilityPrefs.SpeedrunMode, true);
 
             Tracker = new ItemTracker();
 
@@ -155,9 +155,11 @@ namespace TunicArchipelago {
             Harmony.Patch(AccessTools.Method(typeof(SpeedrunFinishlineDisplay), "addParadeIcon"), new HarmonyMethod(AccessTools.Method(typeof(SpeedrunFinishlineDisplayPatches), "SpeedrunFinishlineDisplay_addParadeIcon_PrefixPatch")));
 
             Harmony.Patch(AccessTools.Method(typeof(SpeedrunFinishlineDisplay), "AndTime"), null, new HarmonyMethod(AccessTools.Method(typeof(SpeedrunFinishlineDisplayPatches), "SpeedrunFinishlineDisplay_AndTime_PostfixPatch")));
-
-            Harmony.Patch(AccessTools.Method(typeof(GameOverDecision), "__retry"), new HarmonyMethod(AccessTools.Method(typeof(SpeedrunFinishlineDisplayPatches), "GameOverDecision___retry_PrefixPatch")));
             
+            Harmony.Patch(AccessTools.Method(typeof(GameOverDecision), "__retry"), new HarmonyMethod(AccessTools.Method(typeof(SpeedrunFinishlineDisplayPatches), "GameOverDecision___retry_PrefixPatch")));
+
+            Harmony.Patch(AccessTools.Method(typeof(GameOverDecision), "__newgame"), new HarmonyMethod(AccessTools.Method(typeof(SpeedrunFinishlineDisplayPatches), "GameOverDecision___newgame_PrefixPatch")));
+
             Harmony.Patch(AccessTools.Method(typeof(GameOverDecision), "Start"), null, new HarmonyMethod(AccessTools.Method(typeof(SpeedrunFinishlineDisplayPatches), "GameOverDecision_Start_PostfixPatch")));
 
             // Misc
@@ -172,8 +174,6 @@ namespace TunicArchipelago {
             Harmony.Patch(AccessTools.Method(typeof(InteractionTrigger), "Interact"), new HarmonyMethod(AccessTools.Method(typeof(InteractionPatches), "InteractionTrigger_Interact_PrefixPatch")));
 
             Harmony.Patch(AccessTools.Method(typeof(BloodstainChest), "IInteractionReceiver_Interact"), new HarmonyMethod(AccessTools.Method(typeof(InteractionPatches), "BloodstainChest_IInteractionReceiver_Interact_PrefixPatch")));
-
-            Harmony.Patch(AccessTools.Method(typeof(CreditsCardController), "Awake"), null, new HarmonyMethod(AccessTools.Method(typeof(SpeedrunFinishlineDisplayPatches), "CreditsCardController_Awake_PostfixPatch")));
 
             Harmony.Patch(AccessTools.Method(typeof(HitReceiver), "ReceiveHit"), new HarmonyMethod(AccessTools.Method(typeof(SwordProgression), "HitReceiver_ReceiveHit_PrefixPatch")));
 

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using UnityEngine.SceneManagement;
 using static TunicArchipelago.GhostHints;
 using Archipelago.MultiClient.Net.Enums;
+using static TunicArchipelago.SaveFlags;
 
 namespace TunicArchipelago {
     public class Hints {
@@ -81,7 +82,7 @@ namespace TunicArchipelago {
             HintMessages.Add("Temple Statue", Hint);
 
             List<string> HintItems = new List<string>() { "Magic Wand", "Magic Orb", "Magic Dagger" };
-            if (SaveFile.GetInt("randomizer shuffled abilities") == 1 && SaveFile.GetInt("randomizer hexagon quest enabled") == 0) {
+            if (SaveFile.GetInt(AbilityShuffle) == 1 && SaveFile.GetInt(HexagonQuestEnabled) == 0) {
                 HintItems.Add("Pages 24-25 (Prayer)");
                 HintItems.Add("Pages 42-43 (Holy Cross)");
                 HintItems.Remove("Magic Dagger");
@@ -114,7 +115,7 @@ namespace TunicArchipelago {
 
             List<string> Hexagons;
             Dictionary<string, string> HexagonColors = new Dictionary<string, string>() { { "Red Questagon", "<#FF3333>" }, { "Green Questagon", "<#33FF33>" }, { "Blue Questagon", "<#3333FF>" }, { "Gold Questagon", "<#ffd700>" } };
-            if (SaveFile.GetInt("randomizer hexagon quest enabled") == 1) {
+            if (SaveFile.GetInt(HexagonQuestEnabled) == 1) {
                 Hexagons = new List<string>() { "Gold Questagon", "Gold Questagon", "Gold Questagon" };
             } else {
                 Hexagons = new List<string>() { "Red Questagon", "Green Questagon", "Blue Questagon" };

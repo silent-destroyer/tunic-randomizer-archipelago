@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
+using static TunicArchipelago.SaveFlags;
 
 namespace TunicArchipelago {
     public class CustomItemBehaviors {
@@ -32,7 +33,7 @@ namespace TunicArchipelago {
                     GhostFoxHair.AddComponent<MeshRenderer>().materials = GameObject.Find("_Fox(Clone)/fox hair").GetComponent<CreatureMaterialManager>().ghostMaterialArray;
                 }
                 Sword = new GameObject();
-                if (SaveFile.GetInt("randomizer sword progression level") >= 3) {
+                if (SaveFile.GetInt(SwordProgressionLevel) >= 3) {
                     Sword.AddComponent<MeshRenderer>().materials = GameObject.Find("_Fox(Clone)/Fox/root/pelvis/chest/arm_upper.R/arm_lower.R/hand.R/sword_proxy").transform.GetChild(4).GetComponent<MeshRenderer>().materials;
                 } else {
                     Sword.AddComponent<MeshRenderer>().materials = GameObject.Find("_Fox(Clone)/Fox/root/pelvis/chest/arm_upper.R/arm_lower.R/hand.R/sword_proxy").GetComponent<MeshRenderer>().materials;
@@ -41,7 +42,7 @@ namespace TunicArchipelago {
                 GameObject.Find("_Fox(Clone)/fox hair").GetComponent<CreatureMaterialManager>().originalMaterials = ModelSwaps.Items["GoldenTrophy_2"].GetComponent<MeshRenderer>().materials;
                 GameObject.Find("_Fox(Clone)/fox").GetComponent<CreatureMaterialManager>()._ghostMaterialArray = ModelSwaps.Items["GoldenTrophy_2"].GetComponent<MeshRenderer>().materials;
                 GameObject.Find("_Fox(Clone)/fox hair").GetComponent<CreatureMaterialManager>()._ghostMaterialArray = ModelSwaps.Items["GoldenTrophy_2"].GetComponent<MeshRenderer>().materials;
-                if (SaveFile.GetInt("randomizer sword progression level") >= 3) {
+                if (SaveFile.GetInt(SwordProgressionLevel) >= 3) {
                     GameObject.Find("_Fox(Clone)/Fox/root/pelvis/chest/arm_upper.R/arm_lower.R/hand.R/sword_proxy").transform.GetChild(4).GetComponent<MeshRenderer>().materials = ModelSwaps.Items["GoldenTrophy_2"].GetComponent<MeshRenderer>().materials;
                 } else {
                     GameObject.Find("_Fox(Clone)/Fox/root/pelvis/chest/arm_upper.R/arm_lower.R/hand.R/sword_proxy").GetComponent<MeshRenderer>().materials = ModelSwaps.Items["GoldenTrophy_2"].GetComponent<MeshRenderer>().materials;
@@ -75,7 +76,7 @@ namespace TunicArchipelago {
             if (SceneLoaderPatches.SceneName == "g_elements") {
                 SaveFile.SetString("last campfire scene name", "Posterity");
                 SaveFile.SetString("last campfire id", "campfire");
-                SaveFile.SetInt("randomizer sent lost fox home", 1);
+                SaveFile.SetInt(RescuedLostFox, 1);
             }
             if (SceneLoaderPatches.SceneName == "Posterity") {
                 SaveFile.SetString("last campfire scene name", "Overworld Redux");

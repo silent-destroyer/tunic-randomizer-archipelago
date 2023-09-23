@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using static TunicArchipelago.GhostHints;
+using static TunicArchipelago.SaveFlags;
 
 namespace TunicArchipelago {
 
@@ -137,8 +138,8 @@ namespace TunicArchipelago {
             }
             
             if (Item.Type == ItemTypes.SWORDUPGRADE) {
-                if (SaveFile.GetInt("randomizer sword progression enabled") == 1) {
-                    int SwordLevel = SaveFile.GetInt("randomizer sword progression level");
+                if (SaveFile.GetInt(SwordProgressionEnabled) == 1) {
+                    int SwordLevel = SaveFile.GetInt(SwordProgressionLevel);
                     ImportantItems["Stick"] = 1;
                     if (SwordLevel > 1) {
                         ImportantItems["Sword"] = SwordLevel-1;
@@ -187,6 +188,7 @@ namespace TunicArchipelago {
                 "Lines that start with 'x' instead of '-' represent items that have been collected\n",
                 "Major Items"
             };
+
             foreach (string MajorItem in ItemLookup.MajorItems) {
                 if(MajorItem == "Gold Questagon") { continue; }
                 if(Locations.MajorItemLocations.ContainsKey(MajorItem) && Locations.MajorItemLocations[MajorItem].Count > 0) {
@@ -207,6 +209,11 @@ namespace TunicArchipelago {
                 foreach (string line in SpoilerLog[Key]) {
                     SpoilerLogLines.Add(line);
                 }
+            }
+            if (SaveFile.GetInt(HexagonQuestEnabled) == 1 && SaveFile.GetInt(AbilityShuffle) == 1) {
+                SpoilerLogLines.Add($"\t{(SaveFile.GetInt(PrayerUnlocked) == 1 ? "x" : "-")} Prayer: {SaveFile.GetInt(HexagonQuestPrayer)} Gold Questagons");
+                SpoilerLogLines.Add($"\t{(SaveFile.GetInt(HolyCrossUnlocked) == 1 ? "x" : "-")} Holy Cross: {SaveFile.GetInt(HexagonQuestHolyCross)} Gold Questagons");
+                SpoilerLogLines.Add($"\t{(SaveFile.GetInt(IceRodUnlocked) == 1 ? "x" : "-")} Ice Rod: {SaveFile.GetInt(HexagonQuestIceRod)} Gold Questagons");
             }
             if (!File.Exists(TunicArchipelago.SpoilerLogPath)) {
                 File.WriteAllLines(TunicArchipelago.SpoilerLogPath, SpoilerLogLines);

@@ -18,6 +18,7 @@ using Archipelago.MultiClient.Net.Packets;
 using System.IO;
 using System.Runtime.InteropServices.ComTypes;
 using Archipelago.MultiClient.Net.Helpers;
+using static TunicArchipelago.SaveFlags;
 
 namespace TunicArchipelago {
     public class ArchipelagoIntegration {
@@ -34,6 +35,9 @@ namespace TunicArchipelago {
         private ConcurrentQueue<NetworkItem> outgoingItems;
         private DeathLinkService deathLinkService;
         public Dictionary<string, object> slotData;
+        public bool sentCompletion = false;
+        public bool sentRelease = false;
+        public bool sentCollect = false;
         private int ItemIndex = 0;
 
         public void Update() {
@@ -45,7 +49,7 @@ namespace TunicArchipelago {
                 checkItemsReceived.MoveNext();
             }
 
-            if (SceneManager.GetActiveScene().name != "TitleScreen" && SceneManager.GetActiveScene().name != "Loading" && PlayerCharacter.instance != null) {
+            if (SceneManager.GetActiveScene().name != "TitleScreen" && SceneManager.GetActiveScene().name != "Loading" && PlayerCharacter.instance != null && SpeedrunData.gameComplete == 0) {
 
                 if (incomingItemHandler != null) {
                     incomingItemHandler.MoveNext();
@@ -54,6 +58,13 @@ namespace TunicArchipelago {
                 if (outgoingItemHandler != null) {
                     outgoingItemHandler.MoveNext();
                 }
+
+            }
+
+            if (SpeedrunData.gameComplete != 0 && !sentCompletion) {
+                sentCompletion = true;
+                SendCompletion();
+                SpeedrunFinishlineDisplayPatches.SetupCompletionStatsDisplay();
             }
 
         }
@@ -273,7 +284,7 @@ namespace TunicArchipelago {
                 session.Locations.CompleteLocationChecks(location);
 
                 string GameObjectId = Locations.LocationDescriptionToId[LocationId];
-                SaveFile.SetInt(ItemPatches.SaveFileCollectedKey + GameObjectId, 1);
+                SaveFile.SetInt(ItemCollectedKey + GameObjectId, 1);
                 Locations.CheckedLocations[GameObjectId] = true;
                 if (GameObject.Find($"fairy target {GameObjectId}")) {
                     GameObject.Destroy(GameObject.Find($"fairy target {GameObjectId}"));
@@ -286,9 +297,7 @@ namespace TunicArchipelago {
                         outgoingItems.Enqueue(locationInfoPacket.Result.Locations[0]));
 
             } else {
-                Logger.LogWarning(
-                    "Failed to get unique name for check " + LocationId);
-
+                Logger.LogWarning("Failed to get unique name for check " + LocationId);
                 ShowNotification($"\"Unknown Check: {LocationId}\"", $"\"Please file a bug!\"");
             }
         }
@@ -297,6 +306,22 @@ namespace TunicArchipelago {
             StatusUpdatePacket statusUpdatePacket = new StatusUpdatePacket();
             statusUpdatePacket.Status = ArchipelagoClientState.ClientGoal;
             session.Socket.SendPacket(statusUpdatePacket);
+        }
+
+        public void Release() {
+            if (sentCompletion && !sentRelease) {
+                session.Socket.SendPacket(new SayPacket() { Text = "!release" });
+                sentRelease = true;
+                Logger.LogInfo("Released remaining checks.");
+            }
+        }
+
+        public void Collect() {
+            if (sentCompletion && !sentCollect) {
+                session.Socket.SendPacket(new SayPacket() { Text = "!collect" });
+                sentCollect = true;
+                Logger.LogInfo("Collected remaining items.");
+            }
         }
 
         public void EnableDeathLink() {

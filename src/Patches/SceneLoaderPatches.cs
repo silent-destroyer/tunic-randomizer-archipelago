@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using static TunicArchipelago.SaveFlags;
 
 namespace TunicArchipelago {
     public class SceneLoaderPatches {
@@ -148,7 +149,7 @@ namespace TunicArchipelago {
             SceneId = loadingScene.buildIndex;
 
             if (SceneName == "Overworld Redux" && (StateVariable.GetStateVariableByName("Has Been Betrayed").BoolValue || 
-                StateVariable.GetStateVariableByName("Has Died To God").BoolValue) && SaveFile.GetInt("randomizer died to heir") != 1 && SaveFile.GetInt("randomizer hexagon quest enabled") == 0) {
+                StateVariable.GetStateVariableByName("Has Died To God").BoolValue) && SaveFile.GetInt(DiedToHeir) != 1 && SaveFile.GetInt(HexagonQuestEnabled) == 0) {
                 PlayerCharacterPatches.ResetDayNightTimer = 0.0f;
                 Logger.LogInfo("Resetting time of day to daytime!");
             }
@@ -195,7 +196,7 @@ namespace TunicArchipelago {
                     SaveFile.SetInt("unlocked page " + i, SaveFile.GetInt("randomizer obtained page " + i) == 1 ? 1 : 0);
                 }
                 PlayerCharacterPatches.HeirAssistModeDamageValue = Locations.CheckedLocations.Values.ToList().Where(item => item).ToList().Count / 15;
-                if (SaveFile.GetInt("randomizer hexagon quest enabled") == 1) {
+                if (SaveFile.GetInt(HexagonQuestEnabled) == 1) {
                     Resources.FindObjectsOfTypeAll<Foxgod>().ToList()[0].gameObject.transform.GetChild(0).GetComponent<CreatureMaterialManager>().originalMaterials = ModelSwaps.Items["GoldenTrophy_2"].GetComponent<MeshRenderer>().materials;
                     Resources.FindObjectsOfTypeAll<Foxgod>().ToList()[0].gameObject.transform.GetChild(1).GetComponent<CreatureMaterialManager>().originalMaterials = ModelSwaps.Items["GoldenTrophy_2"].GetComponent<MeshRenderer>().materials;
                 }
@@ -206,7 +207,7 @@ namespace TunicArchipelago {
                     StateVariable.GetStateVariableByName(ItemLookup.HeroRelicLookup[Key].Flag).BoolValue = Inventory.GetItemByName(Key).Quantity == 1;
                 }
                 GameObject.Destroy(GameObject.Find("_Special/Bed Toggle Trigger/"));
-                if ((StateVariable.GetStateVariableByName("Has Been Betrayed").BoolValue || StateVariable.GetStateVariableByName("Has Died To God").BoolValue) && SaveFile.GetInt("randomizer hexagon quest enabled") == 0) {
+                if ((StateVariable.GetStateVariableByName("Has Been Betrayed").BoolValue || StateVariable.GetStateVariableByName("Has Died To God").BoolValue) && SaveFile.GetInt(HexagonQuestEnabled) == 0) {
                     InteractionPatches.SetupDayNightHourglass();
                 }
                 if (GameObject.Find("_Offerings/ash group/")) {
@@ -218,7 +219,7 @@ namespace TunicArchipelago {
                     Archipelago.instance.Connect();
                 }
             } else if (SceneName == "Temple") {
-                if (SaveFile.GetInt("randomizer hexagon quest enabled") == 1) {
+                if (SaveFile.GetInt(HexagonQuestEnabled) == 1) {
                     foreach (GameObject Questagon in Resources.FindObjectsOfTypeAll<GameObject>().Where(Obj => Obj.name == "questagon")) {
                         Questagon.GetComponent<MeshRenderer>().materials = ModelSwaps.Items["GoldenTrophy_2"].GetComponent<MeshRenderer>().materials;
                         Questagon.GetComponent<MeshRenderer>().receiveShadows = false;
@@ -251,7 +252,7 @@ namespace TunicArchipelago {
                     GameObject.Find("_Setpieces Etc/plank_4u (1)").SetActive(false);
                 }
             } else if (SceneName == "g_elements") {
-                if (SaveFile.GetInt("randomizer sent lost fox home") == 0) {
+                if (SaveFile.GetInt(RescuedLostFox) == 0) {
                     GhostHints.GhostFox.GetComponent<NPC>().nPCAnimState = NPC.NPCAnimState.SIT;
                     GameObject LostFox = GameObject.Instantiate(GhostHints.GhostFox);
                     LostFox.transform.position = new Vector3(-1.4098f, 0.0585f, 12.9491f);
@@ -264,7 +265,7 @@ namespace TunicArchipelago {
                     LostFox.SetActive(true);
                 }
             } else if (SceneName == "Posterity") {
-                if (SaveFile.GetInt("randomizer sent lost fox home") == 1) {
+                if (SaveFile.GetInt(RescuedLostFox) == 1) {
                     GhostHints.GhostFox.GetComponent<NPC>().nPCAnimState = NPC.NPCAnimState.SIT;
                     GameObject SavedFox = GameObject.Instantiate(GhostHints.GhostFox);
                     SavedFox.transform.position = new Vector3(80.6991f, 15.9245f, 115.0217f);
@@ -300,6 +301,11 @@ namespace TunicArchipelago {
 
 
             if (Archipelago.instance != null && Archipelago.instance.integration != null && Archipelago.instance.integration.connected) {
+                if (TunicArchipelago.Settings.EnemyRandomizerEnabled && EnemyRandomizer.Enemies.Count > 0 && !EnemyRandomizer.ExcludedScenes.Contains(SceneName)) {
+                    Logger.LogInfo("Spawning enemies");
+                    EnemyRandomizer.SpawnNewEnemies();
+                }
+                
                 try {
                     if (TunicArchipelago.Settings.UseCustomTexture) {
                         PaletteEditor.LoadCustomTexture();
@@ -317,7 +323,7 @@ namespace TunicArchipelago {
                     Logger.LogError(ex.Message + " " + ex.StackTrace);
                 }
 
-                if (SaveFile.GetInt("randomizer shuffled abilities") == 1 && SaveFile.GetInt("randomizer holy cross unlocked") == 0) {
+                if (SaveFile.GetInt(AbilityShuffle) == 1 && SaveFile.GetInt(HolyCrossUnlocked) == 0) {
                     foreach (ToggleObjectBySpell SpellToggle in Resources.FindObjectsOfTypeAll<ToggleObjectBySpell>()) {
                         foreach (ToggleObjectBySpell Spell in SpellToggle.gameObject.GetComponents<ToggleObjectBySpell>()) {
                             Spell.enabled = false;
@@ -333,11 +339,6 @@ namespace TunicArchipelago {
                 } catch (Exception ex) {
                     Logger.LogError("An error occurred spawning hint ghost foxes:");
                     Logger.LogError(ex.Message + " " + ex.StackTrace);
-                }
-
-
-                if (TunicArchipelago.Settings.EnemyRandomizerEnabled && EnemyRandomizer.Enemies.Count > 0 && !EnemyRandomizer.ExcludedScenes.Contains(SceneName)) {
-                    EnemyRandomizer.SpawnNewEnemies();
                 }
 
                 try {
@@ -365,7 +366,6 @@ namespace TunicArchipelago {
             if (ItemStatsHUD.HexagonQuest != null) {
                 ItemStatsHUD.HexagonQuest.SetActive(false);
             }
-
             SceneName = "TitleScreen";
         }
 
