@@ -302,7 +302,6 @@ namespace TunicArchipelago {
 
             if (Archipelago.instance != null && Archipelago.instance.integration != null && Archipelago.instance.integration.connected) {
                 if (TunicArchipelago.Settings.EnemyRandomizerEnabled && EnemyRandomizer.Enemies.Count > 0 && !EnemyRandomizer.ExcludedScenes.Contains(SceneName)) {
-                    Logger.LogInfo("Spawning enemies");
                     EnemyRandomizer.SpawnNewEnemies();
                 }
                 
