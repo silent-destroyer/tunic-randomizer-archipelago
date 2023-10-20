@@ -17,27 +17,39 @@ namespace TunicArchipelago {
         public ArchipelagoIntegration integration;
 
         public void Start() {
-            this.integration = new ArchipelagoIntegration();
+            integration = new ArchipelagoIntegration();
         }
 
         public void Update() {
-            this.integration.Update();
+            integration.Update();
         }
 
         public void OnDestroy() {
-            this.integration.TryDisconnect();
+            integration.TryDisconnect();
         }
 
         public void Connect() {
-            this.integration.TryConnect();
+            integration.TryConnect();
         }
 
         public void Disconnect() {
-            this.integration.TryDisconnect();
+            integration.TryDisconnect();
         }
 
         public void ActivateCheck(string LocationId) {
-            this.integration.ActivateCheck(LocationId);
+            integration.ActivateCheck(LocationId);
+        }
+
+        public void UpdateDataStorage(string Key,  bool Value) {
+            integration.UpdateDataStorage(Key, Value);
+        }
+
+        public void UpdateDataStorage(string Key, string Value) {
+            integration.UpdateDataStorage(Key, Value);
+        }
+
+        public void UpdateDataStorage(string Key, int Value) {
+            integration.UpdateDataStorage(Key, Value);
         }
 
         public void Release() {

@@ -317,5 +317,147 @@ namespace TunicArchipelago {
                 }
             },
         };
+
+
+        public static Dictionary<string, List<string>> PopTrackerMapScenes = new Dictionary<string, List<string>>() {
+            { 
+                "Overworld",
+                new List<string> () {
+                    "Waterfall",
+                    "Overworld Cave",
+                    "Furnace",
+                    "Windmill",
+                    "ShopSpecial",
+                    "CubeRoom",
+                    "PatrolCave",
+                    "Maze Room",
+                    "Sword Cave",
+                    "Ruined Shop",
+                    "Town Basement",
+                    "Ruins Passage",
+                    "EastFiligreeCache",
+                    "Temple",
+                    "Overworld Redux",
+                    "Overworld Interiors",
+                    "Town_FiligreeRoom",
+                    "Changing Room",
+                    "Posterity",
+                    "Mountain",
+                    "Mountaintop",
+                    "g_elements",
+                    "Playable Intro",
+                }
+            },
+            {
+                "East Forest",
+                new List<string> () {
+                    "Forest Belltower",
+                    "East Forest Redux",
+                    "East Forest Redux Interior",
+                    "East Forest Redux Laddercave",
+                    "Sword Access",
+                    "Forest Boss Room"
+                }
+            },
+            {
+                "Bottom of the Well",
+                new List<string> () {
+                    "Sewer",
+                    "Sewer_Boss"
+                }
+            },
+            {
+                "Dark Tomb",
+                new List<string> () {
+                    "Crypt Redux"
+                }
+            },
+            {
+                "West Gardens",
+                new List<string> () {
+                    "Archipelagos Redux",
+                    "archipelagos_house"
+                }
+            },
+            {
+                "Beneath the Earth",
+                new List<string> () {
+                    "Fortress Basement",
+                }
+            },
+            {
+                "Eastern Vault",
+                new List<string> () {
+                    "Fortress Main",
+                    "Fortress Courtyard",
+                    "Fortress Arena",
+                    "Fortress East",
+                    "Fortress Reliquary",
+                    "Dusty"
+                }
+            },
+            {
+                "Ruined Atoll",
+                new List<string> () {
+                    "Atoll Redux"
+                }
+            },
+            {
+                "Frog's Domain",
+                new List<string> () {
+                    "Frog Stairs",
+                    "frog cave main"
+                }
+            },
+            {
+                "The Grand Library",
+                new List<string> () {
+                    "Library Lab",
+                    "Library Hall",
+                    "Library Rotunda",
+                    "Library Arena",
+                    "Library Exterior"
+                }
+            },
+            {
+                "The Quarry",
+                new List<string> () {
+                    "Quarry Redux",
+                    "Monastery",
+                    "Darkwoods Tunnel",
+                }
+            },
+            {
+                "The Rooted Ziggurat",
+                new List<string> () {
+                    "ziggurat2020_2",
+                    "ziggurat2020_1",
+                    "ziggurat2020_3",
+                    "ziggurat2020_0",
+                    "ziggurat2020_FTRoom"
+                }
+            },
+            {
+                "Swamp",
+                new List<string> () {
+                    "Swamp Redux 2"
+                }
+            },
+            {
+                "The Cathedral",
+                new List<string> () {
+                    "Cathedral Arena",
+                    "Cathedral Redux"
+                }
+            },
+            {
+                "The Far Shore",
+                new List<string> () {
+                    "Transit",
+                    "RelicVoid",
+                    "Spirit Arena",
+                }
+            }
+        };
     }
 }

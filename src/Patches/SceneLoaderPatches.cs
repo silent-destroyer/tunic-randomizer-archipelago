@@ -355,6 +355,7 @@ namespace TunicArchipelago {
                     }
                 }
 
+                Archipelago.instance.integration.UpdateDataStorageOnLoad();
             }
 
             ItemTracker.SaveTrackerFile();

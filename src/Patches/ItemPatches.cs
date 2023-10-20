@@ -394,6 +394,12 @@ namespace TunicArchipelago {
             //ItemTracker.SaveTrackerFile();
         }
 
+        public static void ButtonAssignableItem_CheckFreeItemSpell_PostfixPatch(ButtonAssignableItem __instance, ref string s) {
+            if (ItemLookup.BombCodes.ContainsKey(s) && StateVariable.GetStateVariableByName(ItemLookup.BombCodes[s]).BoolValue) {
+                Archipelago.instance.UpdateDataStorage(ItemLookup.BombCodes[s], true);
+            }
+        }
+
         public static void UpgradeAltar_DoOfferingSequence_PostfixPatch(UpgradeAltar __instance) {
             foreach (string LevelUp in ItemLookup.LevelUpItems) {
                 TunicArchipelago.Tracker.ImportantItems[LevelUp] = Inventory.GetItemByName(LevelUp).Quantity;

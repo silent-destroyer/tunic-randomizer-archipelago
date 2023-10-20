@@ -61,12 +61,16 @@ namespace TunicArchipelago {
         }
 
         public static bool BoneItemBehavior_onActionButtonDown_PrefixPatch(BoneItemBehaviour __instance) {
-            if (SceneLoaderPatches.SceneName == "g_elements") {
-                __instance.confirmationPromptLine.text = $"wAk fruhm #is drEm \n ahnd rEturn too \"???\"";
-            } else if (SceneLoaderPatches.SceneName == "Posterity") {
-                __instance.confirmationPromptLine.text = $"wAk fruhm #is drEm \n ahnd rEturn too \"Overworld\"?";
+            if (__instance.item.name == "Torch") {
+                __instance.confirmationPromptLine.text = $"wAk fruhm #is drEm\nahnd rEturn too \"Overworld\"?\n\"[Torch]\"";
             } else {
-                __instance.confirmationPromptLine.text = $"wAk fruhm #is drEm \n ahnd rEturn too \"{Locations.SimplifiedSceneNames[SaveFile.GetString("last campfire scene name")]}\"?";
+                if (SceneLoaderPatches.SceneName == "g_elements") {
+                    __instance.confirmationPromptLine.text = $"wAk fruhm #is drEm\nahnd rEturn too \"???\"";
+                } else if (SceneLoaderPatches.SceneName == "Posterity") {
+                    __instance.confirmationPromptLine.text = $"wAk fruhm #is drEm\nahnd rEturn too \"Overworld\"?";
+                } else {
+                    __instance.confirmationPromptLine.text = $"wAk fruhm #is drEm\nahnd rEturn too \"{Locations.SimplifiedSceneNames[SaveFile.GetString("last campfire scene name")]}\"?\n\"[Dath Stone]\"";
+                }
             }
 
             return true;

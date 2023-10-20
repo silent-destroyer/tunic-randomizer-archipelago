@@ -527,9 +527,25 @@ namespace TunicArchipelago {
         }
 
         public static bool Monster_Die_MoveNext_PrefixPatch(Monster._Die_d__77 __instance, ref bool __result) {
-            if (SceneLoaderPatches.SceneName == "Forest Boss Room" && __instance.__4__this.GetComponent<BossAnnounceOnAggro>() != null) {
-                StateVariable.GetStateVariableByName("SV_Forest Boss Room_Skuladot redux Big").BoolValue = true;
+            if (__instance.__4__this.GetComponent<BossAnnounceOnAggro>() != null) {
+                if (SceneManager.GetActiveScene().name == "Forest Boss Room") {
+                    StateVariable.GetStateVariableByName("SV_Forest Boss Room_Skuladot redux Big").BoolValue = true;
+                    Archipelago.instance.UpdateDataStorage("Defeated Guard Captain", true);
+                }
+                if (__instance.__4__this.GetComponent<Knightbot>() != null) {
+                    Archipelago.instance.UpdateDataStorage("Defeated Garden Knight", true);
+                }
+                if (__instance.__4__this.GetComponent<Spidertank>() != null) {
+                    Archipelago.instance.UpdateDataStorage("Defeated Siege Engine", true);
+                }
+                if (__instance.__4__this.GetComponent<Librarian>() != null) {
+                    Archipelago.instance.UpdateDataStorage("Defeated Librarian", true);
+                }
+                if (__instance.__4__this.GetComponent<ScavengerBoss>() != null) {
+                    Archipelago.instance.UpdateDataStorage("Defeated Boss Scavenger", true);
+                }
             }
+
             if (__instance.__4__this.GetComponent<TunicKnightVoid>() != null) {
                 CoinSpawner.SpawnCoins(50, __instance.__4__this.transform.position);
                 MPPickup.Drop(100f, __instance.__4__this.transform.position);
@@ -570,6 +586,12 @@ namespace TunicArchipelago {
 
         public static bool TunicKnightVoid_onFlinch_PrefixPatch(TunicKnightVoid __instance) {
             return false;
+        }
+
+        public static void ToggleObjectAnimation_SetToggle_PostfixPatch(ToggleObjectAnimation __instance, ref bool state) {
+            if (SceneManager.GetActiveScene().name == "Cathedral Arena" && __instance.name == "Chest Reveal" && state) {
+                Archipelago.instance.UpdateDataStorage("Cleared Cathedral Gauntlet", true);
+            }
         }
 
     }

@@ -440,6 +440,11 @@ namespace TunicArchipelago {
             {"27", "Pages 54-55"},
         };
 
+        public static Dictionary<string, string> BombCodes = new Dictionary<string, string>() {
+            { "drurululdldr", "Granted Firecracker" },
+            { "lurdrurdrurdl", "Granted Firebomb" },
+            { "ldrurdrurdrul", "Granted Icebomb" },
+        };
     }
 
 }

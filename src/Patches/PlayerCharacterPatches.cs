@@ -190,7 +190,14 @@ namespace TunicArchipelago {
             }
             Inventory.GetItemByName("MoneyLevelItem").Quantity = 1;
             Inventory.GetItemByName("Key (House)").icon = Inventory.GetItemByName("Key Special").icon;
-
+            Inventory.GetItemByName("Torch").Quantity = 1;
+           
+            List<ItemBehaviour> itemBehaviours = __instance.itemBehaviours.ToList();
+            BoneItemBehaviour bone = __instance.gameObject.AddComponent<BoneItemBehaviour>();
+            bone.confirmationPromptLine = __instance.gameObject.GetComponent<BoneItemBehaviour>().confirmationPromptLine;
+            bone.item = Inventory.GetItemByName("Torch").TryCast<ButtonAssignableItem>();
+            itemBehaviours.Add(bone);
+            __instance.itemBehaviours = itemBehaviours.ToArray();
             if (SaveFile.GetInt(SwordProgressionEnabled) != 0) {
                 int SwordLevel = SaveFile.GetInt(SwordProgressionLevel);
 
@@ -324,6 +331,8 @@ namespace TunicArchipelago {
                 }
 
                 OptionsGUIPatches.SaveSettings();
+
+                Archipelago.instance.integration.UpdateDataStorageOnLoad();
             }
 
             ModelSwaps.SetupDathStoneItemPresentation();

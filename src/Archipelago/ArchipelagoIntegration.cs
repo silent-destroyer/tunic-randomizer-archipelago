@@ -118,7 +118,7 @@ namespace TunicArchipelago {
                     deathLinkService.EnableDeathLink();
                 }
 
-
+                SetupDataStorage();
 
             } else {
                 LoginFailure loginFailure = (LoginFailure)LoginResult;
@@ -306,6 +306,7 @@ namespace TunicArchipelago {
             StatusUpdatePacket statusUpdatePacket = new StatusUpdatePacket();
             statusUpdatePacket.Status = ArchipelagoClientState.ClientGoal;
             session.Socket.SendPacket(statusUpdatePacket);
+            UpdateDataStorage("Reached an Ending", true);
         }
 
         public void Release() {
@@ -374,6 +375,85 @@ namespace TunicArchipelago {
             areaData.bottomLine = bottomLineObject;
 
             AreaLabel.ShowLabel(areaData);
+        }
+
+        private void SetupDataStorage() {
+            if (session != null) {
+                Logger.LogInfo("Initializing DataStorage values");
+                // Map to Display
+                session.DataStorage[Scope.Slot, "Current Map"].Initialize("Overworld");
+
+                // Boss Info
+                session.DataStorage[Scope.Slot, "Defeated Guard Captain"].Initialize(false);
+                session.DataStorage[Scope.Slot, "Defeated Garden Knight"].Initialize(false);
+                session.DataStorage[Scope.Slot, "Defeated Siege Engine"].Initialize(false);
+                session.DataStorage[Scope.Slot, "Defeated Librarian"].Initialize(false);
+                session.DataStorage[Scope.Slot, "Defeated Boss Scavenger"].Initialize(false);
+                session.DataStorage[Scope.Slot, "Cleared Cathedral Gauntlet"].Initialize(false);
+                session.DataStorage[Scope.Slot, "Reached an Ending"].Initialize(false);
+
+                // Bells
+                session.DataStorage[Scope.Slot, "Rang East Bell"].Initialize(false);
+                session.DataStorage[Scope.Slot, "Rang West Bell"].Initialize(false);
+
+                // Bomb Codes
+                session.DataStorage[Scope.Slot, "Granted Firecracker"].Initialize(false);
+                session.DataStorage[Scope.Slot, "Granted Firebomb"].Initialize(false);
+                session.DataStorage[Scope.Slot, "Granted Icebomb"].Initialize(false);
+
+            }
+        }
+
+        public void UpdateDataStorage(string Key, bool Value) {
+            bool Current = session.DataStorage[Scope.Slot, Key];
+            if (Current != Value) {
+                session.DataStorage[Scope.Slot, Key] = Value;
+                Logger.LogInfo("Setting DataStorage value \"" + Key + "\" to " + Value);
+            }
+        }
+
+        public void UpdateDataStorage(string Key, int Value) {
+            int Current = session.DataStorage[Scope.Slot, Key];
+            if (Current != Value) {
+                session.DataStorage[Scope.Slot, Key] = Value;
+                Logger.LogInfo("Setting DataStorage value \"" + Key + "\" to " + Value);
+            }
+        }
+
+        public void UpdateDataStorage(string Key, string Value) {
+            string Current = session.DataStorage[Scope.Slot, Key];
+            if (Current != Value) {
+                session.DataStorage[Scope.Slot, Key] = Value;
+                Logger.LogInfo("Setting DataStorage value \"" + Key + "\" to " + Value);
+            }
+        }
+
+        public void UpdateDataStorageOnLoad() {
+            // Map to Display
+            foreach (string Key in Locations.PopTrackerMapScenes.Keys) {
+                if (Locations.PopTrackerMapScenes[Key].Contains(SceneLoaderPatches.SceneName)) {
+                    UpdateDataStorage("Current Map", Key);
+                    break;
+                }
+            }
+
+            // Boss Info
+            UpdateDataStorage("Defeated Guard Captain", StateVariable.GetStateVariableByName("SV_Forest Boss Room_Skuladot redux Big").BoolValue);
+            UpdateDataStorage("Defeated Garden Knight", StateVariable.GetStateVariableByName("SV_Archipelagos Redux TUNIC Knight is Dead").BoolValue);
+            UpdateDataStorage("Defeated Siege Engine", StateVariable.GetStateVariableByName("SV_Fortress Arena_Spidertank Is Dead").BoolValue);
+            UpdateDataStorage("Defeated Librarian", StateVariable.GetStateVariableByName("Librarian Dead Forever").BoolValue);
+            UpdateDataStorage("Defeated Boss Scavenger", StateVariable.GetStateVariableByName("SV_ScavengerBossesDead").BoolValue);
+            UpdateDataStorage("Cleared Cathedral Gauntlet", StateVariable.GetStateVariableByName("SV_Cathedral Arena Mockup_Waves Done").BoolValue);
+            UpdateDataStorage("Reached an Ending", SpeedrunData.gameComplete != 0);
+
+            // Bells
+            UpdateDataStorage("Rang East Bell", StateVariable.GetStateVariableByName("Rung Bell 1 (East)").BoolValue);
+            UpdateDataStorage("Rang West Bell", StateVariable.GetStateVariableByName("Rung Bell 2 (West)").BoolValue);
+
+            // Bomb Codes
+            UpdateDataStorage("Granted Firecracker", StateVariable.GetStateVariableByName("Granted Firecracker").BoolValue);
+            UpdateDataStorage("Granted Firebomb", StateVariable.GetStateVariableByName("Granted Firebomb").BoolValue);
+            UpdateDataStorage("Granted Icebomb", StateVariable.GetStateVariableByName("Granted Icebomb").BoolValue);
         }
 
     }

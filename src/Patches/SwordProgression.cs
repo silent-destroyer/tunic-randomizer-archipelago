@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using static TunicArchipelago.SaveFlags;
 
 namespace TunicArchipelago {
@@ -149,6 +150,14 @@ namespace TunicArchipelago {
         public static bool HitReceiver_ReceiveHit_PrefixPatch(HitReceiver __instance, ref HitType hitType, ref bool unblockable, ref bool isPlayerCharacterMelee) {
 
             if ((__instance.GetComponent<TuningForkBell>() != null || __instance.GetComponent<PowerSwitch>() != null) && isPlayerCharacterMelee) {
+                if (__instance.name == "tuning fork") {
+                    if (SceneManager.GetActiveScene().name == "Forest Belltower") {
+                        Archipelago.instance.UpdateDataStorage("Rang East Bell", true);
+                    }
+                    if (SceneManager.GetActiveScene().name == "Overworld Redux") {
+                        Archipelago.instance.UpdateDataStorage("Rang West Bell", true);
+                    }
+                }
                 unblockable = false;
             }
 
