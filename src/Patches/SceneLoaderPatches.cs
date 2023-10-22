@@ -21,6 +21,12 @@ namespace TunicArchipelago {
         public static bool SpawnedGhosts = false;
 
         public static bool SceneLoader_OnSceneLoaded_PrefixPatch(Scene loadingScene, LoadSceneMode mode, SceneLoader __instance) {
+            // ladder storage fix
+            if (PlayerCharacter.instance != null)
+            {
+                PlayerCharacter.instance.currentLadder = null;
+                PlayerCharacter.instance.GetComponent<Animator>().SetBool("climbing", false);
+            }
             TimeOfLastSceneTransition = SaveFile.GetFloat("playtime");
             if (SceneName == "Forest Belltower") {
                 SaveFile.SetInt("chest open 19", SaveFile.GetInt("randomizer picked up 19 [Forest Belltower]"));
@@ -203,6 +209,7 @@ namespace TunicArchipelago {
             } else if (SceneName == "Forest Belltower") {
                 SaveFile.SetInt("chest open 19", 0);
             } else if (SceneName == "Overworld Interiors") {
+                GameObject.Find("Trophy Stuff").transform.GetChild(4).gameObject.SetActive(true);
                 foreach (string Key in ItemLookup.HeroRelicLookup.Keys) {
                     StateVariable.GetStateVariableByName(ItemLookup.HeroRelicLookup[Key].Flag).BoolValue = Inventory.GetItemByName(Key).Quantity == 1;
                 }
@@ -286,6 +293,20 @@ namespace TunicArchipelago {
                 if (new System.Random().Next(100) < 3) {
                     GameObject.Find("merchant (1)").SetActive(false);
                     GameObject.Find("Environment").transform.GetChild(3).gameObject.SetActive(true);
+                }
+            }
+            else if (SceneName == "Cathedral Arena")
+            {
+                if (SaveFile.GetInt("randomizer entrance rando enabled") == 1)
+                {
+                    StateVariable.GetStateVariableByName("SV_cathedral elevator").BoolValue = false;
+                }
+            }
+            else if (SceneName == "Cathedral Redux")
+            {
+                if (SaveFile.GetInt("randomizer entrance rando enabled") == 1)
+                {
+                    StateVariable.GetStateVariableByName("SV_cathedral elevator").BoolValue = true;
                 }
             } else {
                 foreach (string Key in ItemLookup.FairyLookup.Keys) {
