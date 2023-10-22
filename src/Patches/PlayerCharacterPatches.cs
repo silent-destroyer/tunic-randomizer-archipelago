@@ -14,6 +14,7 @@ using UnityEngine.UI;
 using System.Globalization;
 using Archipelago.MultiClient.Net.Enums;
 using static TunicArchipelago.SaveFlags;
+using Newtonsoft.Json.Linq;
 
 namespace TunicArchipelago {
     public class PlayerCharacterPatches {
@@ -274,7 +275,21 @@ namespace TunicArchipelago {
                         SaveFile.SetInt(KeysBehindBosses, 1);
                     }
                 }
-                if(slotData.TryGetValue("seed", out var Seed)) {
+                if (slotData.TryGetValue("entrance_rando", out var entranceRando))
+                {
+                    if (SaveFile.GetInt(EntranceRando) == 0 && entranceRando.ToString() == "1")
+                    {
+                        Logger.LogInfo("entrance rando enabled");
+                        SaveFile.SetInt(EntranceRando, 1);
+                    }
+                }
+                if (slotData.TryGetValue("Entrance Rando", out var entranceRandoPortals))
+                {
+                    TunicPortals.APPortalStrings = ((JObject)slotData["Entrance Rando"]).ToObject<Dictionary<string, string>>();
+                    TunicPortals.CreatePortalPairs();
+                    TunicPortals.AltModifyPortals();
+                }
+                if (slotData.TryGetValue("seed", out var Seed)) {
                     if (SaveFile.GetInt("seed") == 0) {
                         SaveFile.SetInt("seed", int.Parse(Seed.ToString(), CultureInfo.InvariantCulture));
                         EnemyRandomizer.CreateAreaSeeds();

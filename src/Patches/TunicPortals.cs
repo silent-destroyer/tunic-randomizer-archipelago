@@ -11,25 +11,24 @@ using JetBrains.Annotations;
 using System.Globalization;
 using HarmonyLib.Tools;
 
-namespace TunicRandomizer
+namespace TunicArchipelago
 {
     public class TunicPortals {
-        //private static ManualLogSource Logger = TunicArchipelago.Logger;
+        private static ManualLogSource Logger = TunicArchipelago.Logger;
 
         public class TunicPortal
         {
-            public string SceneName; // the scene the portal is in
             public string Destination; // the vanilla destination scene
-            public string DestinationTag; // the vanilla destination tag, aka ID
-            public string PortalName; // a human-readable name for the portal
+            public string Tag; // the vanilla destination tag, aka ID
+            public string Name; // a human-readable name for the portal
 
             public TunicPortal() { }
 
-            public TunicPortal(string destination, string destinationTag, string portalName)
+            public TunicPortal(string destination, string tag, string name)
             {
                 Destination = destination;
-                DestinationTag = destinationTag;
-                PortalName = portalName;
+                Tag = tag;
+                Name = name;
             }
         }
 
@@ -600,13 +599,13 @@ namespace TunicRandomizer
                     new TunicPortal("Shop", "", "Gauntlet Shop"), // we love gauntlet shop
                 }
             },
-            //{
-            //    "Shop", // Every shop is just this region, adding them in later to avoid issues with the combo number
-            //    new List<TunicPortal>
-            //    {
-            //        new TunicPortal("_", "", "Shop Exit Portal"),
-            //    }
-            //},
+            {
+                "Shop", // Every shop is just this region
+                new List<TunicPortal>
+                {
+                    new TunicPortal("Previous Region", "", "Shop Portal"),
+                }
+            },
             {
                 "RelicVoid", // Hero relic area
                 new List<TunicPortal>
@@ -654,9 +653,73 @@ namespace TunicRandomizer
             },
         };
 
-        // a function to apply the randomized portal list to portals during onSceneLoaded
-        public static void ModifyPortals(Scene loadingScene, Dictionary<string, PortalCombo> portalComboList)
+        // this gets populated by slot_data, the strings are the StringDestinationTags for the two portals
+        public static Dictionary<string, string> APPortalStrings = new Dictionary<string, string>();
+        public static Dictionary<string, PortalCombo> APPortalPairs = new Dictionary<string, PortalCombo>();
+
+        public static void CreatePortalPairs()
         {
+            Logger.LogInfo("starting create portal pairs");
+            List<Portal> portalsList = new List<Portal>();
+            Dictionary<string, PortalCombo> portalPairs = new Dictionary<string, PortalCombo>();
+            int comboNumber = 0;
+
+            // turn the TunicPortals into Portals (so we can get the scene name in)
+            foreach (KeyValuePair<string, List<TunicPortal>> region_group in PortalList)
+            {
+                string scene = region_group.Key;
+                List<TunicPortal> region_portals = region_group.Value;
+                foreach (TunicPortal portal in region_portals)
+                {
+                    Portal newPortal = new Portal(scene: scene, destination: portal.Destination, tag: portal.Tag, name: portal.Name);
+                    if (newPortal.Scene == "ziggurat2020_3")
+                    {
+                        Logger.LogInfo("zig 3 portal here");
+                        Logger.LogInfo(newPortal.SceneDestinationTag);
+                    }
+                    portalsList.Add(newPortal);
+                }
+            }
+
+            // make the PortalCombo dictionary
+            foreach (KeyValuePair<string, string> stringPair in APPortalStrings)
+            {
+                string portal1SDT = stringPair.Key;
+                string portal2SDT = stringPair.Value;
+                Portal portal1 = null;
+                Portal portal2 = null;
+
+                foreach (Portal portal in portalsList)
+                {
+                    if (portal1SDT == portal.SceneDestinationTag)
+                    {
+                        portal1 = portal; 
+                    }
+                    if (portal2SDT == portal.SceneDestinationTag)
+                    {
+                        portal2 = portal;
+                    }
+                }
+
+                if (portal2 == null)
+                {
+                    Logger.LogInfo(portal2SDT);
+                }
+                if (portal1 == null)
+                {
+                    Logger.LogInfo(portal1SDT);
+                }
+                PortalCombo portalCombo = new PortalCombo(portal1, portal2);
+                portalPairs.Add(comboNumber.ToString(), portalCombo);
+                comboNumber++;
+            }
+            APPortalPairs = portalPairs;
+        }
+
+        // a function to apply the randomized portal list to portals during onSceneLoaded
+        public static void ModifyPortals(Scene loadingScene)
+        {
+            Dictionary<string, PortalCombo> portalComboList = APPortalPairs;
             var Portals = Resources.FindObjectsOfTypeAll<ScenePortal>();
             foreach (var portal in Portals)
             {
@@ -706,8 +769,9 @@ namespace TunicRandomizer
         }
 
         // this is for use in PlayerCharacterPatches. Will need to refactor later if we do random player spawn
-        public static void AltModifyPortals(Dictionary<string, PortalCombo> portalComboList)
+        public static void AltModifyPortals()
         {
+            Dictionary<string, PortalCombo> portalComboList = APPortalPairs;
             var Portals = Resources.FindObjectsOfTypeAll<ScenePortal>();
             foreach (var portal in Portals)
             {
@@ -717,7 +781,13 @@ namespace TunicRandomizer
                     string comboTag = portalCombo.Key;
                     Portal portal1 = portalCombo.Value.Portal1;
                     Portal portal2 = portalCombo.Value.Portal2;
-
+                    Logger.LogInfo("step 6");
+                    Logger.LogInfo("portal.id == " + portal.id);
+                    Logger.LogInfo("portal.destinationSceneName == " + portal.destinationSceneName);
+                    Logger.LogInfo("portal1.Destination == " + portal1.Destination);
+                    Logger.LogInfo("portal1.Tag == " + portal1.Tag);
+                    Logger.LogInfo("portal1.Scene == " + portal1.Scene);
+                    
                     if (portal1.Scene == "Overworld Redux" && portal1.Tag == portal.id && portal1.Destination == portal.destinationSceneName)
                     {
                         if (portal2.Scene == "Shop")
@@ -734,7 +804,6 @@ namespace TunicRandomizer
                         }
                         break;
                     }
-
 
                     if (portal2.Scene == "Overworld Redux" && portal2.Tag == portal.id && portal2.Destination == portal.destinationSceneName)
                     {

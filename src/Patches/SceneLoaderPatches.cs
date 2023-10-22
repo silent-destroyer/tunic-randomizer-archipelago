@@ -343,6 +343,9 @@ namespace TunicArchipelago {
                     Logger.LogError(ex.Message + " " + ex.StackTrace);
                 }
 
+                if (SaveFile.GetInt("randomizer entrance rando enabled") == 1)
+                { TunicPortals.ModifyPortals(loadingScene); }
+
                 if (SaveFile.GetInt(AbilityShuffle) == 1 && SaveFile.GetInt(HolyCrossUnlocked) == 0) {
                     foreach (ToggleObjectBySpell SpellToggle in Resources.FindObjectsOfTypeAll<ToggleObjectBySpell>()) {
                         foreach (ToggleObjectBySpell Spell in SpellToggle.gameObject.GetComponents<ToggleObjectBySpell>()) {

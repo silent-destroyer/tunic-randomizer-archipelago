@@ -28,14 +28,13 @@ namespace TunicArchipelago {
         public const string SwordProgressionEnabled = "randomizer sword progression enabled";
         public const string SwordProgressionLevel = "randomizer sword progression level";
 
+        // Entrance Rando Flag
+        public const string EntranceRando = "randomizer entrance rando enabled";
+
         // Special Flags
         public const string PlayerDeathCount = "randomizer death count";
         public const string EnemiesDefeatedCount = "randomizer enemies defeated";
         public const string DiedToHeir = "randomizer died to heir";
         public const string RescuedLostFox = "randomizer sent lost fox home";
-
-
-
-
     }
 }
