@@ -657,7 +657,7 @@ namespace TunicArchipelago
         public static Dictionary<string, string> APPortalStrings = new Dictionary<string, string>();
         public static Dictionary<string, PortalCombo> APPortalPairs = new Dictionary<string, PortalCombo>();
 
-        public static void CreatePortalPairs()
+        public static Dictionary<string, PortalCombo> CreatePortalPairs()
         {
             List<Portal> portalsList = new List<Portal>();
             Dictionary<string, PortalCombo> portalPairs = new Dictionary<string, PortalCombo>();
@@ -701,13 +701,14 @@ namespace TunicArchipelago
                 Logger.LogInfo("portal 1 is " + portal1.Name);
                 Logger.LogInfo("portal 2 is " + portal2.Name);
             }
-            APPortalPairs = portalPairs;
+            return portalPairs;
         }
 
         // a function to apply the randomized portal list to portals during onSceneLoaded
-        public static void ModifyPortals(Scene loadingScene)
+        // todo: get silent to show me how to reference an object instead of feeding portalPairs back into this
+        public static void ModifyPortals(Dictionary<string, PortalCombo> portalPairs, Scene loadingScene)
         {
-            Dictionary<string, PortalCombo> portalComboList = APPortalPairs;
+            Dictionary<string, PortalCombo> portalComboList = portalPairs;
             var Portals = Resources.FindObjectsOfTypeAll<ScenePortal>();
             foreach (var portal in Portals)
             {
@@ -757,9 +758,10 @@ namespace TunicArchipelago
         }
 
         // this is for use in PlayerCharacterPatches. Will need to refactor later if we do random player spawn
-        public static void AltModifyPortals()
+        // todo: get silent to show me how to reference an object instead of feeding portalPairs back into this
+        public static void AltModifyPortals(Dictionary<string, PortalCombo> portalPairs)
         {
-            Dictionary<string, PortalCombo> portalComboList = APPortalPairs;
+            Dictionary<string, PortalCombo> portalComboList = portalPairs;
             var Portals = Resources.FindObjectsOfTypeAll<ScenePortal>();
             foreach (var portal in Portals)
             {

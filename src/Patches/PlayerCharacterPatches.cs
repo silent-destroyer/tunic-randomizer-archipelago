@@ -287,7 +287,7 @@ namespace TunicArchipelago {
                 {
                     TunicPortals.APPortalStrings = ((JObject)slotData["Entrance Rando"]).ToObject<Dictionary<string, string>>();
                     //TunicPortals.CreatePortalPairs();
-                    TunicPortals.AltModifyPortals();
+                    TunicPortals.AltModifyPortals(TunicPortals.CreatePortalPairs());
                 }
                 if (slotData.TryGetValue("seed", out var Seed)) {
                     if (SaveFile.GetInt("seed") == 0) {
