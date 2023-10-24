@@ -659,7 +659,6 @@ namespace TunicArchipelago
 
         public static void CreatePortalPairs()
         {
-            Logger.LogInfo("starting create portal pairs");
             List<Portal> portalsList = new List<Portal>();
             Dictionary<string, PortalCombo> portalPairs = new Dictionary<string, PortalCombo>();
             int comboNumber = 0;
@@ -672,11 +671,6 @@ namespace TunicArchipelago
                 foreach (TunicPortal portal in region_portals)
                 {
                     Portal newPortal = new Portal(scene: scene, destination: portal.Destination, tag: portal.Tag, name: portal.Name);
-                    if (newPortal.Scene == "ziggurat2020_3")
-                    {
-                        Logger.LogInfo("zig 3 portal here");
-                        Logger.LogInfo(newPortal.SceneDestinationTag);
-                    }
                     portalsList.Add(newPortal);
                 }
             }
@@ -700,18 +694,12 @@ namespace TunicArchipelago
                         portal2 = portal;
                     }
                 }
-
-                if (portal2 == null)
-                {
-                    Logger.LogInfo(portal2SDT);
-                }
-                if (portal1 == null)
-                {
-                    Logger.LogInfo(portal1SDT);
-                }
                 PortalCombo portalCombo = new PortalCombo(portal1, portal2);
                 portalPairs.Add(comboNumber.ToString(), portalCombo);
                 comboNumber++;
+
+                Logger.LogInfo("portal 1 is " + portal1.Name);
+                Logger.LogInfo("portal 2 is " + portal2.Name);
             }
             APPortalPairs = portalPairs;
         }
@@ -781,12 +769,6 @@ namespace TunicArchipelago
                     string comboTag = portalCombo.Key;
                     Portal portal1 = portalCombo.Value.Portal1;
                     Portal portal2 = portalCombo.Value.Portal2;
-                    Logger.LogInfo("step 6");
-                    Logger.LogInfo("portal.id == " + portal.id);
-                    Logger.LogInfo("portal.destinationSceneName == " + portal.destinationSceneName);
-                    Logger.LogInfo("portal1.Destination == " + portal1.Destination);
-                    Logger.LogInfo("portal1.Tag == " + portal1.Tag);
-                    Logger.LogInfo("portal1.Scene == " + portal1.Scene);
                     
                     if (portal1.Scene == "Overworld Redux" && portal1.Tag == portal.id && portal1.Destination == portal.destinationSceneName)
                     {

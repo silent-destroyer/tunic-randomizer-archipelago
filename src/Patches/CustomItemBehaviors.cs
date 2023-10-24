@@ -62,14 +62,14 @@ namespace TunicArchipelago {
 
         public static bool BoneItemBehavior_onActionButtonDown_PrefixPatch(BoneItemBehaviour __instance) {
             if (__instance.item.name == "Torch") {
-                __instance.confirmationPromptLine.text = $"wAk fruhm #is drEm\nahnd rEturn too \"Overworld\"?\n\"[Torch]\"";
+                __instance.confirmationPromptLine.text = $"wAk fruhm #is drEm\nahnd rEturn too \"Overworld\"?";
             } else {
                 if (SceneLoaderPatches.SceneName == "g_elements") {
                     __instance.confirmationPromptLine.text = $"wAk fruhm #is drEm\nahnd rEturn too \"???\"";
                 } else if (SceneLoaderPatches.SceneName == "Posterity") {
                     __instance.confirmationPromptLine.text = $"wAk fruhm #is drEm\nahnd rEturn too \"Overworld\"?";
                 } else {
-                    __instance.confirmationPromptLine.text = $"wAk fruhm #is drEm\nahnd rEturn too \"{Locations.SimplifiedSceneNames[SaveFile.GetString("last campfire scene name")]}\"?\n\"[Dath Stone]\"";
+                    __instance.confirmationPromptLine.text = $"wAk fruhm #is drEm\nahnd rEturn too \"{Locations.SimplifiedSceneNames[SaveFile.GetString("last campfire scene name")]}\"?";
                 }
             }
 
@@ -77,14 +77,24 @@ namespace TunicArchipelago {
         }
 
         public static bool BoneItemBehavior_confirmBoneUseCallback_PrefixPatch(BoneItemBehaviour __instance) {
-            if (SceneLoaderPatches.SceneName == "g_elements") {
-                SaveFile.SetString("last campfire scene name", "Posterity");
-                SaveFile.SetString("last campfire id", "campfire");
-                SaveFile.SetInt(RescuedLostFox, 1);
-            }
-            if (SceneLoaderPatches.SceneName == "Posterity") {
+            if (__instance.item.name == "Torch")
+            {
                 SaveFile.SetString("last campfire scene name", "Overworld Redux");
                 SaveFile.SetString("last campfire id", "checkpoint");
+            }
+            else
+            {
+                if (SceneLoaderPatches.SceneName == "g_elements")
+                {
+                    SaveFile.SetString("last campfire scene name", "Posterity");
+                    SaveFile.SetString("last campfire id", "campfire");
+                    SaveFile.SetInt("randomizer sent lost fox home", 1);
+                }
+                if (SceneLoaderPatches.SceneName == "Posterity")
+                {
+                    SaveFile.SetString("last campfire scene name", "Overworld Redux");
+                    SaveFile.SetString("last campfire id", "checkpoint");
+                }
             }
             PlayerCharacter.instance.gameObject.AddComponent<Rotate>();
             PlayerCharacterPatches.IsTeleporting = true;
