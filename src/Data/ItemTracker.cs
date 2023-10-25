@@ -215,6 +215,21 @@ namespace TunicArchipelago {
                 SpoilerLogLines.Add($"\t{(SaveFile.GetInt(HolyCrossUnlocked) == 1 ? "x" : "-")} Holy Cross: {SaveFile.GetInt(HexagonQuestHolyCross)} Gold Questagons");
                 SpoilerLogLines.Add($"\t{(SaveFile.GetInt(IceRodUnlocked) == 1 ? "x" : "-")} Ice Rod: {SaveFile.GetInt(HexagonQuestIceRod)} Gold Questagons");
             }
+
+            if (SaveFile.GetInt(EntranceRando) == 1)
+            {
+                Dictionary<string, PortalCombo> PortalList = TunicPortals.CreatePortalPairs();
+                List<string> PortalSpoiler = new List<string>();
+                SpoilerLogLines.Add("\nEntrance Connections");
+                foreach (PortalCombo portalCombo in PortalList.Values)
+                {
+                    PortalSpoiler.Add("\t- " + portalCombo.Portal1.Name + " -- " + portalCombo.Portal2.Name);
+                }
+                foreach (string combo in PortalSpoiler)
+                {
+                    SpoilerLogLines.Add(combo);
+                }
+            }
             if (!File.Exists(TunicArchipelago.SpoilerLogPath)) {
                 File.WriteAllLines(TunicArchipelago.SpoilerLogPath, SpoilerLogLines);
             } else {

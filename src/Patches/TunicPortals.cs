@@ -175,8 +175,8 @@ namespace TunicArchipelago
                 "Ruins Passage", // That little hallway with the key door near the start in Overworld
                 new List<TunicPortal>
                 {
-                    new TunicPortal("Overworld Redux", "east", "Ruins Passage"),
-                    new TunicPortal("Overworld Redux", "west", "Ruins Passage"),
+                    new TunicPortal("Overworld Redux", "east", "Ruins Passage Not-Door Exit"),
+                    new TunicPortal("Overworld Redux", "west", "Ruins Passage Door Exit"),
                 }
             },
             {
@@ -697,9 +697,6 @@ namespace TunicArchipelago
                 PortalCombo portalCombo = new PortalCombo(portal1, portal2);
                 portalPairs.Add(comboNumber.ToString(), portalCombo);
                 comboNumber++;
-
-                Logger.LogInfo("portal 1 is " + portal1.Name);
-                Logger.LogInfo("portal 2 is " + portal2.Name);
             }
             return portalPairs;
         }
