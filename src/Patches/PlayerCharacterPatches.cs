@@ -281,6 +281,7 @@ namespace TunicArchipelago {
                     {
                         Logger.LogInfo("entrance rando enabled");
                         SaveFile.SetInt(EntranceRando, 1);
+                        Inventory.GetItemByName("Torch").Quantity = 1;
                     }
                 }
                 if (slotData.TryGetValue("Entrance Rando", out var entranceRandoPortals))
