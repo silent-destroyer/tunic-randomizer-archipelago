@@ -236,15 +236,12 @@ namespace TunicArchipelago {
                 if (TunicArchipelago.Settings.HeroPathHintsEnabled && SaveFile.GetInt($"randomizer picked up {Hints.MailboxHintId}") == 0) {
                     GameObject.Find("_Environment/_Decorations/Mailbox (1)/mailbox flag").transform.rotation = new Quaternion(0.5f, -0.5f, 0.5f, 0.5f);
                 }
+
+                if (SaveFile.GetInt("randomizer entrance rando enabled") == 1 || (Archipelago.instance.integration.slotData.ContainsKey("entrance_rando") && Archipelago.instance.integration.slotData["entrance_rando"].ToString() == "1" && SaveFile.GetInt("seed") == 0)) {
+                    GhostHints.SpawnTorchHintGhost();
+                }
             } else if (SceneName == "Swamp Redux 2") {
-                GhostHints.GhostFox.GetComponent<NPC>().nPCAnimState = NPC.NPCAnimState.GAZE;
-                GameObject DoorHint = GameObject.Instantiate(GhostHints.GhostFox);
-                DoorHint.transform.position = new Vector3(82.5f, 14f, 143.7f);
-                DoorHint.transform.transform.rotation = new Quaternion(0f, 0f, 0f, 1f);
-                LanguageLine DoorSecret = ScriptableObject.CreateInstance<LanguageLine>();
-                DoorSecret.text = $"$$$... dOnt tehl ehnEwuhn, buht #aht \"DOOR\" bahk #Ar\nkahn bE \"OPENED\" fruhm #E \"OUTSIDE...\"";
-                DoorHint.GetComponent<NPC>().script = DoorSecret;
-                DoorHint.SetActive(true);
+                GhostHints.SpawnCathedralDoorGhost();
 
                 // Removes the barricades from the swamp shop during the day 
                 if (GameObject.Find("_Setpieces Etc/plank_4u") != null && GameObject.Find("_Setpieces Etc/plank_4u (1)") != null) {
@@ -252,31 +249,9 @@ namespace TunicArchipelago {
                     GameObject.Find("_Setpieces Etc/plank_4u (1)").SetActive(false);
                 }
             } else if (SceneName == "g_elements") {
-                if (SaveFile.GetInt(RescuedLostFox) == 0) {
-                    GhostHints.GhostFox.GetComponent<NPC>().nPCAnimState = NPC.NPCAnimState.SIT;
-                    GameObject LostFox = GameObject.Instantiate(GhostHints.GhostFox);
-                    LostFox.transform.position = new Vector3(-1.4098f, 0.0585f, 12.9491f);
-                    LostFox.transform.transform.rotation = new Quaternion(0f, 0f, 0f, 1f);
-
-                    LanguageLine LostFoxScript = ScriptableObject.CreateInstance<LanguageLine>();
-                    LostFoxScript.text = $"\"...\"";
-                    LostFox.GetComponent<NPC>().script = LostFoxScript;
-
-                    LostFox.SetActive(true);
-                }
+                GhostHints.SpawnLostGhostFox();
             } else if (SceneName == "Posterity") {
-                if (SaveFile.GetInt(RescuedLostFox) == 1) {
-                    GhostHints.GhostFox.GetComponent<NPC>().nPCAnimState = NPC.NPCAnimState.SIT;
-                    GameObject SavedFox = GameObject.Instantiate(GhostHints.GhostFox);
-                    SavedFox.transform.position = new Vector3(80.6991f, 15.9245f, 115.0217f);
-                    SavedFox.transform.transform.localEulerAngles = new Vector3(0f, 270f, 0f);
-
-                    LanguageLine SavedFoxScript = ScriptableObject.CreateInstance<LanguageLine>();
-                    SavedFoxScript.text = $"%ah^k yoo for sehnding mE hOm.---plEz kEp #aht stOn ahs A rEword. it wil tAk yoo\nbahk too yor wurld.";
-                    SavedFox.GetComponent<NPC>().script = SavedFoxScript;
-
-                    SavedFox.SetActive(true);
-                }
+                GhostHints.SpawnRescuedGhostFox();
             } else if (SceneName == "Shop") {
                 if (new System.Random().Next(100) < 3) {
                     GameObject.Find("merchant").SetActive(false);

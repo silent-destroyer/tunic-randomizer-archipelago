@@ -15,9 +15,9 @@ namespace TunicArchipelago {
 
             if (__instance.gameObject.GetComponent<NPC>() != null && SceneManager.GetActiveScene().name == "g_elements") {
                 if (Inventory.GetItemByName("Homeward Bone Statue").Quantity == 0) {
-                    __instance.gameObject.GetComponent<NPC>().script.text = $"I lawst mI mahjik stOn ahnd kahnt gO hOm...---if yoo fInd it, kahn yoo bri^ it too mE?\nitz smawl ahnd grA.";
+                    __instance.gameObject.GetComponent<NPC>().script.text = $"I lawst mI mahjik stOn ahnd kahnt gO hOm...---if yoo fInd it, kahn yoo bri^ it too mE?\nit louks lIk #is: [dath]";
                 } else {
-                    __instance.gameObject.GetComponent<NPC>().script.text = $"I lawst mI mahjik stOn ahnd kahnt gO hOm...---... wAt, yoo fownd it! plEz, yooz it now!";
+                    __instance.gameObject.GetComponent<NPC>().script.text = $"I lawst mI mahjik stOn [dath] ahnd kahnt gO hOm...---... wAt, yoo fownd it! plEz, yooz it now!";
                 }
             }
             if (Hints.HintLocations.ContainsKey(InteractionLocation) && TunicArchipelago.Settings.HeroPathHintsEnabled) {
