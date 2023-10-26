@@ -1,12 +1,8 @@
 ﻿using Archipelago.MultiClient.Net.Enums;
-using Archipelago.MultiClient.Net.Models;
 using BepInEx.Logging;
-using HarmonyLib;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnhollowerBaseLib;
 using UnityEngine;
 using UnityEngine.UI;
@@ -31,6 +27,7 @@ namespace TunicArchipelago {
         public static GameObject GardenKnightVoid;
         public static GameObject MoneySfx;
         public static GameObject FairyAnimation;
+        public static GameObject IceFlask;
 
         public static GameObject RedKeyMaterial;
         public static GameObject GreenKeyMaterial;
@@ -1019,6 +1016,65 @@ namespace TunicArchipelago {
                     Inventory.GetItemByName("Key Special").collectionMessage.text = $"dah% stOn\"!?\"";
                     DathStonePresentationAlreadySetup = true;
                 } catch (Exception e) {
+                }
+            }
+        }
+
+        public static void AddNewShopItems() {
+            try {
+                if (IceFlask == null) {
+                    if (Resources.FindObjectsOfTypeAll<BombFlask>().Where(bomb => bomb.name == "Ice flask").Count() > 0) {
+                        IceFlask = Resources.FindObjectsOfTypeAll<BombFlask>().Where(bomb => bomb.name == "Ice flask").ToList()[0].transform.GetChild(0).gameObject;
+                    }
+                }
+                GameObject IceBombs = GameObject.Instantiate(GameObject.Find("Shop/Item Holder/Firebombs/"));
+                GameObject Pepper = GameObject.Instantiate(GameObject.Find("Shop/Item Holder/Ivy/"));
+                IceBombs.name = "Ice Bombs";
+                Pepper.name = "Pepper";
+                IceBombs.transform.parent = GameObject.Find("Shop/Item Holder/Firebombs/").transform.parent;
+                Pepper.transform.parent = GameObject.Find("Shop/Item Holder/Ivy/").transform.parent;
+
+                IceBombs.GetComponent<ShopItem>().itemToGive = Inventory.GetItemByName("Ice Bomb");
+                IceBombs.GetComponent<ShopItem>().price = 200;
+                Pepper.GetComponent<ShopItem>().itemToGive = Inventory.GetItemByName("Pepper");
+                Pepper.GetComponent<ShopItem>().price = 130;
+
+                for (int i = 0; i < 3; i++) {
+                    GameObject.Destroy(IceBombs.transform.GetChild(0).GetChild(i).GetChild(0).gameObject);
+                    if (IceFlask != null) { 
+                        GameObject newIceBomb = GameObject.Instantiate(IceFlask);
+                        newIceBomb.transform.position = IceBombs.transform.GetChild(0).GetChild(i).position;
+                        newIceBomb.transform.localEulerAngles = IceBombs.transform.GetChild(0).GetChild(i).localEulerAngles;
+                        GameObject.Destroy(IceBombs.transform.GetChild(0).GetChild(i).gameObject);
+                        newIceBomb.transform.parent = IceBombs.transform.GetChild(0);
+                        newIceBomb.transform.GetChild(0).gameObject.SetActive(false);
+                        newIceBomb.transform.localScale = Vector3.one;
+                    } else {
+                        IceBombs.transform.GetChild(0).GetChild(i).GetComponent<MeshFilter>().mesh = Items["Ice Bomb"].GetComponent<MeshFilter>().mesh;
+                        IceBombs.transform.GetChild(0).GetChild(i).GetComponent<MeshRenderer>().materials = Items["Ice Bomb"].GetComponent<MeshRenderer>().materials;
+                        IceBombs.transform.GetChild(0).GetChild(i).localScale = Vector3.one;
+                    }
+                }
+
+                Pepper.transform.GetChild(0).GetChild(0).GetComponent<MeshFilter>().mesh = Items["Pepper"].GetComponent<MeshFilter>().mesh;
+                Pepper.transform.GetChild(0).GetChild(0).GetComponent<MeshRenderer>().materials = Items["Pepper"].GetComponent<MeshRenderer>().materials;
+                Pepper.transform.GetChild(0).GetChild(0).localScale = new Vector3(1.2f, 1.2f, 1.2f);
+
+                List<ShopItem> items = ShopManager.cachedShopItems != null ? ShopManager.cachedShopItems.ToList() : new List<ShopItem>();
+                items.Add(IceBombs.GetComponent<ShopItem>());
+                items.Add(Pepper.GetComponent<ShopItem>());
+                ShopManager.cachedShopItems = items.ToArray();
+            } catch (Exception e) {
+                Logger.LogError("Failed to create permanent ice bomb and/or pepper items in the shop.");
+            }
+        }
+
+        public static void ShopManager_entrySequence_MoveNext_PostfixPatch(ShopManager._entrySequence_d__14 __instance, ref bool __result) {
+            if (__instance._f_5__2 > 0.5f && __instance._f_5__2 < 0.6f) {
+                for (int i = 0; i < 3; i++) {
+                    if (IceFlask != null) {
+                        __instance.__4__this.transform.GetChild(0).GetChild(10).GetChild(0).GetChild(i).GetChild(0).gameObject.SetActive(true);
+                    }
                 }
             }
         }

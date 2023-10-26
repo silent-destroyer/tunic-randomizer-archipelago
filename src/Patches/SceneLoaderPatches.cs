@@ -264,6 +264,7 @@ namespace TunicArchipelago {
                     GameObject.Find("merchant").SetActive(false);
                     GameObject.Find("Environment").transform.GetChild(3).gameObject.SetActive(true);
                 }
+                ModelSwaps.AddNewShopItems();
             } else if (SceneName == "ShopSpecial") {
                 if (new System.Random().Next(100) < 3) {
                     GameObject.Find("merchant (1)").SetActive(false);
