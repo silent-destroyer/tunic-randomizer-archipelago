@@ -93,6 +93,12 @@ namespace TunicArchipelago {
                 }
             },
             {
+                "Quarry",
+                new List<string>() {
+                    "Scavenger_stunner"
+                }
+            },
+            {
                 "Quarry Redux",
                 new List<string>() {
                     "Scavenger",
@@ -200,6 +206,7 @@ namespace TunicArchipelago {
                     "Scavenger",
                     "Scavenger_miner",
                     "Scavenger_support",
+                    "Scavenger_stunner",
                     "bomezome_fencer",
                     "Ghostfox_monster",
                     "voidling redux",
@@ -263,6 +270,7 @@ namespace TunicArchipelago {
             { "Scavenger", $"\"Scavenger\" (snIpur)" },
             { "Scavenger_miner", $"\"Scavenger\" (mInur)" },
             { "Scavenger_support", $"\"Scavenger\" (suhport)" },
+            { "Scavenger_stunner", $"\"Scavenger\" (stuhnur)" },
             { "bomezome_fencer", $"\"Fleemer\" (fehnsur)" },
             { "Ghostfox_monster", $"\"Lost Echo\"" },
             { "voidling redux", $"\"Voidling\"" },
@@ -351,6 +359,8 @@ namespace TunicArchipelago {
             EnemiesInCurrentScene.Clear();
 
             string CurrentScene = SceneLoaderPatches.SceneName;
+
+            List<BombFlask> bombFlasks = Resources.FindObjectsOfTypeAll<BombFlask>().Where(bomb => bomb.name != "Firecracker").ToList();
 
             System.Random Random;
             if (TunicArchipelago.Settings.EnemyGeneration == RandomizerSettings.EnemyGenerationType.SEEDED) {
@@ -499,7 +509,27 @@ namespace TunicArchipelago {
                         NewEnemy.GetComponent<BossAnnounceOnAggro>().bossTitleTopLine = TopLine;
                         NewEnemy.GetComponent<BossAnnounceOnAggro>().bossTitleBottomLine = BottomLine;
                     }
-                    
+
+                    // Randomize support scavengers bomb type
+                    if (NewEnemy.GetComponent<Scavenger_Support>() != null) {
+                        Rigidbody randomBomb = bombFlasks[Random.Next(bombFlasks.Count)].gameObject.GetComponent<Rigidbody>();
+                        NewEnemy.GetComponent<Scavenger_Support>().bombPrefab = randomBomb;
+                        if (!randomBomb.gameObject.name.Contains("Firecracker")) {
+                            NewEnemy.GetComponent<Scavenger_Support>().tossAngle = 15f;
+                        }
+                        if (randomBomb.gameObject.name.Contains("Ice")) {
+                            NewEnemy.transform.GetChild(0).GetComponent<CreatureMaterialManager>().originalMaterials = Enemies["Scavenger_stunner"].transform.GetChild(0).GetComponent<CreatureMaterialManager>().originalMaterials;
+                        }
+                    }
+
+                    // For ice snipers
+                    if (NewEnemy.GetComponent<Scavenger>() != null) {
+                        NewEnemy.GetComponent<Scavenger>().useStunBulletPool = NewEnemy.name.Contains("stunner");
+                        if (NewEnemy.name.Contains("stunner")) {
+                            NewEnemy.GetComponent<Scavenger>().laserEndSphere = Enemies["Scavenger"].GetComponent<Scavenger>().laserEndSphere;
+                        }
+                    }
+
                     NewEnemy.name += $" {i}";
                     EnemiesInCurrentScene.Add(NewEnemy.name, NewEnemy.transform.position.ToString());
                     i++;
