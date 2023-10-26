@@ -21,6 +21,12 @@ namespace TunicArchipelago {
         public static bool SpawnedGhosts = false;
 
         public static bool SceneLoader_OnSceneLoaded_PrefixPatch(Scene loadingScene, LoadSceneMode mode, SceneLoader __instance) {
+            // ladder storage fix
+            if (PlayerCharacter.instance != null)
+            {
+                PlayerCharacter.instance.currentLadder = null;
+                PlayerCharacter.instance.GetComponent<Animator>().SetBool("climbing", false);
+            }
             TimeOfLastSceneTransition = SaveFile.GetFloat("playtime");
             if (SceneName == "Forest Belltower") {
                 SaveFile.SetInt("chest open 19", SaveFile.GetInt("randomizer picked up 19 [Forest Belltower]"));
@@ -203,6 +209,7 @@ namespace TunicArchipelago {
             } else if (SceneName == "Forest Belltower") {
                 SaveFile.SetInt("chest open 19", 0);
             } else if (SceneName == "Overworld Interiors") {
+                GameObject.Find("Trophy Stuff").transform.GetChild(4).gameObject.SetActive(true);
                 foreach (string Key in ItemLookup.HeroRelicLookup.Keys) {
                     StateVariable.GetStateVariableByName(ItemLookup.HeroRelicLookup[Key].Flag).BoolValue = Inventory.GetItemByName(Key).Quantity == 1;
                 }
@@ -262,6 +269,20 @@ namespace TunicArchipelago {
                     GameObject.Find("merchant (1)").SetActive(false);
                     GameObject.Find("Environment").transform.GetChild(3).gameObject.SetActive(true);
                 }
+            }
+            else if (SceneName == "Cathedral Arena")
+            {
+                if (SaveFile.GetInt("randomizer entrance rando enabled") == 1)
+                {
+                    StateVariable.GetStateVariableByName("SV_cathedral elevator").BoolValue = false;
+                }
+            }
+            else if (SceneName == "Cathedral Redux")
+            {
+                if (SaveFile.GetInt("randomizer entrance rando enabled") == 1)
+                {
+                    StateVariable.GetStateVariableByName("SV_cathedral elevator").BoolValue = true;
+                }
             } else {
                 foreach (string Key in ItemLookup.FairyLookup.Keys) {
                     StateVariable.GetStateVariableByName(ItemLookup.FairyLookup[Key].Flag).BoolValue = SaveFile.GetInt("randomizer opened fairy chest " + Key) == 1;
@@ -296,6 +317,9 @@ namespace TunicArchipelago {
                     Logger.LogError("An error occurred swapping item models in this scene:");
                     Logger.LogError(ex.Message + " " + ex.StackTrace);
                 }
+
+                if (SaveFile.GetInt("randomizer entrance rando enabled") == 1)
+                { TunicPortals.ModifyPortals(TunicPortals.CreatePortalPairs(), loadingScene); }
 
                 if (SaveFile.GetInt(AbilityShuffle) == 1 && SaveFile.GetInt(HolyCrossUnlocked) == 0) {
                     foreach (ToggleObjectBySpell SpellToggle in Resources.FindObjectsOfTypeAll<ToggleObjectBySpell>()) {
