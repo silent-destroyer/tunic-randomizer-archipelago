@@ -92,20 +92,7 @@ namespace TunicArchipelago {
                     SaveFile.SetString("last campfire id", "checkpoint");
                 }
             }
-            else
-            {
-                if (SceneLoaderPatches.SceneName == "g_elements")
-                {
-                    SaveFile.SetString("last campfire scene name", "Posterity");
-                    SaveFile.SetString("last campfire id", "campfire");
-                    SaveFile.SetInt("randomizer sent lost fox home", 1);
-                }
-                if (SceneLoaderPatches.SceneName == "Posterity")
-                {
-                    SaveFile.SetString("last campfire scene name", "Overworld Redux");
-                    SaveFile.SetString("last campfire id", "checkpoint");
-                }
-            }
+
             PlayerCharacter.instance.gameObject.AddComponent<Rotate>();
             PlayerCharacterPatches.IsTeleporting = true;
             return true;

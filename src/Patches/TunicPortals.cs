@@ -15,6 +15,7 @@ namespace TunicArchipelago
 {
     public class TunicPortals {
         private static ManualLogSource Logger = TunicArchipelago.Logger;
+        public static Dictionary<string, PortalCombo> RandomizedPortals = new Dictionary<string, PortalCombo>();
 
         public class TunicPortal
         {
@@ -653,14 +654,10 @@ namespace TunicArchipelago
             },
         };
 
-        // this gets populated by slot_data, the strings are the StringDestinationTags for the two portals
-        public static Dictionary<string, string> APPortalStrings = new Dictionary<string, string>();
-        public static Dictionary<string, PortalCombo> APPortalPairs = new Dictionary<string, PortalCombo>();
 
-        public static Dictionary<string, PortalCombo> CreatePortalPairs()
+        public static void CreatePortalPairs(Dictionary<string, string> APPortalStrings)
         {
             List<Portal> portalsList = new List<Portal>();
-            Dictionary<string, PortalCombo> portalPairs = new Dictionary<string, PortalCombo>();
             int comboNumber = 0;
 
             // turn the TunicPortals into Portals (so we can get the scene name in)
@@ -695,22 +692,20 @@ namespace TunicArchipelago
                     }
                 }
                 PortalCombo portalCombo = new PortalCombo(portal1, portal2);
-                portalPairs.Add(comboNumber.ToString(), portalCombo);
+                RandomizedPortals.Add(comboNumber.ToString(), portalCombo);
                 comboNumber++;
             }
-            return portalPairs;
         }
 
         // a function to apply the randomized portal list to portals during onSceneLoaded
         // todo: get silent to show me how to reference an object instead of feeding portalPairs back into this
-        public static void ModifyPortals(Dictionary<string, PortalCombo> portalPairs, Scene loadingScene)
+        public static void ModifyPortals(Scene loadingScene)
         {
-            Dictionary<string, PortalCombo> portalComboList = portalPairs;
             var Portals = Resources.FindObjectsOfTypeAll<ScenePortal>();
             foreach (var portal in Portals)
             {
                 // go through the list of randomized portals and see if either the first or second portal matches the one we're looking at
-                foreach (KeyValuePair<string, PortalCombo> portalCombo in portalComboList)
+                foreach (KeyValuePair<string, PortalCombo> portalCombo in RandomizedPortals)
                 {
                     string comboTag = portalCombo.Key;
                     Portal portal1 = portalCombo.Value.Portal1;
@@ -756,14 +751,13 @@ namespace TunicArchipelago
 
         // this is for use in PlayerCharacterPatches. Will need to refactor later if we do random player spawn
         // todo: get silent to show me how to reference an object instead of feeding portalPairs back into this
-        public static void AltModifyPortals(Dictionary<string, PortalCombo> portalPairs)
+        public static void AltModifyPortals()
         {
-            Dictionary<string, PortalCombo> portalComboList = portalPairs;
             var Portals = Resources.FindObjectsOfTypeAll<ScenePortal>();
             foreach (var portal in Portals)
             {
                 // go through the list of randomized portals and see if either the first or second portal matches the one we're looking at
-                foreach (KeyValuePair<string, PortalCombo> portalCombo in portalComboList)
+                foreach (KeyValuePair<string, PortalCombo> portalCombo in RandomizedPortals)
                 {
                     string comboTag = portalCombo.Key;
                     Portal portal1 = portalCombo.Value.Portal1;

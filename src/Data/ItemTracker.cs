@@ -218,10 +218,9 @@ namespace TunicArchipelago {
 
             if (SaveFile.GetInt(EntranceRando) == 1)
             {
-                Dictionary<string, PortalCombo> PortalList = TunicPortals.CreatePortalPairs();
                 List<string> PortalSpoiler = new List<string>();
                 SpoilerLogLines.Add("\nEntrance Connections");
-                foreach (PortalCombo portalCombo in PortalList.Values)
+                foreach (PortalCombo portalCombo in TunicPortals.RandomizedPortals.Values)
                 {
                     PortalSpoiler.Add("\t- " + portalCombo.Portal1.Name + " -- " + portalCombo.Portal2.Name);
                 }
