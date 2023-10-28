@@ -300,30 +300,41 @@ namespace TunicArchipelago {
                     BossScavenger.GetComponent<Image>().color = new Color(0f, 0f, 1f, 1f);
                 }
 
-                if (Inventory.GetItemByName("Spear").Quantity == 1) {
+ if (Inventory.GetItemByName("Spear").Quantity == 1) {
                     Equipment.transform.GetChild(0).transform.position = new Vector3(20f, -20f, 0);
                     Equipment.transform.GetChild(0).GetChild(0).GetComponent<Image>().color = new Color(0, 0, 0, 1);
                     for (int i = 1; i < Equipment.transform.childCount; i++) {
                         Vector3 Position = Equipment.transform.GetChild(i).transform.position;
                         Equipment.transform.GetChild(i).transform.position = new Vector3(-331.975f + ((i - 1) * 52.5f), Position.y, Position.z);
                     }
-                }
-
-                if (Inventory.GetItemByName("Homeward Bone Statue").Quantity == 1 && Equipment.transform.childCount > 7) {
-                    Equipment.transform.GetChild(Equipment.transform.childCount - 1).transform.position = new Vector3(-331.975f, -245.9078f, -98f);
+                    if (Equipment.transform.childCount > 8) {
+                        for (int i = 8; i < Equipment.transform.childCount; i++) {
+                            Equipment.transform.GetChild(i).transform.position = new Vector3(-331.975f + ((i - 8) * 52.5f), -245.9078f, -98f);
+                        }
+                    }
+                } else {
+                    if (Equipment.transform.childCount > 7) {
+                        for (int i = 7; i < Equipment.transform.childCount; i++) {
+                            Equipment.transform.GetChild(i).transform.position = new Vector3(-331.975f + ((i - 7) * 52.5f), -245.9078f, -98f);
+                        }
+                    }
                 }
 
                 for (int i = 0; i < Equipment.transform.childCount; i++) {
+                    if (Equipment.transform.GetChild(i).GetChild(1).GetComponent<Image>().sprite.name == "Inventory items_torch") {
+                        GameObject Torch = Equipment.transform.GetChild(i).gameObject;
+                        Torch.transform.SetAsLastSibling();
+                    }
                     if (Equipment.transform.GetChild(i).GetChild(1).GetComponent<Image>().sprite.name == "Inventory items_sword") {
                         if (Equipment.transform.GetChild(i).childCount == 3) {
                         } else {
-                            if (SaveFile.GetInt(SwordProgressionLevel) == 3) {
+                            if (SaveFile.GetInt("randomizer sword progression level") == 3) {
                                 GameObject NewSword = GameObject.Instantiate(ModelSwaps.SecondSwordImage);
                                 NewSword.transform.parent = Equipment.transform.GetChild(i);
                                 NewSword.transform.localScale = new Vector3(2f, 2f, 2f);
                                 NewSword.transform.localPosition = Vector3.zero;
                                 Equipment.transform.GetChild(i).GetChild(1).gameObject.SetActive(false);
-                            } else if (SaveFile.GetInt(SwordProgressionLevel) >= 4) {
+                            } else if (SaveFile.GetInt("randomizer sword progression level") == 4) {
                                 GameObject NewSword = GameObject.Instantiate(ModelSwaps.ThirdSwordImage);
                                 NewSword.transform.parent = Equipment.transform.GetChild(i);
                                 NewSword.transform.localScale = new Vector3(2f, 2f, 2f);
@@ -337,7 +348,7 @@ namespace TunicArchipelago {
                 // -279.475
                 //TrackerOverlay.Overlay.transform.position = new Vector3(0, 50f, 0);
             }
-
+            
             if (Loaded) {
                 for (int i = 0; i < 3; i++) {
                     GameObject EquipButton = EquipButtons[i];

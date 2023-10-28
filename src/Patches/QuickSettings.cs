@@ -18,12 +18,13 @@ namespace TunicArchipelago {
         public static Font OdinRounded;
         public static List<string> FoolChoices = new List<string>() { "Off", "Normal", "Double", "<size=19>Onslaught</size>" };
         public static List<string> FoolColors = new List<string>() { "white", "#4FF5D4", "#E3D457", "#FF3333" };
+        private static float height = 450f;
 
         private void OnGUI() {
             if (SceneLoaderPatches.SceneName == "TitleScreen" && GameObject.FindObjectOfType<TitleScreen>() != null) {
                 GUI.skin.font = PaletteEditor.OdinRounded == null ? GUI.skin.font : PaletteEditor.OdinRounded;
                 Cursor.visible = true;
-                GUI.Window(101, new Rect(20f, 150f, 430f, 450f), new Action<int>(QuickSettingsWindow), "Quick Settings");
+                GUI.Window(101, new Rect(20f, 150f, 430f, height), new Action<int>(QuickSettingsWindow), "Quick Settings");
             }
         }
 
@@ -68,7 +69,7 @@ namespace TunicArchipelago {
             }
 
             GUI.Label(new Rect(10f, 180f, 200f, 30f), $"World Settings");
-
+            float y = 340f;
             if (Archipelago.instance.integration != null && Archipelago.instance.integration.connected) {
                 Dictionary<string, object> slotData = Archipelago.instance.GetPlayerSlotData();
                 GUI.Toggle(new Rect(10f, 220f, 180f, 30f), slotData["keys_behind_bosses"].ToString() == "1", "Keys Behind Bosses");
@@ -80,7 +81,13 @@ namespace TunicArchipelago {
                 int FoolIndex = int.Parse(slotData["fool_traps"].ToString());
                 GUI.Toggle(new Rect(220f, 300f, 195f, 60f), FoolIndex != 0, $"Fool Traps: {(FoolIndex == 0 ? "Off" : $"<color={FoolColors[FoolIndex]}>{FoolChoices[FoolIndex]}</color>")}");
 
+                if (slotData.ContainsKey("entrance_rando")) {
+                    height = 490f;
+                    y += 40f;
+                    GUI.Toggle(new Rect(10f, 340f, 195f, 30f), slotData["entrance_rando"].ToString() == "1", $"Entrance Randomizer");
+                }
             } else {
+                height = 450f;
                 GUI.Toggle(new Rect(10f, 220f, 180f, 30f), false, "Keys Behind Bosses");
                 GUI.Toggle(new Rect(220f, 220f, 210f, 30f), false, "Sword Progression");
                 GUI.Toggle(new Rect(10f, 260f, 175f, 30f), false, "Start With Sword");
@@ -90,13 +97,15 @@ namespace TunicArchipelago {
 
             }
 
-            GUI.Label(new Rect(10f, 340f, 200f, 30f), $"Other Settings");
-            bool DeathLink = GUI.Toggle(new Rect(10f, 380f, 115f, 30f), TunicArchipelago.Settings.DeathLinkEnabled, "Death Link");
+            GUI.Label(new Rect(10f, y, 200f, 30f), $"Other Settings");
+            y += 40f;
+            bool DeathLink = GUI.Toggle(new Rect(10f, y, 115f, 30f), TunicArchipelago.Settings.DeathLinkEnabled, "Death Link");
             TunicArchipelago.Settings.DeathLinkEnabled = DeathLink;
-            bool EnemyRandomizer = GUI.Toggle(new Rect(150f, 380f, 180f, 30f), TunicArchipelago.Settings.EnemyRandomizerEnabled, "Enemy Randomizer");
+            bool EnemyRandomizer = GUI.Toggle(new Rect(150f, y, 180f, 30f), TunicArchipelago.Settings.EnemyRandomizerEnabled, "Enemy Randomizer");
             TunicArchipelago.Settings.EnemyRandomizerEnabled = EnemyRandomizer;
             GUI.skin.label.fontSize = 20;
-            GUI.Label(new Rect(10f, 410f, 500f, 30f), $"More settings in options menu!");
+            y += 30f;
+            GUI.Label(new Rect(10f, y, 500f, 30f), $"More settings in options menu!");
         }
 
     }
