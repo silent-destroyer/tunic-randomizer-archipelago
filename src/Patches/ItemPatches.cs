@@ -80,6 +80,11 @@ namespace TunicArchipelago {
         }
 
         public static bool Chest_shouldShowAsOpen_GetterPatch(Chest __instance, ref bool __result) {
+            if (SceneManager.GetActiveScene().name == "Quarry") {
+                __result = false;
+                return false;
+            }
+
             if (__instance.chestID == 19) {
                 if (__instance.transform.position.ToString() == "(8.8, 0.0, 9.9)") {
                     __result = SaveFile.GetInt("randomizer picked up 19 [Sword Cave]") == 1;
@@ -136,11 +141,7 @@ namespace TunicArchipelago {
             if (Locations.LocationIdToDescription.ContainsKey(LocationId)) {
                 int Price = TunicArchipelago.Settings.CheaperShopItemsEnabled ? 300 : __instance.price;
                 ArchipelagoItem ShopItem = ItemLookup.ItemList[LocationId];
-                __instance.confirmPurchaseFormattedLanguageLine.text = $"bI for {Price} [money]?";
-
-                if (ShopItem.Player != Archipelago.instance.GetPlayerSlot()) {
-                    __instance.confirmPurchaseFormattedLanguageLine.text = $"bI for {Price} [money]? " + GhostHints.WordWrapString($"\"({Archipelago.instance.GetPlayerName(ShopItem.Player).ToUpper().Replace(" ", "\" \"")}'S {ShopItem.ItemName.ToUpper().Replace($" ", $"\" \"")})\"");
-                }
+                __instance.confirmPurchaseFormattedLanguageLine.text = $"bI for {Price} [money]?\n\t" + GhostHints.WordWrapString($"\"({Archipelago.instance.GetPlayerName(ShopItem.Player).ToUpper().Replace(" ", "\" \"")}'S {ShopItem.ItemName.ToUpper().Replace($" ", $"\" \"")})\"");
             } else {
                 __instance.confirmPurchaseFormattedLanguageLine.text = $"bI for {__instance.price} [money]?";
             }

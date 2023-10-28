@@ -78,9 +78,14 @@ namespace TunicArchipelago {
                 SceneLoader.LoadScene("ziggurat2020_1");
                 return;
             }
+            if (loadingScene.name == "Quarry" && !EnemyRandomizer.Enemies.ContainsKey("Scavenger_stunner")) {
+                EnemyRandomizer.InitializeEnemies("Quarry");
+                SceneLoader.LoadScene("Swamp Redux 2");
+                return;
+            }
             if (loadingScene.name == "Quarry Redux" && !EnemyRandomizer.Enemies.ContainsKey("Scavenger")) {
                 EnemyRandomizer.InitializeEnemies("Quarry Redux");
-                SceneLoader.LoadScene("Swamp Redux 2");
+                SceneLoader.LoadScene("Quarry");
                 return;
             }
             if (loadingScene.name == "Fortress Basement" && !EnemyRandomizer.Enemies.ContainsKey("Spider Small")) {
@@ -255,6 +260,8 @@ namespace TunicArchipelago {
                     GameObject.Find("_Setpieces Etc/plank_4u").SetActive(false);
                     GameObject.Find("_Setpieces Etc/plank_4u (1)").SetActive(false);
                 }
+                // Activate night bridge to allow access to shortcut ladder
+                GameObject.Find("_Setpieces Etc/NightBridge/").GetComponent<DayNightBridge>().dayOrNight = StateVariable.GetStateVariableByName("Is Night").BoolValue ? DayNightBridge.DayNight.NIGHT : DayNightBridge.DayNight.DAY;
             } else if (SceneName == "g_elements") {
                 GhostHints.SpawnLostGhostFox();
             } else if (SceneName == "Posterity") {
@@ -264,6 +271,7 @@ namespace TunicArchipelago {
                     GameObject.Find("merchant").SetActive(false);
                     GameObject.Find("Environment").transform.GetChild(3).gameObject.SetActive(true);
                 }
+                ModelSwaps.AddNewShopItems();
             } else if (SceneName == "ShopSpecial") {
                 if (new System.Random().Next(100) < 3) {
                     GameObject.Find("merchant (1)").SetActive(false);
