@@ -338,7 +338,7 @@ namespace TunicArchipelago
                 "Library Arena",
                 new List<TunicPortal>
                 {
-                    new TunicPortal("Library Lab", "", "Library Librarian Arena Exit"),
+                    new TunicPortal("Library Lab", "", "Librarian Arena Exit"),
                 }
             },
             {
