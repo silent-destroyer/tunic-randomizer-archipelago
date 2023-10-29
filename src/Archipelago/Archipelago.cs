@@ -40,15 +40,7 @@ namespace TunicArchipelago {
             integration.ActivateCheck(LocationId);
         }
 
-        public void UpdateDataStorage(string Key,  bool Value) {
-            integration.UpdateDataStorage(Key, Value);
-        }
-
-        public void UpdateDataStorage(string Key, string Value) {
-            integration.UpdateDataStorage(Key, Value);
-        }
-
-        public void UpdateDataStorage(string Key, int Value) {
+        public void UpdateDataStorage(string Key, object Value) {
             integration.UpdateDataStorage(Key, Value);
         }
 

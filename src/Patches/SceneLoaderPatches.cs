@@ -68,9 +68,14 @@ namespace TunicArchipelago {
                 SceneLoader.LoadScene("Fortress Main");
                 return;
             }
+            if (loadingScene.name == "ziggurat2020_3" && !EnemyRandomizer.Enemies.ContainsKey("Centipede")) {
+                EnemyRandomizer.InitializeEnemies("ziggurat2020_3");
+                SceneLoader.LoadScene("Fortress Reliquary");
+                return;
+            }
             if (loadingScene.name == "ziggurat2020_1" && !EnemyRandomizer.Enemies.ContainsKey("administrator")) {
                 EnemyRandomizer.InitializeEnemies("ziggurat2020_1");
-                SceneLoader.LoadScene("Fortress Reliquary");
+                SceneLoader.LoadScene("ziggurat2020_3");
                 return;
             }
             if (loadingScene.name == "Swamp Redux 2" && !EnemyRandomizer.Enemies.ContainsKey("bomezome_easy")) {
@@ -303,12 +308,11 @@ namespace TunicArchipelago {
                 }
             }
 
-
             if (Archipelago.instance != null && Archipelago.instance.integration != null && Archipelago.instance.integration.connected) {
                 if (TunicArchipelago.Settings.EnemyRandomizerEnabled && EnemyRandomizer.Enemies.Count > 0 && !EnemyRandomizer.ExcludedScenes.Contains(SceneName)) {
                     EnemyRandomizer.SpawnNewEnemies();
                 }
-                
+
                 try {
                     if (TunicArchipelago.Settings.UseCustomTexture) {
                         PaletteEditor.LoadCustomTexture();

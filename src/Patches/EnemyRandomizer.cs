@@ -130,6 +130,12 @@ namespace TunicArchipelago {
                 }
             },
             {
+                "ziggurat2020_3",
+                new List<string>() {
+                    "Centipede from egg (Varient)",
+                }
+            },
+            {
                 "Fortress Reliquary",
                 new List<string> () {
                     "voidling redux"
@@ -218,7 +224,8 @@ namespace TunicArchipelago {
                     "Wizard_Support",
                     "Crow Voidtouched",
                     "woodcutter",
-                    "Fox enemy"
+                    "Fox enemy",
+                    "Centipede",
                 }
             },
             {
@@ -290,6 +297,7 @@ namespace TunicArchipelago {
             { "tech knight ghost", $"\"Garden Knight...?\"" },
             { "tunic knight void", $"gRdin nIt...\"?\"" },
             { "Voidtouched", $"\"Voidtouched\"" },
+            { "Centipede", $"\"Centipede\"" },
         };
 
         public static void CreateAreaSeeds() {
@@ -306,8 +314,8 @@ namespace TunicArchipelago {
                 { "Fairyprobe Archipelagos (2)", "Fairyprobe Archipelagos" },
                 { "Crabbo (1)", "Crabbo" },
                 { "Frog (7)", "Frog" },
-                { "Hedgehog Trap (1)", "Hedgehog Trap" }
-
+                { "Hedgehog Trap (1)", "Hedgehog Trap" },
+                { "Centipede from egg (Varient)", "Centipede" },
             };
             foreach (string LocationEnemy in LocationEnemies[SceneName]) {
                 string EnemyName = LocationEnemy;
@@ -368,12 +376,17 @@ namespace TunicArchipelago {
             } else {
                 Random = new System.Random();
             }
-            List<GameObject> Monsters = Resources.FindObjectsOfTypeAll<GameObject>().Where(Monster => (Monster.GetComponent<Monster>() != null || Monster.GetComponent<TurretTrap>() != null) && Monster.transform.parent != null && !Monster.transform.parent.name.Contains("split tier") && !ExcludedEnemies.Contains(Monster.name) && !Monster.name.Contains("Prefab")).ToList();
+            List<GameObject> Monsters = Resources.FindObjectsOfTypeAll<Monster>().Where(Monster => !Monster.name.Contains("Prefab") && !ExcludedEnemies.Contains(Monster.name) && Monster.gameObject.scene.name == CurrentScene).Select(Monster => Monster.gameObject).ToList();
+            Monsters.AddRange(Resources.FindObjectsOfTypeAll<TurretTrap>().Where(Turret => !Turret.name.Contains("Prefab") && Turret.gameObject.scene.name == CurrentScene).Select(Turret => Turret.gameObject).ToList());
+/*            if (CurrentScene == "Forest Belltower") {
+                Monsters = Resources.FindObjectsOfTypeAll<Blob>().Where(blob => !blob.name.Contains("Prefab") && blob.gameObject.scene.name == CurrentScene).Select(x => x.gameObject).ToList();
+            } else if (CurrentScene == "Fortress East" || CurrentScene == "Frog Stairs") {
+                Monsters = Resources.FindObjectsOfTypeAll<GameObject>().Where(Monster => (Monster.GetComponent<Monster>() != null || Monster.GetComponent<TurretTrap>() != null) && !Monster.name.Contains("Prefab")).ToList();
+            } else {
+                Monsters = Resources.FindObjectsOfTypeAll<GameObject>().Where(Monster => (Monster.GetComponent<Monster>() != null || Monster.GetComponent<TurretTrap>() != null) && Monster.transform.parent != null && !Monster.transform.parent.name.Contains("split tier") && !ExcludedEnemies.Contains(Monster.name) && !Monster.name.Contains("Prefab")).ToList();
+            }*/
             if (CurrentScene == "Archipelagos Redux") {
                 Monsters = Monsters.Where(Monster => Monster.transform.parent.parent == null || Monster.transform.parent.parent.name != "_Environment Prefabs").ToList();
-            }
-            if (CurrentScene == "Forest Belltower") {
-                Monsters = Resources.FindObjectsOfTypeAll<GameObject>().Where(Monster => (Monster.GetComponent<Monster>() != null || Monster.GetComponent<TurretTrap>() != null) && !Monster.name.Contains("Prefab")).ToList();
             }
             if (TunicArchipelago.Settings.ExtraEnemiesEnabled && CurrentScene == "Library Hall" && !CycleController.IsNight) {
                 GameObject.Find("beefboy statues").SetActive(false);
@@ -382,15 +395,12 @@ namespace TunicArchipelago {
                     Monster.transform.parent = null;
                 }
             }
-            if (CurrentScene == "Fortress East" || CurrentScene == "Frog Stairs") {
-                Monsters = Resources.FindObjectsOfTypeAll<GameObject>().Where(Monster => (Monster.GetComponent<Monster>() != null || Monster.GetComponent<TurretTrap>() != null) && !Monster.name.Contains("Prefab")).ToList();
-            }
-            if (CurrentScene == "Cathedral Redux") {
+/*            if (CurrentScene == "Cathedral Redux") {
                 Monsters.AddRange(Resources.FindObjectsOfTypeAll<GameObject>().Where(Monster => Monster.GetComponent<Crow>() != null && !Monster.name.Contains("Prefab")).ToList());
             }
             if (CurrentScene == "Forest Boss Room" && GameObject.Find("Skuladot redux") != null) {
                 Monsters.Add(GameObject.Find("Skuladot redux"));
-            }
+            }*/
             if (TunicArchipelago.Settings.ExtraEnemiesEnabled && CurrentScene == "Monastery") {
                 Resources.FindObjectsOfTypeAll<Voidtouched>().ToList()[0].gameObject.transform.parent = null;
             }
@@ -512,12 +522,20 @@ namespace TunicArchipelago {
 
                     // Randomize support scavengers bomb type
                     if (NewEnemy.GetComponent<Scavenger_Support>() != null) {
-                        Rigidbody randomBomb = bombFlasks[Random.Next(bombFlasks.Count)].gameObject.GetComponent<Rigidbody>();
+                        int bombChance = Random.Next(100);
+                        Rigidbody randomBomb;
+                        if (bombChance < 4) {
+
+                            randomBomb = bombFlasks.Where(bomb => bomb.name == "centipede_detritus_head").ToList()[0].gameObject.GetComponent<Rigidbody>();
+                        } else {
+                            List<BombFlask> possibleBombs = bombFlasks.Where(bomb => bomb.name != "Firecracker" && bomb.name != "centipede_detritus_head").ToList();
+                            randomBomb = possibleBombs[Random.Next(possibleBombs.Count)].gameObject.GetComponent<Rigidbody>();
+                        }
                         NewEnemy.GetComponent<Scavenger_Support>().bombPrefab = randomBomb;
                         if (!randomBomb.gameObject.name.Contains("Firecracker")) {
                             NewEnemy.GetComponent<Scavenger_Support>().tossAngle = 15f;
                         }
-                        if (randomBomb.gameObject.name.Contains("Ice")) {
+                        if (randomBomb.gameObject.name.Contains("Ice") || (randomBomb.gameObject.name.Contains("centipede") && bombChance < 2)) {
                             NewEnemy.transform.GetChild(0).GetComponent<CreatureMaterialManager>().originalMaterials = Enemies["Scavenger_stunner"].transform.GetChild(0).GetComponent<CreatureMaterialManager>().originalMaterials;
                         }
                     }
@@ -538,6 +556,7 @@ namespace TunicArchipelago {
                     }
                     GameObject.Destroy(Enemy.gameObject);
                 } catch (Exception ex) {
+                    Logger.LogInfo("An error occurred spawning a new randomized enemy");
                     if (NewEnemy != null) {
                         GameObject.Destroy(NewEnemy);
                         Logger.LogError("An error occurred spawning the following randomized enemy: " + NewEnemy.name);
