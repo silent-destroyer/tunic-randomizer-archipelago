@@ -405,7 +405,6 @@ namespace TunicArchipelago {
         }
 
         public void UpdateDataStorage(string Key, object Value) {
-            string Current = session.DataStorage[Scope.Slot, Key];
 
             if (Value is bool) {
                 session.DataStorage[Scope.Slot, Key] = (bool)Value;
