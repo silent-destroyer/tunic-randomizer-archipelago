@@ -404,28 +404,19 @@ namespace TunicArchipelago {
             }
         }
 
-        public void UpdateDataStorage(string Key, bool Value) {
-            bool Current = session.DataStorage[Scope.Slot, Key];
-            if (Current != Value) {
-                session.DataStorage[Scope.Slot, Key] = Value;
-                Logger.LogInfo("Setting DataStorage value \"" + Key + "\" to " + Value);
-            }
-        }
-
-        public void UpdateDataStorage(string Key, int Value) {
-            int Current = session.DataStorage[Scope.Slot, Key];
-            if (Current != Value) {
-                session.DataStorage[Scope.Slot, Key] = Value;
-                Logger.LogInfo("Setting DataStorage value \"" + Key + "\" to " + Value);
-            }
-        }
-
-        public void UpdateDataStorage(string Key, string Value) {
+        public void UpdateDataStorage(string Key, object Value) {
             string Current = session.DataStorage[Scope.Slot, Key];
-            if (Current != Value) {
-                session.DataStorage[Scope.Slot, Key] = Value;
-                Logger.LogInfo("Setting DataStorage value \"" + Key + "\" to " + Value);
+
+            if (Value is bool) {
+                session.DataStorage[Scope.Slot, Key] = (bool)Value;
             }
+            if (Value is int) {
+                session.DataStorage[Scope.Slot, Key] = (int)Value;
+            }
+            if (Value is string) {
+                session.DataStorage[Scope.Slot, Key] = (string)Value;
+            }
+            Logger.LogInfo("Setting DataStorage value \"" + Key + "\" to " + Value);
         }
 
         public void UpdateDataStorageOnLoad() {
