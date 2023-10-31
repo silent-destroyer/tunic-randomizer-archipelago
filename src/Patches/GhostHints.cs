@@ -252,6 +252,9 @@ namespace TunicArchipelago {
                 new HintGhost("frog cave main", new Vector3(19.7682f, 9.1943f, -23.3269f), new Quaternion(0f, 1f, 0f, -4.371139E-08f), NPC.NPCAnimState.FISHING, $"I wuhndur wAr #uh kwehstuhgawn iz?"),
                 new HintGhost("frog cave main", new Vector3(27.09619f, 9.2581f, -37.28336f), new Quaternion(0f, 0.5000001f, 0f, -0.8660254f), NPC.NPCAnimState.FISHING, $"$hhh. Im hIdi^ fruhm #uh frawgs.") }
             },
+            { "Purgatory", new List<HintGhost>() {
+                new HintGhost("Purgatory", new Vector3(27.1514f, 38.018f, 74.7217f), new Quaternion(0f, 0.9585385f, 0f, -0.2849632f), NPC.NPCAnimState.DANCE, $"doo yoo nO skipEO? hE brOk awl uhv #uh dorz.") }
+            },
         };
 
         public static void InitializeGhostFox() {
@@ -286,9 +289,9 @@ namespace TunicArchipelago {
 
         public static void GenerateHints() {
             HintGhosts.Clear();
-            if (SaveFile.GetInt(EntranceRando) == 1 && !GhostLocations.ContainsKey("Purgatory"))
-            { GhostLocations.Add("Purgatory", new List<HintGhost> { new HintGhost("Purgatory", new Vector3(27.1514f, 38.018f, 74.7217f), new Quaternion(0f, 0.9585385f, 0f, -0.2849632f), NPC.NPCAnimState.DANCE, $"doo yoo nO skipEO? hE brOk awl uhv #uh dorz.") }); }
             List<string> GhostSpawns = GhostLocations.Keys.ToList();
+            if (SaveFile.GetInt(EntranceRando) == 0 && GhostLocations.ContainsKey("Purgatory"))
+            { GhostSpawns.Remove("Purgatory"); }
             List<string> SelectedSpawns = new List<string>();
             System.Random random = new System.Random(SaveFile.GetInt("seed"));
             for (int i = 0; i < 15; i++) {
