@@ -298,6 +298,7 @@ namespace TunicArchipelago {
                     button.specialBadge.transform.localPosition = new Vector3(-75f, -27f, 0f);
                     button.playtimeString.enableAutoSizing = false;
                     button.playtimeString.text += $" <size=65%>archipelago";
+                    button.filenameTMP.text += $" <size=65%>({SaveFile.GetString("archipelago player name")})";
                     // Display randomized page count instead of "vanilla" pages picked up
                     int Pages = 0;
                     for (int i = 0; i < 28; i++) {

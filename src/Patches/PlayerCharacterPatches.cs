@@ -214,7 +214,9 @@ namespace TunicArchipelago {
 
                 Dictionary<string, object> slotData = Archipelago.instance.GetPlayerSlotData();
                 SaveFile.SetInt("archipelago", 1);
-
+                if (SaveFile.GetString("archipelago player name") == "") {
+                    SaveFile.SetString("archipelago player name", TunicArchipelago.Settings.ConnectionSettings.Player);
+                }
                 if (Locations.VanillaLocations.Count == 0) {
                     Locations.CreateLocationLookups();
                 }
