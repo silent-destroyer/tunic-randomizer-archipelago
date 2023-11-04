@@ -657,6 +657,7 @@ namespace TunicArchipelago
 
         public static void CreatePortalPairs(Dictionary<string, string> APPortalStrings)
         {
+            RandomizedPortals.Clear();
             List<Portal> portalsList = new List<Portal>();
             int comboNumber = 0;
 
