@@ -153,6 +153,15 @@ namespace TunicArchipelago {
 
 
         public static void PlayerCharacter_Start_PostfixPatch(PlayerCharacter __instance) {
+            
+            // hide inventory prompt button so it doesn't overlap item messages
+            GameObject InvButton = Resources.FindObjectsOfTypeAll<Animator>().Where(animator => animator.gameObject.name == "LB Prompt").ToList()[0].gameObject;
+            if (InvButton != null) {
+                InvButton.transform.GetChild(0).gameObject.SetActive(false);
+                InvButton.transform.GetChild(1).gameObject.SetActive(false);
+                InvButton.SetActive(false);
+            }
+
             if (!Archipelago.instance.integration.connected) {
                 Archipelago.instance.Connect();
             } else {

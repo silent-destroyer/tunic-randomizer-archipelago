@@ -96,7 +96,7 @@ namespace TunicArchipelago {
             } catch (Exception e) {
                 LoginResult = new LoginFailure(e.GetBaseException().Message);
             }
-
+            
             if (LoginResult is LoginSuccessful LoginSuccess) {
 
                 slotData = LoginSuccess.SlotData;
@@ -404,7 +404,7 @@ namespace TunicArchipelago {
             }
         }
 
-        public void UpdateDataStorage(string Key, object Value) {
+        public void UpdateDataStorage(string Key, object Value, bool Log = true) {
 
             if (Value is bool) {
                 session.DataStorage[Scope.Slot, Key] = (bool)Value;
@@ -415,7 +415,9 @@ namespace TunicArchipelago {
             if (Value is string) {
                 session.DataStorage[Scope.Slot, Key] = (string)Value;
             }
-            Logger.LogInfo("Setting DataStorage value \"" + Key + "\" to " + Value);
+            if (Log) {
+                Logger.LogInfo("Setting DataStorage value \"" + Key + "\" to " + Value);
+            }
         }
 
         public void UpdateDataStorageOnLoad() {
@@ -428,22 +430,22 @@ namespace TunicArchipelago {
             }
 
             // Boss Info
-            UpdateDataStorage("Defeated Guard Captain", StateVariable.GetStateVariableByName("SV_Forest Boss Room_Skuladot redux Big").BoolValue);
-            UpdateDataStorage("Defeated Garden Knight", StateVariable.GetStateVariableByName("SV_Archipelagos Redux TUNIC Knight is Dead").BoolValue);
-            UpdateDataStorage("Defeated Siege Engine", StateVariable.GetStateVariableByName("SV_Fortress Arena_Spidertank Is Dead").BoolValue);
-            UpdateDataStorage("Defeated Librarian", StateVariable.GetStateVariableByName("Librarian Dead Forever").BoolValue);
-            UpdateDataStorage("Defeated Boss Scavenger", StateVariable.GetStateVariableByName("SV_ScavengerBossesDead").BoolValue);
-            UpdateDataStorage("Cleared Cathedral Gauntlet", StateVariable.GetStateVariableByName("SV_Cathedral Arena Mockup_Waves Done").BoolValue);
-            UpdateDataStorage("Reached an Ending", SpeedrunData.gameComplete != 0);
+            UpdateDataStorage("Defeated Guard Captain", StateVariable.GetStateVariableByName("SV_Forest Boss Room_Skuladot redux Big").BoolValue, false);
+            UpdateDataStorage("Defeated Garden Knight", StateVariable.GetStateVariableByName("SV_Archipelagos Redux TUNIC Knight is Dead").BoolValue, false);
+            UpdateDataStorage("Defeated Siege Engine", StateVariable.GetStateVariableByName("SV_Fortress Arena_Spidertank Is Dead").BoolValue, false);
+            UpdateDataStorage("Defeated Librarian", StateVariable.GetStateVariableByName("Librarian Dead Forever").BoolValue, false);
+            UpdateDataStorage("Defeated Boss Scavenger", StateVariable.GetStateVariableByName("SV_ScavengerBossesDead").BoolValue, false);
+            UpdateDataStorage("Cleared Cathedral Gauntlet", StateVariable.GetStateVariableByName("SV_Cathedral Arena Mockup_Waves Done").BoolValue, false);
+            UpdateDataStorage("Reached an Ending", SpeedrunData.gameComplete != 0, false);
 
             // Bells
-            UpdateDataStorage("Rang East Bell", StateVariable.GetStateVariableByName("Rung Bell 1 (East)").BoolValue);
-            UpdateDataStorage("Rang West Bell", StateVariable.GetStateVariableByName("Rung Bell 2 (West)").BoolValue);
+            UpdateDataStorage("Rang East Bell", StateVariable.GetStateVariableByName("Rung Bell 1 (East)").BoolValue, false);
+            UpdateDataStorage("Rang West Bell", StateVariable.GetStateVariableByName("Rung Bell 2 (West)").BoolValue, false);
 
             // Bomb Codes
-            UpdateDataStorage("Granted Firecracker", StateVariable.GetStateVariableByName("Granted Firecracker").BoolValue);
-            UpdateDataStorage("Granted Firebomb", StateVariable.GetStateVariableByName("Granted Firebomb").BoolValue);
-            UpdateDataStorage("Granted Icebomb", StateVariable.GetStateVariableByName("Granted Icebomb").BoolValue);
+            UpdateDataStorage("Granted Firecracker", StateVariable.GetStateVariableByName("Granted Firecracker").BoolValue, false);
+            UpdateDataStorage("Granted Firebomb", StateVariable.GetStateVariableByName("Granted Firebomb").BoolValue, false);
+            UpdateDataStorage("Granted Icebomb", StateVariable.GetStateVariableByName("Granted Icebomb").BoolValue, false);
         }
 
     }

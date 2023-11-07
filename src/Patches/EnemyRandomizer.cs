@@ -93,6 +93,12 @@ namespace TunicArchipelago {
                 }
             },
             {
+                "Crypt",
+                new List<string>() {
+                    "Shadowreaper"
+                }
+            },
+            {
                 "Quarry",
                 new List<string>() {
                     "Scavenger_stunner"
@@ -196,7 +202,6 @@ namespace TunicArchipelago {
                     "Hedgehog Trap",
                     "administrator_servant",
                     "Phage",
-                    "Ghost Knight"
                 }
             },
             {
@@ -226,6 +231,7 @@ namespace TunicArchipelago {
                     "woodcutter",
                     "Fox enemy",
                     "Centipede",
+                    "Ghost Knight",
                 }
             },
             {
@@ -237,7 +243,8 @@ namespace TunicArchipelago {
                     "bomezome big",
                     "tech knight ghost",
                     "tunic knight void",
-                    "Voidtouched"
+                    "Voidtouched",
+                    "Shadowreaper",
                 }
             }
         };
@@ -298,6 +305,7 @@ namespace TunicArchipelago {
             { "tunic knight void", $"gRdin nIt...\"?\"" },
             { "Voidtouched", $"\"Voidtouched\"" },
             { "Centipede", $"\"Centipede\"" },
+            { "Shadowreaper", $"\"Shadowreaper\"" },
         };
 
         public static void CreateAreaSeeds() {
@@ -324,7 +332,6 @@ namespace TunicArchipelago {
                 }
                 if (EnemyName == "voidling redux") {
                     Enemies[EnemyName] = GameObject.Instantiate(Monsters.Where(Monster => Monster.name == LocationEnemy && Monster.transform.parent.name == "_Night Encounters").ToList()[0].gameObject);
-                    Enemies[EnemyName].GetComponent<Voidling>().replacementMonster = null;
                 } else {
                     Enemies[EnemyName] = GameObject.Instantiate(Monsters.Where(Monster => Monster.name == LocationEnemy).ToList()[0].gameObject);
                 }
@@ -340,6 +347,10 @@ namespace TunicArchipelago {
                     Enemies["BlobBigger"].transform.position = new Vector3(-30000f, -30000f, -30000f);
                     Enemies["BlobBigger"].name = "BlobBigger Prefab";
                     Enemies["BlobBigger"].GetComponent<Blob>().attackDistance = 3f;
+                }
+                if (EnemyName == "Centipede") {
+                    Enemies[EnemyName].GetComponent<Centipede>().maxBeamDistance = 10f;
+                    Enemies[EnemyName].GetComponent<Centipede>().attackDistance = 5f;
                 }
 
                 Enemies[EnemyName].name = EnemyName + " Prefab";

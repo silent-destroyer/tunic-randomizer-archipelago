@@ -34,6 +34,17 @@ namespace TunicArchipelago {
             if (SceneName == "Sword Cave") {
                 SaveFile.SetInt("chest open 19", SaveFile.GetInt("randomizer picked up 19 [Sword Cave]"));
             }
+
+            if (Archipelago.instance != null && Archipelago.instance.integration != null && Archipelago.instance.integration.connected) {
+                foreach (long location in Archipelago.instance.integration.session.Locations.AllLocationsChecked) {
+                    string LocationId = Archipelago.instance.integration.session.Locations.GetLocationNameFromId(location);
+                    string GameObjectId = Locations.LocationDescriptionToId[LocationId];
+                    if (SaveFile.GetInt(ItemCollectedKey + GameObjectId) == 0) {
+                        SaveFile.SetInt($"randomizer {GameObjectId} was collected", 1);
+                    }
+                }
+            }
+
             return true;
         }
 
@@ -93,9 +104,14 @@ namespace TunicArchipelago {
                 SceneLoader.LoadScene("Quarry");
                 return;
             }
+            if (loadingScene.name == "Crypt" && !EnemyRandomizer.Enemies.ContainsKey("Shadowreaper")) {
+                EnemyRandomizer.InitializeEnemies("Crypt");
+                SceneLoader.LoadScene("Quarry Redux");
+                return;
+            }
             if (loadingScene.name == "Fortress Basement" && !EnemyRandomizer.Enemies.ContainsKey("Spider Small")) {
                 EnemyRandomizer.InitializeEnemies("Fortress Basement");
-                SceneLoader.LoadScene("Quarry Redux");
+                SceneLoader.LoadScene("Crypt");
                 return;
             }
             if (loadingScene.name == "frog cave main" && !EnemyRandomizer.Enemies.ContainsKey("Frog Small")) {
@@ -192,6 +208,17 @@ namespace TunicArchipelago {
                 Inventory.GetItemByName("Flask Container").Quantity += 1;
             }
 
+            foreach (string Key in ItemLookup.FairyLookup.Keys) {
+                StateVariable.GetStateVariableByName(ItemLookup.FairyLookup[Key].Flag).BoolValue = SaveFile.GetInt("randomizer opened fairy chest " + Key) == 1;
+            }
+            for (int i = 0; i < 28; i++) {
+                SaveFile.SetInt("unlocked page " + i, SaveFile.GetInt("randomizer picked up page " + i) == 1 ? 1 : 0);
+            }
+            foreach (string Key in ItemLookup.HeroRelicLookup.Keys) {
+                StateVariable.GetStateVariableByName(ItemLookup.HeroRelicLookup[Key].Flag).BoolValue = SaveFile.GetInt("randomizer picked up " + ItemLookup.HeroRelicLookup[Key].OriginalPickupLocation) == 1;
+            }
+
+
             if (SceneName == "Waterfall") {
                 List<string> RandomObtainedFairies = new List<string>();
                 foreach (string Key in ItemLookup.FairyLookup.Keys) {
@@ -216,8 +243,6 @@ namespace TunicArchipelago {
                     Resources.FindObjectsOfTypeAll<Foxgod>().ToList()[0].gameObject.transform.GetChild(0).GetComponent<CreatureMaterialManager>().originalMaterials = ModelSwaps.Items["GoldenTrophy_2"].GetComponent<MeshRenderer>().materials;
                     Resources.FindObjectsOfTypeAll<Foxgod>().ToList()[0].gameObject.transform.GetChild(1).GetComponent<CreatureMaterialManager>().originalMaterials = ModelSwaps.Items["GoldenTrophy_2"].GetComponent<MeshRenderer>().materials;
                 }
-            } else if (SceneName == "Forest Belltower") {
-                SaveFile.SetInt("chest open 19", 0);
             } else if (SceneName == "Overworld Interiors") {
                 GameObject.Find("Trophy Stuff").transform.GetChild(4).gameObject.SetActive(true);
                 foreach (string Key in ItemLookup.HeroRelicLookup.Keys) {
@@ -230,6 +255,8 @@ namespace TunicArchipelago {
                 if (GameObject.Find("_Offerings/ash group/")) {
                     GameObject.Find("_Offerings/ash group/").transform.position = new Vector3(-24.2824f, 29.8f, -45.4f);
                 }
+            } else if (SceneName == "Forest Belltower") {
+                SaveFile.SetInt("chest open 19", 0);
             } else if (SceneName == "TitleScreen") {
                 TitleVersion.Initialize();
                 if (!Archipelago.instance.integration.connected) {
@@ -295,16 +322,6 @@ namespace TunicArchipelago {
                 if (SaveFile.GetInt("randomizer entrance rando enabled") == 1)
                 {
                     StateVariable.GetStateVariableByName("SV_cathedral elevator").BoolValue = true;
-                }
-            } else {
-                foreach (string Key in ItemLookup.FairyLookup.Keys) {
-                    StateVariable.GetStateVariableByName(ItemLookup.FairyLookup[Key].Flag).BoolValue = SaveFile.GetInt("randomizer opened fairy chest " + Key) == 1;
-                }
-                for (int i = 0; i < 28; i++) {
-                    SaveFile.SetInt("unlocked page " + i, SaveFile.GetInt("randomizer picked up page " + i) == 1 ? 1 : 0);
-                }
-                foreach (string Key in ItemLookup.HeroRelicLookup.Keys) {
-                    StateVariable.GetStateVariableByName(ItemLookup.HeroRelicLookup[Key].Flag).BoolValue = SaveFile.GetInt("randomizer picked up " + ItemLookup.HeroRelicLookup[Key].OriginalPickupLocation) == 1;
                 }
             }
 

@@ -212,8 +212,8 @@ namespace TunicArchipelago {
 
         public static void Update() {
             try {
-                int ObtainedItemCount = Locations.CheckedLocations.Values.Where(Check => Check).ToList().Count;
-                int ObtainedItemCountInCurrentScene = Locations.VanillaLocations.Keys.Where(loc => Locations.VanillaLocations[loc].Location.SceneName == SceneLoaderPatches.SceneName && Locations.CheckedLocations[loc]).ToList().Count;
+                int ObtainedItemCount = Locations.VanillaLocations.Keys.Where(loc => Locations.CheckedLocations[loc] || (TunicArchipelago.Settings.CollectReflectsInWorld && SaveFile.GetInt($"randomizer {loc} was collected") == 1)).ToList().Count;
+                int ObtainedItemCountInCurrentScene = Locations.VanillaLocations.Keys.Where(loc => Locations.VanillaLocations[loc].Location.SceneName == SceneLoaderPatches.SceneName && (Locations.CheckedLocations[loc] || (TunicArchipelago.Settings.CollectReflectsInWorld && SaveFile.GetInt($"randomizer {loc} was collected") == 1))).ToList().Count;
                 int TotalItemCountInCurrentScene = Locations.VanillaLocations.Keys.Where(loc => Locations.VanillaLocations[loc].Location.SceneName == SceneLoaderPatches.SceneName).ToList().Count;
                 Title.GetComponent<TextMeshProUGUI>().text = $"Randomizer Stats";
                 Pages.GetComponent<TextMeshProUGUI>().text = $"Pages:\t\t{TunicArchipelago.Tracker.ImportantItems["Pages"]}/28";

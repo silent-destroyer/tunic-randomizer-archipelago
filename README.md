@@ -76,6 +76,13 @@ The Archipelago version of the TUNIC Randomizer is still very much a work-in-pro
 
 ## Settings
 With the exception of the Logic settings (which are determined in your Archipelago yaml settings), all options can be freely toggled or changed at any point while playing.
+### Archipelago
+- Death Link
+  - Want a more chaotice experience? When a player with Death Link enabled dies, everyone else with the setting on *also* dies. Be careful!
+- Auto-open !collect-ed Checks
+  - With this enabled, chests and other item pickup locations that you haven't already found but were retrieved by another player via !collect will appear as open/already picked up.
+  - This will also reflect the item counts on the inventory screen and on the end summary screen.
+  - This setting can be toggled on/off at will, and the world will update/revert accordingly on the next scene transition.
 ### Logic
 - Game Mode
   - Choose between a classic randomizer experience or Hexagon Quest, a separate game mode inspired by Triforce Hunt in Zelda randomizers.
