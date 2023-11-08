@@ -448,31 +448,39 @@ namespace TunicArchipelago {
             string Scene = SceneManager.GetActiveScene().name;
             if (TunicArchipelago.Settings.CollectReflectsInWorld) {
                 foreach (PagePickup PagePickup in Resources.FindObjectsOfTypeAll<PagePickup>()) {
-                    string PageId = $"{PagePickup.pageName} [{Scene}]";
-                    if (SaveFile.GetInt($"randomizer {PageId} was collected") == 1) {
-                        PagePickup.destroyOrDisable();
+                    if (PagePickup != null && PagePickup.pageName != null) {
+                        string PageId = $"{PagePickup.pageName} [{Scene}]";
+                        if (SaveFile.GetInt($"randomizer {PageId} was collected") == 1) {
+                            GameObject.Destroy(PagePickup.gameObject);
+                        }
                     }
                 }
 
 
                 foreach (ItemPickup ItemPickup in Resources.FindObjectsOfTypeAll<ItemPickup>()) {
-                    string ItemId = $"{ItemPickup.itemToGive.name} [{Scene}]";
-                    if (SaveFile.GetInt($"randomizer {ItemId} was collected") == 1) {
-                        ItemPickup.destroyOrDisable();
+                    if (ItemPickup != null && ItemPickup.itemToGive != null) {
+                        string ItemId = $"{ItemPickup.itemToGive.name} [{Scene}]";
+                        if (SaveFile.GetInt($"randomizer {ItemId} was collected") == 1) {
+                            GameObject.Destroy(ItemPickup.gameObject);
+                        }
                     }
                 }
 
                 foreach (HeroRelicPickup RelicPickup in Resources.FindObjectsOfTypeAll<HeroRelicPickup>()) {
-                    string RelicId = $"{RelicPickup.name} [{Scene}]";
-                    if (SaveFile.GetInt($"randomizer {RelicId} was collected") == 1) {
-                        RelicPickup.destroyOrDisable();
+                    if (RelicPickup != null && RelicPickup.name != null) {
+                        string RelicId = $"{RelicPickup.name} [{Scene}]";
+                        if (SaveFile.GetInt($"randomizer {RelicId} was collected") == 1) {
+                            GameObject.Destroy(RelicPickup.gameObject);
+                        }
                     }
                 }
 
                 foreach (ShopItem ShopItem in Resources.FindObjectsOfTypeAll<ShopItem>()) {
-                    string ShopId = $"{ShopItem.name} [{Scene}]";
-                    if (SaveFile.GetInt($"randomizer {ShopId} was collected") == 1) {
-                        GameObject.Destroy(ShopItem.gameObject);
+                    if (ShopItem != null) {
+                        string ShopId = $"{ShopItem.name} [{Scene}]";
+                        if (SaveFile.GetInt($"randomizer {ShopId} was collected") == 1) {
+                            GameObject.Destroy(ShopItem.gameObject);
+                        }
                     }
                 }
             }
