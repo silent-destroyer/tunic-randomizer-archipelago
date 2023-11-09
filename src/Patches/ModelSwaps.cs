@@ -479,7 +479,7 @@ namespace TunicArchipelago {
                     if (ShopItem != null) {
                         string ShopId = $"{ShopItem.name} [{Scene}]";
                         if (SaveFile.GetInt($"randomizer {ShopId} was collected") == 1) {
-                            GameObject.Destroy(ShopItem.gameObject);
+                            ShopItem.gameObject.SetActive(false);
                         }
                     }
                 }
