@@ -21,6 +21,11 @@ namespace TunicArchipelago {
             set;
         }
 
+        public bool SkipItemAnimations {
+            get;
+            set;
+        }
+
         // Hint Settings
         public bool HeroPathHintsEnabled {
             get;
@@ -128,6 +133,7 @@ namespace TunicArchipelago {
             ShuffleAbilities = false;*/
             DeathLinkEnabled = false;
             CollectReflectsInWorld = false;
+            SkipItemAnimations = false;
 
             HeroPathHintsEnabled = true;
             GhostFoxHintsEnabled = true;

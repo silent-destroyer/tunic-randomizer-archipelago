@@ -41,6 +41,7 @@ namespace TunicArchipelago {
             OptionsGUI.setHeading("Archipelago");
             OptionsGUI.addToggle("Death Link", "Off", "On", TunicArchipelago.Settings.DeathLinkEnabled ? 1 : 0, (OptionsGUIMultiSelect.MultiSelectAction)ToggleDeathLink);
             OptionsGUI.addToggle("Auto-open !collect-ed Checks", "Off", "On", TunicArchipelago.Settings.CollectReflectsInWorld ? 1 : 0, (OptionsGUIMultiSelect.MultiSelectAction)ToggleUpdateOnCollect);
+            OptionsGUI.addToggle("Skip Item Animations", "Off", "On", TunicArchipelago.Settings.SkipItemAnimations ? 1 : 0, (OptionsGUIMultiSelect.MultiSelectAction)ToggleSkipItemAnimations);
         }
 
         public static void LogicSettingsPage() {
@@ -130,6 +131,11 @@ namespace TunicArchipelago {
 
         public static void ToggleUpdateOnCollect(int index) {
             TunicArchipelago.Settings.CollectReflectsInWorld = !TunicArchipelago.Settings.CollectReflectsInWorld;
+            SaveSettings();
+        }
+
+        public static void ToggleSkipItemAnimations(int index) { 
+            TunicArchipelago.Settings.SkipItemAnimations = !TunicArchipelago.Settings.SkipItemAnimations; 
             SaveSettings();
         }
 

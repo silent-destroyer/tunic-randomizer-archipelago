@@ -208,6 +208,11 @@ namespace TunicArchipelago {
                     yield return true;
                 }
 
+                if (networkItem.Player == session.ConnectionInfo.Slot && TunicArchipelago.Settings.SkipItemAnimations) {
+                    ShowNotification($"yoo fownd \"{itemName}!\"", $"$oud bE yoosfuhl!");
+                    yield return true;
+                }
+
                 var handleResult = ItemPatches.GiveItem(itemName, networkItem);
                 switch (handleResult) {
                     case ItemPatches.ItemResult.Success:
@@ -229,7 +234,7 @@ namespace TunicArchipelago {
 
                         // Pause before processing next item
                         DateTime postInteractionStart = DateTime.Now;
-                        while (DateTime.Now < postInteractionStart + TimeSpan.FromSeconds(2.5)) {
+                        while (DateTime.Now < postInteractionStart + TimeSpan.FromSeconds(3.5)) {
                             yield return true;
                         }
 
@@ -266,8 +271,6 @@ namespace TunicArchipelago {
                 if (networkItem.Player != session.ConnectionInfo.Slot) {
                     SaveFile.SetInt("archipelago items sent to other players", SaveFile.GetInt("archipelago items sent to other players")+1);
                     ShowNotification($"yoo sehnt \"{itemName.Replace("_", " ")}\" too \"{receiver}!\"", $"hOp #A lIk it!");
-                } else {
-                    //ShowNotification($"yoo \"FOUND {itemName}!\"", $"$oud bE yoosfuhl!");
                 }
                 
                 yield return true;

@@ -271,8 +271,9 @@ namespace TunicArchipelago {
                         }
                     }
                 }
-
-                PageDisplay.ShowPage(int.Parse(Item.ItemNameForInventory, CultureInfo.InvariantCulture));
+                if (!TunicArchipelago.Settings.SkipItemAnimations) {
+                    PageDisplay.ShowPage(int.Parse(Item.ItemNameForInventory, CultureInfo.InvariantCulture));
+                }
             }
 
             if (Item.Type == ItemTypes.GOLDENTROPHY) {
@@ -415,6 +416,13 @@ namespace TunicArchipelago {
         public static bool FairyCollection_getFairyCount_PrefixPatch(FairyCollection __instance, ref int __result) {
             __result = TunicArchipelago.Tracker.ImportantItems["Fairies"];
             return false;
+        }
+
+        public static bool ItemPresentation_presentItem_PrefixPatch(ItemPresentation __instance) {
+            if(TunicArchipelago.Settings.SkipItemAnimations) {
+                return false;
+            }
+            return true;
         }
 
         private static void ShowNotification(string topLine, string bottomLine) {
