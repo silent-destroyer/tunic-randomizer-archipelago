@@ -161,6 +161,8 @@ namespace TunicArchipelago {
                 return;
             }
             if (ModelSwaps.Chests.Count == 0 && loadingScene.name == "TitleScreen") {
+
+                SwordProgression.CreateSwordItems();
                 GameObject ArchipelagoObject = new GameObject("archipelago");
                 Archipelago.instance = ArchipelagoObject.AddComponent<Archipelago>();   
                 GameObject.DontDestroyOnLoad(ArchipelagoObject);

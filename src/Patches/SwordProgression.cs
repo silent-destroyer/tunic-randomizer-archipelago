@@ -15,7 +15,6 @@ namespace TunicArchipelago {
             
             SaveFile.SetInt(SwordProgressionLevel, SwordLevel);
 
-            GameObject SwordPresentation = Resources.FindObjectsOfTypeAll<GameObject>().Where(Item => Item.name == "User Rotation Root").ToList()[0].transform.GetChild(9).gameObject;
             if (SwordLevel == 1) {
                 //fownd ahn Itehm!
                 Inventory.GetItemByName("Stick").Quantity = 1;
@@ -25,44 +24,41 @@ namespace TunicArchipelago {
                 ItemPresentation.PresentItem(Inventory.GetItemByName("Stick"));
             } else if (SwordLevel == 2) {
                 Inventory.GetItemByName("Sword").Quantity = 1;
-                SwordPresentation.GetComponent<MeshFilter>().mesh = ModelSwaps.Items["Sword"].GetComponent<MeshFilter>().mesh;
-                SwordPresentation.GetComponent<MeshRenderer>().materials = ModelSwaps.Items["Sword"].GetComponent<MeshRenderer>().materials;
-                SwordPresentation.transform.localScale = new Vector3(1.447f, 1.447f, 1.447f);
-                SwordPresentation.transform.localRotation = new Quaternion(-0.2071f, -0.1216f, 0.3247f, -0.9148f);
-
                 Inventory.GetItemByName("Sword").collectionMessage = ScriptableObject.CreateInstance<LanguageLine>();
                 Inventory.GetItemByName("Sword").collectionMessage.text = $"fownd ahn Itehm! \"(<#e99d4c>Lv. 2<#FFFFFF>)\"";
                 Inventory.GetItemByName("Sword").useAlreadyHaveOneMessage = false;
                 ItemPresentation.PresentItem(Inventory.GetItemByName("Sword"));
+                List<ButtonAssignableItem> items = Inventory.buttonAssignedItems.ToList();
+                for (int i = 0; i < items.Count; i++) {
+                    if (items[i] != null && items[i].name == "Stick") {
+                        items[i] = Inventory.GetItemByName("Sword").TryCast<ButtonAssignableItem>();
+                    }
+                }
+                Inventory.buttonAssignedItems = items.ToArray();
             } else if (SwordLevel == 3) {
-                Inventory.GetItemByName("Sword").Quantity = 1;
-                SwordPresentation.GetComponent<MeshFilter>().mesh = ModelSwaps.SecondSword.GetComponent<MeshFilter>().mesh;
-                SwordPresentation.GetComponent<MeshRenderer>().materials = ModelSwaps.SecondSword.GetComponent<MeshRenderer>().materials;
-                SwordPresentation.transform.localScale = new Vector3(0.25f, 0.2f, 0.25f);
-                SwordPresentation.transform.localRotation = new Quaternion(-0.2071f, -0.1216f, 0.3247f, -0.9148f);
-
-                Inventory.GetItemByName("Sword").collectionMessage = ScriptableObject.CreateInstance<LanguageLine>();
-                Inventory.GetItemByName("Sword").collectionMessage.text = $"\"        ? ? ? (<#ca7be4>Lv. 3<#FFFFFF>)\"";
-                Inventory.GetItemByName("Sword").useAlreadyHaveOneMessage = false;
-                ItemPresentation.PresentItem(Inventory.GetItemByName("Sword"));
+                Inventory.GetItemByName("Librarian Sword").Quantity = 1;
+                ItemPresentation.PresentItem(Inventory.GetItemByName("Librarian Sword"));
                 Inventory.GetItemByName("Level Up - Attack").Quantity += 1;
                 TunicArchipelago.Tracker.ImportantItems["Level Up - Attack"] = Inventory.GetItemByName("Level Up - Attack").Quantity;
-                EnableSecondSword();
+                List<ButtonAssignableItem> items = Inventory.buttonAssignedItems.ToList();
+                for (int i = 0; i < items.Count; i++) {
+                    if (items[i] != null && items[i].name == "Sword") {
+                        items[i] = Inventory.GetItemByName("Librarian Sword").TryCast<ButtonAssignableItem>();
+                    }
+                }
+                Inventory.buttonAssignedItems = items.ToArray();
             } else if (SwordLevel >= 4) {
-                Inventory.GetItemByName("Sword").Quantity = 1;
-                SwordPresentation.GetComponent<MeshFilter>().mesh = ModelSwaps.ThirdSword.GetComponent<MeshFilter>().mesh;
-                SwordPresentation.GetComponent<MeshRenderer>().materials = ModelSwaps.ThirdSword.GetComponent<MeshRenderer>().materials;
-                SwordPresentation.transform.localScale = new Vector3(0.175f, 0.175f, 0.175f);
-                SwordPresentation.transform.localRotation = new Quaternion(-0.6533f, 0.2706f, -0.2706f, 0.6533f);
-                SwordPresentation.transform.localScale = new Vector3(0.175f, 0.175f, 0.175f);
-
-                Inventory.GetItemByName("Sword").collectionMessage = ScriptableObject.CreateInstance<LanguageLine>();
-                Inventory.GetItemByName("Sword").collectionMessage.text = $"\"        ! ! ! (<#5de7cf>Lv. 4<#FFFFFF>)\"";
-                Inventory.GetItemByName("Sword").useAlreadyHaveOneMessage = false;
-                ItemPresentation.PresentItem(Inventory.GetItemByName("Sword"));
+                Inventory.GetItemByName("Heir Sword").Quantity = 1;
+                ItemPresentation.PresentItem(Inventory.GetItemByName("Heir Sword"));
                 Inventory.GetItemByName("Level Up - Attack").Quantity += 1;
                 TunicArchipelago.Tracker.ImportantItems["Level Up - Attack"] = Inventory.GetItemByName("Level Up - Attack").Quantity;
-                EnableThirdSword();
+                List<ButtonAssignableItem> items = Inventory.buttonAssignedItems.ToList();
+                for (int i = 0; i < items.Count; i++) {
+                    if (items[i] != null && items[i].name == "Librarian Sword") {
+                        items[i] = Inventory.GetItemByName("Heir Sword").TryCast<ButtonAssignableItem>();
+                    }
+                }
+                Inventory.buttonAssignedItems = items.ToArray();
             }
         }
 
@@ -85,9 +81,8 @@ namespace TunicArchipelago {
             }
         }
 
-        public static void EnableSecondSword() {
-            string SwordPath = "_Fox(Clone)/Fox/root/pelvis/chest/arm_upper.R/arm_lower.R/hand.R/sword_proxy/";
-            GameObject SwordProxy = GameObject.Find(SwordPath);
+        public static void EnableSecondSwordFromExisting(GameObject SwordProxy) {
+
             if (SwordProxy != null) {
                 if (SwordProxy.GetComponent<MeshFilter>() != null && SwordProxy.GetComponent<MeshRenderer>() != null) {
                     GameObject.Destroy(SwordProxy.GetComponent<MeshFilter>());
@@ -109,18 +104,17 @@ namespace TunicArchipelago {
                 Sword.transform.localScale = new Vector3(0.5f, 0.3f, 0.5f);
                 Sword.transform.localRotation = Quaternion.identity;
                 Sword.transform.localPosition = Vector3.zero;
-                PlayerCharacterPatches.LoadSecondSword = false;
             } else {
                 Logger.LogError("Could not find sword object to replace with Sword Lvl 3!");
             }
         }
 
-        public static void EnableThirdSword() {
+        public static void EnableThirdSwordFromExisting(GameObject SwordProxy) {
 
-            string SwordPath = "_Fox(Clone)/Fox/root/pelvis/chest/arm_upper.R/arm_lower.R/hand.R/sword_proxy/";
-            GameObject SwordProxy = GameObject.Find(SwordPath);
+/*            string SwordPath = "_Fox(Clone)/Fox/root/pelvis/chest/arm_upper.R/arm_lower.R/hand.R/sword_proxy/";
+            GameObject SwordProxy = GameObject.Find(SwordPath);*/
             if (SwordProxy != null) {
-                if(SwordProxy.GetComponent<MeshFilter>() != null && SwordProxy.GetComponent<MeshRenderer>() != null) {
+                if (SwordProxy.GetComponent<MeshFilter>() != null && SwordProxy.GetComponent<MeshRenderer>() != null) {
                     GameObject.Destroy(SwordProxy.GetComponent<MeshFilter>());
                     GameObject.Destroy(SwordProxy.GetComponent<MeshRenderer>());
                 }
@@ -141,10 +135,63 @@ namespace TunicArchipelago {
                 Sword.transform.localScale = new Vector3(0.3f, 0.3f, 0.3f);
                 Sword.transform.localRotation = new Quaternion(0.7071f, 0f, 0f, -0.7071f);
                 Sword.transform.localPosition = Vector3.zero;
-                PlayerCharacterPatches.LoadThirdSword = false;
             } else {
                 Logger.LogError("Could not find sword object to replace with Sword Lvl 4!");
             }
+        }
+
+        public static void CreateSwordItems() {
+            ButtonAssignableItem LibrarianSword = ScriptableObject.CreateInstance<ButtonAssignableItem>();
+            ButtonAssignableItem HeirSword = ScriptableObject.CreateInstance<ButtonAssignableItem>();
+            LibrarianSword.name = "Librarian Sword";
+            LibrarianSword.icon = ModelSwaps.FindSprite("Inventory items_koban_hp");
+            LibrarianSword.collectionMessage = new LanguageLine();
+            LibrarianSword.collectionMessage.text = $"\"        ? ? ? (<#ca7be4>Lv. 3<#FFFFFF>)\"";
+            HeirSword.name = "Heir Sword";
+            HeirSword.icon = ModelSwaps.FindSprite("Inventory items_koban_sp");
+            HeirSword.collectionMessage = new LanguageLine();
+            HeirSword.collectionMessage.text = $"\"        ! ! ! (<#5de7cf>Lv. 4<#FFFFFF>)\"";
+            LibrarianSword.controlAction = "";
+            HeirSword.controlAction = "";
+            LibrarianSword.suppressQuantity = true;
+            HeirSword.suppressQuantity = true;
+            for(int i = 0; i < Inventory.itemList.Count; i++) {
+                if (Inventory.itemList[i].name == "Sword") { 
+                    Inventory.itemList.Insert(i+1, LibrarianSword);
+                    Inventory.itemList.Insert(i+2, HeirSword);
+                    break;
+                }
+            }
+        }
+
+
+        public static void CreateSwordItemBehaviours(PlayerCharacter instance) {
+            GameObject swordProxy = GameObject.Find("_Fox(Clone)/Fox/root/pelvis/chest/arm_upper.R/arm_lower.R/hand.R/").transform.GetChild(1).gameObject;
+            // fix: reset localposition to 0 on instantiate sword root object
+            instance.gameObject.AddComponent<SwordItemBehaviour>().item = Inventory.GetItemByName("Librarian Sword").TryCast<ButtonAssignableItem>();
+            instance.gameObject.AddComponent<SwordItemBehaviour>().item = Inventory.GetItemByName("Heir Sword").TryCast<ButtonAssignableItem>();
+            List<ItemBehaviour> behaviours = instance.itemBehaviours.ToList();
+            foreach (SwordItemBehaviour sword in instance.gameObject.GetComponents<SwordItemBehaviour>()) {
+                if (sword.item.name == "Librarian Sword") {
+                    sword.itemRoot = GameObject.Instantiate(swordProxy);
+                    sword.itemRoot.transform.parent = swordProxy.transform.parent;
+                    sword.itemRoot.name = sword.item.name;
+                    EnableSecondSwordFromExisting(sword.itemRoot);
+                    sword.itemRoot.transform.localRotation = swordProxy.transform.localRotation;
+                    sword.itemRoot.transform.localPosition = swordProxy.transform.localPosition;
+                    behaviours.Add(sword);
+                }
+                if (sword.item.name == "Heir Sword") {
+                    sword.itemRoot = GameObject.Instantiate(swordProxy);
+                    sword.itemRoot.transform.parent = swordProxy.transform.parent;
+                    sword.itemRoot.name = sword.item.name;
+                    EnableThirdSwordFromExisting(sword.itemRoot);
+                    sword.itemRoot.transform.localRotation = swordProxy.transform.localRotation;
+                    sword.itemRoot.transform.localPosition = swordProxy.transform.localPosition;
+                    behaviours.Add(sword);
+                }
+            }
+            instance.itemBehaviours = behaviours.ToArray();
         }
 
         public static bool HitReceiver_ReceiveHit_PrefixPatch(HitReceiver __instance, ref HitType hitType, ref bool unblockable, ref bool isPlayerCharacterMelee) {

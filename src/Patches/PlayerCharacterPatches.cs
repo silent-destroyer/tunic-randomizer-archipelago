@@ -29,8 +29,7 @@ namespace TunicArchipelago {
         public static string DeathLinkMessage = "";
         public static int index = 0;
 
-        public static bool LoadSecondSword = false;
-        public static bool LoadThirdSword = false;
+        public static bool LoadSwords = false;
         public static float LoadSwordTimer = 0.0f;
         public static bool LoadCustomTexture = false;
         public static bool WearHat = false;
@@ -78,17 +77,17 @@ namespace TunicArchipelago {
             if (StungByBee) {
                 __instance.gameObject.transform.Find("Fox/root/pelvis/chest/head").localScale = new Vector3(3f, 3f, 3f);
             }
-            if ((LoadSecondSword || LoadThirdSword || WearHat) && (GameObject.Find("_Fox(Clone)/Fox/root/pelvis/chest/arm_upper.R/arm_lower.R/hand.R/sword_proxy/") != null)) {
+            if (LoadSwords && (GameObject.Find("_Fox(Clone)/Fox/root/pelvis/chest/arm_upper.R/arm_lower.R/hand.R/sword_proxy/") != null)) {
                 try {
-                    if (LoadSecondSword) { SwordProgression.EnableSecondSword(); }
-                    if (LoadThirdSword) { SwordProgression.EnableThirdSword(); }
-                    if (WearHat) {
-                        GameObject.Find("_Fox(Clone)/Fox/root/pelvis/chest/head/floppy hat").SetActive(true);
-                        WearHat = false;
-                    }
+                    SwordProgression.CreateSwordItemBehaviours(__instance);
+                    LoadSwords = false;
                 } catch (Exception ex) {
                     Logger.LogError("Error applying upgraded sword!");
                 }
+            }
+            if (WearHat && (GameObject.Find("_Fox(Clone)/Fox/root/pelvis/chest/head/floppy hat") != null)) {
+                GameObject.Find("_Fox(Clone)/Fox/root/pelvis/chest/head/floppy hat").SetActive(true);
+                WearHat = false;
             }
             if (LoadCustomTexture && GameObject.Find("_Fox(Clone)/Fox/root/pelvis/chest/head/GameObject") != null) {
                 PaletteEditor.LoadCustomTexture();
@@ -203,16 +202,7 @@ namespace TunicArchipelago {
 
             CustomItemBehaviors.SetupTorchItemBehaviour(__instance);
 
-            if (SaveFile.GetInt(SwordProgressionEnabled) != 0) {
-                int SwordLevel = SaveFile.GetInt(SwordProgressionLevel);
-
-                if (SwordLevel == 3) {
-                    LoadSecondSword = true;
-                }
-                if (SwordLevel >= 4) {
-                    LoadThirdSword = true;
-                }
-            }
+            LoadSwords = true;
 
             TextBuilderPatches.SetupCustomGlyphSprites();
 
@@ -360,7 +350,8 @@ namespace TunicArchipelago {
             }
 
             ModelSwaps.SetupDathStoneItemPresentation();
-
+            ModelSwaps.SetupCustomSwordItemPresentations();
+            
             PaletteEditor.SetupPartyHat(__instance);
 
             if (TunicArchipelago.Settings.RandomFoxColorsEnabled) {
@@ -421,12 +412,13 @@ namespace TunicArchipelago {
                 }
                 if (CustomItemBehaviors.CanSwingGoldenSword) {
                     __instance.hp -= 30;
-                    if (SaveFile.GetInt(SwordProgressionLevel) == 3) {
-                        GameObject.Find("_Fox(Clone)/Fox/root/pelvis/chest/arm_upper.R/arm_lower.R/hand.R/sword_proxy").transform.GetChild(4).GetComponent<MeshRenderer>().materials = ModelSwaps.SecondSword.GetComponent<MeshRenderer>().materials;
-                    } else if (SaveFile.GetInt(SwordProgressionLevel) >= 4) {
-                        GameObject.Find("_Fox(Clone)/Fox/root/pelvis/chest/arm_upper.R/arm_lower.R/hand.R/sword_proxy").transform.GetChild(4).GetComponent<MeshRenderer>().materials = ModelSwaps.ThirdSword.GetComponent<MeshRenderer>().materials;
-                    } else {
-                        GameObject.Find("_Fox(Clone)/Fox/root/pelvis/chest/arm_upper.R/arm_lower.R/hand.R/sword_proxy").GetComponent<MeshRenderer>().materials = CustomItemBehaviors.Sword.GetComponent<MeshRenderer>().materials;
+                    GameObject Hand = GameObject.Find("_Fox(Clone)/Fox/root/pelvis/chest/arm_upper.R/arm_lower.R/hand.R");
+                    if (Hand != null) {
+                        Hand.transform.GetChild(1).GetComponent<MeshRenderer>().materials = ModelSwaps.Items["Sword"].GetComponent<MeshRenderer>().materials;
+                        if (Hand.transform.childCount >= 12) {
+                            Hand.transform.GetChild(12).GetChild(4).GetComponent<MeshRenderer>().materials = ModelSwaps.SecondSword.GetComponent<MeshRenderer>().materials;
+                            Hand.transform.GetChild(13).GetChild(4).GetComponent<MeshRenderer>().materials = ModelSwaps.ThirdSword.GetComponent<MeshRenderer>().materials;
+                        }
                     }
                     SFX.PlayAudioClipAtFox(PlayerCharacter.instance.bigHurtSFX);
                     CustomItemBehaviors.CanSwingGoldenSword = false;
