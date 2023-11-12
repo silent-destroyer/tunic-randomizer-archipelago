@@ -2506,7 +2506,7 @@
                     ""Position"": ""(359.9, 0.5, 34.0)"",
                     ""RequiredItems"": [],
                     ""RequiredItemsDoors"": [
-                    {""Sewer"": 1}
+                        {""Sewer"": 1, ""Stick"": 1}
                     ],
                     ""SceneId"": 27,
                     ""SceneName"": ""Sewer""
@@ -2523,7 +2523,7 @@
                     ""Position"": ""(368.9, -1.0, 21.0)"",
                     ""RequiredItems"": [],
                     ""RequiredItemsDoors"": [
-                    {""Sewer"": 1}
+                        {""Sewer"": 1, ""Stick"": 1}
                     ],
                     ""SceneId"": 27,
                     ""SceneName"": ""Sewer""
@@ -2540,7 +2540,7 @@
                     ""Position"": ""(351.0, 1.0, 97.0)"",
                     ""RequiredItems"": [],
                     ""RequiredItemsDoors"": [
-                    {""Sewer"": 1}
+                        {""Sewer"": 1, ""Stick"": 1}
                     ],
                     ""SceneId"": 27,
                     ""SceneName"": ""Sewer""
@@ -2557,7 +2557,7 @@
                     ""Position"": ""(405.6, 2.0, 107.0)"",
                     ""RequiredItems"": [],
                     ""RequiredItemsDoors"": [
-                    {""Sewer"": 1}
+                        {""Sewer"": 1, ""Stick"": 1}
                     ],
                     ""SceneId"": 27,
                     ""SceneName"": ""Sewer""
@@ -2574,7 +2574,7 @@
                     ""Position"": ""(406.0, 3.1, 174.0)"",
                     ""RequiredItems"": [],
                     ""RequiredItemsDoors"": [
-                    {""Sewer"": 1}
+                        {""Sewer"": 1, ""Stick"": 1}
                     ],
                     ""SceneId"": 27,
                     ""SceneName"": ""Sewer""
@@ -2591,7 +2591,7 @@
                     ""Position"": ""(321.0, 3.0, 201.0)"",
                     ""RequiredItems"": [],
                     ""RequiredItemsDoors"": [
-                    {""Sewer"": 1}
+                        {""Sewer"": 1, ""Stick"": 1}
                     ],
                     ""SceneId"": 27,
                     ""SceneName"": ""Sewer""
@@ -2608,7 +2608,7 @@
                     ""Position"": ""(286.3, -0.1, 133.1)"",
                     ""RequiredItems"": [],
                     ""RequiredItemsDoors"": [
-                    {""Sewer"": 1}
+                        {""Sewer"": 1, ""Stick"": 1}
                     ],
                     ""SceneId"": 27,
                     ""SceneName"": ""Sewer""
@@ -2625,7 +2625,7 @@
                     ""Position"": ""(340.9, 1.3, 137.9)"",
                     ""RequiredItems"": [],
                     ""RequiredItemsDoors"": [
-                    {""Sewer"": 1}
+                        {""Sewer"": 1, ""Stick"": 1}
                     ],
                     ""SceneId"": 27,
                     ""SceneName"": ""Sewer""
@@ -2642,7 +2642,7 @@
                     ""Position"": ""(347.4, -1.0, 115.9)"",
                     ""RequiredItems"": [],
                     ""RequiredItemsDoors"": [
-                    {""Sewer"": 1}
+                        {""Sewer"": 1, ""Stick"": 1}
                     ],
                     ""SceneId"": 27,
                     ""SceneName"": ""Sewer""
@@ -2659,7 +2659,7 @@
                     ""Position"": ""(324.0, 11.0, 89.0)"",
                     ""RequiredItems"": [],
                     ""RequiredItemsDoors"": [
-                    {""Sewer"": 1}
+                        {""Sewer, Sewer_Boss_"": 1}
                     ],
                     ""SceneId"": 27,
                     ""SceneName"": ""Sewer""
@@ -2676,7 +2676,7 @@
                     ""Position"": ""(343.5, 11.0, 69.5)"",
                     ""RequiredItems"": [],
                     ""RequiredItemsDoors"": [
-                    {""Sewer"": 1}
+                        {""Sewer, Overworld Redux_west_aqueduct"": 1}
                     ],
                     ""SceneId"": 27,
                     ""SceneName"": ""Sewer""
@@ -2693,7 +2693,7 @@
                     ""Position"": ""(374.0, 7.0, 74.0)"",
                     ""RequiredItems"": [],
                     ""RequiredItemsDoors"": [
-                    {""Sewer"": 1}
+                        {""Sewer, Sewer_Boss_"": 1}
                     ],
                     ""SceneId"": 27,
                     ""SceneName"": ""Sewer""
