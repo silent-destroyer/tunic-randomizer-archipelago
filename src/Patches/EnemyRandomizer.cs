@@ -93,6 +93,12 @@ namespace TunicArchipelago {
                 }
             },
             {
+                "Crypt",
+                new List<string>() {
+                    "Shadowreaper"
+                }
+            },
+            {
                 "Quarry",
                 new List<string>() {
                     "Scavenger_stunner"
@@ -196,7 +202,6 @@ namespace TunicArchipelago {
                     "Hedgehog Trap",
                     "administrator_servant",
                     "Phage",
-                    "Ghost Knight"
                 }
             },
             {
@@ -226,6 +231,7 @@ namespace TunicArchipelago {
                     "woodcutter",
                     "Fox enemy",
                     "Centipede",
+                    "Ghost Knight",
                 }
             },
             {
@@ -237,7 +243,8 @@ namespace TunicArchipelago {
                     "bomezome big",
                     "tech knight ghost",
                     "tunic knight void",
-                    "Voidtouched"
+                    "Voidtouched",
+                    "Shadowreaper",
                 }
             }
         };
@@ -298,6 +305,7 @@ namespace TunicArchipelago {
             { "tunic knight void", $"gRdin nIt...\"?\"" },
             { "Voidtouched", $"\"Voidtouched\"" },
             { "Centipede", $"\"Centipede\"" },
+            { "Shadowreaper", $"\"Shadowreaper\"" },
         };
 
         public static void CreateAreaSeeds() {
@@ -324,7 +332,6 @@ namespace TunicArchipelago {
                 }
                 if (EnemyName == "voidling redux") {
                     Enemies[EnemyName] = GameObject.Instantiate(Monsters.Where(Monster => Monster.name == LocationEnemy && Monster.transform.parent.name == "_Night Encounters").ToList()[0].gameObject);
-                    Enemies[EnemyName].GetComponent<Voidling>().replacementMonster = null;
                 } else {
                     Enemies[EnemyName] = GameObject.Instantiate(Monsters.Where(Monster => Monster.name == LocationEnemy).ToList()[0].gameObject);
                 }
@@ -340,6 +347,10 @@ namespace TunicArchipelago {
                     Enemies["BlobBigger"].transform.position = new Vector3(-30000f, -30000f, -30000f);
                     Enemies["BlobBigger"].name = "BlobBigger Prefab";
                     Enemies["BlobBigger"].GetComponent<Blob>().attackDistance = 3f;
+                }
+                if (EnemyName == "Centipede") {
+                    Enemies[EnemyName].GetComponent<Centipede>().maxBeamDistance = 10f;
+                    Enemies[EnemyName].GetComponent<Centipede>().attackDistance = 5f;
                 }
 
                 Enemies[EnemyName].name = EnemyName + " Prefab";
@@ -376,17 +387,12 @@ namespace TunicArchipelago {
             } else {
                 Random = new System.Random();
             }
-            List<GameObject> Monsters = Resources.FindObjectsOfTypeAll<Monster>().Where(Monster => !Monster.name.Contains("Prefab") && !ExcludedEnemies.Contains(Monster.name) && Monster.gameObject.scene.name == CurrentScene).Select(Monster => Monster.gameObject).ToList();
-            Monsters.AddRange(Resources.FindObjectsOfTypeAll<TurretTrap>().Where(Turret => !Turret.name.Contains("Prefab") && Turret.gameObject.scene.name == CurrentScene).Select(Turret => Turret.gameObject).ToList());
-/*            if (CurrentScene == "Forest Belltower") {
-                Monsters = Resources.FindObjectsOfTypeAll<Blob>().Where(blob => !blob.name.Contains("Prefab") && blob.gameObject.scene.name == CurrentScene).Select(x => x.gameObject).ToList();
-            } else if (CurrentScene == "Fortress East" || CurrentScene == "Frog Stairs") {
-                Monsters = Resources.FindObjectsOfTypeAll<GameObject>().Where(Monster => (Monster.GetComponent<Monster>() != null || Monster.GetComponent<TurretTrap>() != null) && !Monster.name.Contains("Prefab")).ToList();
-            } else {
-                Monsters = Resources.FindObjectsOfTypeAll<GameObject>().Where(Monster => (Monster.GetComponent<Monster>() != null || Monster.GetComponent<TurretTrap>() != null) && Monster.transform.parent != null && !Monster.transform.parent.name.Contains("split tier") && !ExcludedEnemies.Contains(Monster.name) && !Monster.name.Contains("Prefab")).ToList();
-            }*/
+            List<GameObject> Monsters = Resources.FindObjectsOfTypeAll<GameObject>().Where(Monster => (Monster.GetComponent<Monster>() != null || Monster.GetComponent<TurretTrap>() != null) && Monster.transform.parent != null && !Monster.transform.parent.name.Contains("split tier") && !ExcludedEnemies.Contains(Monster.name) && !Monster.name.Contains("Prefab")).ToList();
             if (CurrentScene == "Archipelagos Redux") {
                 Monsters = Monsters.Where(Monster => Monster.transform.parent.parent == null || Monster.transform.parent.parent.name != "_Environment Prefabs").ToList();
+            }
+            if (CurrentScene == "Forest Belltower") {
+                Monsters = Resources.FindObjectsOfTypeAll<GameObject>().Where(Monster => (Monster.GetComponent<Monster>() != null || Monster.GetComponent<TurretTrap>() != null) && !Monster.name.Contains("Prefab")).ToList();
             }
             if (TunicArchipelago.Settings.ExtraEnemiesEnabled && CurrentScene == "Library Hall" && !CycleController.IsNight) {
                 GameObject.Find("beefboy statues").SetActive(false);
@@ -395,15 +401,21 @@ namespace TunicArchipelago {
                     Monster.transform.parent = null;
                 }
             }
-/*            if (CurrentScene == "Cathedral Redux") {
+            if (CurrentScene == "Fortress East" || CurrentScene == "Frog Stairs") {
+                Monsters = Resources.FindObjectsOfTypeAll<GameObject>().Where(Monster => (Monster.GetComponent<Monster>() != null || Monster.GetComponent<TurretTrap>() != null) && !Monster.name.Contains("Prefab")).ToList();
+            }
+            if (CurrentScene == "Cathedral Redux") {
                 Monsters.AddRange(Resources.FindObjectsOfTypeAll<GameObject>().Where(Monster => Monster.GetComponent<Crow>() != null && !Monster.name.Contains("Prefab")).ToList());
             }
             if (CurrentScene == "Forest Boss Room" && GameObject.Find("Skuladot redux") != null) {
                 Monsters.Add(GameObject.Find("Skuladot redux"));
-            }*/
+            }
             if (TunicArchipelago.Settings.ExtraEnemiesEnabled && CurrentScene == "Monastery") {
                 Resources.FindObjectsOfTypeAll<Voidtouched>().ToList()[0].gameObject.transform.parent = null;
             }
+
+            Monsters = Monsters.Where(Monster => Monster.gameObject.scene.name == CurrentScene).ToList();
+            
             int i = 0;
             foreach (GameObject Enemy in Monsters) {
                 GameObject NewEnemy = null;
@@ -416,7 +428,10 @@ namespace TunicArchipelago {
                             EnemyKeys.Remove("Crabbit with Shell");
                         }
                         if (Enemy.transform.parent.name.Contains("Wave")) {
-                            Enemy.transform.position = Vector3.zero;
+                            float x = (float)(Random.NextDouble() * 15) - 15f;
+
+                            float z = (float)(Random.NextDouble() * 23) - 23f;
+                            Enemy.transform.position = new Vector3(x, 0, z);
                         }
                     }
                     if (CurrentScene == "ziggurat2020_1" && Enemy.GetComponent<Administrator>() != null) {

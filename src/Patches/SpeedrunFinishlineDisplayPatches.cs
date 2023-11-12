@@ -7,6 +7,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.UI;
 using static TunicArchipelago.SaveFlags;
 
@@ -196,13 +197,18 @@ namespace TunicArchipelago {
             CompletionCanvas.transform.position = new Vector3(0f, 0f, 300f);
             CompletionCanvas.SetActive(false);
 
-            int CheckCount = Locations.CheckedLocations.Values.Where(Item => Item).ToList().Count;
+            int CheckCount = Locations.VanillaLocations.Keys.Where(Check => Locations.CheckedLocations[Check] || (TunicArchipelago.Settings.CollectReflectsInWorld && SaveFile.GetInt($"randomizer {Check} was collected") == 1)).Count();
+            int ChecksCollectedByOthers = Locations.VanillaLocations.Keys.Where(Check => !Locations.CheckedLocations[Check] && SaveFile.GetInt($"randomizer {Check} was collected") == 1).Count();
             float CheckPercentage = ((float)CheckCount / ItemLookup.ItemList.Count) * 100.0f;
             GameObject TotalCompletion = GameObject.Instantiate(CompletionRate.gameObject, GameObject.Find("_FinishlineDisplay(Clone)/").transform.GetChild(2));
             TotalCompletion.transform.position = new Vector3(-60f, -30f, 55f);
             TotalCompletion.transform.localScale = new Vector3(2.5f, 2.5f, 2.5f);
             string Color = CheckCount == ItemLookup.ItemList.Count ? $"<#eaa614>" : "<#FFFFFF>";
-            TotalCompletion.GetComponent<TextMeshPro>().text = $"Overall Completion: {Color}{CheckCount}/{ItemLookup.ItemList.Count} ({Math.Round(CheckPercentage, 2)}%)";
+            if (TunicArchipelago.Settings.CollectReflectsInWorld) {
+                TotalCompletion.GetComponent<TextMeshPro>().text = $"Overall Completion: {Color}{CheckCount}/{ItemLookup.ItemList.Count}* ({Math.Round(CheckPercentage, 2)}%)\n\t<size=60%>*includes {ChecksCollectedByOthers} locations collected by others";
+            } else {
+                TotalCompletion.GetComponent<TextMeshPro>().text = $"Overall Completion: {Color}{CheckCount}/{ItemLookup.ItemList.Count} ({Math.Round(CheckPercentage, 2)}%)";
+            }
             if ((int)CheckPercentage == 69) {
                 TotalCompletion.GetComponent<TextMeshPro>().text += " <size=40%>nice";
             }
@@ -257,7 +263,7 @@ namespace TunicArchipelago {
                 float Percentage = 0;
                 foreach (string SubArea in Locations.MainAreasToSubAreas[Area]) {
                     TotalAreaChecks += Locations.VanillaLocations.Keys.Where(Check => Locations.VanillaLocations[Check].Location.SceneName == SubArea).Count();
-                    AreaChecksFound += Locations.VanillaLocations.Keys.Where(Check => Locations.VanillaLocations[Check].Location.SceneName == SubArea && Locations.CheckedLocations[Check]).Count();
+                    AreaChecksFound += Locations.VanillaLocations.Keys.Where(Check => Locations.VanillaLocations[Check].Location.SceneName == SubArea && (Locations.CheckedLocations[Check] || (TunicArchipelago.Settings.CollectReflectsInWorld && SaveFile.GetInt($"randomizer {Check} was collected") == 1))).Count();
                     TotalAreaTime += SaveFile.GetFloat($"randomizer play time {SubArea}");
                 }
                 if (TotalAreaChecks > 0) {
@@ -283,7 +289,7 @@ namespace TunicArchipelago {
                     foreach (Dictionary<string, int> requirements in Locations.VanillaLocations[Key].Location.RequiredItems) {
                         if (requirements.ContainsKey("21")) {
                             TotalChecks++;
-                            if (Locations.CheckedLocations[Key]) {
+                            if (Locations.CheckedLocations[Key] || (TunicArchipelago.Settings.CollectReflectsInWorld && SaveFile.GetInt($"randomizer {Key} was collected") == 1)) {
                                 ChecksFound++;
                             }
                             continue;

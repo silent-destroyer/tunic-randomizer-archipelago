@@ -40,6 +40,8 @@ namespace TunicArchipelago {
             OptionsGUI OptionsGUI = GameObject.FindObjectOfType<OptionsGUI>();
             OptionsGUI.setHeading("Archipelago");
             OptionsGUI.addToggle("Death Link", "Off", "On", TunicArchipelago.Settings.DeathLinkEnabled ? 1 : 0, (OptionsGUIMultiSelect.MultiSelectAction)ToggleDeathLink);
+            OptionsGUI.addToggle("Auto-open !collect-ed Checks", "Off", "On", TunicArchipelago.Settings.CollectReflectsInWorld ? 1 : 0, (OptionsGUIMultiSelect.MultiSelectAction)ToggleUpdateOnCollect);
+            OptionsGUI.addToggle("Skip Item Animations", "Off", "On", TunicArchipelago.Settings.SkipItemAnimations ? 1 : 0, (OptionsGUIMultiSelect.MultiSelectAction)ToggleSkipItemAnimations);
         }
 
         public static void LogicSettingsPage() {
@@ -124,6 +126,16 @@ namespace TunicArchipelago {
                 }
             }
 
+            SaveSettings();
+        }
+
+        public static void ToggleUpdateOnCollect(int index) {
+            TunicArchipelago.Settings.CollectReflectsInWorld = !TunicArchipelago.Settings.CollectReflectsInWorld;
+            SaveSettings();
+        }
+
+        public static void ToggleSkipItemAnimations(int index) { 
+            TunicArchipelago.Settings.SkipItemAnimations = !TunicArchipelago.Settings.SkipItemAnimations; 
             SaveSettings();
         }
 
@@ -291,13 +303,18 @@ namespace TunicArchipelago {
         public static void FileManagementGUI_rePopulateList_PostfixPatch(FileManagementGUI __instance) {
             foreach (FileManagementGUIButton button in GameObject.FindObjectsOfType<FileManagementGUIButton>()) {
                 SaveFile.LoadFromPath(SaveFile.GetRootSaveFileNameList()[button.index]);
-                if (SaveFile.GetInt("archipelago") != 0 && !button.isSpecial) {
+                if ((SaveFile.GetInt("archipelago") != 0 || SaveFile.GetInt("randomizer") != 0) && !button.isSpecial) {
                     // Display special icon and "randomized" text to indicate randomizer file
                     button.specialBadge.gameObject.active = true;
                     button.specialBadge.transform.localScale = new Vector3(0.4f, 0.4f, 0.4f);
                     button.specialBadge.transform.localPosition = new Vector3(-75f, -27f, 0f);
                     button.playtimeString.enableAutoSizing = false;
-                    button.playtimeString.text += $" <size=65%>archipelago";
+                    if (SaveFile.GetInt("archipelago") != 0) {
+                        button.playtimeString.text += $" <size=65%>archipelago";
+                        button.filenameTMP.text += $" <size=65%>({SaveFile.GetString("archipelago player name")})";
+                    } else if (SaveFile.GetInt("randomizer") != 0) {
+                        button.playtimeString.text += $" <size=70%>randomized";
+                    }
                     // Display randomized page count instead of "vanilla" pages picked up
                     int Pages = 0;
                     for (int i = 0; i < 28; i++) {

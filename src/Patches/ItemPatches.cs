@@ -80,13 +80,14 @@ namespace TunicArchipelago {
         }
 
         public static bool Chest_shouldShowAsOpen_GetterPatch(Chest __instance, ref bool __result) {
-            if (SceneManager.GetActiveScene().name == "Quarry") {
+            string ActiveScene = SceneManager.GetActiveScene().name;
+            if (ActiveScene == "Quarry") {
                 __result = false;
                 return false;
             }
 
-            if (__instance.chestID == 19) {
-                if (__instance.transform.position.ToString() == "(8.8, 0.0, 9.9)") {
+/*            if (__instance.chestID == 19) {
+                if (ActiveScene == "Sword Cave") {
                     __result = SaveFile.GetInt("randomizer picked up 19 [Sword Cave]") == 1;
                 } else {
                     __result = SaveFile.GetInt("randomizer picked up 19 [Forest Belltower]") == 1;
@@ -96,13 +97,17 @@ namespace TunicArchipelago {
             if (__instance.chestID == 5) {
                 __result = SaveFile.GetInt("randomizer picked up 5 [Overworld Redux]") == 1;
                 return false;
-            }
+            }*/
             string FairyId = $"{__instance.gameObject.scene.name}-{__instance.transform.position.ToString()}";
             if (ItemLookup.FairyLookup.ContainsKey(FairyId)) {
                 __result = SaveFile.GetInt($"randomizer opened fairy chest {FairyId}") == 1;
                 return false;
             }
-
+            string ChestObjectId = $"{__instance.chestID} [{ActiveScene}]";
+            if (Locations.LocationIdToDescription.ContainsKey(ChestObjectId)) {
+                __result = SaveFile.GetInt($"randomizer picked up {ChestObjectId}") == 1 || (TunicArchipelago.Settings.CollectReflectsInWorld && SaveFile.GetInt($"randomizer {ChestObjectId} was collected") == 1);
+                return false;
+            }
             return true;
         }
 
@@ -266,8 +271,9 @@ namespace TunicArchipelago {
                         }
                     }
                 }
-
-                PageDisplay.ShowPage(int.Parse(Item.ItemNameForInventory, CultureInfo.InvariantCulture));
+                if (!TunicArchipelago.Settings.SkipItemAnimations) {
+                    PageDisplay.ShowPage(int.Parse(Item.ItemNameForInventory, CultureInfo.InvariantCulture));
+                }
             }
 
             if (Item.Type == ItemTypes.GOLDENTROPHY) {
@@ -410,6 +416,13 @@ namespace TunicArchipelago {
         public static bool FairyCollection_getFairyCount_PrefixPatch(FairyCollection __instance, ref int __result) {
             __result = TunicArchipelago.Tracker.ImportantItems["Fairies"];
             return false;
+        }
+
+        public static bool ItemPresentation_presentItem_PrefixPatch(ItemPresentation __instance) {
+            if(TunicArchipelago.Settings.SkipItemAnimations) {
+                return false;
+            }
+            return true;
         }
 
         private static void ShowNotification(string topLine, string bottomLine) {

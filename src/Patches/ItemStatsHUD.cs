@@ -212,8 +212,8 @@ namespace TunicArchipelago {
 
         public static void Update() {
             try {
-                int ObtainedItemCount = Locations.CheckedLocations.Values.Where(Check => Check).ToList().Count;
-                int ObtainedItemCountInCurrentScene = Locations.VanillaLocations.Keys.Where(loc => Locations.VanillaLocations[loc].Location.SceneName == SceneLoaderPatches.SceneName && Locations.CheckedLocations[loc]).ToList().Count;
+                int ObtainedItemCount = Locations.VanillaLocations.Keys.Where(loc => Locations.CheckedLocations[loc] || (TunicArchipelago.Settings.CollectReflectsInWorld && SaveFile.GetInt($"randomizer {loc} was collected") == 1)).ToList().Count;
+                int ObtainedItemCountInCurrentScene = Locations.VanillaLocations.Keys.Where(loc => Locations.VanillaLocations[loc].Location.SceneName == SceneLoaderPatches.SceneName && (Locations.CheckedLocations[loc] || (TunicArchipelago.Settings.CollectReflectsInWorld && SaveFile.GetInt($"randomizer {loc} was collected") == 1))).ToList().Count;
                 int TotalItemCountInCurrentScene = Locations.VanillaLocations.Keys.Where(loc => Locations.VanillaLocations[loc].Location.SceneName == SceneLoaderPatches.SceneName).ToList().Count;
                 Title.GetComponent<TextMeshProUGUI>().text = $"Randomizer Stats";
                 Pages.GetComponent<TextMeshProUGUI>().text = $"Pages:\t\t{TunicArchipelago.Tracker.ImportantItems["Pages"]}/28";
@@ -325,16 +325,16 @@ namespace TunicArchipelago {
                         GameObject Torch = Equipment.transform.GetChild(i).gameObject;
                         Torch.transform.SetAsLastSibling();
                     }
-                    if (Equipment.transform.GetChild(i).GetChild(1).GetComponent<Image>().sprite.name == "Inventory items_sword") {
+                    if (Equipment.transform.GetChild(i).GetChild(1).GetComponent<Image>().sprite.name == "Inventory items_koban_hp" || Equipment.transform.GetChild(i).GetChild(1).GetComponent<Image>().sprite.name == "Inventory items_koban_sp") {
                         if (Equipment.transform.GetChild(i).childCount == 3) {
                         } else {
-                            if (SaveFile.GetInt("randomizer sword progression level") == 3) {
+                            if (Equipment.transform.GetChild(i).GetChild(1).GetComponent<Image>().sprite.name == "Inventory items_koban_hp") {
                                 GameObject NewSword = GameObject.Instantiate(ModelSwaps.SecondSwordImage);
                                 NewSword.transform.parent = Equipment.transform.GetChild(i);
                                 NewSword.transform.localScale = new Vector3(2f, 2f, 2f);
                                 NewSword.transform.localPosition = Vector3.zero;
                                 Equipment.transform.GetChild(i).GetChild(1).gameObject.SetActive(false);
-                            } else if (SaveFile.GetInt("randomizer sword progression level") == 4) {
+                            } else if (Equipment.transform.GetChild(i).GetChild(1).GetComponent<Image>().sprite.name == "Inventory items_koban_sp") {
                                 GameObject NewSword = GameObject.Instantiate(ModelSwaps.ThirdSwordImage);
                                 NewSword.transform.parent = Equipment.transform.GetChild(i);
                                 NewSword.transform.localScale = new Vector3(2f, 2f, 2f);
@@ -352,13 +352,13 @@ namespace TunicArchipelago {
             if (Loaded) {
                 for (int i = 0; i < 3; i++) {
                     GameObject EquipButton = EquipButtons[i];
-                    if (EquipButton.transform.GetChild(0).GetComponent<Image>().enabled && EquipButton.transform.GetChild(0).GetComponent<Image>().sprite != null && EquipButton.transform.GetChild(0).GetComponent<Image>().sprite.name == "Inventory items_sword") {
+                    if (EquipButton.transform.GetChild(0).GetComponent<Image>().enabled && EquipButton.transform.GetChild(0).GetComponent<Image>().sprite != null && (EquipButton.transform.GetChild(0).GetComponent<Image>().sprite.name == "Inventory items_koban_hp" || EquipButton.transform.GetChild(0).GetComponent<Image>().sprite.name == "Inventory items_koban_sp")) {
 
-                        if (SaveFile.GetInt(SwordProgressionLevel) == 3) {
+                        if (EquipButton.transform.GetChild(0).GetComponent<Image>().sprite.name == "Inventory items_koban_hp") {
                             EquipButton.transform.GetChild(0).gameObject.SetActive(false);
                             EquipButton.transform.GetChild(2).gameObject.SetActive(true);
                             EquipButton.transform.GetChild(3).gameObject.SetActive(false);
-                        } else if (SaveFile.GetInt(SwordProgressionLevel) >= 4) {
+                        } else if (EquipButton.transform.GetChild(0).GetComponent<Image>().sprite.name == "Inventory items_koban_sp") {
                             EquipButton.transform.GetChild(0).gameObject.SetActive(false);
                             EquipButton.transform.GetChild(2).gameObject.SetActive(false);
                             EquipButton.transform.GetChild(3).gameObject.SetActive(true);

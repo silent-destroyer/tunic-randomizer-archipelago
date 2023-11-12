@@ -178,13 +178,13 @@ namespace TunicArchipelago {
             foreach (string Key in ItemLookup.ItemList.Keys) {
                 ArchipelagoItem Item = ItemLookup.ItemList[Key];
 
-                string Spoiler = $"\t{(Locations.CheckedLocations[Key] ? "x" : "-")} {Locations.LocationIdToDescription[Key]}: {Item.ItemName} ({Archipelago.instance.GetPlayerName(Item.Player)})";
+                string Spoiler = $"\t{((Locations.CheckedLocations[Key] || SaveFile.GetInt($"randomizer picked up {Key}") == 1 || (TunicArchipelago.Settings.CollectReflectsInWorld && SaveFile.GetInt($"randomizer {Key} was collected") == 1)) ? "x" : "-")} {Locations.LocationIdToDescription[Key]}: {Item.ItemName} ({Archipelago.instance.GetPlayerName(Item.Player)})";
 
                 SpoilerLog[Locations.VanillaLocations[Key].Location.SceneName].Add(Spoiler);
             }
 
             List<string> SpoilerLogLines = new List<string>() {
-                "Archipelago Seed: " + SaveFile.GetString("archipelago seed"),
+                "Seed: " + SaveFile.GetString("seed"),
                 "Lines that start with 'x' instead of '-' represent items that have been collected\n",
                 "Major Items"
             };

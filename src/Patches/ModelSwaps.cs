@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnhollowerBaseLib;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using static TunicArchipelago.SaveFlags;
 
@@ -36,6 +37,7 @@ namespace TunicArchipelago {
 
         public static bool DathStonePresentationAlreadySetup = false;
         public static bool OldHouseKeyPresentationAlreadySetup = false;
+        public static bool SwordPresentationsAlreadySetup = false;
         public static GameObject GlowEffect;
         public static GameObject SpecialKeyPopup;
         public static void InitializeItems() {
@@ -331,6 +333,8 @@ namespace TunicArchipelago {
 
         public static void SwapItemsInScene() {
 
+            CheckCollectedItemFlags();
+
             if (SceneLoaderPatches.SceneName == "Shop") {
                 SetupShopItems();
             } else {
@@ -441,7 +445,50 @@ namespace TunicArchipelago {
             }
         }
 
+        public static void CheckCollectedItemFlags() {
+            string Scene = SceneManager.GetActiveScene().name;
+            if (TunicArchipelago.Settings.CollectReflectsInWorld) {
+                foreach (PagePickup PagePickup in Resources.FindObjectsOfTypeAll<PagePickup>()) {
+                    if (PagePickup != null && PagePickup.pageName != null) {
+                        string PageId = $"{PagePickup.pageName} [{Scene}]";
+                        if (SaveFile.GetInt($"randomizer {PageId} was collected") == 1) {
+                            GameObject.Destroy(PagePickup.gameObject);
+                        }
+                    }
+                }
+
+
+                foreach (ItemPickup ItemPickup in Resources.FindObjectsOfTypeAll<ItemPickup>()) {
+                    if (ItemPickup != null && ItemPickup.itemToGive != null) {
+                        string ItemId = $"{ItemPickup.itemToGive.name} [{Scene}]";
+                        if (SaveFile.GetInt($"randomizer {ItemId} was collected") == 1) {
+                            GameObject.Destroy(ItemPickup.gameObject);
+                        }
+                    }
+                }
+
+                foreach (HeroRelicPickup RelicPickup in Resources.FindObjectsOfTypeAll<HeroRelicPickup>()) {
+                    if (RelicPickup != null && RelicPickup.name != null) {
+                        string RelicId = $"{RelicPickup.name} [{Scene}]";
+                        if (SaveFile.GetInt($"randomizer {RelicId} was collected") == 1) {
+                            GameObject.Destroy(RelicPickup.gameObject);
+                        }
+                    }
+                }
+
+                foreach (ShopItem ShopItem in Resources.FindObjectsOfTypeAll<ShopItem>()) {
+                    if (ShopItem != null) {
+                        string ShopId = $"{ShopItem.name} [{Scene}]";
+                        if (SaveFile.GetInt($"randomizer {ShopId} was collected") == 1) {
+                            ShopItem.gameObject.SetActive(false);
+                        }
+                    }
+                }
+            }
+        }
+
         public static void SetupItemPickup(ItemPickup ItemPickup) {
+            
             if (ItemPickup != null && ItemPickup.itemToGive != null) {
                 string ItemId = $"{ItemPickup.itemToGive.name} [{SceneLoaderPatches.SceneName}]";
 
@@ -995,6 +1042,45 @@ namespace TunicArchipelago {
                 }
             }
         }
+
+        public static void SetupCustomSwordItemPresentations() {
+            if (!SwordPresentationsAlreadySetup) {
+                try {
+                    GameObject SwordPresentation = Resources.FindObjectsOfTypeAll<GameObject>().Where(Item => Item.name == "User Rotation Root").ToList()[0].transform.GetChild(9).gameObject;
+                    GameObject LibrarianSword = GameObject.Instantiate(SwordPresentation);
+                    LibrarianSword.transform.parent = SwordPresentation.transform.parent;
+                    LibrarianSword.GetComponent<MeshFilter>().mesh = SecondSword.GetComponent<MeshFilter>().mesh;
+                    LibrarianSword.GetComponent<MeshRenderer>().materials = SecondSword.GetComponent<MeshRenderer>().materials;
+                    LibrarianSword.transform.localScale = new Vector3(0.25f, 0.2f, 0.25f);
+                    LibrarianSword.transform.localRotation = new Quaternion(-0.2071f, -0.1216f, 0.3247f, -0.9148f);
+                    LibrarianSword.transform.localPosition = SwordPresentation.transform.localPosition;
+                    LibrarianSword.SetActive(false);
+                    GameObject.DontDestroyOnLoad(LibrarianSword);
+
+                    GameObject HeirSword = GameObject.Instantiate(SwordPresentation);
+                    HeirSword.transform.parent = SwordPresentation.transform.parent;
+                    HeirSword.GetComponent<MeshFilter>().mesh = ThirdSword.GetComponent<MeshFilter>().mesh;
+                    HeirSword.GetComponent<MeshRenderer>().materials = ThirdSword.GetComponent<MeshRenderer>().materials;
+                    HeirSword.transform.localScale = new Vector3(0.175f, 0.175f, 0.175f);
+                    HeirSword.transform.localRotation = new Quaternion(-0.6533f, 0.2706f, -0.2706f, 0.6533f);
+                    HeirSword.transform.localPosition = SwordPresentation.transform.localPosition;
+                    HeirSword.SetActive(false);
+                    GameObject.DontDestroyOnLoad(HeirSword);
+
+                    LibrarianSword.GetComponent<ItemPresentationGraphic>().items = new List<Item>() { Inventory.GetItemByName("Librarian Sword") }.ToArray();
+                    HeirSword.GetComponent<ItemPresentationGraphic>().items = new List<Item>() { Inventory.GetItemByName("Heir Sword") }.ToArray();
+
+                    List<ItemPresentationGraphic> newipgs = ItemPresentation.instance.itemGraphics.ToList();
+                    newipgs.Add(LibrarianSword.GetComponent<ItemPresentationGraphic>());
+                    newipgs.Add(HeirSword.GetComponent<ItemPresentationGraphic>());
+                    ItemPresentation.instance.itemGraphics = newipgs.ToArray();
+
+                    SwordPresentationsAlreadySetup = true;
+                } catch (Exception e) {
+                }
+            }
+        }
+
 
         public static void SetupDathStoneItemPresentation() {
             if (!DathStonePresentationAlreadySetup) {
