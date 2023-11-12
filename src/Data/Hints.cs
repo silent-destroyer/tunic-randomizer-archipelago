@@ -68,7 +68,7 @@ namespace TunicArchipelago {
             HintMessages.Add("Mailbox", Hint);
 
             ArchipelagoHint Hyperdash = Locations.MajorItemLocations["Hero's Laurels"][0];
-            Hint = $"lehjehnd sehz <#FF00FF>suhm%i^ ehkstruhordinArE<#FFFFFF>";
+            Hint = $"lehjehnd sehz <#FF00FF>suhm%i^ ehkstruhordinArE<#FFFFFF>  [laurels] ";
             if (Hyperdash.Player == Player) {
                 Scene = Hyperdash.Location == "Your Pocket" ? Hyperdash.Location.ToUpper() : Locations.SimplifiedSceneNames[Locations.VanillaLocations[Locations.LocationDescriptionToId[Hyperdash.Location]].Location.SceneName].ToUpper();
                 Prefix = Vowels.Contains(Scene[0]) ? "#E" : "#uh";
