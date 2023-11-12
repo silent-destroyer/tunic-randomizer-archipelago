@@ -7,9 +7,11 @@ using UnityEngine.SceneManagement;
 using static TunicArchipelago.GhostHints;
 using Archipelago.MultiClient.Net.Enums;
 using static TunicArchipelago.SaveFlags;
+using BepInEx.Logging;
 
 namespace TunicArchipelago {
     public class Hints {
+        //private static ManualLogSource Logger = TunicArchipelago.Logger;
 
         public static Dictionary<string, string> HintLocations = new Dictionary<string, string>() {
             {"Overworld Redux (-7.0, 12.0, -136.4)", "Mailbox"},
@@ -34,6 +36,47 @@ namespace TunicArchipelago {
 
         public static String MailboxHintId = "";
 
+        // Used for getting what sphere 1 is if you have ER on
+        // Gives you items in Overworld or items in adjacent scenes
+        // will need updating if/when we do a different starting spot
+        public static List<string> GetERSphereOne()
+        {
+            List<Portal> PortalInventory = new List<Portal>();
+            List<string> CombinedInventory = new List<string>{"Overworld"};
+            
+            // add starting sword and abilities if applicable
+            if (SaveFile.GetInt("randomizer started with sword") == 1)
+            { CombinedInventory.Add("Sword"); }
+            if (SaveFile.GetInt(AbilityShuffle) == 0)
+            {
+                CombinedInventory.Add("12");
+                CombinedInventory.Add("21");
+            }
+            
+            // find which portals you can reach from spawn without additional progression
+            foreach (PortalCombo portalCombo in TunicPortals.RandomizedPortals.Values)
+            {
+                if (portalCombo.Portal1.Region == "Overworld")
+                { PortalInventory.Add(portalCombo.Portal2); }
+                if (portalCombo.Portal1.Region == "Overworld Ability" && SaveFile.GetInt(AbilityShuffle) == 0)
+                { PortalInventory.Add(portalCombo.Portal2); }
+
+                if (portalCombo.Portal2.Region == "Overworld")
+                { PortalInventory.Add(portalCombo.Portal1); }
+                if (portalCombo.Portal2.Region == "Overworld Ability" && SaveFile.GetInt(AbilityShuffle) == 0)
+                { PortalInventory.Add(portalCombo.Portal1); }
+            }
+
+            // add the new portals and any applicable new scenes to the inventory
+            foreach (Portal portal in PortalInventory)
+            {
+                CombinedInventory.Add(portal.SceneDestinationTag);
+                CombinedInventory.AddRange(portal.Rewards(CombinedInventory));
+            }
+
+            return CombinedInventory;
+        }
+
         public static void PopulateHints() {
             HintMessages.Clear();
             System.Random random = new System.Random(SaveFile.GetInt("seed"));
@@ -46,13 +89,53 @@ namespace TunicArchipelago {
             List<string> MailboxItems = new List<string>() { "Stick", "Sword", "Sword Upgrade", "Magic Dagger", "Magic Wand", "Magic Orb", "Lantern", "Gun", "Scavenger Mask", "Pages 24-25 (Prayer)", "Pages 42-43 (Holy Cross)" };
             Dictionary<string, ArchipelagoItem> SphereOnePlayer = new Dictionary<string, ArchipelagoItem>();
             Dictionary<string, ArchipelagoItem> SphereOneOthers = new Dictionary<string, ArchipelagoItem>();
-            foreach(string itemkey in ItemLookup.ItemList.Keys) {
+            List<string> ERSphereOneItemsAndAreas = GetERSphereOne();
+            foreach (string itemkey in ItemLookup.ItemList.Keys) {
                 ArchipelagoItem item = ItemLookup.ItemList[itemkey];
-                if (Archipelago.instance.GetPlayerGame(item.Player) == "Tunic" && MailboxItems.Contains(item.ItemName) && Locations.VanillaLocations[itemkey].Location.RequiredItems.Count == 0) {
-                    SphereOnePlayer.Add(itemkey, item);
+                
+                // In ER, we need to check more info, since every item has a required item count
+                if (SaveFile.GetInt(EntranceRando) == 1)
+                {
+                    if (Archipelago.instance.GetPlayerGame(item.Player) == "Tunic" && MailboxItems.Contains(item.ItemName))
+                    {
+                        var requirements = Locations.VanillaLocations[itemkey].Location.RequiredItemsDoors[0].Keys;
+                        foreach (string req in requirements)
+                        {
+                            int checkCount = 0;
+                            if (ERSphereOneItemsAndAreas.Contains(req))
+                            { checkCount++; }
+                            else
+                            { continue; }
+
+                            if (checkCount == requirements.Count)
+                            { SphereOnePlayer.Add(itemkey, item); }
+                        }
+                    }
+                    else if (item.Player != Archipelago.instance.GetPlayerSlot() && item.Classification == ItemFlags.Advancement)
+                    {
+                        var requirements = Locations.VanillaLocations[itemkey].Location.RequiredItemsDoors[0].Keys;
+                        foreach (string req in requirements)
+                        {
+                            int checkCount = 0;
+                            if (ERSphereOneItemsAndAreas.Contains(req))
+                            { checkCount++; }
+                            else
+                            { continue; }
+
+                            if (checkCount == requirements.Count)
+                            { SphereOneOthers.Add(itemkey, item); }
+                        }
+                    }
                 }
-                if (item.Player != Archipelago.instance.GetPlayerSlot() && item.Classification == ItemFlags.Advancement && Locations.VanillaLocations[itemkey].Location.RequiredItems.Count == 0) {
-                    SphereOneOthers.Add(itemkey, item);
+                else {
+                    if (Archipelago.instance.GetPlayerGame(item.Player) == "Tunic" && MailboxItems.Contains(item.ItemName) && Locations.VanillaLocations[itemkey].Location.RequiredItems.Count == 0)
+                    {
+                        SphereOnePlayer.Add(itemkey, item);
+                    }
+                    if (item.Player != Archipelago.instance.GetPlayerSlot() && item.Classification == ItemFlags.Advancement && Locations.VanillaLocations[itemkey].Location.RequiredItems.Count == 0)
+                    {
+                        SphereOneOthers.Add(itemkey, item);
+                    }
                 }
             }
             ArchipelagoItem mailboxitem = null;
@@ -152,6 +235,7 @@ namespace TunicArchipelago {
                 Hexagons.Remove(Hexagon);
                 HexagonHintGraves.Remove(HexagonHintArea);
             }
+            // make the in-game signs tell you what area they're pointing to
             if (SaveFile.GetInt(EntranceRando) == 1)
             {
                 foreach (PortalCombo Portal in TunicPortals.RandomizedPortals.Values)
