@@ -300,7 +300,7 @@ namespace TunicArchipelago {
                     BossScavenger.GetComponent<Image>().color = new Color(0f, 0f, 1f, 1f);
                 }
 
- if (Inventory.GetItemByName("Spear").Quantity == 1) {
+                if (Inventory.GetItemByName("Spear").Quantity == 1) {
                     Equipment.transform.GetChild(0).transform.position = new Vector3(20f, -20f, 0);
                     Equipment.transform.GetChild(0).GetChild(0).GetComponent<Image>().color = new Color(0, 0, 0, 1);
                     for (int i = 1; i < Equipment.transform.childCount; i++) {

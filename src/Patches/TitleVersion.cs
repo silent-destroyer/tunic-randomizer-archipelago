@@ -16,6 +16,7 @@ namespace TunicArchipelago {
 
         public static bool Loaded = false;
         public static GameObject TitleLogo;
+        public static bool DevBuild = true;
         public static void Initialize() {
             if (!Loaded) {
                 bool UpdateAvailable = false;
@@ -27,7 +28,7 @@ namespace TunicArchipelago {
                     StreamReader Reader = new StreamReader(response.GetResponseStream());
                     string JsonResponse = Reader.ReadToEnd();
                     dynamic Releases = JsonConvert.DeserializeObject<dynamic>(JsonResponse);
-                    UpdateAvailable = Releases[0]["tag_name"].ToString() != PluginInfo.VERSION;
+                    UpdateAvailable = Releases[0]["tag_name"].ToString() != PluginInfo.VERSION && !DevBuild;
                     UpdateVersion = Releases[0]["tag_name"].ToString();
                 } catch (Exception e) {
                     TunicArchipelago.Logger.LogInfo(e.Message);
@@ -35,7 +36,7 @@ namespace TunicArchipelago {
                 TMP_FontAsset FontAsset = Resources.FindObjectsOfTypeAll<TMP_FontAsset>().Where(Font => Font.name == "Latin Rounded").ToList()[0];
                 Material FontMaterial = Resources.FindObjectsOfTypeAll<Material>().Where(Material => Material.name == "Latin Rounded - Quantity Outline").ToList()[0];
                 GameObject TitleVersion = new GameObject("randomizer version");
-                TitleVersion.AddComponent<TextMeshProUGUI>().text = $"Randomizer + Archipelago Mod Ver. {PluginInfo.VERSION}";
+                TitleVersion.AddComponent<TextMeshProUGUI>().text = $"Randomizer + Archipelago Mod Ver. {PluginInfo.VERSION}{(DevBuild ? "-dev" : "")}";
                 if (UpdateAvailable) {
                     TitleVersion.GetComponent<TextMeshProUGUI>().text += $" (Update Available: v{UpdateVersion}!)";
                 }

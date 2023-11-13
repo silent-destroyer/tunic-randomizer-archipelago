@@ -429,7 +429,6 @@ namespace TunicArchipelago {
                         }
                         if (Enemy.transform.parent.name.Contains("Wave")) {
                             float x = (float)(Random.NextDouble() * 15) - 15f;
-
                             float z = (float)(Random.NextDouble() * 23) - 23f;
                             Enemy.transform.position = new Vector3(x, 0, z);
                         }
