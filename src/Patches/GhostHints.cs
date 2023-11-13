@@ -52,6 +52,7 @@ namespace TunicArchipelago {
         public static List<string> LocationHints = new List<string>();
         public static List<string> ItemHints = new List<string>();
         public static List<string> BarrenAndTreasureHints = new List<string>();
+        public static string HeirHint;
 
         public static List<HintGhost> HintGhosts = new List<HintGhost>();
 
@@ -322,6 +323,11 @@ namespace TunicArchipelago {
                 }
             }
             for (int i = 0; i < 3; i++) {
+                if (i == 0 && SaveFile.GetInt(EntranceRando) == 1)
+                {
+                    GenerateHeirHint();
+                    Hints.Add(HeirHint);
+                }
                 if (BarrenAndTreasureHints.Count > 0) {
                     string BarrenHint = BarrenAndTreasureHints[random.Next(BarrenAndTreasureHints.Count)];
                     Hints.Add(BarrenHint);
@@ -400,6 +406,28 @@ namespace TunicArchipelago {
                 ItemHints.Add($"bI #uh wA, I hurd #aht \"{SaveFile.GetInt(HexagonQuestHolyCross)} GOLD QUESTAGONS\"\nwil grahnt yoo #uh powur uhv #uh \"HOLY CROSS.\"");
                 ItemHints.Add($"bI #uh wA, I hurd #aht \"{SaveFile.GetInt(HexagonQuestIceRod)} GOLD QUESTAGONS\"\nwil grahnt yoo #uh #uh powur uhv #uh \"ICE ROD.\"");
             }
+        }
+
+        public static void GenerateHeirHint()
+        {
+            Logger.LogInfo("heir hint creation started");
+            string heirPortal = "error finding heir";
+            foreach (PortalCombo portalCombo in TunicPortals.RandomizedPortals.Values)
+            {
+                if (portalCombo.Portal1.Scene == "Spirit Arena")
+                {
+                    Logger.LogInfo("found the heir, they're at " + portalCombo.Portal2.Name);
+                    heirPortal = portalCombo.Portal2.Name;
+                    break;
+                }
+                if (portalCombo.Portal2.Scene == "Spirit Arena")
+                {
+                    Logger.LogInfo("found the heir, they're at " + portalCombo.Portal1.Name);
+                    heirPortal = portalCombo.Portal1.Name;
+                    break;
+                }
+            }
+            HeirHint = $"bI #uh wA, I hurd #aht #uh \"HEIR\" moovd, yoo kahn \n fInd #ehm aht \"{heirPortal.ToUpper()}\"";
         }
 
         public static string WordWrapString(string Hint) {
