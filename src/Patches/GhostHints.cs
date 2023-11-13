@@ -408,28 +408,6 @@ namespace TunicArchipelago {
             }
         }
 
-        public static void GenerateHeirHint()
-        {
-            Logger.LogInfo("heir hint creation started");
-            string heirPortal = "error finding heir";
-            foreach (PortalCombo portalCombo in TunicPortals.RandomizedPortals.Values)
-            {
-                if (portalCombo.Portal1.Scene == "Spirit Arena")
-                {
-                    Logger.LogInfo("found the heir, they're at " + portalCombo.Portal2.Name);
-                    heirPortal = portalCombo.Portal2.Name;
-                    break;
-                }
-                if (portalCombo.Portal2.Scene == "Spirit Arena")
-                {
-                    Logger.LogInfo("found the heir, they're at " + portalCombo.Portal1.Name);
-                    heirPortal = portalCombo.Portal1.Name;
-                    break;
-                }
-            }
-            HeirHint = $"bI #uh wA, I hurd #aht #uh \"HEIR\" moovd, yoo kahn \n fInd #ehm aht \"{heirPortal.ToUpper()}\"";
-        }
-
         public static string WordWrapString(string Hint) {
             string formattedHint = "";
 
@@ -505,6 +483,25 @@ namespace TunicArchipelago {
                 }
 
             }
+        }
+
+        public static void GenerateHeirHint()
+        {
+            string heirPortal = "error finding heir";
+            foreach (PortalCombo portalCombo in TunicPortals.RandomizedPortals.Values)
+            {
+                if (portalCombo.Portal1.Scene == "Spirit Arena")
+                {
+                    heirPortal = portalCombo.Portal2.Name;
+                    break;
+                }
+                if (portalCombo.Portal2.Scene == "Spirit Arena")
+                {
+                    heirPortal = portalCombo.Portal1.Name;
+                    break;
+                }
+            }
+            HeirHint = $"bI #uh wA, I hurd #aht #uh \"HEIR\" moovd, yoo kahn \nfInd #ehm aht \"{heirPortal.ToUpper()}\"";
         }
 
         public static void SpawnTorchHintGhost() {

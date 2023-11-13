@@ -259,6 +259,23 @@ namespace TunicArchipelago {
             // if you can reach, you get the center of the region. One-ways give you the center too
             if (CanReachCenterFromPortal(inventory) || this.OneWay == true)
             { rewardsList.Add(this.Scene); }
+            if (this.Region == "Swamp Back")
+            { rewardsList.Add("Swamp Back"); }
+            if (this.Region == "Forest Belltower Upper")
+            {
+                rewardsList.Add("Forest Belltower Upper");
+                rewardsList.Add("Forest Belltower Main");
+                rewardsList.Add("Forest Belltower Lower");
+            }
+            if (this.Region == "Forest Belltower Main")
+            {
+                rewardsList.Add("Forest Belltower Main");
+                rewardsList.Add("Forest Belltower Lower");
+            }
+            else if (this.Region == "Forest Belltower Lower")
+            {
+                rewardsList.Add("Forest Belltower Lower");
+            }
 
             return rewardsList;
         }

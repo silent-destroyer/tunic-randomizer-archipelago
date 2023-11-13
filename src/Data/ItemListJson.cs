@@ -420,7 +420,7 @@
                     ""Position"": ""(480.8, 40.0, 104.0)"",
                     ""RequiredItems"": [],
                     ""RequiredItemsDoors"": [
-                    {""Forest Belltower"": 1}
+                        {""Forest Belltower Main"": 1}
                     ],
                     ""SceneId"": 36,
                     ""SceneName"": ""Forest Belltower""
@@ -437,7 +437,7 @@
                     ""Position"": ""(501.5, 38.0, 114.5)"",
                     ""RequiredItems"": [],
                     ""RequiredItemsDoors"": [
-                    {""Forest Belltower"": 1}
+                        {""Forest Belltower Main"": 1}
                     ],
                     ""SceneId"": 36,
                     ""SceneName"": ""Forest Belltower""
@@ -857,7 +857,7 @@
                     ""Position"": ""(582.0, 14.0, 86.5)"",
                     ""RequiredItems"": [],
                     ""RequiredItemsDoors"": [
-                        {""Forest Belltower, Forest Boss Room_"": 1}
+                        {""Forest Belltower Upper"": 1}
                     ],
                     ""SceneId"": 36,
                     ""SceneName"": ""Forest Belltower""
@@ -874,7 +874,7 @@
                     ""Position"": ""(495.5, 59.0, 110.0)"",
                     ""RequiredItems"": [],
                     ""RequiredItemsDoors"": [
-                    {""Forest Belltower"": 1}
+                        {""Forest Belltower Upper"": 1}
                     ],
                     ""SceneId"": 36,
                     ""SceneName"": ""Forest Belltower""
@@ -5034,7 +5034,7 @@
                         {""Hyperdash"": 1}
                     ],
                     ""RequiredItemsDoors"": [
-                        {""Swamp Redux 2, Cathedral Arena_"": 1}
+                        {""Swamp Back"": 1}
                     ],
                     ""SceneId"": 59,
                     ""SceneName"": ""Swamp Redux 2""
@@ -5508,7 +5508,7 @@
                     ""Position"": ""(512.6, 14.0, 51.9)"",
                     ""RequiredItems"": [],
                     ""RequiredItemsDoors"": [
-                        {""Forest Belltower"": 1}
+                        {""Forest Belltower Lower"": 1}
                     ],
                     ""SceneId"": 36,
                     ""SceneName"": ""Forest Belltower""
