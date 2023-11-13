@@ -501,7 +501,7 @@ namespace TunicArchipelago {
                     break;
                 }
             }
-            HeirHint = $"bI #uh wA, I hurd #aht #uh \"HEIR\" moovd, yoo kahn \nfInd #ehm aht \"{heirPortal.ToUpper()}\"";
+            HeirHint = $"bI #uh wA, I hurd #aht \"THE HEIR\" moovd, #A liv \naht \"{heirPortal.ToUpper()}\" now";
         }
 
         public static void SpawnTorchHintGhost() {
