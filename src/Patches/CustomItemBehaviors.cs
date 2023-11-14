@@ -66,7 +66,11 @@ namespace TunicArchipelago {
                 } else if (SceneLoaderPatches.SceneName == "Posterity") {
                     __instance.confirmationPromptLine.text = $"wAk fruhm #is drEm\nahnd rEturn too \"Overworld\"?";
                 } else {
-                    __instance.confirmationPromptLine.text = $"wAk fruhm #is drEm\nahnd rEturn too \"{Locations.SimplifiedSceneNames[SaveFile.GetString("last campfire scene name")]}\"?";
+                    if (SaveFile.GetString("randomizer last campfire scene name for dath stone") != "" && SaveFile.GetString("randomizer last campfire id for dath stone") != "") {
+                        __instance.confirmationPromptLine.text = $"wAk fruhm #is drEm\nahnd rEturn too \"{Locations.SimplifiedSceneNames[SaveFile.GetString("randomizer last campfire scene name for dath stone")]}?\"";
+                    } else {
+                        __instance.confirmationPromptLine.text = $"wAk fruhm #is drEm\nahnd rEturn too \"{Locations.SimplifiedSceneNames[SaveFile.GetString("last campfire scene name")]}?\"";
+                    }
                 }
             }
 
@@ -83,10 +87,12 @@ namespace TunicArchipelago {
                     SaveFile.SetString("last campfire scene name", "Posterity");
                     SaveFile.SetString("last campfire id", "campfire");
                     SaveFile.SetInt(RescuedLostFox, 1);
-                }
-                if (SceneLoaderPatches.SceneName == "Posterity") {
+                } else if (SceneLoaderPatches.SceneName == "Posterity") {
                     SaveFile.SetString("last campfire scene name", "Overworld Redux");
                     SaveFile.SetString("last campfire id", "checkpoint");
+                } else if (SaveFile.GetString("randomizer last campfire scene name for dath stone") != "" && SaveFile.GetString("randomizer last campfire id for dath stone") != "") {
+                    SaveFile.SetString("last campfire scene name", SaveFile.GetString("randomizer last campfire scene name for dath stone"));
+                    SaveFile.SetString("last campfire id", SaveFile.GetString("randomizer last campfire id for dath stone"));
                 }
             }
             PlayerCharacter.instance.gameObject.AddComponent<Rotate>();
