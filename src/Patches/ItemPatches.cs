@@ -251,6 +251,16 @@ namespace TunicArchipelago {
 
             if (Item.Type == ItemTypes.PAGE) {
                 SaveFile.SetInt($"randomizer obtained page {Item.ItemNameForInventory}", 1);
+                bool HasAllPages = true;
+                for (int i = 0; i < 28; i++) {
+                    if (SaveFile.GetInt($"randomizer obtained page {i}") == 0) {
+                        HasAllPages = false;
+                        break;
+                    }                    
+                }
+                if (!StateVariable.GetStateVariableByName("Has Been Betrayed").BoolValue && HasAllPages) {
+                    StateVariable.GetStateVariableByName("Has Been Betrayed").BoolValue = HasAllPages;
+                }
                 if (SaveFile.GetInt(AbilityShuffle) == 1) {
                     Dictionary<string, string> pagesForAbilities = new Dictionary<string, string>() {
                         { "12", PrayerUnlocked },

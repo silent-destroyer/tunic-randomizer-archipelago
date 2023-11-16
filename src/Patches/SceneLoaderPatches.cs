@@ -182,7 +182,7 @@ namespace TunicArchipelago {
             SceneName = loadingScene.name;
             SceneId = loadingScene.buildIndex;
 
-            if (SceneName == "Overworld Redux" && (StateVariable.GetStateVariableByName("Has Been Betrayed").BoolValue || 
+            if (SceneName == "Overworld Redux" && (StateVariable.GetStateVariableByName("Has Been Betrayed").BoolValue &&
                 StateVariable.GetStateVariableByName("Has Died To God").BoolValue) && SaveFile.GetInt(DiedToHeir) != 1 && SaveFile.GetInt(HexagonQuestEnabled) == 0) {
                 PlayerCharacterPatches.ResetDayNightTimer = 0.0f;
                 Logger.LogInfo("Resetting time of day to daytime!");
