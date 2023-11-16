@@ -324,6 +324,7 @@ namespace TunicArchipelago {
 
             if (Item.Type == ItemTypes.SPECIAL) {
                 Inventory.GetItemByName("Homeward Bone Statue").Quantity += Item.QuantityToGive;
+                Inventory.GetItemByName("Torch").Quantity = 1;
                 ItemPresentation.PresentItem(Inventory.GetItemByName("Key Special"));
             }
 

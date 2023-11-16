@@ -21,6 +21,12 @@ namespace TunicArchipelago {
 
         public static Dictionary<string, string> EnemiesInCurrentScene = new Dictionary<string, string>() { };
 
+        public static List<string> SpecificExcludedEnemies = new List<string>() {
+            "Overworld Redux (-175.1, 1.0, -76.3)",
+            "frog cave main (118.5, 29.9, -52.6)",
+            "East Forest Redux (104.3, -16.0, -28.0)"
+        };
+
         public static List<string> ExcludedEnemies = new List<string>() {
             "tech knight boss",
             "Spidertank",
@@ -419,6 +425,9 @@ namespace TunicArchipelago {
             int i = 0;
             foreach (GameObject Enemy in Monsters) {
                 GameObject NewEnemy = null;
+                if (SpecificExcludedEnemies.Contains($"{CurrentScene} {Enemy.transform.position.ToString()}")) {
+                    continue;
+                }
                 try {
                     List<string> EnemyKeys = Enemies.Keys.ToList();
                     if (CurrentScene == "Cathedral Arena") {
