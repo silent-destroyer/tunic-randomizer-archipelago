@@ -11,7 +11,7 @@ using BepInEx.Logging;
 
 namespace TunicArchipelago {
     public class Hints {
-        //private static ManualLogSource Logger = TunicArchipelago.Logger;
+        private static ManualLogSource Logger = TunicArchipelago.Logger;
 
         public static Dictionary<string, string> HintLocations = new Dictionary<string, string>() {
             {"Overworld Redux (-7.0, 12.0, -136.4)", "Mailbox"},
@@ -92,7 +92,6 @@ namespace TunicArchipelago {
             List<string> ERSphereOneItemsAndAreas = GetERSphereOne();
             foreach (string itemkey in ItemLookup.ItemList.Keys) {
                 ArchipelagoItem item = ItemLookup.ItemList[itemkey];
-                
                 // In ER, we need to check more info, since every item has a required item count
                 if (SaveFile.GetInt(EntranceRando) == 1)
                 {
@@ -113,7 +112,10 @@ namespace TunicArchipelago {
                     }
                     else if (item.Player != Archipelago.instance.GetPlayerSlot() && item.Classification == ItemFlags.Advancement)
                     {
+                        Logger.LogInfo("error below maybe?");
+                        Logger.LogInfo(item.ItemName);
                         var requirements = Locations.VanillaLocations[itemkey].Location.RequiredItemsDoors[0].Keys;
+                        Logger.LogInfo("got past the error spot in first steps hint ER");
                         foreach (string req in requirements)
                         {
                             int checkCount = 0;
@@ -121,13 +123,13 @@ namespace TunicArchipelago {
                             { checkCount++; }
                             else
                             { continue; }
-
                             if (checkCount == requirements.Count)
                             { SphereOneOthers.Add(itemkey, item); }
                         }
                     }
                 }
-                else {
+                else
+                {
                     if (Archipelago.instance.GetPlayerGame(item.Player) == "Tunic" && MailboxItems.Contains(item.ItemName) && Locations.VanillaLocations[itemkey].Location.RequiredItems.Count == 0)
                     {
                         SphereOnePlayer.Add(itemkey, item);
@@ -157,7 +159,6 @@ namespace TunicArchipelago {
                 Hint = $"yor frehndz muhst furst hehlp yoo fInd yor wA...\ngoud luhk, rooin sEkur.";
             }
             HintMessages.Add("Mailbox", Hint);
-
             ArchipelagoHint Hyperdash = Locations.MajorItemLocations["Hero's Laurels"][0];
             Hint = $"lehjehnd sehz <#FF00FF>suhm%i^ ehkstruhordinArE<#FFFFFF>  [laurels] ";
             if (Hyperdash.Player == Player) {
@@ -171,7 +172,6 @@ namespace TunicArchipelago {
                 Hint += $" uhwAts yoo aht\n\"{Hyperdash.Location.ToUpper()}\"\nin\"{Archipelago.instance.GetPlayerName((int)Hyperdash.Player).ToUpper()}'S WORLD...\"";  
             }
             HintMessages.Add("Temple Statue", Hint);
-
             List<string> HintItems = new List<string>() { "Magic Wand", "Magic Orb", "Magic Dagger" };
             if (SaveFile.GetInt(AbilityShuffle) == 1 && SaveFile.GetInt(HexagonQuestEnabled) == 0) {
                 HintItems.Add("Pages 24-25 (Prayer)");
@@ -229,7 +229,6 @@ namespace TunicArchipelago {
                 } else {
                     Hint = $"#A sA #uh {HexagonColors[Hexagon]}kwehstuhgawn [hexagram]<#FFFFFF> iz fownd aht\n\"{HexHint.Location.ToUpper()}\"\nin \"{Archipelago.instance.GetPlayerName((int)HexHint.Player).ToUpper()}'S WORLD...\"";
                 }
-                
                 Hints.HintMessages.Add(HexagonHintArea, Hint);
 
                 Hexagons.Remove(Hexagon);
