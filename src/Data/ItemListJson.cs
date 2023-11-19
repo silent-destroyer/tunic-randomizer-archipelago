@@ -5447,7 +5447,9 @@
                     ""LocationId"": ""Potion (First)"",
                     ""Position"": ""(-1.9, 1.2, -2.0)"",
                     ""RequiredItems"": [],
-                    ""RequiredItemsDoors"": [],
+                    ""RequiredItemsDoors"": [
+                        {""Shop"": 1}
+                    ],
                     ""SceneId"": 56,
                     ""SceneName"": ""Shop""
                 },
@@ -5462,7 +5464,9 @@
                     ""LocationId"": ""Potion (West Garden)"",
                     ""Position"": ""(0.4, 1.2, -2.0)"",
                     ""RequiredItems"": [],
-                    ""RequiredItemsDoors"": [],
+                    ""RequiredItemsDoors"": [
+                        {""Shop"": 1}
+                    ],
                     ""SceneId"": 56,
                     ""SceneName"": ""Shop""
                 },
@@ -5477,7 +5481,9 @@
                     ""LocationId"": ""Trinket Coin 1 (day)"",
                     ""Position"": ""(0.0, 2.0, -21.5)"",
                     ""RequiredItems"": [],
-                    ""RequiredItemsDoors"": [],
+                    ""RequiredItemsDoors"": [
+                        {""Shop"": 1}
+                    ],
                     ""SceneId"": 56,
                     ""SceneName"": ""Shop""
                 },
@@ -5492,7 +5498,9 @@
                     ""LocationId"": ""Trinket Coin 2 (night)"",
                     ""Position"": ""(0.0, 2.0, -21.5)"",
                     ""RequiredItems"": [],
-                    ""RequiredItemsDoors"": [],
+                    ""RequiredItemsDoors"": [
+                        {""Shop"": 1}
+                    ],
                     ""SceneId"": 56,
                     ""SceneName"": ""Shop""
                 },

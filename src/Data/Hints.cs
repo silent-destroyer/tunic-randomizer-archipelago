@@ -112,10 +112,7 @@ namespace TunicArchipelago {
                     }
                     else if (item.Player != Archipelago.instance.GetPlayerSlot() && item.Classification == ItemFlags.Advancement)
                     {
-                        Logger.LogInfo("error below maybe?");
-                        Logger.LogInfo(item.ItemName);
                         var requirements = Locations.VanillaLocations[itemkey].Location.RequiredItemsDoors[0].Keys;
-                        Logger.LogInfo("got past the error spot in first steps hint ER");
                         foreach (string req in requirements)
                         {
                             int checkCount = 0;
