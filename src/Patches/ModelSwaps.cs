@@ -40,6 +40,20 @@ namespace TunicArchipelago {
         public static bool SwordPresentationsAlreadySetup = false;
         public static GameObject GlowEffect;
         public static GameObject SpecialKeyPopup;
+
+        public static List<string> ShopItemIDs = new List<string>() {
+            "Potion (First) [Shop]",
+            "Potion (West Garden) [Shop]",
+            "Trinket Coin 1 (day) [Shop]",
+            "Trinket Coin 2 (night) [Shop]"
+        };
+        public static List<string> ShopGameObjectIDs = new List<string>() {
+            "Shop/Item Holder/Potion (First)/rotation/potion",
+            "Shop/Item Holder/Potion (West Garden)/rotation/potion",
+            "Shop/Item Holder/Trinket Coin 1 (day)/rotation/Trinket Coin",
+            "Shop/Item Holder/Trinket Coin 2 (night)/rotation/Trinket Coin"
+        };
+
         public static void InitializeItems() {
             GameObject ItemRoot = Resources.FindObjectsOfTypeAll<GameObject>().Where(Item => Item.name == "User Rotation Root").ToList()[0];
             Items["Firecracker"] = ItemRoot.transform.GetChild(3).GetChild(0).gameObject;
@@ -332,6 +346,13 @@ namespace TunicArchipelago {
         }
 
         public static void SwapItemsInScene() {
+
+            if (IceFlask == null) {
+                if (Resources.FindObjectsOfTypeAll<BombFlask>().Where(bomb => bomb.name == "Ice flask").Count() > 0) {
+                    IceFlask = Resources.FindObjectsOfTypeAll<BombFlask>().Where(bomb => bomb.name == "Ice flask").ToList()[0].transform.GetChild(0).gameObject;
+                    Items["Ice Bomb"] = IceFlask;
+                }
+            }
 
             CheckCollectedItemFlags();
 
@@ -861,18 +882,6 @@ namespace TunicArchipelago {
         }
 
         public static void SetupShopItems() {
-            List<string> ShopItemIDs = new List<string>() {
-                        "Potion (First) [Shop]",
-                        "Potion (West Garden) [Shop]",
-                        "Trinket Coin 1 (day) [Shop]",
-                        "Trinket Coin 2 (night) [Shop]"
-                    };
-            List<string> ShopGameObjectIDs = new List<string>() {
-                        "Shop/Item Holder/Potion (First)/rotation/potion",
-                        "Shop/Item Holder/Potion (West Garden)/rotation/potion",
-                        "Shop/Item Holder/Trinket Coin 1 (day)/rotation/Trinket Coin",
-                        "Shop/Item Holder/Trinket Coin 2 (night)/rotation/Trinket Coin"
-                    };
 
             int Player = Archipelago.instance.GetPlayerSlot();
 
@@ -934,6 +943,10 @@ namespace TunicArchipelago {
                     NewItem.transform.localPosition = Vector3.zero;
                     for (int j = 0; j < NewItem.transform.childCount; j++) {
                         NewItem.transform.GetChild(j).gameObject.layer = 12;
+                    }
+
+                    if (Archipelago.instance.GetPlayerGame(APItem.Player) == "Tunic" && APItem.ItemName == "Ice Bomb") {
+                        NewItem.transform.GetChild(0).gameObject.SetActive(false);
                     }
 
                     ItemHolder.SetActive(false);
@@ -1146,6 +1159,7 @@ namespace TunicArchipelago {
                 if (IceFlask == null) {
                     if (Resources.FindObjectsOfTypeAll<BombFlask>().Where(bomb => bomb.name == "Ice flask").Count() > 0) {
                         IceFlask = Resources.FindObjectsOfTypeAll<BombFlask>().Where(bomb => bomb.name == "Ice flask").ToList()[0].transform.GetChild(0).gameObject;
+                        Items["Ice Bomb"] = IceFlask;
                     }
                 }
                 GameObject IceBombs = GameObject.Instantiate(GameObject.Find("Shop/Item Holder/Firebombs/"));
@@ -1195,6 +1209,17 @@ namespace TunicArchipelago {
                 for (int i = 0; i < 3; i++) {
                     if (IceFlask != null) {
                         __instance.__4__this.transform.GetChild(0).GetChild(10).GetChild(0).GetChild(i).GetChild(0).gameObject.SetActive(true);
+                        try {
+                            __instance.__4__this.transform.GetChild(0).GetChild(10).GetChild(0).GetChild(i).GetChild(0).gameObject.SetActive(true);
+                            foreach (ShopItem shopItem in ShopManager.cachedShopItems) {
+                                if (ShopItemIDs.Contains($"{shopItem.name} [Shop]") && !Locations.CheckedLocations[$"{shopItem.name} [Shop]"]
+                                    && ItemLookup.ItemList[$"{shopItem.name} [Shop]"].ItemName == "Ice Bomb" && Archipelago.instance.GetPlayerGame(ItemLookup.ItemList[$"{shopItem.name} [Shop]"].Player) == "Tunic") {
+                                    shopItem.transform.GetChild(0).GetChild(1).GetChild(0).gameObject.SetActive(true);
+                                }
+                            }
+                        } catch (Exception e) {
+
+                        }
                     }
                 }
             }

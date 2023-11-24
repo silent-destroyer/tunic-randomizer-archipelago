@@ -316,6 +316,9 @@ namespace TunicArchipelago {
                 RelicItem.collectionMessage.text = ItemLookup.BonusUpgrades[Item.ItemNameForInventory].CustomPickupMessage;
                 
                 ItemPresentation.PresentItem(RelicItem);
+                if (SceneManager.GetActiveScene().name == "Overworld Interiors") {
+                    SceneLoaderPatches.ToggleOldHouseRelics();
+                }
             }
 
             if (Item.Type == ItemTypes.FOOLTRAP) {
