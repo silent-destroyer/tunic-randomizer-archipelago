@@ -284,9 +284,8 @@ namespace TunicArchipelago {
                 }
                 if (slotData.TryGetValue("Entrance Rando", out var entranceRandoPortals))
                 {
-                    TunicPortals.APPortalStrings = ((JObject)slotData["Entrance Rando"]).ToObject<Dictionary<string, string>>();
-                    //TunicPortals.CreatePortalPairs();
-                    TunicPortals.AltModifyPortals(TunicPortals.CreatePortalPairs());
+                    TunicPortals.CreatePortalPairs(((JObject)slotData["Entrance Rando"]).ToObject<Dictionary<string, string>>());
+                    TunicPortals.AltModifyPortals();
                 }
                 if (slotData.TryGetValue("seed", out var Seed)) {
                     if (SaveFile.GetInt("seed") == 0) {

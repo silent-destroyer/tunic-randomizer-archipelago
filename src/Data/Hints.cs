@@ -7,9 +7,11 @@ using UnityEngine.SceneManagement;
 using static TunicArchipelago.GhostHints;
 using Archipelago.MultiClient.Net.Enums;
 using static TunicArchipelago.SaveFlags;
+using BepInEx.Logging;
 
 namespace TunicArchipelago {
     public class Hints {
+        private static ManualLogSource Logger = TunicArchipelago.Logger;
 
         public static Dictionary<string, string> HintLocations = new Dictionary<string, string>() {
             {"Overworld Redux (-7.0, 12.0, -136.4)", "Mailbox"},
@@ -19,12 +21,61 @@ namespace TunicArchipelago {
             {"Library Hall (131.0, 19.0, -8.5)", "Library Relic"},
             {"Monastery (-6.0, 26.0, 180.5)", "Monastery Relic"},
             {"Fortress Reliquary (198.5, 5.0, -40.0)", "Fortress Relic"},
-            {"Temple (14.0, -0.5, 49.0)", "Temple Statue"}
+            {"Temple (14.0, -0.5, 49.0)", "Temple Statue"},
+            {"Overworld Redux (89.0, 44.0, -107.0)", "East Forest Sign"},
+            {"Overworld Redux (-5.0, 36.0, -70.0)", "Town Sign"},
+            {"Overworld Redux (8.0, 20.0, -115.0)", "Ruined Hall Sign"},
+            {"Overworld Redux (-156.0, 12.0, -44.3)", "West Garden Sign"},
+            {"Overworld Redux (73.0, 44.0, -38.0)", "Fortress Sign"},
+            {"Overworld Redux (-141.0, 40.0, 34.8)", "Quarry Sign"},
+            {"East Forest Redux (128.0, 0.0, 33.5)", "West East Forest Sign"},
+            {"East Forest Redux (144.0, 0.0, -23.0)", "East East Forest Sign"},
         };
 
         public static Dictionary<string, string> HintMessages = new Dictionary<string, string>();
 
         public static String MailboxHintId = "";
+
+        // Used for getting what sphere 1 is if you have ER on
+        // Gives you items in Overworld or items in adjacent scenes
+        // will need updating if/when we do a different starting spot
+        public static List<string> GetERSphereOne()
+        {
+            List<Portal> PortalInventory = new List<Portal>();
+            List<string> CombinedInventory = new List<string>{"Overworld"};
+            
+            // add starting sword and abilities if applicable
+            if (SaveFile.GetInt("randomizer started with sword") == 1)
+            { CombinedInventory.Add("Sword"); }
+            if (SaveFile.GetInt(AbilityShuffle) == 0)
+            {
+                CombinedInventory.Add("12");
+                CombinedInventory.Add("21");
+            }
+            
+            // find which portals you can reach from spawn without additional progression
+            foreach (PortalCombo portalCombo in TunicPortals.RandomizedPortals.Values)
+            {
+                if (portalCombo.Portal1.Region == "Overworld")
+                { PortalInventory.Add(portalCombo.Portal2); }
+                if (portalCombo.Portal1.Region == "Overworld Ability" && SaveFile.GetInt(AbilityShuffle) == 0)
+                { PortalInventory.Add(portalCombo.Portal2); }
+
+                if (portalCombo.Portal2.Region == "Overworld")
+                { PortalInventory.Add(portalCombo.Portal1); }
+                if (portalCombo.Portal2.Region == "Overworld Ability" && SaveFile.GetInt(AbilityShuffle) == 0)
+                { PortalInventory.Add(portalCombo.Portal1); }
+            }
+
+            // add the new portals and any applicable new scenes to the inventory
+            foreach (Portal portal in PortalInventory)
+            {
+                CombinedInventory.Add(portal.SceneDestinationTag);
+                CombinedInventory.AddRange(portal.Rewards(CombinedInventory));
+            }
+
+            return CombinedInventory;
+        }
 
         public static void PopulateHints() {
             HintMessages.Clear();
@@ -38,13 +89,52 @@ namespace TunicArchipelago {
             List<string> MailboxItems = new List<string>() { "Stick", "Sword", "Sword Upgrade", "Magic Dagger", "Magic Wand", "Magic Orb", "Lantern", "Gun", "Scavenger Mask", "Pages 24-25 (Prayer)", "Pages 42-43 (Holy Cross)" };
             Dictionary<string, ArchipelagoItem> SphereOnePlayer = new Dictionary<string, ArchipelagoItem>();
             Dictionary<string, ArchipelagoItem> SphereOneOthers = new Dictionary<string, ArchipelagoItem>();
-            foreach(string itemkey in ItemLookup.ItemList.Keys) {
+            List<string> ERSphereOneItemsAndAreas = GetERSphereOne();
+            foreach (string itemkey in ItemLookup.ItemList.Keys) {
                 ArchipelagoItem item = ItemLookup.ItemList[itemkey];
-                if (Archipelago.instance.GetPlayerGame(item.Player) == "Tunic" && MailboxItems.Contains(item.ItemName) && Locations.VanillaLocations[itemkey].Location.RequiredItems.Count == 0) {
-                    SphereOnePlayer.Add(itemkey, item);
+                // In ER, we need to check more info, since every item has a required item count
+                if (SaveFile.GetInt(EntranceRando) == 1)
+                {
+                    if (Archipelago.instance.GetPlayerGame(item.Player) == "Tunic" && MailboxItems.Contains(item.ItemName))
+                    {
+                        var requirements = Locations.VanillaLocations[itemkey].Location.RequiredItemsDoors[0].Keys;
+                        foreach (string req in requirements)
+                        {
+                            int checkCount = 0;
+                            if (ERSphereOneItemsAndAreas.Contains(req))
+                            { checkCount++; }
+                            else
+                            { continue; }
+
+                            if (checkCount == requirements.Count)
+                            { SphereOnePlayer.Add(itemkey, item); }
+                        }
+                    }
+                    else if (item.Player != Archipelago.instance.GetPlayerSlot() && item.Classification == ItemFlags.Advancement)
+                    {
+                        var requirements = Locations.VanillaLocations[itemkey].Location.RequiredItemsDoors[0].Keys;
+                        foreach (string req in requirements)
+                        {
+                            int checkCount = 0;
+                            if (ERSphereOneItemsAndAreas.Contains(req))
+                            { checkCount++; }
+                            else
+                            { continue; }
+                            if (checkCount == requirements.Count)
+                            { SphereOneOthers.Add(itemkey, item); }
+                        }
+                    }
                 }
-                if (item.Player != Archipelago.instance.GetPlayerSlot() && item.Classification == ItemFlags.Advancement && Locations.VanillaLocations[itemkey].Location.RequiredItems.Count == 0) {
-                    SphereOneOthers.Add(itemkey, item);
+                else
+                {
+                    if (Archipelago.instance.GetPlayerGame(item.Player) == "Tunic" && MailboxItems.Contains(item.ItemName) && Locations.VanillaLocations[itemkey].Location.RequiredItems.Count == 0)
+                    {
+                        SphereOnePlayer.Add(itemkey, item);
+                    }
+                    if (item.Player != Archipelago.instance.GetPlayerSlot() && item.Classification == ItemFlags.Advancement && Locations.VanillaLocations[itemkey].Location.RequiredItems.Count == 0)
+                    {
+                        SphereOneOthers.Add(itemkey, item);
+                    }
                 }
             }
             ArchipelagoItem mailboxitem = null;
@@ -66,7 +156,6 @@ namespace TunicArchipelago {
                 Hint = $"yor frehndz muhst furst hehlp yoo fInd yor wA...\ngoud luhk, rooin sEkur.";
             }
             HintMessages.Add("Mailbox", Hint);
-
             ArchipelagoHint Hyperdash = Locations.MajorItemLocations["Hero's Laurels"][0];
             Hint = $"lehjehnd sehz <#FF00FF>suhm%i^ ehkstruhordinArE<#FFFFFF>  [laurels] ";
             if (Hyperdash.Player == Player) {
@@ -80,7 +169,6 @@ namespace TunicArchipelago {
                 Hint += $" uhwAts yoo aht\n\"{Hyperdash.Location.ToUpper()}\"\nin\"{Archipelago.instance.GetPlayerName((int)Hyperdash.Player).ToUpper()}'S WORLD...\"";  
             }
             HintMessages.Add("Temple Statue", Hint);
-
             List<string> HintItems = new List<string>() { "Magic Wand", "Magic Orb", "Magic Dagger" };
             if (SaveFile.GetInt(AbilityShuffle) == 1 && SaveFile.GetInt(HexagonQuestEnabled) == 0) {
                 HintItems.Add("Pages 24-25 (Prayer)");
@@ -138,11 +226,57 @@ namespace TunicArchipelago {
                 } else {
                     Hint = $"#A sA #uh {HexagonColors[Hexagon]}kwehstuhgawn [hexagram]<#FFFFFF> iz fownd aht\n\"{HexHint.Location.ToUpper()}\"\nin \"{Archipelago.instance.GetPlayerName((int)HexHint.Player).ToUpper()}'S WORLD...\"";
                 }
-                
                 Hints.HintMessages.Add(HexagonHintArea, Hint);
 
                 Hexagons.Remove(Hexagon);
                 HexagonHintGraves.Remove(HexagonHintArea);
+            }
+            // make the in-game signs tell you what area they're pointing to
+            if (SaveFile.GetInt(EntranceRando) == 1)
+            {
+                foreach (PortalCombo Portal in TunicPortals.RandomizedPortals.Values)
+                {
+                    if (Portal.Portal1.SceneDestinationTag == "Overworld Redux, Forest Belltower_")
+                    { Hints.HintMessages.Add("East Forest Sign", $"\"{Locations.SimplifiedSceneNames[Portal.Portal2.Scene]}\" [arrow_right]"); }
+                    if (Portal.Portal2.SceneDestinationTag == "Overworld Redux, Forest Belltower_")
+                    { Hints.HintMessages.Add("East Forest Sign", $"\"{Locations.SimplifiedSceneNames[Portal.Portal1.Scene]}\" [arrow_right]"); }
+
+                    if (Portal.Portal1.SceneDestinationTag == "Overworld Redux, Archipelagos Redux_lower")
+                    { Hints.HintMessages.Add("West Garden Sign", $"[arrow_left] \"{Locations.SimplifiedSceneNames[Portal.Portal2.Scene]}\""); }
+                    if (Portal.Portal2.SceneDestinationTag == "Overworld Redux, Archipelagos Redux_lower")
+                    { Hints.HintMessages.Add("West Garden Sign", $"[arrow_left] \"{Locations.SimplifiedSceneNames[Portal.Portal1.Scene]}\""); }
+
+                    if (Portal.Portal1.SceneDestinationTag == "Overworld Redux, Fortress Courtyard_")
+                    { Hints.HintMessages.Add("Fortress Sign", $"\"{Locations.SimplifiedSceneNames[Portal.Portal2.Scene]}\" [arrow_right]"); }
+                    if (Portal.Portal2.SceneDestinationTag == "Overworld Redux, Fortress Courtyard_")
+                    { Hints.HintMessages.Add("Fortress Sign", $"\"{Locations.SimplifiedSceneNames[Portal.Portal1.Scene]}\" [arrow_right]"); }
+
+                    if (Portal.Portal1.SceneDestinationTag == "Overworld Redux, Darkwoods Tunnel_")
+                    { Hints.HintMessages.Add("Quarry Sign", $"\"{Locations.SimplifiedSceneNames[Portal.Portal2.Scene]}\" [arrow_up]"); }
+                    if (Portal.Portal2.SceneDestinationTag == "Overworld Redux, Darkwoods Tunnel_")
+                    { Hints.HintMessages.Add("Quarry Sign", $"\"{Locations.SimplifiedSceneNames[Portal.Portal1.Scene]}\" [arrow_up]"); }
+
+                    if (Portal.Portal1.SceneDestinationTag == "Overworld Redux, Ruins Passage_west")
+                    { Hints.HintMessages.Add("Ruined Hall Sign", $"\"{Locations.SimplifiedSceneNames[Portal.Portal2.Scene]}\" [arrow_right]"); }
+                    if (Portal.Portal2.SceneDestinationTag == "Overworld Redux, Ruins Passage_west")
+                    { Hints.HintMessages.Add("Ruined Hall Sign", $"\"{Locations.SimplifiedSceneNames[Portal.Portal1.Scene]}\" [arrow_right]"); }
+
+                    if (Portal.Portal1.SceneDestinationTag == "Overworld Redux, Overworld Interiors_house")
+                    { Hints.HintMessages.Add("Town Sign", $"[arrow_left] \"{Locations.SimplifiedSceneNames[Portal.Portal2.Scene]}\""); }
+                    if (Portal.Portal2.SceneDestinationTag == "Overworld Redux, Overworld Interiors_house")
+                    { Hints.HintMessages.Add("Town Sign", $"[arrow_left] \"{Locations.SimplifiedSceneNames[Portal.Portal1.Scene]}\""); }
+
+                    if (Portal.Portal1.SceneDestinationTag == "East Forest Redux, Sword Access_lower")
+                    {
+                        Hints.HintMessages.Add("West East Forest Sign", $"\"{Locations.SimplifiedSceneNames[Portal.Portal2.Scene]}\" [arrow_right]");
+                        Hints.HintMessages.Add("East East Forest Sign", $"\"{Locations.SimplifiedSceneNames[Portal.Portal2.Scene]}\" [arrow_right]");
+                    }
+                    if (Portal.Portal2.SceneDestinationTag == "East Forest Redux, Sword Access_lower")
+                    {
+                        Hints.HintMessages.Add("West East Forest Sign", $"\"{Locations.SimplifiedSceneNames[Portal.Portal1.Scene]}\" [arrow_right]");
+                        Hints.HintMessages.Add("East East Forest Sign", $"\"{Locations.SimplifiedSceneNames[Portal.Portal1.Scene]}\" [arrow_right]");
+                    }
+                }
             }
         }
 

@@ -10,6 +10,7 @@ namespace TunicArchipelago {
         public string LocationId;
         public string Position;
         public List<Dictionary<string, int>> RequiredItems;
+        public List<Dictionary<string, int>> RequiredItemsDoors;
         public int SceneId;
         public string SceneName;
     }

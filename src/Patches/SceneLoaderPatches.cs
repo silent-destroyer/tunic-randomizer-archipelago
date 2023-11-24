@@ -1,6 +1,7 @@
 ﻿using Archipelago.MultiClient.Net.Enums;
 using BepInEx.Logging;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -350,7 +351,11 @@ namespace TunicArchipelago {
                 }
 
                 if (SaveFile.GetInt("randomizer entrance rando enabled") == 1)
-                { TunicPortals.ModifyPortals(TunicPortals.CreatePortalPairs(), loadingScene); }
+                {
+                    TunicPortals.CreatePortalPairs(((JObject)Archipelago.instance.GetPlayerSlotData()["Entrance Rando"]).ToObject<Dictionary<string, string>>());
+                    TunicPortals.ModifyPortals(loadingScene);
+
+                }
 
                 if (SaveFile.GetInt(AbilityShuffle) == 1 && SaveFile.GetInt(HolyCrossUnlocked) == 0) {
                     foreach (ToggleObjectBySpell SpellToggle in Resources.FindObjectsOfTypeAll<ToggleObjectBySpell>()) {
