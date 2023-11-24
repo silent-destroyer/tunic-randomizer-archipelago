@@ -20,7 +20,7 @@ namespace TunicArchipelago {
                     __instance.gameObject.GetComponent<NPC>().script.text = $"I lawst mI mahjik stOn [dath] ahnd kahnt gO hOm...---... wAt, yoo fownd it! plEz, yooz it now!";
                 }
             }
-            if (Hints.HintLocations.ContainsKey(InteractionLocation) && TunicArchipelago.Settings.HeroPathHintsEnabled) {
+            if (Hints.HintLocations.ContainsKey(InteractionLocation) && Hints.HintMessages.ContainsKey(Hints.HintLocations[InteractionLocation]) && TunicArchipelago.Settings.HeroPathHintsEnabled) {
                 LanguageLine Hint = ScriptableObject.CreateInstance<LanguageLine>();
                 Hint.text = Hints.HintMessages[Hints.HintLocations[InteractionLocation]];
                 GenericMessage.ShowMessage(Hint);

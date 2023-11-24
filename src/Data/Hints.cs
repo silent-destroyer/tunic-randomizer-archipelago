@@ -266,15 +266,18 @@ namespace TunicArchipelago {
                     if (Portal.Portal2.SceneDestinationTag == "Overworld Redux, Overworld Interiors_house")
                     { Hints.HintMessages.Add("Town Sign", $"[arrow_left] \"{Locations.SimplifiedSceneNames[Portal.Portal1.Scene]}\""); }
 
-                    if (Portal.Portal1.SceneDestinationTag == "East Forest Redux, Sword Access_lower")
-                    {
-                        Hints.HintMessages.Add("West East Forest Sign", $"\"{Locations.SimplifiedSceneNames[Portal.Portal2.Scene]}\" [arrow_right]");
+                    if (Portal.Portal1.SceneDestinationTag == "East Forest Redux, Sword Access_lower") {
                         Hints.HintMessages.Add("East East Forest Sign", $"\"{Locations.SimplifiedSceneNames[Portal.Portal2.Scene]}\" [arrow_right]");
                     }
-                    if (Portal.Portal2.SceneDestinationTag == "East Forest Redux, Sword Access_lower")
-                    {
-                        Hints.HintMessages.Add("West East Forest Sign", $"\"{Locations.SimplifiedSceneNames[Portal.Portal1.Scene]}\" [arrow_right]");
+                    if (Portal.Portal2.SceneDestinationTag == "East Forest Redux, Sword Access_lower") {
                         Hints.HintMessages.Add("East East Forest Sign", $"\"{Locations.SimplifiedSceneNames[Portal.Portal1.Scene]}\" [arrow_right]");
+                    }
+
+                    if (Portal.Portal1.SceneDestinationTag == "East Forest Redux, East Forest Redux Laddercave_lower") {
+                        Hints.HintMessages.Add("West East Forest Sign", $"[arrow_left] \"{Locations.SimplifiedSceneNames[Portal.Portal2.Scene]}\"");
+                    }
+                    if (Portal.Portal2.SceneDestinationTag == "East Forest Redux, East Forest Redux Laddercave_lower") {
+                        Hints.HintMessages.Add("West East Forest Sign", $"[arrow_left] \"{Locations.SimplifiedSceneNames[Portal.Portal1.Scene]}\"");
                     }
                 }
             }
