@@ -60,6 +60,10 @@ namespace TunicArchipelago {
                 Directory.CreateDirectory(Application.persistentDataPath + "/Randomizer/");
             }
 
+            if (!Directory.Exists(Application.dataPath + "/../BepInEx/plugins/Tunic Archipelago")) {
+                Directory.CreateDirectory(Application.dataPath + "/../BepInEx/plugins/Tunic Archipelago");
+            }
+
             if (!File.Exists(SettingsPath)) {
                 Settings = new RandomizerSettings();
                 File.WriteAllText(SettingsPath, JsonConvert.SerializeObject(Settings, Formatting.Indented));
