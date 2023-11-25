@@ -945,7 +945,7 @@ namespace TunicArchipelago {
                         NewItem.transform.GetChild(j).gameObject.layer = 12;
                     }
 
-                    if (Archipelago.instance.GetPlayerGame(APItem.Player) == "Tunic" && APItem.ItemName == "Ice Bomb") {
+                    if (Archipelago.instance.GetPlayerGame(APItem.Player) == "Tunic" && APItem.ItemName.Contains("Ice Bomb")) {
                         NewItem.transform.GetChild(0).gameObject.SetActive(false);
                     }
 
@@ -1208,12 +1208,11 @@ namespace TunicArchipelago {
             if (__instance._f_5__2 > 0.5f && __instance._f_5__2 < 0.6f) {
                 for (int i = 0; i < 3; i++) {
                     if (IceFlask != null) {
-                        __instance.__4__this.transform.GetChild(0).GetChild(10).GetChild(0).GetChild(i).GetChild(0).gameObject.SetActive(true);
                         try {
                             __instance.__4__this.transform.GetChild(0).GetChild(10).GetChild(0).GetChild(i).GetChild(0).gameObject.SetActive(true);
                             foreach (ShopItem shopItem in ShopManager.cachedShopItems) {
                                 if (ShopItemIDs.Contains($"{shopItem.name} [Shop]") && !Locations.CheckedLocations[$"{shopItem.name} [Shop]"]
-                                    && ItemLookup.ItemList[$"{shopItem.name} [Shop]"].ItemName == "Ice Bomb" && Archipelago.instance.GetPlayerGame(ItemLookup.ItemList[$"{shopItem.name} [Shop]"].Player) == "Tunic") {
+                                    && ItemLookup.ItemList[$"{shopItem.name} [Shop]"].ItemName.Contains("Ice Bomb") && Archipelago.instance.GetPlayerGame(ItemLookup.ItemList[$"{shopItem.name} [Shop]"].Player) == "Tunic") {
                                     shopItem.transform.GetChild(0).GetChild(1).GetChild(0).gameObject.SetActive(true);
                                 }
                             }
