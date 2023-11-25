@@ -85,16 +85,21 @@ namespace TunicArchipelago {
                     height = 490f;
                     y += 40f;
                     GUI.Toggle(new Rect(10f, 340f, 195f, 30f), slotData["entrance_rando"].ToString() == "1", $"Entrance Randomizer");
+                } else {
+                    height = 490f;
+                    y += 40f;
+                    GUI.Toggle(new Rect(10f, 340f, 195f, 30f), false, $"Entrance Randomizer");
                 }
             } else {
-                height = 450f;
+                height = 490f;
+                y += 40f;
                 GUI.Toggle(new Rect(10f, 220f, 180f, 30f), false, "Keys Behind Bosses");
                 GUI.Toggle(new Rect(220f, 220f, 210f, 30f), false, "Sword Progression");
                 GUI.Toggle(new Rect(10f, 260f, 175f, 30f), false, "Start With Sword");
                 GUI.Toggle(new Rect(220f, 260f, 175f, 30f), false, "Shuffle Abilities");
                 GUI.Toggle(new Rect(10f, 300f, 175f, 30f), false, "Hexagon Quest");
                 GUI.Toggle(new Rect(220f, 300f, 175f, 30f), false, "Fool Traps: Off");
-
+                GUI.Toggle(new Rect(10f, 340f, 195f, 30f), false, $"Entrance Randomizer");
             }
 
             GUI.Label(new Rect(10f, y, 200f, 30f), $"Other Settings");
