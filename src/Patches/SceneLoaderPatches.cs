@@ -217,9 +217,9 @@ namespace TunicArchipelago {
             for (int i = 0; i < 28; i++) {
                 SaveFile.SetInt("unlocked page " + i, SaveFile.GetInt("randomizer picked up page " + i) == 1 ? 1 : 0);
             }
-/*            foreach (string Key in ItemLookup.HeroRelicLookup.Keys) {
-                StateVariable.GetStateVariableByName(ItemLookup.HeroRelicLookup[Key].Flag).BoolValue = SaveFile.GetInt("randomizer picked up " + ItemLookup.HeroRelicLookup[Key].OriginalPickupLocation) == 1;
-            }*/
+            /*            foreach (string Key in ItemLookup.HeroRelicLookup.Keys) {
+                            StateVariable.GetStateVariableByName(ItemLookup.HeroRelicLookup[Key].Flag).BoolValue = SaveFile.GetInt("randomizer picked up " + ItemLookup.HeroRelicLookup[Key].OriginalPickupLocation) == 1;
+                        }*/
 
 
             if (SceneName == "Waterfall") {
@@ -280,7 +280,7 @@ namespace TunicArchipelago {
                 }
             } else if (SceneName == "Overworld Redux") {
                 GameObject.Find("_Signposts/Signpost (3)/").GetComponent<Signpost>().message.text = $"#is wA too \"West Garden\"\n<#33FF33>[death] bEwAr uhv tArE [death]";
-                GameObject.Find("_Environment Special/Door (1)/door/key twist").GetComponent<MeshRenderer>().materials = ModelSwaps.Items["Key (House)"].GetComponent <MeshRenderer>().materials;
+                GameObject.Find("_Environment Special/Door (1)/door/key twist").GetComponent<MeshRenderer>().materials = ModelSwaps.Items["Key (House)"].GetComponent<MeshRenderer>().materials;
                 if (TunicArchipelago.Settings.HeroPathHintsEnabled && SaveFile.GetInt($"randomizer picked up {Hints.MailboxHintId}") == 0) {
                     GameObject.Find("_Environment/_Decorations/Mailbox (1)/mailbox flag").transform.rotation = new Quaternion(0.5f, -0.5f, 0.5f, 0.5f);
                 }
@@ -313,19 +313,19 @@ namespace TunicArchipelago {
                     GameObject.Find("merchant (1)").SetActive(false);
                     GameObject.Find("Environment").transform.GetChild(3).gameObject.SetActive(true);
                 }
-            }
-            else if (SceneName == "Cathedral Arena")
-            {
-                if (SaveFile.GetInt("randomizer entrance rando enabled") == 1)
-                {
+            } else if (SceneName == "Cathedral Arena") {
+                if (SaveFile.GetInt("randomizer entrance rando enabled") == 1) {
                     StateVariable.GetStateVariableByName("SV_cathedral elevator").BoolValue = false;
                 }
-            }
-            else if (SceneName == "Cathedral Redux")
-            {
-                if (SaveFile.GetInt("randomizer entrance rando enabled") == 1)
-                {
+            } else if (SceneName == "Cathedral Redux") {
+                if (SaveFile.GetInt("randomizer entrance rando enabled") == 1) {
                     StateVariable.GetStateVariableByName("SV_cathedral elevator").BoolValue = true;
+                }
+            } else if (SceneName == "Maze Room") {
+                foreach (Chest chest in Resources.FindObjectsOfTypeAll<Chest>().Where(chest => chest.name == "Chest: Fairy")) { 
+                    chest.transform.GetChild(4).gameObject.SetActive(false);
+                    chest.transform.GetChild(7).gameObject.SetActive(false);
+                    chest.transform.parent.GetChild(2).gameObject.SetActive(false);
                 }
             }
 
