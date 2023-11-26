@@ -367,6 +367,11 @@ namespace TunicArchipelago {
                 HintableLocations.Remove("Hexagon Green [Library Arena]");
                 HintableLocations.Remove("Hexagon Blue [ziggurat2020_3]");
             }
+            if(SaveFile.GetInt(EntranceRando) == 1) {
+                // Remove dead ends since they don't matter
+                HintableLocations.Remove("1011 [Dusty]");
+                HintableLocations.Remove("final [Mountaintop]");
+            }
             foreach (string Key in HintableLocations) {
                 ArchipelagoItem Item = ItemLookup.ItemList[Key];
                 string Location = HintableLocationIds[Key];
