@@ -140,8 +140,8 @@ namespace TunicArchipelago
                     new TunicPortal("Overworld Cave", "", "Rotating Lights Entrance", granularRegion: "Overworld"),
                     new TunicPortal("Swamp Redux 2", "wall", "Swamp Upper Entrance", granularRegion: "Overworld Not First Steps", requiredItems: new Dictionary<string, int> { { "Hyperdash", 1} }),
                     new TunicPortal("Swamp Redux 2", "conduit", "Swamp Lower Entrance", granularRegion: "Overworld"),
-                    new TunicPortal("Ruins Passage", "east", "Ruined Hall Entrance Not-Door", granularRegion: "Overworld"),
-                    new TunicPortal("Ruins Passage", "west", "Ruined Hall Entrance Door", granularRegion: "Overworld Not First Steps", requiredItems: new Dictionary<string, int> { { "Key", 2 } }), // and access to any overworld portal, but we start in overworld so no need to put it here
+                    new TunicPortal("Ruins Passage", "east", "Ruined Passage Entrance Not-Door", granularRegion: "Overworld"),
+                    new TunicPortal("Ruins Passage", "west", "Ruined Passage Entrance Door", granularRegion: "Overworld Not First Steps", requiredItems: new Dictionary<string, int> { { "Key", 2 } }), // and access to any overworld portal, but we start in overworld so no need to put it here
                     new TunicPortal("Atoll Redux", "upper", "Atoll Upper Entrance", granularRegion: "Overworld"),
                     new TunicPortal("Atoll Redux", "lower", "Atoll Lower Entrance", granularRegion: "Overworld"),
                     new TunicPortal("ShopSpecial", "", "Special Shop Entrance", granularRegion: "Overworld Not First Steps", requiredItems: new Dictionary<string, int> { { "Hyperdash", 1} }),
@@ -263,8 +263,8 @@ namespace TunicArchipelago
                 "Ruins Passage", // That little hallway with the key door near the start in Overworld
                 new List<TunicPortal>
                 {
-                    new TunicPortal("Overworld Redux", "east", "Ruined Hall Not-Door Exit", granularRegion: "Ruined Hall"),
-                    new TunicPortal("Overworld Redux", "west", "Ruined Hall Door Exit", granularRegion: "Ruined Hall"),
+                    new TunicPortal("Overworld Redux", "east", "Ruined Passage Not-Door Exit", granularRegion: "Ruined Passage"),
+                    new TunicPortal("Overworld Redux", "west", "Ruined Passage Door Exit", granularRegion: "Ruined Passage"),
                 }
             },
             {
