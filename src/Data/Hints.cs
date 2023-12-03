@@ -35,6 +35,12 @@ namespace TunicArchipelago {
         public static Dictionary<string, string> HintMessages = new Dictionary<string, string>();
 
         public static String MailboxHintId = "";
+        public static string ForestHintId = "";
+        public static string FortressHintId = "";
+        public static string GardenHintId = "";
+        public static string SwampHintId = "";
+        public static string LibraryHintId = "";
+        public static string MonasteryHintId = "";
 
         // Used for getting what sphere 1 is if you have ER on
         // Gives you items in Overworld or items in adjacent scenes
@@ -197,6 +203,14 @@ namespace TunicArchipelago {
                 Hint += $"\niz lOkAtid awn #uh \"<#ffd700>PATH OF THE HERO<#ffffff>...\"";
                 Hints.HintMessages.Add(HintGrave, Hint);
 
+                if (HintGrave == "East Forest Relic") {
+                    Hints.ForestHintId = $"{ItemHint.Player}, {ItemHint.Location}";
+                } else if (HintGrave == "Fortress Relic") {
+                    Hints.FortressHintId = $"{ItemHint.Player}, {ItemHint.Location}";
+                } else if (HintGrave == "West Garden Relic") {
+                    Hints.GardenHintId = $"{ItemHint.Player}, {ItemHint.Location}";
+                }
+
                 HintItems.Remove(HintItem);
                 HintGraves.Remove(HintGrave);
             }
@@ -227,6 +241,14 @@ namespace TunicArchipelago {
                     Hint = $"#A sA #uh {HexagonColors[Hexagon]}kwehstuhgawn [hexagram]<#FFFFFF> iz fownd aht\n\"{HexHint.Location.ToUpper()}\"\nin \"{Archipelago.instance.GetPlayerName((int)HexHint.Player).ToUpper()}'S WORLD...\"";
                 }
                 Hints.HintMessages.Add(HexagonHintArea, Hint);
+
+                if (HexagonHintArea == "Swamp Relic") {
+                    Hints.SwampHintId = $"{HexHint.Player}, {HexHint.Location}";
+                } else if (HexagonHintArea == "Library Relic") {
+                    Hints.LibraryHintId = $"{HexHint.Player}, {HexHint.Location}";
+                } else if (HexagonHintArea == "Monastery Relic") {
+                    Hints.MonasteryHintId = $"{HexHint.Player}, {HexHint.Location}";
+                }
 
                 Hexagons.Remove(Hexagon);
                 HexagonHintGraves.Remove(HexagonHintArea);

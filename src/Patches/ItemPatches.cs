@@ -370,6 +370,23 @@ namespace TunicArchipelago {
                 }
             }
 
+            if (TunicArchipelago.Settings.HeroPathHintsEnabled) {
+                string slotLoc = networkItem.Player.ToString() + ", " + Archipelago.instance.GetLocationName(networkItem.Location);
+                if (Hints.ForestHintId == slotLoc) {
+                    SaveFile.SetInt($"randomizer got {Hints.ForestHintId}", 1);
+                } else if (Hints.FortressHintId == slotLoc) {
+                    SaveFile.SetInt($"randomizer got {Hints.FortressHintId}", 1);
+                } else if (Hints.GardenHintId == slotLoc) {
+                    SaveFile.SetInt($"randomizer got {Hints.GardenHintId}", 1);
+                } else if (Hints.SwampHintId == slotLoc) {
+                    SaveFile.SetInt($"randomizer got {Hints.SwampHintId}", 1);
+                } else if (Hints.LibraryHintId == slotLoc) {
+                    SaveFile.SetInt($"randomizer got {Hints.LibraryHintId}", 1);
+                } else if (Hints.MonasteryHintId == slotLoc) {
+                    SaveFile.SetInt($"randomizer got {Hints.MonasteryHintId}", 1);
+                }
+            }
+
             TunicArchipelago.Tracker.SetCollectedItem(ItemName, true);
 
             return ItemResult.Success;

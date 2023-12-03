@@ -298,6 +298,12 @@ namespace TunicArchipelago {
                 }
                 // Activate night bridge to allow access to shortcut ladder
                 GameObject.Find("_Setpieces Etc/NightBridge/").GetComponent<DayNightBridge>().dayOrNight = StateVariable.GetStateVariableByName("Is Night").BoolValue ? DayNightBridge.DayNight.NIGHT : DayNightBridge.DayNight.DAY;
+                
+                // Turn off the hero grave candle if you haven't found its hex yet
+                if (TunicArchipelago.Settings.HeroPathHintsEnabled && SaveFile.GetInt($"randomizer got {Hints.SwampHintId}") == 0) {
+                    GameObject.Find("_Setpieces Etc/RelicPlinth/cathedral_candleflame").SetActive(false);
+                    GameObject.Find("_Setpieces Etc/RelicPlinth/Point Light").SetActive(false);
+                }
             } else if (SceneName == "g_elements") {
                 GhostHints.SpawnLostGhostFox();
             } else if (SceneName == "Posterity") {
@@ -326,6 +332,29 @@ namespace TunicArchipelago {
                     chest.transform.GetChild(4).gameObject.SetActive(false);
                     chest.transform.GetChild(7).gameObject.SetActive(false);
                     chest.transform.parent.GetChild(2).gameObject.SetActive(false);
+                }
+            } else if (SceneName == "Sword Access") {
+                if (TunicArchipelago.Settings.HeroPathHintsEnabled && SaveFile.GetInt($"randomizer got {Hints.ForestHintId}") == 0) {
+                    GameObject.Find("_Setpieces/RelicPlinth (1)/cathedral_candleflame").SetActive(false);
+                }
+            } else if (SceneName == "Fortress Reliquary") {
+                if (TunicArchipelago.Settings.HeroPathHintsEnabled && SaveFile.GetInt($"randomizer got {Hints.FortressHintId}") == 0) {
+                    GameObject.Find("RelicPlinth/cathedral_candleflame").SetActive(false);
+                }
+            } else if (SceneName == "Archipelagos Redux") {
+                if (TunicArchipelago.Settings.HeroPathHintsEnabled && SaveFile.GetInt($"randomizer got {Hints.GardenHintId}") == 0) {
+                    GameObject.Find("_Environment Prefabs/RelicPlinth/cathedral_candleflame").SetActive(false);
+                    GameObject.Find("_Environment Prefabs/RelicPlinth/Point Light").SetActive(false);
+                }
+            } else if (SceneName == "Library Hall") {
+                if (TunicArchipelago.Settings.HeroPathHintsEnabled && SaveFile.GetInt($"randomizer got {Hints.LibraryHintId}") == 0) {
+                    GameObject.Find("_Special/RelicPlinth/cathedral_candleflame").SetActive(false);
+                    GameObject.Find("_Special/RelicPlinth/Point Light").SetActive(false);
+                }
+            } else if (SceneName == "Monastery") {
+                if (TunicArchipelago.Settings.HeroPathHintsEnabled && SaveFile.GetInt($"randomizer got {Hints.MonasteryHintId}") == 0) {
+                    GameObject.Find("Root/RelicPlinth (1)/cathedral_candleflame").SetActive(false);
+                    GameObject.Find("Root/RelicPlinth (1)/Point Light").SetActive(false);
                 }
             }
 
