@@ -99,46 +99,39 @@ namespace TunicArchipelago {
             foreach (string itemkey in ItemLookup.ItemList.Keys) {
                 ArchipelagoItem item = ItemLookup.ItemList[itemkey];
                 // In ER, we need to check more info, since every item has a required item count
-                if (SaveFile.GetInt(EntranceRando) == 1)
-                {
-                    if (Archipelago.instance.GetPlayerGame(item.Player) == "Tunic" && MailboxItems.Contains(item.ItemName))
-                    {
+                if (SaveFile.GetInt(EntranceRando) == 1) {
+                    if (Archipelago.instance.GetPlayerGame(item.Player) == "Tunic" && MailboxItems.Contains(item.ItemName)) {
                         var requirements = Locations.VanillaLocations[itemkey].Location.RequiredItemsDoors[0].Keys;
-                        foreach (string req in requirements)
-                        {
+                        foreach (string req in requirements) {
                             int checkCount = 0;
-                            if (ERSphereOneItemsAndAreas.Contains(req))
-                            { checkCount++; }
-                            else
-                            { continue; }
-
-                            if (checkCount == requirements.Count)
-                            { SphereOnePlayer.Add(itemkey, item); }
+                            if (ERSphereOneItemsAndAreas.Contains(req)) {
+                                checkCount++;
+                            } else { 
+                                continue;
+                            }
+                            if (checkCount == requirements.Count) {
+                                SphereOnePlayer.Add(itemkey, item);
+                            }
                         }
                     }
-                    else if (item.Player != Archipelago.instance.GetPlayerSlot() && item.Classification == ItemFlags.Advancement)
-                    {
+                    else if (item.Player != Archipelago.instance.GetPlayerSlot() && item.Classification == ItemFlags.Advancement) {
                         var requirements = Locations.VanillaLocations[itemkey].Location.RequiredItemsDoors[0].Keys;
-                        foreach (string req in requirements)
-                        {
+                        foreach (string req in requirements) {
                             int checkCount = 0;
-                            if (ERSphereOneItemsAndAreas.Contains(req))
-                            { checkCount++; }
-                            else
-                            { continue; }
+                            if (ERSphereOneItemsAndAreas.Contains(req)) {
+                                checkCount++;
+                            } else {
+                                continue;
+                            }
                             if (checkCount == requirements.Count)
                             { SphereOneOthers.Add(itemkey, item); }
                         }
                     }
-                }
-                else
-                {
-                    if (Archipelago.instance.GetPlayerGame(item.Player) == "Tunic" && MailboxItems.Contains(item.ItemName) && Locations.VanillaLocations[itemkey].Location.RequiredItems.Count == 0)
-                    {
+                } else {
+                    if (Archipelago.instance.GetPlayerGame(item.Player) == "Tunic" && MailboxItems.Contains(item.ItemName) && Locations.VanillaLocations[itemkey].Location.RequiredItems.Count == 0) {
                         SphereOnePlayer.Add(itemkey, item);
                     }
-                    if (item.Player != Archipelago.instance.GetPlayerSlot() && item.Classification == ItemFlags.Advancement && Locations.VanillaLocations[itemkey].Location.RequiredItems.Count == 0)
-                    {
+                    if (item.Player != Archipelago.instance.GetPlayerSlot() && item.Classification == ItemFlags.Advancement && Locations.VanillaLocations[itemkey].Location.RequiredItems.Count == 0) {
                         SphereOneOthers.Add(itemkey, item);
                     }
                 }
@@ -149,10 +142,12 @@ namespace TunicArchipelago {
                 key = SphereOnePlayer.Keys.ToList()[random.Next(SphereOnePlayer.Count)];
                 mailboxitem = SphereOnePlayer[key];
                 MailboxHintId = key;
+                Logger.LogInfo("mailbox hint is " + MailboxHintId);
             } else if (SphereOneOthers.Count > 0) {
                 key = SphereOneOthers.Keys.ToList()[random.Next(SphereOneOthers.Count)];
                 mailboxitem = SphereOneOthers[key];
                 MailboxHintId = key;
+                Logger.LogInfo("mailbox hint is " + MailboxHintId);
             }
             if (mailboxitem != null) {
                 Scene = Locations.SimplifiedSceneNames[Locations.VanillaLocations[key].Location.SceneName].ToUpper();

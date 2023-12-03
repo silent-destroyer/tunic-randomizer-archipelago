@@ -288,6 +288,12 @@ namespace TunicArchipelago {
 
                 string GameObjectId = Locations.LocationDescriptionToId[LocationId];
                 SaveFile.SetInt(ItemCollectedKey + GameObjectId, 1);
+
+                // flip the flag down immediately when you find your first steps, doesn't work in slot co-op but that's such a minor thing that like whatever
+                if (TunicArchipelago.Settings.HeroPathHintsEnabled && SaveFile.GetInt($"randomizer picked up {Hints.MailboxHintId}") == 1 && SceneLoaderPatches.SceneName == "Overworld Redux") {
+                    GameObject.Find("_Environment/_Decorations/Mailbox (1)/mailbox flag").transform.rotation = new Quaternion(0.0f, 0.0f, 0.0f, 0.0f);
+                }
+
                 Locations.CheckedLocations[GameObjectId] = true;
                 if (GameObject.Find($"fairy target {GameObjectId}")) {
                     GameObject.Destroy(GameObject.Find($"fairy target {GameObjectId}"));
