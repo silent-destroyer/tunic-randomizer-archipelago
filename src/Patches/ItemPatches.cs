@@ -374,16 +374,38 @@ namespace TunicArchipelago {
                 string slotLoc = networkItem.Player.ToString() + ", " + Archipelago.instance.GetLocationName(networkItem.Location);
                 if (Hints.ForestHintId == slotLoc) {
                     SaveFile.SetInt($"randomizer got {Hints.ForestHintId}", 1);
+                    if (SceneManager.GetActiveScene().name == "Sword Access") {
+                        GameObject.Find("_Setpieces/RelicPlinth (1)/cathedral_candleflame").SetActive(true);
+                    }
                 } else if (Hints.FortressHintId == slotLoc) {
                     SaveFile.SetInt($"randomizer got {Hints.FortressHintId}", 1);
+                    if (SceneManager.GetActiveScene().name == "Fortress Reliquary") {
+                        GameObject.Find("RelicPlinth/cathedral_candleflame").SetActive(true);
+                    }
                 } else if (Hints.GardenHintId == slotLoc) {
                     SaveFile.SetInt($"randomizer got {Hints.GardenHintId}", 1);
+                    if (SceneManager.GetActiveScene().name == "Archipelagos Redux") {
+                        GameObject.Find("_Environment Prefabs/RelicPlinth/cathedral_candleflame").SetActive(true);
+                        GameObject.Find("_Environment Prefabs/RelicPlinth/Point Light").SetActive(true);
+                    }
                 } else if (Hints.SwampHintId == slotLoc) {
                     SaveFile.SetInt($"randomizer got {Hints.SwampHintId}", 1);
+                    if (SceneManager.GetActiveScene().name == "Swamp Redux 2") {
+                        GameObject.Find("_Setpieces Etc/RelicPlinth/cathedral_candleflame").SetActive(true);
+                        GameObject.Find("_Setpieces Etc/RelicPlinth/Point Light").SetActive(true);
+                    }
                 } else if (Hints.LibraryHintId == slotLoc) {
                     SaveFile.SetInt($"randomizer got {Hints.LibraryHintId}", 1);
+                    if (SceneManager.GetActiveScene().name == "Library Hall") {
+                        GameObject.Find("_Special/RelicPlinth/cathedral_candleflame").SetActive(true);
+                        GameObject.Find("_Special/RelicPlinth/Point Light").SetActive(true);
+                    }
                 } else if (Hints.MonasteryHintId == slotLoc) {
                     SaveFile.SetInt($"randomizer got {Hints.MonasteryHintId}", 1);
+                    if (SceneManager.GetActiveScene().name == "Monastery") {
+                        GameObject.Find("Root/RelicPlinth (1)/cathedral_candleflame").SetActive(true);
+                        GameObject.Find("Root/RelicPlinth (1)/Point Light").SetActive(true);
+                    }
                 }
             }
 
