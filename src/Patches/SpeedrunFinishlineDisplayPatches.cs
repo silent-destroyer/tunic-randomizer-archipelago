@@ -204,14 +204,11 @@ namespace TunicArchipelago {
             TotalCompletion.transform.position = new Vector3(-60f, -30f, 55f);
             TotalCompletion.transform.localScale = new Vector3(2.5f, 2.5f, 2.5f);
             string Color = CheckCount == ItemLookup.ItemList.Count ? $"<#eaa614>" : "<#FFFFFF>";
-            if (TunicArchipelago.Settings.CollectReflectsInWorld) {
-                TotalCompletion.GetComponent<TextMeshPro>().text = $"Overall Completion: {Color}{CheckCount}/{ItemLookup.ItemList.Count}* ({Math.Round(CheckPercentage, 2)}%)\n\t<size=60%>*includes {ChecksCollectedByOthers} locations collected by others";
-            } else {
-                TotalCompletion.GetComponent<TextMeshPro>().text = $"Overall Completion: {Color}{CheckCount}/{ItemLookup.ItemList.Count} ({Math.Round(CheckPercentage, 2)}%)";
-            }
-            if ((int)CheckPercentage == 69) {
-                TotalCompletion.GetComponent<TextMeshPro>().text += " <size=40%>nice";
-            }
+
+            TotalCompletion.GetComponent<TextMeshPro>().text = $"Overall Completion: {Color}{CheckCount}/{ItemLookup.ItemList.Count}" +
+                $"{(TunicArchipelago.Settings.CollectReflectsInWorld ? "*" : "")} " +
+                $"({Math.Round(CheckPercentage, 2)}%) {((int)CheckPercentage == 69 ? "<size=40%>nice</size>" : "")}" +
+                $"{(TunicArchipelago.Settings.CollectReflectsInWorld ? $"\n\t<size=60%>*includes {ChecksCollectedByOthers} locations collected by others" : "")}";
 
             TotalCompletion.GetComponent<TextMeshPro>().fontSize = 100f;
             TotalCompletion.SetActive(true);
