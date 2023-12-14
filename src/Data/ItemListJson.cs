@@ -2504,7 +2504,9 @@
                 ""Location"": {
                     ""LocationId"": ""40"",
                     ""Position"": ""(359.9, 0.5, 34.0)"",
-                    ""RequiredItems"": [],
+                    ""RequiredItems"": [
+                        {""Stick"": 1}
+                    ],
                     ""RequiredItemsDoors"": [
                         {""Sewer"": 1, ""Stick"": 1}
                     ],
@@ -2521,7 +2523,9 @@
                 ""Location"": {
                     ""LocationId"": ""43"",
                     ""Position"": ""(368.9, -1.0, 21.0)"",
-                    ""RequiredItems"": [],
+                    ""RequiredItems"": [
+                        {""Stick"": 1}
+                    ],
                     ""RequiredItemsDoors"": [
                         {""Sewer"": 1, ""Stick"": 1}
                     ],
@@ -2538,7 +2542,9 @@
                 ""Location"": {
                     ""LocationId"": ""sewer"",
                     ""Position"": ""(351.0, 1.0, 97.0)"",
-                    ""RequiredItems"": [],
+                    ""RequiredItems"": [
+                        {""Stick"": 1}
+                    ],
                     ""RequiredItemsDoors"": [
                         {""Sewer"": 1, ""Stick"": 1}
                     ],
@@ -2555,7 +2561,9 @@
                 ""Location"": {
                     ""LocationId"": ""49"",
                     ""Position"": ""(405.6, 2.0, 107.0)"",
-                    ""RequiredItems"": [],
+                    ""RequiredItems"": [
+                        {""Stick"": 1}
+                    ],
                     ""RequiredItemsDoors"": [
                         {""Sewer"": 1, ""Stick"": 1}
                     ],
@@ -2572,7 +2580,9 @@
                 ""Location"": {
                     ""LocationId"": ""47"",
                     ""Position"": ""(406.0, 3.1, 174.0)"",
-                    ""RequiredItems"": [],
+                    ""RequiredItems"": [
+                        {""Stick"": 1}
+                    ],
                     ""RequiredItemsDoors"": [
                         {""Sewer"": 1, ""Stick"": 1}
                     ],
@@ -2589,7 +2599,9 @@
                 ""Location"": {
                     ""LocationId"": ""48"",
                     ""Position"": ""(321.0, 3.0, 201.0)"",
-                    ""RequiredItems"": [],
+                    ""RequiredItems"": [
+                        {""Stick"": 1}
+                    ],
                     ""RequiredItemsDoors"": [
                         {""Sewer"": 1, ""Stick"": 1}
                     ],
@@ -2606,7 +2618,9 @@
                 ""Location"": {
                     ""LocationId"": ""41"",
                     ""Position"": ""(286.3, -0.1, 133.1)"",
-                    ""RequiredItems"": [],
+                    ""RequiredItems"": [
+                        {""Stick"": 1}
+                    ],
                     ""RequiredItemsDoors"": [
                         {""Sewer"": 1, ""Stick"": 1}
                     ],
@@ -2623,7 +2637,9 @@
                 ""Location"": {
                     ""LocationId"": ""42"",
                     ""Position"": ""(340.9, 1.3, 137.9)"",
-                    ""RequiredItems"": [],
+                    ""RequiredItems"": [
+                        {""Stick"": 1}
+                    ],
                     ""RequiredItemsDoors"": [
                         {""Sewer"": 1, ""Stick"": 1}
                     ],
@@ -2640,7 +2656,9 @@
                 ""Location"": {
                     ""LocationId"": ""46"",
                     ""Position"": ""(347.4, -1.0, 115.9)"",
-                    ""RequiredItems"": [],
+                    ""RequiredItems"": [
+                        {""Stick"": 1}
+                    ],
                     ""RequiredItemsDoors"": [
                         {""Sewer"": 1, ""Stick"": 1}
                     ],
@@ -2657,7 +2675,9 @@
                 ""Location"": {
                     ""LocationId"": ""50"",
                     ""Position"": ""(324.0, 11.0, 89.0)"",
-                    ""RequiredItems"": [],
+                    ""RequiredItems"": [
+                        {""Stick"": 1}
+                    ],
                     ""RequiredItemsDoors"": [
                         {""Sewer, Sewer_Boss_"": 1}
                     ],
@@ -2674,7 +2694,9 @@
                 ""Location"": {
                     ""LocationId"": ""44"",
                     ""Position"": ""(343.5, 11.0, 69.5)"",
-                    ""RequiredItems"": [],
+                    ""RequiredItems"": [
+                        {""Stick"": 1}
+                    ],
                     ""RequiredItemsDoors"": [
                         {""Sewer, Overworld Redux_west_aqueduct"": 1}
                     ],
@@ -2691,7 +2713,9 @@
                 ""Location"": {
                     ""LocationId"": ""45"",
                     ""Position"": ""(374.0, 7.0, 74.0)"",
-                    ""RequiredItems"": [],
+                    ""RequiredItems"": [
+                        {""Stick"": 1}
+                    ],
                     ""RequiredItemsDoors"": [
                         {""Sewer, Sewer_Boss_"": 1}
                     ],
@@ -2725,9 +2749,11 @@
                 ""Location"": {
                     ""LocationId"": ""51"",
                     ""Position"": ""(296.1, 11.0, 89.3)"",
-                    ""RequiredItems"": [],
+                    ""RequiredItems"": [
+                        {""Stick"": 1}
+                    ],
                     ""RequiredItemsDoors"": [
-                    {""Sewer"": 1}
+                        {""Sewer"": 1, ""Stick"": 1}
                     ],
                     ""SceneId"": 27,
                     ""SceneName"": ""Sewer""
@@ -2763,7 +2789,7 @@
                     ""Position"": ""(-138.2, 28.0, 10.0)"",
                     ""RequiredItems"": [],
                     ""RequiredItemsDoors"": [
-                    {""Overworld Redux"": 1}
+                        {""Overworld Redux"": 1}
                     ],
                     ""SceneId"": 25,
                     ""SceneName"": ""Overworld Redux""
@@ -3960,7 +3986,9 @@
                 ""Location"": {
                     ""LocationId"": ""126"",
                     ""Position"": ""(80.0, 16.0, 13.0)"",
-                    ""RequiredItems"": [],
+                    ""RequiredItems"": [
+                        {""Sword"": 1}
+                    ],
                     ""RequiredItemsDoors"": [
                         {""Quarry Redux"": 1, ""Sword"": 1}
                     ],
@@ -3977,7 +4005,9 @@
                 ""Location"": {
                     ""LocationId"": ""133"",
                     ""Position"": ""(3.4, -8.0, -21.0)"",
-                    ""RequiredItems"": [],
+                    ""RequiredItems"": [
+                        {""Sword"": 1}
+                    ],
                     ""RequiredItemsDoors"": [
                         {""Quarry Redux"": 1, ""Sword"": 1}
                     ],
@@ -4252,7 +4282,9 @@
                 ""Location"": {
                     ""LocationId"": ""123"",
                     ""Position"": ""(-9.0, -12.0, -64.7)"",
-                    ""RequiredItems"": [],
+                    ""RequiredItems"": [
+                        {""Sword"": 1}
+                    ],
                     ""RequiredItemsDoors"": [
                         {""Quarry Redux"": 1, ""Sword"": 1}
                     ],
@@ -4269,7 +4301,9 @@
                 ""Location"": {
                     ""LocationId"": ""117"",
                     ""Position"": ""(-23.0, 0.0, 7.0)"",
-                    ""RequiredItems"": [],
+                    ""RequiredItems"": [
+                        {""Sword"": 1}
+                    ],
                     ""RequiredItemsDoors"": [
                         {""Quarry Redux"": 1, ""Sword"": 1}
                     ],
@@ -4286,7 +4320,9 @@
                 ""Location"": {
                     ""LocationId"": ""224"",
                     ""Position"": ""(28.5, 0.0, -3.0)"",
-                    ""RequiredItems"": [],
+                    ""RequiredItems"": [
+                        {""Sword"": 1}
+                    ],
                     ""RequiredItemsDoors"": [
                         {""Quarry Redux"": 1, ""Sword"": 1}
                     ],
@@ -4303,7 +4339,9 @@
                 ""Location"": {
                     ""LocationId"": ""289"",
                     ""Position"": ""(52.0, 0.0, 2.5)"",
-                    ""RequiredItems"": [],
+                    ""RequiredItems"": [
+                        {""Sword"": 1}
+                    ],
                     ""RequiredItemsDoors"": [
                         {""Quarry Redux"": 1, ""Sword"": 1}
                     ],
@@ -4320,7 +4358,9 @@
                 ""Location"": {
                     ""LocationId"": ""118"",
                     ""Position"": ""(125.4, 16.0, 14.8)"",
-                    ""RequiredItems"": [],
+                    ""RequiredItems"": [
+                        {""Sword"": 1}
+                    ],
                     ""RequiredItemsDoors"": [
                         {""Quarry Redux"": 1, ""Sword"": 1}
                     ],
@@ -4337,7 +4377,9 @@
                 ""Location"": {
                     ""LocationId"": ""268"",
                     ""Position"": ""(-13.0, 8.0, 21.6)"",
-                    ""RequiredItems"": [],
+                    ""RequiredItems"": [
+                        {""Sword"": 1}
+                    ],
                     ""RequiredItemsDoors"": [
                         {""Quarry Redux"": 1, ""Sword"": 1}
                     ],
@@ -4354,7 +4396,9 @@
                 ""Location"": {
                     ""LocationId"": ""125"",
                     ""Position"": ""(38.7, 24.5, 28.6)"",
-                    ""RequiredItems"": [],
+                    ""RequiredItems"": [
+                        {""Sword"": 1}
+                    ],
                     ""RequiredItemsDoors"": [
                         {""Quarry Redux"": 1, ""Sword"": 1}
                     ],
@@ -4371,7 +4415,9 @@
                 ""Location"": {
                     ""LocationId"": ""124"",
                     ""Position"": ""(62.0, 8.0, 15.0)"",
-                    ""RequiredItems"": [],
+                    ""RequiredItems"": [
+                        {""Sword"": 1}
+                    ],
                     ""RequiredItemsDoors"": [
                         {""Quarry Redux"": 1, ""Sword"": 1}
                     ],
@@ -4388,7 +4434,9 @@
                 ""Location"": {
                     ""LocationId"": ""119"",
                     ""Position"": ""(81.0, 56.0, 25.0)"",
-                    ""RequiredItems"": [],
+                    ""RequiredItems"": [
+                        {""Sword"": 1}
+                    ],
                     ""RequiredItemsDoors"": [
                         {""Quarry Redux"": 1, ""Sword"": 1}
                     ],
@@ -4405,7 +4453,9 @@
                 ""Location"": {
                     ""LocationId"": ""250"",
                     ""Position"": ""(21.8, 63.0, 51.4)"",
-                    ""RequiredItems"": [],
+                    ""RequiredItems"": [
+                        {""Sword"": 1}
+                    ],
                     ""RequiredItemsDoors"": [
                         {""Quarry Redux, Monastery_front"": 1}
                     ],
@@ -4441,7 +4491,9 @@
                 ""Location"": {
                     ""LocationId"": ""134"",
                     ""Position"": ""(1.0, 40.0, -19.0)"",
-                    ""RequiredItems"": [],
+                    ""RequiredItems"": [
+                        {""Sword"": 1}
+                    ],
                     ""RequiredItemsDoors"": [
                         {""Quarry Redux"": 1, ""Sword"": 1}
                     ],
@@ -4462,7 +4514,7 @@
                         {""Wand"": 1, ""Mask"": 1, ""12"": 1}
                     ],
                     ""RequiredItemsDoors"": [
-                        {""ziggurat2020_1"": 1}
+                        {""ziggurat2020_1"": 1, ""Sword"": 1}
                     ],
                     ""SceneId"": 43,
                     ""SceneName"": ""ziggurat2020_1""
