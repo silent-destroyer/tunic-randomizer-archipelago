@@ -309,6 +309,7 @@ namespace TunicArchipelago {
                 HintGhosts.Add(HintGhost);
             }
 
+            OptionalCheckIdHintMap.Clear();
             GenerateLocationHints();
             GenerateItemHints();
             GenerateBarrenAndMoneySceneHints();

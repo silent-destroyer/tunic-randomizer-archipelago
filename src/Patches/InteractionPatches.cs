@@ -29,7 +29,15 @@ namespace TunicArchipelago {
             if (Hints.HintLocations.ContainsKey(InteractionLocation) && Hints.HintMessages.ContainsKey(Hints.HintLocations[InteractionLocation]) && TunicArchipelago.Settings.HeroPathHintsEnabled) {
                 LanguageLine Hint = ScriptableObject.CreateInstance<LanguageLine>();
                 Hint.text = Hints.HintMessages[Hints.HintLocations[InteractionLocation]];
+
+                if (TunicArchipelago.Settings.SendHintsToServer && Hints.LocalHintsForServer.ContainsKey(Hints.HintLocations[InteractionLocation]) && SaveFile.GetInt($"archipelago sent optional hint to server {Hints.LocalHintsForServer[Hints.HintLocations[InteractionLocation]]}") == 0) {
+                    string LocationName = Hints.LocalHintsForServer[Hints.HintLocations[InteractionLocation]];
+                    Archipelago.instance.integration.session.Locations.ScoutLocationsAsync(true, Archipelago.instance.GetLocationId(LocationName)).ContinueWith(locationInfoPacket => { }).Wait();
+                    SaveFile.SetInt($"archipelago sent optional hint to server {Hints.LocalHintsForServer[Hints.HintLocations[InteractionLocation]]}", 1);
+                }
+
                 GenericMessage.ShowMessage(Hint);
+
                 return false;
             }
             if (SceneLoaderPatches.SceneName == "Waterfall" && __instance.transform.position.ToString() == "(-47.4, 46.9, 3.0)" && TunicArchipelago.Tracker.ImportantItems["Fairies"] < 10) {

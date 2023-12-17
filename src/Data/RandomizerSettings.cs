@@ -79,6 +79,11 @@ namespace TunicArchipelago {
             set;
         }
 
+        public bool FasterUpgrades {
+            get;
+            set;
+        }
+
         public EnemyRandomizationType EnemyDifficulty {
             get;
             set;
@@ -150,6 +155,7 @@ namespace TunicArchipelago {
             CheaperShopItemsEnabled = true;
             BonusStatUpgradesEnabled = true;
             DisableChestInterruption = false;
+            FasterUpgrades = false;
 
             EnemyRandomizerEnabled = false;
             EnemyDifficulty = EnemyRandomizationType.BALANCED;

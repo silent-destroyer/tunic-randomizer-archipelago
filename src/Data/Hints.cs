@@ -33,6 +33,7 @@ namespace TunicArchipelago {
         };
 
         public static Dictionary<string, string> HintMessages = new Dictionary<string, string>();
+        public static Dictionary<string, string> LocalHintsForServer = new Dictionary<string, string>();
 
         public static String MailboxHintId = "";
 
@@ -79,6 +80,7 @@ namespace TunicArchipelago {
 
         public static void PopulateHints() {
             HintMessages.Clear();
+            LocalHintsForServer.Clear();
             System.Random random = new System.Random(SaveFile.GetInt("seed"));
             string Hint = "";
             string Scene = "";
@@ -162,6 +164,9 @@ namespace TunicArchipelago {
                 Scene = Hyperdash.Location == "Your Pocket" ? Hyperdash.Location.ToUpper() : Locations.SimplifiedSceneNames[Locations.VanillaLocations[Locations.LocationDescriptionToId[Hyperdash.Location]].Location.SceneName].ToUpper();
                 Prefix = Vowels.Contains(Scene[0]) ? "#E" : "#uh";
                 Hint += $"\nuhwAts yoo in {Prefix} \"{Scene}...\"";
+                if (Locations.LocationDescriptionToId.ContainsKey(Hyperdash.Location)) {
+                    LocalHintsForServer.Add("Temple Statue", Hyperdash.Location);
+                }
             } else if (Archipelago.instance.GetPlayerGame((int)Hyperdash.Player) == "Tunic") {
                 Scene = Locations.SimplifiedSceneNames[Locations.VanillaLocations[Locations.LocationDescriptionToId[Hyperdash.Location]].Location.SceneName].ToUpper();
                 Hint += $"\nuhwAts yoo in \"{Archipelago.instance.GetPlayerName((int)Hyperdash.Player).ToUpper()}'S\"\n\"{Scene}...\"";
@@ -219,6 +224,10 @@ namespace TunicArchipelago {
                     Scene = HexHint.Location == "Your Pocket" ? HexHint.Location.ToUpper() : Locations.SimplifiedSceneNames[Locations.VanillaLocations[Locations.LocationDescriptionToId[HexHint.Location]].Location.SceneName].ToUpper();
                     Prefix = Vowels.Contains(Scene[0]) ? "#E" : "#uh";
                     Hint = $"#A sA {Prefix} \"{Scene.ToUpper()}\" iz \nwAr #uh {HexagonColors[Hexagon]}kwehstuhgawn [hexagram]<#FFFFFF> iz fownd\"...\"";
+
+                    if (Locations.LocationDescriptionToId.ContainsKey(HexHint.Location)) {
+                        LocalHintsForServer.Add(HexagonHintArea, HexHint.Location);
+                    }
                 } else if (Archipelago.instance.GetPlayerGame((int)HexHint.Player) == "Tunic") {
                     Scene = Locations.SimplifiedSceneNames[Locations.VanillaLocations[Locations.LocationDescriptionToId[HexHint.Location]].Location.SceneName].ToUpper();
                     Prefix = Vowels.Contains(Scene[0]) ? "#E" : "#uh";
