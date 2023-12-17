@@ -42,6 +42,7 @@ namespace TunicArchipelago {
             OptionsGUI.addToggle("Death Link", "Off", "On", TunicArchipelago.Settings.DeathLinkEnabled ? 1 : 0, (OptionsGUIMultiSelect.MultiSelectAction)ToggleDeathLink);
             OptionsGUI.addToggle("Auto-open !collect-ed Checks", "Off", "On", TunicArchipelago.Settings.CollectReflectsInWorld ? 1 : 0, (OptionsGUIMultiSelect.MultiSelectAction)ToggleUpdateOnCollect);
             OptionsGUI.addToggle("Skip Item Animations", "Off", "On", TunicArchipelago.Settings.SkipItemAnimations ? 1 : 0, (OptionsGUIMultiSelect.MultiSelectAction)ToggleSkipItemAnimations);
+            OptionsGUI.addToggle("Send Hints to Server", "Off", "On", TunicArchipelago.Settings.SendHintsToServer ? 1 : 0, (OptionsGUIMultiSelect.MultiSelectAction)ToggleSendHintsToServer);
         }
 
         public static void LogicSettingsPage() {
@@ -139,6 +140,11 @@ namespace TunicArchipelago {
             SaveSettings();
         }
 
+        public static void ToggleSendHintsToServer(int index) {
+            TunicArchipelago.Settings.SendHintsToServer = !TunicArchipelago.Settings.SendHintsToServer;
+            SaveSettings();
+        }
+        
         public static void ToggleSunglasses(int index) {
             TunicArchipelago.Settings.RealestAlwaysOn = !TunicArchipelago.Settings.RealestAlwaysOn;
             if (TunicArchipelago.Settings.RealestAlwaysOn) {

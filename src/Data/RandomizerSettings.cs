@@ -26,6 +26,11 @@ namespace TunicArchipelago {
             set;
         }
 
+        public bool SendHintsToServer {
+            get;
+            set;
+        }
+
         // Hint Settings
         public bool HeroPathHintsEnabled {
             get;
@@ -134,6 +139,7 @@ namespace TunicArchipelago {
             DeathLinkEnabled = false;
             CollectReflectsInWorld = false;
             SkipItemAnimations = false;
+            SendHintsToServer = false;
 
             HeroPathHintsEnabled = true;
             GhostFoxHintsEnabled = true;
