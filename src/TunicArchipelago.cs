@@ -126,8 +126,8 @@ namespace TunicArchipelago {
 
             Harmony.Patch(AccessTools.Method(typeof(FairyCollection), "getFairyCount"), new HarmonyMethod(AccessTools.Method(typeof(ItemPatches), "FairyCollection_getFairyCount_PrefixPatch")));
 
-            Harmony.Patch(AccessTools.Method(typeof(UpgradeAltar), "DoOfferingSequence"), null, new HarmonyMethod(AccessTools.Method(typeof(ItemPatches), "UpgradeAltar_DoOfferingSequence_PostfixPatch")));
-
+            Harmony.Patch(AccessTools.Method(typeof(UpgradeAltar), "DoOfferingSequence"), new HarmonyMethod(AccessTools.Method(typeof(ItemPatches), "UpgradeAltar_DoOfferingSequence_PrefixPatch")), new HarmonyMethod(AccessTools.Method(typeof(ItemPatches), "UpgradeAltar_DoOfferingSequence_PostfixPatch")));
+            
             Harmony.Patch(AccessTools.Method(typeof(ButtonAssignableItem), "CheckFreeItemSpell"), null, new HarmonyMethod(AccessTools.Method(typeof(ItemPatches), "ButtonAssignableItem_CheckFreeItemSpell_PostfixPatch")));
             
             // Custom Item Behaviors

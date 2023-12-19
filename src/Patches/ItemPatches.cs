@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using static TunicArchipelago.GhostHints;
 using static TunicArchipelago.SaveFlags;
 
 namespace TunicArchipelago {
@@ -147,6 +148,13 @@ namespace TunicArchipelago {
                 int Price = TunicArchipelago.Settings.CheaperShopItemsEnabled ? 300 : __instance.price;
                 ArchipelagoItem ShopItem = ItemLookup.ItemList[LocationId];
                 __instance.confirmPurchaseFormattedLanguageLine.text = $"bI for {Price} [money]?\n\t" + GhostHints.WordWrapString($"\"({Archipelago.instance.GetPlayerName(ShopItem.Player).ToUpper().Replace(" ", "\" \"")}'S {ShopItem.ItemName.ToUpper().Replace($" ", $"\" \"")})\"");
+
+                string CheckName = Locations.LocationIdToDescription[LocationId];
+                if (TunicArchipelago.Settings.SendHintsToServer && SaveFile.GetInt($"archipelago sent optional hint to server {CheckName}") == 0) {
+                    Archipelago.instance.integration.session.Locations.ScoutLocationsAsync(true, Archipelago.instance.GetLocationId(CheckName))
+                                            .ContinueWith(locationInfoPacket => { }).Wait();
+                    SaveFile.SetInt($"archipelago sent optional hint to server {CheckName}", 1);
+                }
             } else {
                 __instance.confirmPurchaseFormattedLanguageLine.text = $"bI for {__instance.price} [money]?";
             }
@@ -458,6 +466,17 @@ namespace TunicArchipelago {
             if (ItemLookup.BombCodes.ContainsKey(s) && StateVariable.GetStateVariableByName(ItemLookup.BombCodes[s]).BoolValue) {
                 Archipelago.instance.UpdateDataStorage(ItemLookup.BombCodes[s], true);
             }
+        }
+
+
+        public static bool UpgradeAltar_DoOfferingSequence_PrefixPatch(UpgradeAltar __instance, OfferingItem offeringItemToOffer) {
+            if (TunicArchipelago.Settings.FasterUpgrades) {
+                ShowNotification($"{TextBuilderPatches.SpriteNameToAbbreviation[offeringItemToOffer.icon.name]} \"{offeringItemToOffer.statLabelLocKey}\" wehnt uhp fruhm {offeringItemToOffer.upgradeItemReceived.Quantity-1} [arrow_right] {offeringItemToOffer.upgradeItemReceived.Quantity}!", $"#E Ar ahksehpts yor awfuri^.");
+                UpgradeMenu.instance.__Exit();
+                return false;
+            }
+
+            return true;
         }
 
         public static void UpgradeAltar_DoOfferingSequence_PostfixPatch(UpgradeAltar __instance) {

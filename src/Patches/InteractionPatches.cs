@@ -13,17 +13,31 @@ namespace TunicArchipelago {
         public static bool InteractionTrigger_Interact_PrefixPatch(Item item, InteractionTrigger __instance) {
             string InteractionLocation = SceneLoaderPatches.SceneName + " " + __instance.transform.position;
 
-            if (__instance.gameObject.GetComponent<NPC>() != null && SceneManager.GetActiveScene().name == "g_elements") {
-                if (Inventory.GetItemByName("Homeward Bone Statue").Quantity == 0) {
-                    __instance.gameObject.GetComponent<NPC>().script.text = $"I lawst mI mahjik stOn ahnd kahnt gO hOm...---if yoo fInd it, kahn yoo bri^ it too mE?\nit louks lIk #is: [dath]";
-                } else {
-                    __instance.gameObject.GetComponent<NPC>().script.text = $"I lawst mI mahjik stOn [dath] ahnd kahnt gO hOm...---... wAt, yoo fownd it! plEz, yooz it now!";
+            if (__instance.gameObject.GetComponent<NPC>() != null) {
+                if (SceneManager.GetActiveScene().name == "g_elements") {
+                    if (Inventory.GetItemByName("Homeward Bone Statue").Quantity == 0) {
+                        __instance.gameObject.GetComponent<NPC>().script.text = $"I lawst mI mahjik stOn ahnd kahnt gO hOm...---if yoo fInd it, kahn yoo bri^ it too mE?\nit louks lIk #is: [dath]";
+                    } else {
+                        __instance.gameObject.GetComponent<NPC>().script.text = $"I lawst mI mahjik stOn [dath] ahnd kahnt gO hOm...---... wAt, yoo fownd it! plEz, yooz it now!";
+                    }
+                }
+
+                if (TunicArchipelago.Settings.SendHintsToServer) {
+                    GhostHints.CheckForServerHint(__instance.name);
                 }
             }
             if (Hints.HintLocations.ContainsKey(InteractionLocation) && Hints.HintMessages.ContainsKey(Hints.HintLocations[InteractionLocation]) && TunicArchipelago.Settings.HeroPathHintsEnabled) {
                 LanguageLine Hint = ScriptableObject.CreateInstance<LanguageLine>();
                 Hint.text = Hints.HintMessages[Hints.HintLocations[InteractionLocation]];
+
+                if (TunicArchipelago.Settings.SendHintsToServer && Hints.LocalHintsForServer.ContainsKey(Hints.HintLocations[InteractionLocation]) && SaveFile.GetInt($"archipelago sent optional hint to server {Hints.LocalHintsForServer[Hints.HintLocations[InteractionLocation]]}") == 0) {
+                    string LocationName = Hints.LocalHintsForServer[Hints.HintLocations[InteractionLocation]];
+                    Archipelago.instance.integration.session.Locations.ScoutLocationsAsync(true, Archipelago.instance.GetLocationId(LocationName)).ContinueWith(locationInfoPacket => { }).Wait();
+                    SaveFile.SetInt($"archipelago sent optional hint to server {Hints.LocalHintsForServer[Hints.HintLocations[InteractionLocation]]}", 1);
+                }
+
                 GenericMessage.ShowMessage(Hint);
+
                 return false;
             }
             if (SceneLoaderPatches.SceneName == "Waterfall" && __instance.transform.position.ToString() == "(-47.4, 46.9, 3.0)" && TunicArchipelago.Tracker.ImportantItems["Fairies"] < 10) {

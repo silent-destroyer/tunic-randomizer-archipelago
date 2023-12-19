@@ -26,6 +26,11 @@ namespace TunicArchipelago {
             set;
         }
 
+        public bool SendHintsToServer {
+            get;
+            set;
+        }
+
         // Hint Settings
         public bool HeroPathHintsEnabled {
             get;
@@ -70,6 +75,11 @@ namespace TunicArchipelago {
 
         // Enemy Randomization Settings
         public bool EnemyRandomizerEnabled {
+            get;
+            set;
+        }
+
+        public bool FasterUpgrades {
             get;
             set;
         }
@@ -134,6 +144,7 @@ namespace TunicArchipelago {
             DeathLinkEnabled = false;
             CollectReflectsInWorld = false;
             SkipItemAnimations = false;
+            SendHintsToServer = false;
 
             HeroPathHintsEnabled = true;
             GhostFoxHintsEnabled = true;
@@ -144,6 +155,7 @@ namespace TunicArchipelago {
             CheaperShopItemsEnabled = true;
             BonusStatUpgradesEnabled = true;
             DisableChestInterruption = false;
+            FasterUpgrades = false;
 
             EnemyRandomizerEnabled = false;
             EnemyDifficulty = EnemyRandomizationType.BALANCED;

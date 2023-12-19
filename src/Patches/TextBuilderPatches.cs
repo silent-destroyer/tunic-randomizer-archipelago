@@ -25,7 +25,7 @@ namespace TunicArchipelago {
             { "[fairy]", 123 },
             { "[mayor]", 124 },
             { "[book]", 125 },
-            { "[atk]", 126 },
+            { "[att]", 126 },
             { "[def]", 127 },
             { "[potion]", 128 },
             { "[hp]", 129 },
@@ -67,7 +67,7 @@ namespace TunicArchipelago {
             { "[fairy]", "Inventory items_fairy" },
             { "[mayor]", "Inventory items_trophy" },
             { "[book]", "Inventory items_book" },
-            { "[atk]", "Inventory items_offering_tooth" },
+            { "[att]", "Inventory items_offering_tooth" },
             { "[def]", "Inventory items_offering_effigy" },
             { "[potion]", "Inventory items_offering_ash" },
             { "[hp]", "Inventory items_offering_flower" },
@@ -92,6 +92,8 @@ namespace TunicArchipelago {
             { "[triangle]", "Inventory items_money triangle" },
         };
 
+        public static Dictionary<string, string> SpriteNameToAbbreviation = new Dictionary<string, string>();
+
         public static void SetupCustomGlyphSprites() {
             List<string> cartouches = Parser.cartouche.ToList();
             if (!cartouches.Contains("[torch]")) {
@@ -99,8 +101,9 @@ namespace TunicArchipelago {
                 cartouches.Add("[filler]");
                 Parser.cartouche = cartouches.ToArray();
                 List<Sprite> sprites = SpriteBuilder.spriteResources.ToList();
-                foreach (string Icon in CustomSpriteIcons.Values) {
-                    sprites.Add(ModelSwaps.FindSprite(Icon));
+                foreach (string Icon in CustomSpriteIcons.Keys) {
+                    sprites.Add(ModelSwaps.FindSprite(CustomSpriteIcons[Icon]));
+                    SpriteNameToAbbreviation.Add(CustomSpriteIcons[Icon], Icon);
                 }
                 sprites.Add(Inventory.GetItemByName("Homeward Bone Statue").icon);
                 SpriteBuilder.spriteResources = sprites.ToArray();
@@ -118,7 +121,7 @@ namespace TunicArchipelago {
         public static void SpriteBuilder_rebuild_PostfixPatch(SpriteBuilder __instance) {
             foreach (SpriteRenderer renderer in __instance.gameObject.transform.GetComponentsInChildren<SpriteRenderer>(true)) {
                 if (renderer.sprite != null && CustomSpriteIcons.Values.ToList().Contains(renderer.sprite.name)) {
-                    renderer.material = ModelSwaps.FindMaterial("Default UI Material");
+                    renderer.material = ModelSwaps.FindMaterial("UI Add");
                 }
             }
         }

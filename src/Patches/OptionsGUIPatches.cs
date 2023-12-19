@@ -42,6 +42,7 @@ namespace TunicArchipelago {
             OptionsGUI.addToggle("Death Link", "Off", "On", TunicArchipelago.Settings.DeathLinkEnabled ? 1 : 0, (OptionsGUIMultiSelect.MultiSelectAction)ToggleDeathLink);
             OptionsGUI.addToggle("Auto-open !collect-ed Checks", "Off", "On", TunicArchipelago.Settings.CollectReflectsInWorld ? 1 : 0, (OptionsGUIMultiSelect.MultiSelectAction)ToggleUpdateOnCollect);
             OptionsGUI.addToggle("Skip Item Animations", "Off", "On", TunicArchipelago.Settings.SkipItemAnimations ? 1 : 0, (OptionsGUIMultiSelect.MultiSelectAction)ToggleSkipItemAnimations);
+            OptionsGUI.addToggle("Send Hints to Server", "Off", "On", TunicArchipelago.Settings.SendHintsToServer ? 1 : 0, (OptionsGUIMultiSelect.MultiSelectAction)ToggleSendHintsToServer);
         }
 
         public static void LogicSettingsPage() {
@@ -72,6 +73,7 @@ namespace TunicArchipelago {
             OptionsGUI.addToggle("Cheaper Shop Items", "Off", "On", TunicArchipelago.Settings.CheaperShopItemsEnabled ? 1 : 0, (OptionsGUIMultiSelect.MultiSelectAction)ToggleCheaperShopItems);
             OptionsGUI.addToggle("Bonus Upgrades", "Off", "On", TunicArchipelago.Settings.BonusStatUpgradesEnabled ? 1 : 0, (OptionsGUIMultiSelect.MultiSelectAction)ToggleBonusStatUpgrades);
             OptionsGUI.addToggle("Disable Chest Interruption", "Off", "On", TunicArchipelago.Settings.DisableChestInterruption ? 1 : 0, (OptionsGUIMultiSelect.MultiSelectAction)ToggleChestInterruption);
+            OptionsGUI.addToggle("Skip Upgrade Animation", "Off", "On", TunicArchipelago.Settings.FasterUpgrades ? 1 : 0, (OptionsGUIMultiSelect.MultiSelectAction)ToggleFasterUpgrades);
             OptionsGUI.addToggle("???", "Off", "On", CameraController.Flip ? 1 : 0, (OptionsGUIMultiSelect.MultiSelectAction)ToggleWeirdMode);
         }
 
@@ -139,6 +141,11 @@ namespace TunicArchipelago {
             SaveSettings();
         }
 
+        public static void ToggleSendHintsToServer(int index) {
+            TunicArchipelago.Settings.SendHintsToServer = !TunicArchipelago.Settings.SendHintsToServer;
+            SaveSettings();
+        }
+        
         public static void ToggleSunglasses(int index) {
             TunicArchipelago.Settings.RealestAlwaysOn = !TunicArchipelago.Settings.RealestAlwaysOn;
             if (TunicArchipelago.Settings.RealestAlwaysOn) {
@@ -205,6 +212,11 @@ namespace TunicArchipelago {
 
         public static void ToggleChestInterruption(int index) {
             TunicArchipelago.Settings.DisableChestInterruption = !TunicArchipelago.Settings.DisableChestInterruption;
+            SaveSettings();
+        }
+
+        public static void ToggleFasterUpgrades(int index) {
+            TunicArchipelago.Settings.FasterUpgrades = !TunicArchipelago.Settings.FasterUpgrades;
             SaveSettings();
         }
 

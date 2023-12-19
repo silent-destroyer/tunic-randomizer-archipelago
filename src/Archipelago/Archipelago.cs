@@ -76,5 +76,9 @@ namespace TunicArchipelago {
             return integration.session.Locations.GetLocationNameFromId(id);
         }
 
+        public long GetLocationId(string name) {
+            return integration.session.Locations.GetLocationIdFromName("Tunic", name);
+        }
+
     }
 }
