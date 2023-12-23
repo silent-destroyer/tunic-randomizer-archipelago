@@ -575,8 +575,10 @@ namespace TunicArchipelago {
                     EnemiesInCurrentScene.Add(NewEnemy.name, NewEnemy.transform.position.ToString());
 
                     // Give every enemy a unique ID to fix enemies despawning (and more importantly, fixes cathedral)
-                    NewEnemy.GetComponent<RuntimeStableID>().intraSceneID = Resources.FindObjectsOfTypeAll<RuntimeStableID>().OrderBy(id => id.intraSceneID).Last().intraSceneID + 1;
-                    
+                    if (NewEnemy.GetComponent<RuntimeStableID>() != null) {
+                        NewEnemy.GetComponent<RuntimeStableID>().intraSceneID = Resources.FindObjectsOfTypeAll<RuntimeStableID>().OrderBy(id => id.intraSceneID).Last().intraSceneID + 1;
+                    }
+
                     i++;
                     if (DefeatedEnemyTracker.ContainsKey(CurrentScene) && DefeatedEnemyTracker[CurrentScene].Contains(Enemy.transform.position.ToString())) {
                         GameObject.Destroy(NewEnemy);
