@@ -310,7 +310,9 @@ namespace TunicArchipelago {
                 SceneLoaderPatches.TimeOfLastSceneTransition = SaveFile.GetFloat("playtime");
                 Archipelago.instance.integration.session.Locations.ScoutLocationsAsync(LocationIDs.ToArray()).ContinueWith(locationInfoPacket => {
                     foreach (NetworkItem Location in locationInfoPacket.Result.Locations) {
-                        ItemLookup.ItemList.Add(Locations.LocationDescriptionToId[Archipelago.instance.integration.session.Locations.GetLocationNameFromId(Location.Location)], new ArchipelagoItem(Archipelago.instance.integration.session.Items.GetItemName(Location.Item), Location.Player, Location.Flags));
+                        string LocationId = Locations.LocationDescriptionToId[Archipelago.instance.integration.session.Locations.GetLocationNameFromId(Location.Location)];
+                        string ItemName = Archipelago.instance.integration.session.Items.GetItemName(Location.Item) == null ? "UNKNOWN ITEM" : Archipelago.instance.integration.session.Items.GetItemName(Location.Item);
+                        ItemLookup.ItemList.Add(LocationId, new ArchipelagoItem(ItemName, Location.Player, Location.Flags));
                     }
                 }).Wait();
                 ItemTracker.PopulateSpoilerLog();

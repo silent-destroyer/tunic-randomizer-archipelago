@@ -1,14 +1,17 @@
-﻿using System;
+﻿using BepInEx.Logging;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using static TunicArchipelago.GhostHints;
 using static TunicArchipelago.SaveFlags;
 
 namespace TunicArchipelago {
     public class InteractionPatches {
+        private static ManualLogSource Logger = TunicArchipelago.Logger;
 
         public static bool InteractionTrigger_Interact_PrefixPatch(Item item, InteractionTrigger __instance) {
             string InteractionLocation = SceneLoaderPatches.SceneName + " " + __instance.transform.position;
@@ -21,7 +24,11 @@ namespace TunicArchipelago {
                         __instance.gameObject.GetComponent<NPC>().script.text = $"I lawst mI mahjik stOn [dath] ahnd kahnt gO hOm...---... wAt, yoo fownd it! plEz, yooz it now!";
                     }
                 }
-
+                foreach (HintGhost HintGhost in HintGhosts) {
+                    if (HintGhost.Name == __instance.name && HintGhost.HintedItem != "" && TextBuilderPatches.ItemNameToAbbreviation.ContainsKey(HintGhost.HintedItem) && TextBuilderPatches.ItemNameToAbbreviation[HintGhost.HintedItem] == "[customimage]") {
+                        TextBuilderPatches.CustomImageToDisplay = HintGhost.HintedItem;
+                    }
+                }
                 if (TunicArchipelago.Settings.SendHintsToServer) {
                     GhostHints.CheckForServerHint(__instance.name);
                 }
