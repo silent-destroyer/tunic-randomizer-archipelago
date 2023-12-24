@@ -35,6 +35,8 @@ namespace TunicArchipelago {
         public static GameObject BlueKeyMaterial;
         public static GameObject HeroRelicMaterial;
 
+        public static Dictionary<string, GameObject> CustomItemImages = new Dictionary<string, GameObject>();
+
         public static bool DathStonePresentationAlreadySetup = false;
         public static bool OldHouseKeyPresentationAlreadySetup = false;
         public static bool SwordPresentationsAlreadySetup = false;
@@ -1173,7 +1175,7 @@ namespace TunicArchipelago {
                 IceBombs.GetComponent<ShopItem>().price = 200;
                 Pepper.GetComponent<ShopItem>().itemToGive = Inventory.GetItemByName("Pepper");
                 Pepper.GetComponent<ShopItem>().price = 130;
-
+                
                 for (int i = 0; i < 3; i++) {
                     GameObject.Destroy(IceBombs.transform.GetChild(0).GetChild(i).GetChild(0).gameObject);
                     if (IceFlask != null) { 
@@ -1263,6 +1265,43 @@ namespace TunicArchipelago {
             //TuncImage.GetComponent<RawImage>().material = ImageMaterial;
             GameObject.DontDestroyOnLoad(TuncImage);
 
+
+            CustomItemImages.Add("Mr Mayor", CreateImageObject(ImageData.MrMayor, ImageMaterial));
+            CustomItemImages.Add("Secret Legend", CreateImageObject(ImageData.SecretLegend, ImageMaterial));
+            CustomItemImages.Add("Sacred Geometry", CreateImageObject(ImageData.SacredGeometry, ImageMaterial));
+            CustomItemImages.Add("Vintage", CreateImageObject(ImageData.Vintage, ImageMaterial));
+            CustomItemImages.Add("Just Some Pals", CreateImageObject(ImageData.JustSomePals, ImageMaterial));
+            CustomItemImages.Add("Regal Weasel", CreateImageObject(ImageData.RegalWeasel, ImageMaterial));
+            CustomItemImages.Add("Spring Falls", CreateImageObject(ImageData.SpringFalls, ImageMaterial));
+            CustomItemImages.Add("Power Up", CreateImageObject(ImageData.PowerUp, ImageMaterial));
+            CustomItemImages.Add("Back To Work", CreateImageObject(ImageData.BackToWork, ImageMaterial));
+            CustomItemImages.Add("Phonomath", CreateImageObject(ImageData.Phonomath, ImageMaterial));
+            CustomItemImages.Add("Dusty", CreateImageObject(ImageData.Dusty, ImageMaterial));
+            CustomItemImages.Add("Forever Friend", CreateImageObject(ImageData.ForeverFriend, ImageMaterial));
+            CustomItemImages.Add("Red Questagon", CreateImageObject(ImageData.RedQuestagon, ImageMaterial));
+            CustomItemImages.Add("Green Questagon", CreateImageObject(ImageData.GreenQuestagon, ImageMaterial));
+            CustomItemImages.Add("Blue Questagon", CreateImageObject(ImageData.BlueQuestagon, ImageMaterial));
+            CustomItemImages.Add("Gold Questagon", CreateImageObject(ImageData.GoldHex, ImageMaterial));
+            CustomItemImages.Add("Hero Relic - ATT", CreateImageObject(ImageData.HeroRelicATT, ImageMaterial));
+            CustomItemImages.Add("Hero Relic - DEF", CreateImageObject(ImageData.HeroRelicDef, ImageMaterial));
+            CustomItemImages.Add("Hero Relic - POTION", CreateImageObject(ImageData.HeroRelicPotion, ImageMaterial));
+            CustomItemImages.Add("Hero Relic - HP", CreateImageObject(ImageData.HeroRelicHP, ImageMaterial));
+            CustomItemImages.Add("Hero Relic - SP", CreateImageObject(ImageData.HeroRelicSP, ImageMaterial));
+            CustomItemImages.Add("Hero Relic - MP", CreateImageObject(ImageData.HeroRelicMP, ImageMaterial));
+            CustomItemImages.Add("Fool Trap", CreateImageObject(ImageData.TinyFox, ImageMaterial));
+            CustomItemImages.Add("Archipelago Item", CreateImageObject(ImageData.ArchipelagoItem, ImageMaterial, 128, 128));
+        }
+
+        public static GameObject CreateImageObject(string ImageData, Material imgMaterial, int Width = 160, int Height = 160) {
+
+            Texture2D Texture = new Texture2D(Width, Height, TextureFormat.DXT1, false);
+            ImageConversion.LoadImage(Texture, Convert.FromBase64String(ImageData));
+
+            GameObject obj = new GameObject();
+            obj.AddComponent<RawImage>().texture = Texture;
+            obj.GetComponent<RawImage>().material = imgMaterial;
+            GameObject.DontDestroyOnLoad(obj);
+            return obj;
         }
 
         public static Material FindMaterial(string MaterialName) {

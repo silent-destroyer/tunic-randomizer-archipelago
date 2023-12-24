@@ -165,6 +165,11 @@ namespace TunicArchipelago {
         public static bool ShopItem_buy_PrefixPatch(ShopItem __instance) {
             string LocationId = $"{__instance.name} [Shop]";
             if (!Locations.LocationIdToDescription.ContainsKey(LocationId)) {
+                if (TunicArchipelago.Settings.SkipItemAnimations && __instance.itemToGive != null) {
+                    TunicArchipelago.Settings.SkipItemAnimations = false;
+                    ItemPresentation.PresentItem(__instance.itemToGive, __instance.quantityToGive);
+                    TunicArchipelago.Settings.SkipItemAnimations = true;
+                }
                 return true;
             }
             int Price = TunicArchipelago.Settings.CheaperShopItemsEnabled ? 300 : __instance.price;
@@ -205,6 +210,9 @@ namespace TunicArchipelago {
                 return ItemResult.PermanentFailure;
             }
 
+            string NotificationTop = "";
+            string NotificationBottom = "";
+
             ItemData Item = ItemLookup.Items[ItemName];
             string LocationId = Archipelago.instance.integration.session.Locations.GetLocationNameFromId(networkItem.Location);
             
@@ -233,6 +241,10 @@ namespace TunicArchipelago {
                     InventoryItem.collectionMessage.text = $"fownd ahn Itehm!";
                 }
                 ItemPresentation.PresentItem(InventoryItem, Item.QuantityToGive);
+                if (TunicArchipelago.Settings.SkipItemAnimations && Item.Name == "Flask Shard" && Inventory.GetItemByName("Flask Shard").Quantity >= 3) {
+                    Inventory.GetItemByName("Flask Shard").Quantity -= 3;
+                    Inventory.GetItemByName("Flask Container").Quantity += 1;
+                }
             }
 
             if (Item.Type == ItemTypes.SWORDUPGRADE) {
@@ -254,7 +266,7 @@ namespace TunicArchipelago {
                     }
                 }
                 GameObject.Instantiate(ModelSwaps.FairyAnimation, PlayerCharacter.instance.transform.position, Quaternion.identity).SetActive(true);
-                ShowNotification($"yoo fownd A \"FAIRY!!\"", $"#Ar R stil \"{20 - (TunicArchipelago.Tracker.ImportantItems["Fairies"]+1)}\" lehft too fInd\"!!\"");
+                NotificationBottom = $"\"{TunicArchipelago.Tracker.ImportantItems["Fairies"] + 1}/20\" fArEz fownd.";
             }
 
             if (Item.Type == ItemTypes.PAGE) {
@@ -330,7 +342,7 @@ namespace TunicArchipelago {
             }
 
             if (Item.Type == ItemTypes.FOOLTRAP) {
-                ApplyFoolEffect(networkItem.Player);
+                (NotificationTop, NotificationBottom) = ApplyFoolEffect(networkItem.Player);
             }
 
             if (Item.Type == ItemTypes.SPECIAL) {
@@ -347,12 +359,12 @@ namespace TunicArchipelago {
                 if (GoldHexes == SaveFile.GetInt(HexagonQuestPrayer)) {
                     SaveFile.SetInt(PrayerUnlocked, 1);
                     SaveFile.SetFloat(PrayerUnlockedTime, SpeedrunData.inGameTime);
-                    ShowNotification($"\"PRAYER Unlocked\"", $"Jahnuhl yor wizduhm, rooin sEkur");
+                    NotificationBottom = $"\"PRAYER Unlocked.\" Jahnuhl yor wizduhm, rooin sEkur";
                 }
                 if (GoldHexes == SaveFile.GetInt(HexagonQuestHolyCross)) {
                     SaveFile.SetInt(HolyCrossUnlocked, 1);
                     SaveFile.SetFloat(HolyCrossUnlockedTime, SpeedrunData.inGameTime);
-                    ShowNotification($"\"HOLY CROSS Unlocked\"", $"sEk wuht iz rItfuhlE yorz");
+                    NotificationBottom = $"\"HOLY CROSS Unlocked.\" sEk wuht iz rItfuhlE yorz";
                     foreach (ToggleObjectBySpell SpellToggle in Resources.FindObjectsOfTypeAll<ToggleObjectBySpell>()) {
                         foreach (ToggleObjectBySpell Spell in SpellToggle.gameObject.GetComponents<ToggleObjectBySpell>()) {
                             Spell.enabled = true;
@@ -362,7 +374,7 @@ namespace TunicArchipelago {
                 if (GoldHexes == SaveFile.GetInt(HexagonQuestIceRod)) {
                     SaveFile.SetInt(IceRodUnlocked, 1);
                     SaveFile.SetFloat(IceRodUnlockedTime, SpeedrunData.inGameTime);
-                    ShowNotification($"\"ICE ROD Unlocked\"", $"#A wOnt nO wuht hit #ehm");
+                    NotificationBottom = $"\"ICE ROD Unlocked.\" #A wOnt nO wuht hit #ehm";
                 }
                 ItemPresentation.PresentItem(Inventory.GetItemByName("Hexagon Blue"));
             }
@@ -377,6 +389,20 @@ namespace TunicArchipelago {
                     SaveFile.SetFloat($"randomizer {Item.Name} {TunicArchipelago.Tracker.ImportantItems[Item.ItemNameForInventory] + 1} time", SpeedrunData.inGameTime);
                 }
             }
+            
+            if (networkItem.Player != Archipelago.instance.GetPlayerSlot()) {
+                var sender = Archipelago.instance.GetPlayerName(networkItem.Player);
+                NotificationTop = NotificationTop == "" ? $"\"{sender}\" sehnt yoo {(TextBuilderPatches.ItemNameToAbbreviation.ContainsKey(ItemName) ? TextBuilderPatches.ItemNameToAbbreviation[ItemName] : "")} \"{ItemName}!\"" : NotificationTop;
+                NotificationBottom = NotificationBottom == "" ? $"Rnt #A nIs\"?\"" : NotificationBottom; 
+            }
+
+            if (networkItem.Player == Archipelago.instance.GetPlayerSlot() && TunicArchipelago.Settings.SkipItemAnimations) {
+                NotificationTop = NotificationTop == "" ? $"yoo fownd {(TextBuilderPatches.ItemNameToAbbreviation.ContainsKey(ItemName) ? TextBuilderPatches.ItemNameToAbbreviation[ItemName] : "")} \"{ItemName}!\"" : NotificationTop;
+                NotificationBottom = NotificationBottom == "" ? $"$oud bE yoosfuhl!" : NotificationBottom;
+            }
+
+            TextBuilderPatches.CustomImageToDisplay = ItemName;
+            ShowNotification(NotificationTop, NotificationBottom);
 
             if (TunicArchipelago.Settings.HeroPathHintsEnabled) {
                 string slotLoc = networkItem.Player.ToString() + ", " + Archipelago.instance.GetLocationName(networkItem.Location);
@@ -422,7 +448,7 @@ namespace TunicArchipelago {
             return ItemResult.Success;
         }
 
-        private static void ApplyFoolEffect(int Player) {
+        private static (string, string) ApplyFoolEffect(int Player) {
             System.Random Random = new System.Random();
             int FoolType = PlayerCharacterPatches.StungByBee ? Random.Next(21, 100) : Random.Next(100);
             string FoolMessageTop = $"";
@@ -430,7 +456,7 @@ namespace TunicArchipelago {
             if (FoolType < 35) {
                 SFX.PlayAudioClipAtFox(PlayerCharacter.instance.bigHurtSFX);
                 PlayerCharacter.instance.IDamageable_ReceiveDamage(PlayerCharacter.instance.hp / 3, 0, Vector3.zero, 0, 0);
-                FoolMessageTop = $"yoo R A \"<#ffd700>FOOL<#ffffff>!!\"";
+                FoolMessageTop = $"yoo R A \"<#ffd700>FOOL<#ffffff>!!\" [customimage]";
                 FoolMessageBottom = $"\"(\"it wuhz A swRm uhv <#ffd700>bEz\"...)\"";
                 PlayerCharacterPatches.StungByBee = true;
                 PlayerCharacter.instance.Flinch(true);
@@ -439,7 +465,7 @@ namespace TunicArchipelago {
                 PlayerCharacter.instance.stamina = 0;
                 PlayerCharacter.instance.cachedFireController.FireAmount = 3f;
                 SFX.PlayAudioClipAtFox(PlayerCharacter.instance.bigHurtSFX);
-                FoolMessageTop = $"yoo R A \"<#FF3333>FOOL<#ffffff>!!\"";
+                FoolMessageTop = $"yoo R A \"<#FF3333>FOOL<#ffffff>!!\" [customimage]";
                 FoolMessageBottom = $"iz it hawt in hEr?";
                 PlayerCharacter.instance.Flinch(true);
             } else if (FoolType >= 50) {
@@ -447,14 +473,15 @@ namespace TunicArchipelago {
                 SFX.PlayAudioClipAtFox(PlayerCharacter.instance.bigHurtSFX);
                 SFX.PlayAudioClipAtFox(PlayerCharacter.standardFreezeSFX);
                 PlayerCharacter.instance.AddFreezeTime(3f);
-                FoolMessageTop = $"yoo R A \"<#86A5FF>FOOL<#ffffff>!!\"";
+                FoolMessageTop = $"yoo R A \"<#86A5FF>FOOL<#ffffff>!!\" [customimage]";
                 FoolMessageBottom = $"hahvi^ ahn Is tIm?";
             }
 
             if (Player != Archipelago.instance.GetPlayerSlot()) {
                 FoolMessageTop = $"\"{Archipelago.instance.GetPlayerName(Player)}\" %i^ks {FoolMessageTop}";
             }
-            ShowNotification(FoolMessageTop, FoolMessageBottom);
+
+            return (FoolMessageTop, FoolMessageBottom);
         }
 
         public static void PotionCombine_Show_PostFixPatch(PotionCombine __instance) {

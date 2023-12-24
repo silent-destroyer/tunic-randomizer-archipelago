@@ -202,21 +202,10 @@ namespace TunicArchipelago {
                     yield return true;
                 }
 
-                if (networkItem.Player != session.ConnectionInfo.Slot) {
-                    var sender = session.Players.GetPlayerName(networkItem.Player);
-                    ShowNotification($"\"{sender}\" sehnt yoo \"{itemName}!\"", $"Rnt #A nIs\"?\"");
-                    yield return true;
-                }
-
-                if (networkItem.Player == session.ConnectionInfo.Slot && TunicArchipelago.Settings.SkipItemAnimations) {
-                    ShowNotification($"yoo fownd \"{itemName}!\"", $"$oud bE yoosfuhl!");
-                    yield return true;
-                }
-
                 var handleResult = ItemPatches.GiveItem(itemName, networkItem);
                 switch (handleResult) {
                     case ItemPatches.ItemResult.Success:
-                        Logger.LogInfo("Recieved " + itemDisplayName + " from " + session.Players.GetPlayerName(networkItem.Player));
+                        Logger.LogInfo("Received " + itemDisplayName + " from " + session.Players.GetPlayerName(networkItem.Player));
 
                         incomingItems.TryDequeue(out _);
                         SaveFile.SetInt($"randomizer processed item index {pendingItem.index}", 1);
@@ -270,7 +259,12 @@ namespace TunicArchipelago {
 
                 if (networkItem.Player != session.ConnectionInfo.Slot) {
                     SaveFile.SetInt("archipelago items sent to other players", SaveFile.GetInt("archipelago items sent to other players")+1);
-                    ShowNotification($"yoo sehnt \"{itemName.Replace("_", " ")}\" too \"{receiver}!\"", $"hOp #A lIk it!");
+                    if (session.Players.Players[0][networkItem.Player].Game == "Tunic") {
+                        TextBuilderPatches.CustomImageToDisplay = itemName;
+                    } else {
+                        TextBuilderPatches.CustomImageToDisplay = "Archipelago Item";
+                    }
+                    ShowNotification($"yoo sehnt {(TextBuilderPatches.ItemNameToAbbreviation.ContainsKey(TextBuilderPatches.CustomImageToDisplay) ? TextBuilderPatches.ItemNameToAbbreviation[TextBuilderPatches.CustomImageToDisplay] : "")} \"{itemName.Replace("_", " ")}\" too \"{receiver}!\"", $"hOp #A lIk it!");
                 }
                 
                 yield return true;
@@ -282,7 +276,7 @@ namespace TunicArchipelago {
             
             if (LocationId != null) {
                 Logger.LogInfo("Checked location " + LocationId);
-                var location = this.session.Locations.GetLocationIdFromName(this.session.ConnectionInfo.Game, LocationId);
+                var location = session.Locations.GetLocationIdFromName(session.ConnectionInfo.Game, LocationId);
 
                 session.Locations.CompleteLocationChecks(location);
 

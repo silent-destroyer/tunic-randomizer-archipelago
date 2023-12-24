@@ -126,6 +126,7 @@ namespace TunicArchipelago {
             {"g_elements", "Glyph Tower"},
             {"Spirit Arena", "The Heir"},
             {"Purgatory", "Purgatory"},
+            {"Posterity", "Posterity"}
         };
 
         public static Dictionary<string, string> SceneNamesForSpoilerLog = new Dictionary<string, string>() {
