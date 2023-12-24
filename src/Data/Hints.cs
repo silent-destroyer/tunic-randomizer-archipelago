@@ -36,14 +36,14 @@ namespace TunicArchipelago {
         public static Dictionary<string, string> HintMessages = new Dictionary<string, string>();
         public static Dictionary<string, string> LocalHintsForServer = new Dictionary<string, string>();
 
-        public static String MailboxHintId = "";
+        public static string MailboxHintId = "";
         public static string ForestHintId = "";
         public static string FortressHintId = "";
         public static string GardenHintId = "";
         public static string SwampHintId = "";
         public static string LibraryHintId = "";
         public static string MonasteryHintId = "";
-        public static Dictionary<string, string> HeroGraveScenes = new Dictionary<string, string>();
+        public static Dictionary<string, string> HintStructureScenes = new Dictionary<string, string>();
 
         // Used for getting what sphere 1 is if you have ER on
         // Gives you items in Overworld or items in adjacent scenes
@@ -89,6 +89,7 @@ namespace TunicArchipelago {
         public static void PopulateHints() {
             HintMessages.Clear();
             LocalHintsForServer.Clear();
+            HintStructureScenes.Clear();
             System.Random random = new System.Random(SaveFile.GetInt("seed"));
             string Hint = "";
             string Scene = "";
@@ -145,13 +146,15 @@ namespace TunicArchipelago {
             if (SphereOnePlayer.Count > 0) {
                 key = SphereOnePlayer.Keys.ToList()[random.Next(SphereOnePlayer.Count)];
                 mailboxitem = SphereOnePlayer[key];
-                MailboxHintId = key;
-                Logger.LogInfo("mailbox hint is " + MailboxHintId);
+                MailboxHintId = Locations.LocationIdToDescription[key];
+                Logger.LogInfo(key);
+                Hints.HintStructureScenes.Add(Hints.MailboxHintId, "Overworld Redux");
             } else if (SphereOneOthers.Count > 0) {
                 key = SphereOneOthers.Keys.ToList()[random.Next(SphereOneOthers.Count)];
                 mailboxitem = SphereOneOthers[key];
-                MailboxHintId = key;
-                Logger.LogInfo("mailbox hint is " + MailboxHintId);
+                Logger.LogInfo(key);
+                MailboxHintId = Locations.LocationIdToDescription[key];
+                Hints.HintStructureScenes.Add(Hints.MailboxHintId, "Overworld Redux");
             }
             if (mailboxitem != null) {
                 Scene = Locations.SimplifiedSceneNames[Locations.VanillaLocations[key].Location.SceneName].ToUpper();
@@ -207,13 +210,13 @@ namespace TunicArchipelago {
 
                 if (HintGrave == "East Forest Relic") {
                     Hints.ForestHintId = $"{ItemHint.Player}, {ItemHint.Location}";
-                    Hints.HeroGraveScenes.Add(Hints.ForestHintId, "East Forest Redux");
+                    Hints.HintStructureScenes.Add(Hints.ForestHintId, "East Forest Redux");
                 } else if (HintGrave == "Fortress Relic") {
                     Hints.FortressHintId = $"{ItemHint.Player}, {ItemHint.Location}";
-                    Hints.HeroGraveScenes.Add(Hints.FortressHintId, "Fortress Reliquary");
+                    Hints.HintStructureScenes.Add(Hints.FortressHintId, "Fortress Reliquary");
                 } else if (HintGrave == "West Garden Relic") {
                     Hints.GardenHintId = $"{ItemHint.Player}, {ItemHint.Location}";
-                    Hints.HeroGraveScenes.Add(Hints.GardenHintId, "Archipelagos Redux");
+                    Hints.HintStructureScenes.Add(Hints.GardenHintId, "Archipelagos Redux");
                 }
 
                 HintItems.Remove(HintItem);
@@ -253,13 +256,13 @@ namespace TunicArchipelago {
 
                 if (HexagonHintArea == "Swamp Relic") {
                     Hints.SwampHintId = $"{HexHint.Player}, {HexHint.Location}";
-                    Hints.HeroGraveScenes.Add(Hints.SwampHintId, "Swamp Redux 2");
+                    Hints.HintStructureScenes.Add(Hints.SwampHintId, "Swamp Redux 2");
                 } else if (HexagonHintArea == "Library Relic") {
                     Hints.LibraryHintId = $"{HexHint.Player}, {HexHint.Location}";
-                    Hints.HeroGraveScenes.Add(Hints.LibraryHintId, "Library Hall");
+                    Hints.HintStructureScenes.Add(Hints.LibraryHintId, "Library Hall");
                 } else if (HexagonHintArea == "Monastery Relic") {
                     Hints.MonasteryHintId = $"{HexHint.Player}, {HexHint.Location}";
-                    Hints.HeroGraveScenes.Add(Hints.MonasteryHintId, "Monastery");
+                    Hints.HintStructureScenes.Add(Hints.MonasteryHintId, "Monastery");
                 }
 
                 Hexagons.Remove(Hexagon);
@@ -339,33 +342,29 @@ namespace TunicArchipelago {
             return formattedHint;
         }
 
-
-        //public static Dictionary<string, string> HeroGraveScenes = new Dictionary<string, string> {
-        //    { Hints.ForestHintId, "Sword Access" },
-        //    { Hints.FortressHintId, "Fortress Reliquary" },
-        //    { Hints.GardenHintId , "Archipelagos Redux" },
-        //    { Hints.SwampHintId , "Swamp Redux 2" },
-        //    { Hints.LibraryHintId , "Library Hall" },
-        //    { Hints.MonasteryHintId , "Monastery" }
-        //};
-
-        public static void ToggleCandle(string sceneName, bool lightCandle) {
+        public static void ToggleHintIndicator(string sceneName, bool onOrOff) {
             if (sceneName == "Sword Access") {
-                GameObject.Find("_Setpieces/RelicPlinth (1)/cathedral_candleflame").SetActive(lightCandle);
+                GameObject.Find("_Setpieces/RelicPlinth (1)/cathedral_candleflame").SetActive(onOrOff);
             } else if (sceneName == "Fortress Reliquary") {
-                GameObject.Find("RelicPlinth/cathedral_candleflame").SetActive(lightCandle);
+                GameObject.Find("RelicPlinth/cathedral_candleflame").SetActive(onOrOff);
             } else if (sceneName == "Archipelagos Redux") {
-                GameObject.Find("_Environment Prefabs/RelicPlinth/cathedral_candleflame").SetActive(lightCandle);
-                GameObject.Find("_Environment Prefabs/RelicPlinth/Point Light").SetActive(lightCandle);
+                GameObject.Find("_Environment Prefabs/RelicPlinth/cathedral_candleflame").SetActive(onOrOff);
+                GameObject.Find("_Environment Prefabs/RelicPlinth/Point Light").SetActive(onOrOff);
             } else if (sceneName == "Swamp Redux 2") {
-                GameObject.Find("_Setpieces Etc/RelicPlinth/cathedral_candleflame").SetActive(lightCandle);
-                GameObject.Find("_Setpieces Etc/RelicPlinth/Point Light").SetActive(lightCandle);
+                GameObject.Find("_Setpieces Etc/RelicPlinth/cathedral_candleflame").SetActive(onOrOff);
+                GameObject.Find("_Setpieces Etc/RelicPlinth/Point Light").SetActive(onOrOff);
             } else if (sceneName == "Library Hall") {
-                GameObject.Find("_Special/RelicPlinth/cathedral_candleflame").SetActive(lightCandle);
-                GameObject.Find("_Special/RelicPlinth/Point Light").SetActive(lightCandle);
+                GameObject.Find("_Special/RelicPlinth/cathedral_candleflame").SetActive(onOrOff);
+                GameObject.Find("_Special/RelicPlinth/Point Light").SetActive(onOrOff);
             } else if (sceneName == "Monastery") {
-                GameObject.Find("Root/RelicPlinth (1)/cathedral_candleflame").SetActive(lightCandle);
-                GameObject.Find("Root/RelicPlinth (1)/Point Light").SetActive(lightCandle);
+                GameObject.Find("Root/RelicPlinth (1)/cathedral_candleflame").SetActive(onOrOff);
+                GameObject.Find("Root/RelicPlinth (1)/Point Light").SetActive(onOrOff);
+            } else if (sceneName == "Overworld Redux") {
+                if (onOrOff) {
+                    GameObject.Find("_Environment/_Decorations/Mailbox (1)/mailbox flag").transform.rotation = new Quaternion(0.0f, 0.0f, 0.0f, 0.0f);
+                } else {
+                    GameObject.Find("_Environment/_Decorations/Mailbox (1)/mailbox flag").transform.rotation = new Quaternion(0.5f, -0.5f, 0.5f, 0.5f);
+                }
             }
         }
 

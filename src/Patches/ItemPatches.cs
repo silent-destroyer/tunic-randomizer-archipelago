@@ -409,12 +409,12 @@ namespace TunicArchipelago {
 
             if (TunicArchipelago.Settings.HeroPathHintsEnabled) {
                 string slotLoc = networkItem.Player.ToString() + ", " + Archipelago.instance.GetLocationName(networkItem.Location);
-                foreach (string hintId in Hints.HeroGraveScenes.Keys) {
+                foreach (string hintId in Hints.HintStructureScenes.Keys) {
                     if (hintId == slotLoc) {
                         SaveFile.SetInt($"randomizer got {hintId}", 1);
                         string sceneName = SceneManager.GetActiveScene().name;
-                        if (sceneName == Hints.HeroGraveScenes[hintId]) {
-                            Hints.ToggleCandle(sceneName, true);
+                        if (sceneName == Hints.HintStructureScenes[hintId]) {
+                            Hints.ToggleHintIndicator(sceneName, true);
                         }
                     }
                 }

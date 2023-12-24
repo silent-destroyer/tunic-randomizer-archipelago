@@ -217,11 +217,7 @@ namespace TunicArchipelago {
             for (int i = 0; i < 28; i++) {
                 SaveFile.SetInt("unlocked page " + i, SaveFile.GetInt("randomizer picked up page " + i) == 1 ? 1 : 0);
             }
-            /*            foreach (string Key in ItemLookup.HeroRelicLookup.Keys) {
-                            StateVariable.GetStateVariableByName(ItemLookup.HeroRelicLookup[Key].Flag).BoolValue = SaveFile.GetInt("randomizer picked up " + ItemLookup.HeroRelicLookup[Key].OriginalPickupLocation) == 1;
-                        }*/
 
-            List<string> HeroGraveList = new List<string>() {"Sword Access", "Fortress Reliquary", "Archipelagos Redux", "Library Hall", "Monastery"};
             if (SceneName == "Waterfall") {
                 List<string> RandomObtainedFairies = new List<string>();
                 foreach (string Key in ItemLookup.FairyLookup.Keys) {
@@ -232,9 +228,7 @@ namespace TunicArchipelago {
                 }
 
                 StateVariable.GetStateVariableByName("SV_Fairy_5_Waterfall_Opened").BoolValue = SaveFile.GetInt("randomizer opened fairy chest Waterfall-(-47.0, 45.0, 10.0)") == 1;
-
                 StateVariable.GetStateVariableByName("SV_Fairy_00_Enough Fairies Found").BoolValue = true;
-
                 StateVariable.GetStateVariableByName("SV_Fairy_00_All Fairies Found").BoolValue = true;
 
             } else if (SceneName == "Spirit Arena") {
@@ -281,10 +275,7 @@ namespace TunicArchipelago {
             } else if (SceneName == "Overworld Redux") {
                 GameObject.Find("_Signposts/Signpost (3)/").GetComponent<Signpost>().message.text = $"#is wA too \"West Garden\"\n<#33FF33>[death] bEwAr uhv tArE [death]";
                 GameObject.Find("_Environment Special/Door (1)/door/key twist").GetComponent<MeshRenderer>().materials = ModelSwaps.Items["Key (House)"].GetComponent<MeshRenderer>().materials;
-                if (TunicArchipelago.Settings.HeroPathHintsEnabled && SaveFile.GetInt($"randomizer picked up {Hints.MailboxHintId}") == 0) {
-                    GameObject.Find("_Environment/_Decorations/Mailbox (1)/mailbox flag").transform.rotation = new Quaternion(0.5f, -0.5f, 0.5f, 0.5f);
-                }
-
+                
                 if (SaveFile.GetInt("randomizer entrance rando enabled") == 1 || (Archipelago.instance.integration.slotData.ContainsKey("entrance_rando") && Archipelago.instance.integration.slotData["entrance_rando"].ToString() == "1" && SaveFile.GetInt("seed") == 0)) {
                     GhostHints.SpawnTorchHintGhost();
                 }
@@ -328,73 +319,66 @@ namespace TunicArchipelago {
                     chest.transform.parent.GetChild(2).gameObject.SetActive(false);
                 }
             }
-            if (TunicArchipelago.Settings.HeroPathHintsEnabled && Hints.HeroGraveScenes.Values.Contains(SceneName) && SaveFile.GetInt($"randomizer got {Hints.HeroGraveScenes.FirstOrDefault(x => x.Value == SceneName).Key}") == 0) {
-                Hints.ToggleCandle(SceneName, false);
+            if (TunicArchipelago.Settings.HeroPathHintsEnabled && Hints.HintStructureScenes.ContainsValue(SceneName) && SaveFile.GetInt($"randomizer got {Hints.HintStructureScenes.FirstOrDefault(x => x.Value == SceneName).Key}") == 0) {
+                Hints.ToggleHintIndicator(SceneName, false);
             }
-            // else if (SceneName == "Sword Access") {
-                //    if (TunicArchipelago.Settings.HeroPathHintsEnabled && SaveFile.GetInt($"randomizer got {Hints.ForestHintId}") == 0) {
-                //        GameObject.Find("_Setpieces/RelicPlinth (1)/cathedral_candleflame").SetActive(false);
-                //    }
 
-                if (Archipelago.instance != null && Archipelago.instance.integration != null && Archipelago.instance.integration.connected) {
-                if (TunicArchipelago.Settings.EnemyRandomizerEnabled && EnemyRandomizer.Enemies.Count > 0 && !EnemyRandomizer.ExcludedScenes.Contains(SceneName)) {
-                    EnemyRandomizer.SpawnNewEnemies();
+            if (Archipelago.instance != null && Archipelago.instance.integration != null && Archipelago.instance.integration.connected) {
+            if (TunicArchipelago.Settings.EnemyRandomizerEnabled && EnemyRandomizer.Enemies.Count > 0 && !EnemyRandomizer.ExcludedScenes.Contains(SceneName)) {
+                EnemyRandomizer.SpawnNewEnemies();
+            }
+
+            try {
+                if (TunicArchipelago.Settings.UseCustomTexture) {
+                    PaletteEditor.LoadCustomTexture();
                 }
-
-                try {
-                    if (TunicArchipelago.Settings.UseCustomTexture) {
-                        PaletteEditor.LoadCustomTexture();
-                    }
-                } catch (Exception ex) {
-                    Logger.LogError("An error occurred applying custom texture:");
-                    Logger.LogError(ex.Message + " " + ex.StackTrace);
+            } catch (Exception ex) {
+                Logger.LogError("An error occurred applying custom texture:");
+                Logger.LogError(ex.Message + " " + ex.StackTrace);
+            }
+            try {
+                if (!ModelSwaps.SwappedThisSceneAlready && (ItemLookup.ItemList.Count > 0 && SaveFile.GetInt("seed") != 0)) {
+                    ModelSwaps.SwapItemsInScene();
                 }
-                try {
-                    if (!ModelSwaps.SwappedThisSceneAlready && (ItemLookup.ItemList.Count > 0 && SaveFile.GetInt("seed") != 0)) {
-                        ModelSwaps.SwapItemsInScene();
-                    }
-                } catch (Exception ex) {
-                    Logger.LogError("An error occurred swapping item models in this scene:");
-                    Logger.LogError(ex.Message + " " + ex.StackTrace);
-                }
+            } catch (Exception ex) {
+                Logger.LogError("An error occurred swapping item models in this scene:");
+                Logger.LogError(ex.Message + " " + ex.StackTrace);
+            }
 
-                if (SaveFile.GetInt("randomizer entrance rando enabled") == 1)
-                {
-                    TunicPortals.CreatePortalPairs(((JObject)Archipelago.instance.GetPlayerSlotData()["Entrance Rando"]).ToObject<Dictionary<string, string>>());
-                    TunicPortals.ModifyPortals(loadingScene);
+            if (SaveFile.GetInt("randomizer entrance rando enabled") == 1) {
+                TunicPortals.CreatePortalPairs(((JObject)Archipelago.instance.GetPlayerSlotData()["Entrance Rando"]).ToObject<Dictionary<string, string>>());
+                TunicPortals.ModifyPortals(loadingScene);
+            }
 
-                }
-
-                if (SaveFile.GetInt(AbilityShuffle) == 1 && SaveFile.GetInt(HolyCrossUnlocked) == 0) {
-                    foreach (ToggleObjectBySpell SpellToggle in Resources.FindObjectsOfTypeAll<ToggleObjectBySpell>()) {
-                        foreach (ToggleObjectBySpell Spell in SpellToggle.gameObject.GetComponents<ToggleObjectBySpell>()) {
-                            Spell.enabled = false;
-                        }
+            if (SaveFile.GetInt(AbilityShuffle) == 1 && SaveFile.GetInt(HolyCrossUnlocked) == 0) {
+                foreach (ToggleObjectBySpell SpellToggle in Resources.FindObjectsOfTypeAll<ToggleObjectBySpell>()) {
+                    foreach (ToggleObjectBySpell Spell in SpellToggle.gameObject.GetComponents<ToggleObjectBySpell>()) {
+                        Spell.enabled = false;
                     }
                 }
+            }
 
-                try {
-                    if (TunicArchipelago.Settings.GhostFoxHintsEnabled && GhostHints.HintGhosts.Count > 0 && SaveFile.GetInt("seed") != 0) {
-                        GhostHints.SpawnHintGhosts(SceneName);
-                        SpawnedGhosts = true;
-                    }
-                } catch (Exception ex) {
-                    Logger.LogError("An error occurred spawning hint ghost foxes:");
-                    Logger.LogError(ex.Message + " " + ex.StackTrace);
+            try {
+                if (TunicArchipelago.Settings.GhostFoxHintsEnabled && GhostHints.HintGhosts.Count > 0 && SaveFile.GetInt("seed") != 0) {
+                    GhostHints.SpawnHintGhosts(SceneName);
+                    SpawnedGhosts = true;
                 }
+            } catch (Exception ex) {
+                Logger.LogError("An error occurred spawning hint ghost foxes:");
+                Logger.LogError(ex.Message + " " + ex.StackTrace);
+            }
 
-                try {
-                    FairyTargets.CreateFairyTargets();
-                } catch (Exception ex) {
-                    Logger.LogError("An error occurred creating new fairy seeker spell targets:");
-                    Logger.LogError(ex.Message + " " + ex.StackTrace);
-                }
+            try {
+                FairyTargets.CreateFairyTargets();
+            } catch (Exception ex) {
+                Logger.LogError("An error occurred creating new fairy seeker spell targets:");
+                Logger.LogError(ex.Message + " " + ex.StackTrace);
+            }
 
                 if (TunicArchipelago.Settings.RealestAlwaysOn) {
                     try {
                         GameObject.FindObjectOfType<RealestSpell>().SpellEffect();
                     } catch (Exception e) {
-
                     }
                 }
 
