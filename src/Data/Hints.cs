@@ -8,6 +8,7 @@ using static TunicArchipelago.GhostHints;
 using Archipelago.MultiClient.Net.Enums;
 using static TunicArchipelago.SaveFlags;
 using BepInEx.Logging;
+using UnityEngine;
 
 namespace TunicArchipelago {
     public class Hints {
@@ -42,6 +43,7 @@ namespace TunicArchipelago {
         public static string SwampHintId = "";
         public static string LibraryHintId = "";
         public static string MonasteryHintId = "";
+        public static Dictionary<string, string> HeroGraveScenes = new Dictionary<string, string>();
 
         // Used for getting what sphere 1 is if you have ER on
         // Gives you items in Overworld or items in adjacent scenes
@@ -205,10 +207,13 @@ namespace TunicArchipelago {
 
                 if (HintGrave == "East Forest Relic") {
                     Hints.ForestHintId = $"{ItemHint.Player}, {ItemHint.Location}";
+                    Hints.HeroGraveScenes.Add(Hints.ForestHintId, "East Forest Redux");
                 } else if (HintGrave == "Fortress Relic") {
                     Hints.FortressHintId = $"{ItemHint.Player}, {ItemHint.Location}";
+                    Hints.HeroGraveScenes.Add(Hints.FortressHintId, "Fortress Reliquary");
                 } else if (HintGrave == "West Garden Relic") {
                     Hints.GardenHintId = $"{ItemHint.Player}, {ItemHint.Location}";
+                    Hints.HeroGraveScenes.Add(Hints.GardenHintId, "Archipelagos Redux");
                 }
 
                 HintItems.Remove(HintItem);
@@ -248,10 +253,13 @@ namespace TunicArchipelago {
 
                 if (HexagonHintArea == "Swamp Relic") {
                     Hints.SwampHintId = $"{HexHint.Player}, {HexHint.Location}";
+                    Hints.HeroGraveScenes.Add(Hints.SwampHintId, "Swamp Redux 2");
                 } else if (HexagonHintArea == "Library Relic") {
                     Hints.LibraryHintId = $"{HexHint.Player}, {HexHint.Location}";
+                    Hints.HeroGraveScenes.Add(Hints.LibraryHintId, "Library Hall");
                 } else if (HexagonHintArea == "Monastery Relic") {
                     Hints.MonasteryHintId = $"{HexHint.Player}, {HexHint.Location}";
+                    Hints.HeroGraveScenes.Add(Hints.MonasteryHintId, "Monastery");
                 }
 
                 Hexagons.Remove(Hexagon);
@@ -329,6 +337,36 @@ namespace TunicArchipelago {
             }
 
             return formattedHint;
+        }
+
+
+        //public static Dictionary<string, string> HeroGraveScenes = new Dictionary<string, string> {
+        //    { Hints.ForestHintId, "Sword Access" },
+        //    { Hints.FortressHintId, "Fortress Reliquary" },
+        //    { Hints.GardenHintId , "Archipelagos Redux" },
+        //    { Hints.SwampHintId , "Swamp Redux 2" },
+        //    { Hints.LibraryHintId , "Library Hall" },
+        //    { Hints.MonasteryHintId , "Monastery" }
+        //};
+
+        public static void ToggleCandle(string sceneName, bool lightCandle) {
+            if (sceneName == "Sword Access") {
+                GameObject.Find("_Setpieces/RelicPlinth (1)/cathedral_candleflame").SetActive(lightCandle);
+            } else if (sceneName == "Fortress Reliquary") {
+                GameObject.Find("RelicPlinth/cathedral_candleflame").SetActive(lightCandle);
+            } else if (sceneName == "Archipelagos Redux") {
+                GameObject.Find("_Environment Prefabs/RelicPlinth/cathedral_candleflame").SetActive(lightCandle);
+                GameObject.Find("_Environment Prefabs/RelicPlinth/Point Light").SetActive(lightCandle);
+            } else if (sceneName == "Swamp Redux 2") {
+                GameObject.Find("_Setpieces Etc/RelicPlinth/cathedral_candleflame").SetActive(lightCandle);
+                GameObject.Find("_Setpieces Etc/RelicPlinth/Point Light").SetActive(lightCandle);
+            } else if (sceneName == "Library Hall") {
+                GameObject.Find("_Special/RelicPlinth/cathedral_candleflame").SetActive(lightCandle);
+                GameObject.Find("_Special/RelicPlinth/Point Light").SetActive(lightCandle);
+            } else if (sceneName == "Monastery") {
+                GameObject.Find("Root/RelicPlinth (1)/cathedral_candleflame").SetActive(lightCandle);
+                GameObject.Find("Root/RelicPlinth (1)/Point Light").SetActive(lightCandle);
+            }
         }
 
     }
