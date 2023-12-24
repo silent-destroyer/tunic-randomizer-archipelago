@@ -1207,7 +1207,7 @@ namespace TunicArchipelago {
         }
 
         public static void ShopManager_entrySequence_MoveNext_PostfixPatch(ShopManager._entrySequence_d__14 __instance, ref bool __result) {
-            if (__instance._f_5__2 > 0.5f && __instance._f_5__2 < 0.6f) {
+            if (SceneManager.GetActiveScene().name == "Shop" && __instance._f_5__2 > 0.5f && __instance._f_5__2 < 0.6f) {
                 for (int i = 0; i < 3; i++) {
                     if (IceFlask != null) {
                         try {
