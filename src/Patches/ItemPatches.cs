@@ -389,20 +389,20 @@ namespace TunicArchipelago {
                     SaveFile.SetFloat($"randomizer {Item.Name} {TunicArchipelago.Tracker.ImportantItems[Item.ItemNameForInventory] + 1} time", SpeedrunData.inGameTime);
                 }
             }
-            
+
+            TextBuilderPatches.CustomImageToDisplay = ItemName;
             if (networkItem.Player != Archipelago.instance.GetPlayerSlot()) {
                 var sender = Archipelago.instance.GetPlayerName(networkItem.Player);
                 NotificationTop = NotificationTop == "" ? $"\"{sender}\" sehnt yoo {(TextBuilderPatches.ItemNameToAbbreviation.ContainsKey(ItemName) ? TextBuilderPatches.ItemNameToAbbreviation[ItemName] : "")} \"{ItemName}!\"" : NotificationTop;
-                NotificationBottom = NotificationBottom == "" ? $"Rnt #A nIs\"?\"" : NotificationBottom; 
+                NotificationBottom = NotificationBottom == "" ? $"Rnt #A nIs\"?\"" : NotificationBottom;
+                ShowNotification(NotificationTop, NotificationBottom);
             }
 
             if (networkItem.Player == Archipelago.instance.GetPlayerSlot() && TunicArchipelago.Settings.SkipItemAnimations) {
                 NotificationTop = NotificationTop == "" ? $"yoo fownd {(TextBuilderPatches.ItemNameToAbbreviation.ContainsKey(ItemName) ? TextBuilderPatches.ItemNameToAbbreviation[ItemName] : "")} \"{ItemName}!\"" : NotificationTop;
                 NotificationBottom = NotificationBottom == "" ? $"$oud bE yoosfuhl!" : NotificationBottom;
+                ShowNotification(NotificationTop, NotificationBottom);
             }
-
-            TextBuilderPatches.CustomImageToDisplay = ItemName;
-            ShowNotification(NotificationTop, NotificationBottom);
 
             TunicArchipelago.Tracker.SetCollectedItem(ItemName, true);
 
