@@ -102,16 +102,6 @@ namespace TunicArchipelago {
                     ResetDayNightTimer = -1.0f;
                 }
             }
-            if (SpeedrunFinishlineDisplayPatches.ShowSwordAfterDelay) {
-                FinishLineSwordTimer += Time.fixedUnscaledDeltaTime;
-                if (FinishLineSwordTimer > 3.5f) {
-                    FinishLineSwordTimer = 0.0f;
-                    SpeedrunFinishlineDisplayPatches.ShowSwordAfterDelay = false;
-                    int SwordLevel = SaveFile.GetInt(SwordProgressionLevel);
-                    GameObject.Find("_FinishlineDisplay(Clone)/Finishline Camera/Vertical Group/Item Parade Group/").transform.GetChild(1).GetChild(1).GetComponent<Image>().enabled = false;
-                    GameObject.Instantiate(SwordLevel == 3 ? ModelSwaps.SecondSwordImage : ModelSwaps.ThirdSwordImage, GameObject.Find("_FinishlineDisplay(Clone)/Finishline Camera/Vertical Group/Item Parade Group/").transform.GetChild(1)).GetComponent<RawImage>().color = new UnityEngine.Color(1, 1, 1, 0.65f);
-                }
-            }
             if (SpeedrunFinishlineDisplayPatches.ShowCompletionStatsAfterDelay) {
                 CompletionTimer += Time.fixedUnscaledDeltaTime;
                 if (CompletionTimer > 6.0f) {
@@ -191,7 +181,6 @@ namespace TunicArchipelago {
 
             TunicArchipelago.Tracker.ImportantItems["Coins Tossed"] = StateVariable.GetStateVariableByName("Trinket Coins Tossed").IntValue;
 
-            Inventory.GetItemByName("Homeward Bone Statue").icon = Inventory.GetItemByName("Dash Stone").icon;
             Inventory.GetItemByName("Spear").icon = Inventory.GetItemByName("MoneyBig").icon;
             if (Inventory.GetItemByName("Spear").TryCast<ButtonAssignableItem>() != null) {
                 Inventory.GetItemByName("Spear").TryCast<ButtonAssignableItem>().useMPUsesForQuantity = true;
@@ -203,8 +192,6 @@ namespace TunicArchipelago {
             CustomItemBehaviors.SetupTorchItemBehaviour(__instance);
 
             LoadSwords = true;
-
-            TextBuilderPatches.SetupCustomGlyphSprites();
 
             if (Archipelago.instance.integration.connected) {
                 Archipelago.instance.integration.sentCompletion = false;
@@ -320,19 +307,12 @@ namespace TunicArchipelago {
                 Hints.PopulateHints();
 
                 if (SaveFile.GetInt(AbilityShuffle) == 1 && SaveFile.GetInt(HolyCrossUnlocked) == 0) {
-                    foreach (ToggleObjectBySpell SpellToggle in Resources.FindObjectsOfTypeAll<ToggleObjectBySpell>()) {
-                        foreach (ToggleObjectBySpell Spell in SpellToggle.gameObject.GetComponents<ToggleObjectBySpell>()) {
-                            Spell.enabled = false;
-                        }
-                    }
+                    ItemPatches.ToggleHolyCrossObjects(false);
                 }
 
                 if(SaveFile.GetInt(HexagonQuestEnabled) == 1) {
                     TunicArchipelago.Tracker.ImportantItems["Pages"] = 28;
                     SaveFile.SetInt("last page viewed", 0);
-                    ModelSwaps.SetupHexagonQuest();
-                } else {
-                    ModelSwaps.RestoreOriginalHexagons();
                 }
 
                 FairyTargets.CreateFairyTargets();
@@ -350,9 +330,8 @@ namespace TunicArchipelago {
                 Archipelago.instance.integration.UpdateDataStorageOnLoad();
             }
 
-            ModelSwaps.SetupDathStoneItemPresentation();
-            ModelSwaps.SetupCustomSwordItemPresentations();
-            
+            ItemPresentationPatches.SwitchDathStonePresentation();
+
             PaletteEditor.SetupPartyHat(__instance);
 
             if (TunicArchipelago.Settings.RandomFoxColorsEnabled) {

@@ -35,9 +35,6 @@ namespace TunicArchipelago {
         public static GameObject BlueHexagon;
         public static GameObject HexagonQuest;
         public static GameObject QuestionMark;
-        public static List<GameObject> SecondSwordIcons = new List<GameObject>();
-        public static List<GameObject> ThirdSwordIcons = new List<GameObject>();
-        public static List<GameObject> EquipButtons = new List<GameObject>();
         public static void Initialize() {
             if (!Loaded) {
                 TMP_FontAsset FontAsset = Resources.FindObjectsOfTypeAll<TMP_FontAsset>().Where(Font => Font.name == "Latin Rounded").ToList()[0];
@@ -92,7 +89,9 @@ namespace TunicArchipelago {
                 HexBacking.transform.parent = HexagonQuest.transform;
                 HexBacking.transform.position = new Vector3(-445f, 210f, 0f);
                 HexBacking.transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
-                GameObject.Instantiate(ModelSwaps.HexagonGoldImage, HexBacking.transform);
+                GameObject GoldHex = GameObject.Instantiate(ModelSwaps.HexagonGoldImage, HexBacking.transform);
+                GoldHex.transform.localPosition = Vector3.zero;
+                GoldHex.SetActive(true);
                 HexBacking.transform.GetChild(0).localScale = new Vector3(0.75f, 0.75f, 0.75f);
                 GoldHexagons = SetupText("gold hexagons", new Vector3(-237f, 200f, 0f), HexagonQuest.transform, 24f, FontAsset, FontMaterial);
                 GoldHexagons.GetComponent<RectTransform>().sizeDelta = new Vector2(350f, 50f);
@@ -138,26 +137,6 @@ namespace TunicArchipelago {
                 QuestionMark.AddComponent<Image>().sprite = Resources.FindObjectsOfTypeAll<Sprite>().Where(sprite => sprite.name == "trinkets 1_slot_grey").ToList()[0];
                 GameObject.DontDestroyOnLoad(QuestionMark);
                 Stats.transform.SetAsFirstSibling();
-                if (SecondSwordIcons.Count < 3) {
-                    for (int i = 1; i < 4; i++) {
-                        GameObject SecondSwordImg = GameObject.Instantiate(ModelSwaps.SecondSwordImage);
-                        GameObject EquipButton = Resources.FindObjectsOfTypeAll<GameObject>().Where(GameObj => GameObj.name == $"Equip Button {i}").ToList()[0].transform.GetChild(0).gameObject;
-                        SecondSwordImg.transform.parent = EquipButton.transform;
-                        SecondSwordImg.transform.localScale = Vector3.one;
-                        SecondSwordImg.transform.localPosition = Vector3.one;
-                        GameObject.DontDestroyOnLoad(SecondSwordImg);
-                        SecondSwordImg.SetActive(false);
-                        SecondSwordIcons.Add(SecondSwordImg);
-                        GameObject ThirdSwordImg = GameObject.Instantiate(ModelSwaps.ThirdSwordImage);
-                        ThirdSwordImg.transform.parent = EquipButton.transform;
-                        ThirdSwordImg.transform.localScale = Vector3.one;
-                        ThirdSwordImg.transform.localPosition = Vector3.one;
-                        GameObject.DontDestroyOnLoad(ThirdSwordImg);
-                        ThirdSwordImg.SetActive(false);
-                        ThirdSwordIcons.Add(ThirdSwordImg);
-                        EquipButtons.Add(EquipButton);
-                    }
-                }
                 if (Screen.width <= 1280 && Screen.height <= 800) {
                     Stats.transform.localScale = new Vector3(3.6f, 3.6f, 3.6f);
                 }
@@ -228,8 +207,8 @@ namespace TunicArchipelago {
                 ThisArea.GetComponent<TextMeshProUGUI>().color = (ObtainedItemCountInCurrentScene == TotalItemCountInCurrentScene) ? new Color(0.917f, 0.65f, .08f) : Color.white;
                 Total.GetComponent<TextMeshProUGUI>().text = $"Total:\t\t  {ObtainedItemCount}/302";
                 if (GoldHexagons != null) {
-                    GoldHexagons.GetComponent<TextMeshProUGUI>().text = $"{SaveFile.GetInt(GoldHexagonQuantity)}/{SaveFile.GetInt(HexagonQuestGoal)}";
-                    GoldHexagons.GetComponent<TextMeshProUGUI>().color = SaveFile.GetInt(GoldHexagonQuantity) >= SaveFile.GetInt(HexagonQuestGoal) ? new Color(0.917f, 0.65f, .08f) : Color.white;
+                    GoldHexagons.GetComponent<TextMeshProUGUI>().text = $"{Inventory.GetItemByName("Hexagon Gold").Quantity}/{SaveFile.GetInt(HexagonQuestGoal)}";
+                    GoldHexagons.GetComponent<TextMeshProUGUI>().color = Inventory.GetItemByName("Hexagon Gold").Quantity >= SaveFile.GetInt(HexagonQuestGoal) ? new Color(0.917f, 0.65f, .08f) : Color.white;
                 }
                 if (Inventory.GetItemByName("Spear").Quantity == 1) {
                     QuestionMark.SetActive(false);
@@ -319,57 +298,12 @@ namespace TunicArchipelago {
                         }
                     }
                 }
-
-                for (int i = 0; i < Equipment.transform.childCount; i++) {
-                    if (Equipment.transform.GetChild(i).GetChild(1).GetComponent<Image>().sprite.name == "Inventory items_torch") {
-                        GameObject Torch = Equipment.transform.GetChild(i).gameObject;
-                        Torch.transform.SetAsLastSibling();
-                    }
-                    if (Equipment.transform.GetChild(i).GetChild(1).GetComponent<Image>().sprite.name == "Inventory items_koban_hp" || Equipment.transform.GetChild(i).GetChild(1).GetComponent<Image>().sprite.name == "Inventory items_koban_sp") {
-                        if (Equipment.transform.GetChild(i).childCount == 3) {
-                        } else {
-                            if (Equipment.transform.GetChild(i).GetChild(1).GetComponent<Image>().sprite.name == "Inventory items_koban_hp") {
-                                GameObject NewSword = GameObject.Instantiate(ModelSwaps.SecondSwordImage);
-                                NewSword.transform.parent = Equipment.transform.GetChild(i);
-                                NewSword.transform.localScale = new Vector3(2f, 2f, 2f);
-                                NewSword.transform.localPosition = Vector3.zero;
-                                Equipment.transform.GetChild(i).GetChild(1).gameObject.SetActive(false);
-                            } else if (Equipment.transform.GetChild(i).GetChild(1).GetComponent<Image>().sprite.name == "Inventory items_koban_sp") {
-                                GameObject NewSword = GameObject.Instantiate(ModelSwaps.ThirdSwordImage);
-                                NewSword.transform.parent = Equipment.transform.GetChild(i);
-                                NewSword.transform.localScale = new Vector3(2f, 2f, 2f);
-                                NewSword.transform.localPosition = Vector3.zero;
-                                Equipment.transform.GetChild(i).GetChild(1).gameObject.SetActive(false);
-                            }
-                        }
-                    }
-                }
+                
                 // -331.975
                 // -279.475
                 //TrackerOverlay.Overlay.transform.position = new Vector3(0, 50f, 0);
             }
             
-            if (Loaded) {
-                for (int i = 0; i < 3; i++) {
-                    GameObject EquipButton = EquipButtons[i];
-                    if (EquipButton.transform.GetChild(0).GetComponent<Image>().enabled && EquipButton.transform.GetChild(0).GetComponent<Image>().sprite != null && (EquipButton.transform.GetChild(0).GetComponent<Image>().sprite.name == "Inventory items_koban_hp" || EquipButton.transform.GetChild(0).GetComponent<Image>().sprite.name == "Inventory items_koban_sp")) {
-
-                        if (EquipButton.transform.GetChild(0).GetComponent<Image>().sprite.name == "Inventory items_koban_hp") {
-                            EquipButton.transform.GetChild(0).gameObject.SetActive(false);
-                            EquipButton.transform.GetChild(2).gameObject.SetActive(true);
-                            EquipButton.transform.GetChild(3).gameObject.SetActive(false);
-                        } else if (EquipButton.transform.GetChild(0).GetComponent<Image>().sprite.name == "Inventory items_koban_sp") {
-                            EquipButton.transform.GetChild(0).gameObject.SetActive(false);
-                            EquipButton.transform.GetChild(2).gameObject.SetActive(false);
-                            EquipButton.transform.GetChild(3).gameObject.SetActive(true);
-                        }
-                    } else {
-                        EquipButton.transform.GetChild(0).gameObject.SetActive(true);
-                        EquipButton.transform.GetChild(2).gameObject.SetActive(false);
-                        EquipButton.transform.GetChild(3).gameObject.SetActive(false);
-                    }
-                }
-            }
             if (SaveFile.GetInt(HexagonQuestEnabled) == 1) {
                 HexagonQuest.SetActive(true);
             } else {

@@ -142,7 +142,7 @@ namespace TunicArchipelago {
             { "Lantern", new ItemData("Lantern", "progression", "Lantern", ItemTypes.INVENTORY, 1) },
             { "Gun", new ItemData("Gun", "useful", "Shotgun", ItemTypes.INVENTORY, 1) },
             { "Shield", new ItemData("Shield", "useful", "Shield", ItemTypes.INVENTORY, 1) },
-            { "Dath Stone", new ItemData("Dath Stone", "useful", "Dath Stone", ItemTypes.SPECIAL, 1) },
+            { "Dath Stone", new ItemData("Dath Stone", "useful", "Dath Stone", ItemTypes.INVENTORY, 1) },
             { "Hourglass", new ItemData("Hourglass", "useful", "SlowmoItem", ItemTypes.INVENTORY, 1) },
             { "Old House Key", new ItemData("Old House Key", "progression", "Key (House)", ItemTypes.INVENTORY, 1) },
             { "Key", new ItemData("Key", "progression", "Key", ItemTypes.INVENTORY, 1) },

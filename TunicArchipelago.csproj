@@ -173,6 +173,7 @@
     <Compile Include="src\Patches\CustomItemBehaviors.cs" />
     <Compile Include="src\Patches\InteractionPatches.cs" />
     <Compile Include="src\Patches\ItemPatches.cs" />
+    <Compile Include="src\Patches\ItemPresentationPatches.cs" />
     <Compile Include="src\Patches\ItemStatsHUD.cs" />
     <Compile Include="src\Patches\ModelSwaps.cs" />
     <Compile Include="src\Patches\OptionsGUIPatches.cs" />

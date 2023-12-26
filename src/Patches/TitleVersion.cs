@@ -58,11 +58,7 @@ namespace TunicArchipelago {
 
                 if (Random.Next(100) < 10) {
                     GameObject Title = GameObject.Find("_GameGUI(Clone)/Title Canvas/Title Screen Root/Image");
-                    GameObject.Destroy(Title.GetComponent<Image>());
-                    ModelSwaps.TuncTitleImage.transform.parent = Title.transform;
-                    ModelSwaps.TuncTitleImage.transform.localScale = new Vector3(3.5f, 2f, 1f);
-                    ModelSwaps.TuncTitleImage.transform.localPosition = Vector3.zero;
-                    ModelSwaps.TuncTitleImage.SetActive(true);
+                    Title.GetComponent<Image>().sprite = ModelSwaps.TuncTitleImage.GetComponent<Image>().sprite;
                 }
             }
             Loaded = true;

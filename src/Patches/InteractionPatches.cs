@@ -1,12 +1,6 @@
 ﻿using BepInEx.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using static TunicArchipelago.GhostHints;
 using static TunicArchipelago.SaveFlags;
 
 namespace TunicArchipelago {
@@ -18,15 +12,10 @@ namespace TunicArchipelago {
 
             if (__instance.gameObject.GetComponent<NPC>() != null) {
                 if (SceneManager.GetActiveScene().name == "g_elements") {
-                    if (Inventory.GetItemByName("Homeward Bone Statue").Quantity == 0) {
+                    if (Inventory.GetItemByName("Dath Stone").Quantity == 0) {
                         __instance.gameObject.GetComponent<NPC>().script.text = $"I lawst mI mahjik stOn ahnd kahnt gO hOm...---if yoo fInd it, kahn yoo bri^ it too mE?\nit louks lIk #is: [dath]";
                     } else {
                         __instance.gameObject.GetComponent<NPC>().script.text = $"I lawst mI mahjik stOn [dath] ahnd kahnt gO hOm...---... wAt, yoo fownd it! plEz, yooz it now!";
-                    }
-                }
-                foreach (HintGhost HintGhost in HintGhosts) {
-                    if (HintGhost.Name == __instance.name && HintGhost.HintedItem != "" && TextBuilderPatches.ItemNameToAbbreviation.ContainsKey(HintGhost.HintedItem) && TextBuilderPatches.ItemNameToAbbreviation[HintGhost.HintedItem] == "[customimage]") {
-                        TextBuilderPatches.CustomImageToDisplay = HintGhost.HintedItem;
                     }
                 }
                 if (TunicArchipelago.Settings.SendHintsToServer) {

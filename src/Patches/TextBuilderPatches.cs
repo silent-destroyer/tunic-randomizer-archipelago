@@ -1,79 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace TunicArchipelago {
     public class TextBuilderPatches {
 
-        public static string CustomImageToDisplay = "";
-
-        public static Dictionary<string, int> CustomSpriteIndices = new Dictionary<string, int>() {
-            { "[stick]", 110 },
-            { "[realsword]", 111 },
-            { "[wand]", 112 },
-            { "[dagger]", 113 },
-            { "[orb]", 114 },
-            { "[shield]", 115 },
-            { "[gun]", 116 },
-            { "[hourglass]", 117 },
-            { "[lantern]", 118 },
-            { "[laurels]", 119 },
-            { "[coin]", 120 },
-            { "[trinket]", 121 },
-            { "[square]", 122 },
-            { "[fairy]", 123 },
-            { "[mayor]", 124 },
-            { "[book]", 125 },
-            { "[att]", 126 },
-            { "[def]", 127 },
-            { "[potion]", 128 },
-            { "[hp]", 129 },
-            { "[sp]", 130 },
-            { "[mp]", 131 },
-            { "[yellowkey]", 132 },
-            { "[housekey]", 133 },
-            { "[vaultkey]", 134 },
-            { "[firecracker]", 135 },
-            { "[firebomb]", 136 },
-            { "[icebomb]", 137 },
-            { "[hpberry]", 138 },
-            { "[mpberry]", 139 },
-            { "[pepper]", 140 },
-            { "[ivy]", 141 },
-            { "[lure]", 142 },
-            { "[effigy]", 143 },
-            { "[flask]", 144 },
-            { "[shard]", 145 },
-            { "[dath]", 146 },
-            { "[torch]", 147 },
-            { "[triangle]", 148 },
-            { "[realmoney]", 149 },
-            { "[anklet]", 150 },
-            { "[perfume]", 151 },
-            { "[mufflingbell]", 152 },
-            { "[rtsr]", 153 },
-            { "[aurasgem]", 154 },
-            { "[invertedash]", 155 },
-            { "[bonecard]", 156 },
-            { "[luckycup]", 157 },
-            { "[glasscannon]", 158 },
-            { "[daggerstrap]", 159 },
-            { "[louderecho]", 160 },
-            { "[magicecho]", 161 },
-            { "[bracer]", 162 },
-            { "[tincture]", 163 },
-            { "[btsr]", 164 },
-            { "[scavengermask]", 165 },
-            { "[customimage]", 166 },
-        };
+        public static Dictionary<string, int> CustomSpriteIndices = new Dictionary<string, int>() { };
 
         public static Dictionary<string, string> CustomSpriteIcons = new Dictionary<string, string>() {
             { "[stick]", "Inventory items_stick" },
             { "[realsword]", "Inventory items_sword" },
+            { "[librariansword]", "Randomizer items_Librarian Sword" },
+            { "[heirsword]", "Randomizer items_Heir Sword" },
             { "[wand]", "Inventory items_techbow" },
             { "[dagger]", "Inventory items_stundagger" },
             { "[orb]", "Inventory items_forcewand" },
@@ -94,6 +32,12 @@ namespace TunicArchipelago {
             { "[hp]", "Inventory items_offering_flower" },
             { "[sp]", "Inventory items_offering_feather" },
             { "[mp]", "Inventory items_offering_orb" },
+            { "[attrelic]", "Randomizer items_Hero Relic - ATT" },
+            { "[defrelic]", "Randomizer items_Hero Relic - DEF" },
+            { "[potionrelic]", "Randomizer items_Hero Relic - POTION" },
+            { "[hprelic]", "Randomizer items_Hero Relic - HP" },
+            { "[sprelic]", "Randomizer items_Hero Relic - SP" },
+            { "[mprelic]", "Randomizer items_Hero Relic - MP" },
             { "[yellowkey]", "Inventory items_key" },
             { "[housekey]", "Inventory items 3_keySpecial" },
             { "[vaultkey]", "Inventory items_vault key" },
@@ -109,7 +53,7 @@ namespace TunicArchipelago {
             { "[flask]", "Inventory items_potion" },
             { "[shard]", "Inventory items 3_shard" },
             { "[dath]", "Inventory items_dash stone" },
-            { "[torch]", "Inventory items_torch" },
+            { "[torch]", "Randomizer items_Torch redux" },
             { "[triangle]", "Inventory items_money triangle" },
             { "[realmoney]", "game gui_money_icon" },
             { "[anklet]", "trinkets 1_anklet" },
@@ -128,7 +72,24 @@ namespace TunicArchipelago {
             { "[tincture]", "trinkets 1_glass" },
             { "[btsr]", "trinkets 1_BTSR" },
             { "[scavengermask]", "trinkets 1_mask" },
-            { "[customimage]", "Inventory items_sword2" },
+            { "[redhex]", "Randomizer items_Red Questagon" },
+            { "[greenhex]", "Randomizer items_Green Questagon" },
+            { "[bluehex]", "Randomizer items_Blue Questagon" },
+            { "[goldhex]", "Randomizer items_Gold Questagon" },
+            { "[mrmayor]", "Randomizer items_Mr Mayor" },
+            { "[secretlegend]", "Randomizer items_Secret Legend" },
+            { "[sacredgeometry]", "Randomizer items_Sacred Geometry" },
+            { "[vintage]", "Randomizer items_Vintage" },
+            { "[justsomepals]", "Randomizer items_Just Some Pals" },
+            { "[regalweasel]", "Randomizer items_Regal Weasel" },
+            { "[springfalls]", "Randomizer items_Spring Falls" },
+            { "[powerup]", "Randomizer items_Power Up" },
+            { "[backtowork]", "Randomizer items_Back To Work" },
+            { "[phonomath]", "Randomizer items_Phonomath" },
+            { "[dusty]", "Randomizer items_Dusty" },
+            { "[foreverfriend]", "Randomizer items_Forever Friend" },
+            { "[fooltrap]", "Randomizer items_Fool Trap" },
+            { "[archipelago]", "Randomizer items_Archipelago Item" },
         };
 
         public static Dictionary<string, string> SpriteNameToAbbreviation = new Dictionary<string, string>();
@@ -183,10 +144,10 @@ namespace TunicArchipelago {
             { "Potion Flask", "[flask]" },
             { "Golden Coin", "[coin]" },
             { "Card Slot", "[square]" },
-            { "Red Questagon", "[customimage]" },
-            { "Green Questagon", "[customimage]" },
-            { "Blue Questagon", "[customimage]" },
-            { "Gold Questagon", "[customimage]" },
+            { "Red Questagon", "[redhex]" },
+            { "Green Questagon", "[greenhex]" },
+            { "Blue Questagon", "[bluehex]" },
+            { "Gold Questagon", "[goldhex]" },
             // Upgrades and Relics
             { "ATT Offering", "[att]" },
             { "DEF Offering", "[def]" },
@@ -194,12 +155,12 @@ namespace TunicArchipelago {
             { "HP Offering", "[hp]" },
             { "MP Offering", "[mp]" },
             { "SP Offering", "[sp]" },
-            { "Hero Relic - ATT", "[customimage]" },
-            { "Hero Relic - DEF", "[customimage]" },
-            { "Hero Relic - POTION", "[customimage]" },
-            { "Hero Relic - HP", "[customimage]" },
-            { "Hero Relic - SP", "[customimage]" },
-            { "Hero Relic - MP", "[customimage]" },
+            { "Hero Relic - ATT", "[attrelic]" },
+            { "Hero Relic - DEF", "[defrelic]" },
+            { "Hero Relic - POTION", "[potionrelic]" },
+            { "Hero Relic - HP", "[hprelic]" },
+            { "Hero Relic - SP", "[sprelic]" },
+            { "Hero Relic - MP", "[mprelic]" },
             // Trinket Cards
             { "Orange Peril Ring", "[rtsr]" },
             { "Tincture", "[tincture]" },
@@ -218,20 +179,20 @@ namespace TunicArchipelago {
             { "Aura's Gem", "[aurasgem]" },
             { "Bone Card", "[bonecard]" },
             // Golden Trophies
-            { "Mr Mayor", "[customimage]" },
-            { "Secret Legend", "[customimage]" },
-            { "Sacred Geometry", "[customimage]" },
-            { "Vintage", "[customimage]" },
-            { "Just Some Pals", "[customimage]" },
-            { "Regal Weasel", "[customimage]" },
-            { "Spring Falls", "[customimage]" },
-            { "Power Up", "[customimage]" },
-            { "Back To Work", "[customimage]" },
-            { "Phonomath", "[customimage]" },
-            { "Dusty", "[customimage]" },
-            { "Forever Friend", "[customimage]" },
+            { "Mr Mayor", "[mrmayor]" },
+            { "Secret Legend", "[secretlegend]" },
+            { "Sacred Geometry", "[sacredgeometry]" },
+            { "Vintage", "[vintage]" },
+            { "Just Some Pals", "[justsomepals]" },
+            { "Regal Weasel", "[regalweasel]" },
+            { "Spring Falls", "[springfalls]" },
+            { "Power Up", "[powerup]" },
+            { "Back To Work", "[backtowork]" },
+            { "Phonomath", "[phonomath]" },
+            { "Dusty", "[dusty]" },
+            { "Forever Friend", "[foreverfriend]" },
             // Fool Trap
-            { "Fool Trap", "[customimage]" },
+            { "Fool Trap", "[fooltrap]" },
             // Money
             { "Money x1", "[realmoney]" },
             { "Money x10", "[realmoney]" },
@@ -279,10 +240,11 @@ namespace TunicArchipelago {
             { "Pages 52-53 (Ice Rod)", "[book]" },
             { "Pages 54-55", "[book]" },
             // Non-Tunic Item
-            { "Archipelago Item", "[customimage]"}
+            { "Archipelago Item", "[archipelago]"}
         };
 
         public static void SetupCustomGlyphSprites() {
+            int index = 110;
             List<string> cartouches = Parser.cartouche.ToList();
             if (!cartouches.Contains("[torch]")) {
                 cartouches.AddRange(CustomSpriteIndices.Keys);
@@ -292,8 +254,9 @@ namespace TunicArchipelago {
                 foreach (string Icon in CustomSpriteIcons.Keys) {
                     sprites.Add(ModelSwaps.FindSprite(CustomSpriteIcons[Icon]));
                     SpriteNameToAbbreviation.Add(CustomSpriteIcons[Icon], Icon);
+                    CustomSpriteIndices.Add(Icon, index++);
                 }
-                sprites.Add(Inventory.GetItemByName("Homeward Bone Statue").icon);
+                sprites.Add(Inventory.GetItemByName("Dath Stone").icon);
                 SpriteBuilder.spriteResources = sprites.ToArray();
             }
         }
@@ -323,42 +286,31 @@ namespace TunicArchipelago {
                         if (SaveFile.GetInt("randomizer sword progression enabled") == 1) {
                             switch (NPCDialogue.instance.isActiveAndEnabled ? SaveFile.GetInt("randomizer sword progression level")+1 : SaveFile.GetInt("randomizer sword progression level")) {
                                 case 1:
-                                    renderer.sprite = ModelSwaps.FindSprite("Inventory items_stick");
+                                    renderer.sprite = Inventory.GetItemByName("Stick").icon;
                                     break;
                                 case 2:
-                                    renderer.sprite = ModelSwaps.FindSprite("Inventory items_sword");
+                                    renderer.sprite = Inventory.GetItemByName("Sword").icon;
                                     break;
                                 case 3:
-                                    renderer.gameObject.AddComponent<RawImage>().texture = ModelSwaps.SecondSwordImage.GetComponent<RawImage>().texture;
-                                    renderer.enabled = false;
+                                    renderer.sprite = Inventory.GetItemByName("Librarian Sword").icon;
                                     break;
                                 case 4:
                                 case 5:
-                                    renderer.gameObject.AddComponent<RawImage>().texture = ModelSwaps.ThirdSwordImage.GetComponent<RawImage>().texture;
-                                    renderer.enabled = false;
+                                    renderer.sprite = Inventory.GetItemByName("Heir Sword").icon;
                                     break;
                                 default:
-                                    renderer.sprite = ModelSwaps.FindSprite("Inventory items_sword");
+                                    renderer.sprite = Inventory.GetItemByName("Sword").icon;
                                     break;
                             }
                         }
-                    } else if (renderer.sprite.name == "Inventory items_sword2" && ModelSwaps.CustomItemImages.ContainsKey(CustomImageToDisplay)) {
-                        if (renderer.gameObject != null && ModelSwaps.CustomItemImages[CustomImageToDisplay] != null
-                            && ModelSwaps.CustomItemImages[CustomImageToDisplay].GetComponent<RawImage>() != null && renderer.GetComponent<RawImage>() == null) {
-
-                            renderer.gameObject.AddComponent<RawImage>().texture = ModelSwaps.CustomItemImages[CustomImageToDisplay].GetComponent<RawImage>().texture;
-                            renderer.gameObject.GetComponent<RawImage>().material = renderer.material;
-                            if (CustomImageToDisplay == "Fool Trap") {
-                                renderer.transform.localEulerAngles = new Vector3(0f, 0f, 180f);
-                                renderer.transform.localScale *= 0.75f;
-                            }
-                            if (CustomImageToDisplay == "Archipelago Item") {
-                                renderer.transform.localScale *= 0.85f;
-                            }
-                            renderer.enabled = false;
-                        }
-                    } else if (renderer.sprite.name == "game gui_money_icon") {
+                    } 
+                    else if (renderer.sprite.name == "game gui_money_icon") {
                         renderer.transform.localScale *= 1.25f;
+                    } else if (renderer.sprite.name == "Randomizer items_Archipelago Item") {
+                        renderer.transform.localScale *= 0.85f;
+                    } else if (renderer.sprite.name == "Randomizer items_Fool Trap") {
+                        renderer.transform.localEulerAngles = new Vector3(0f, 0f, 180f);
+                        renderer.transform.localScale *= 0.75f;
                     }
 
                     renderer.transform.localScale *= 0.85f;

@@ -147,7 +147,8 @@ namespace TunicArchipelago {
             if (Locations.LocationIdToDescription.ContainsKey(LocationId)) {
                 int Price = TunicArchipelago.Settings.CheaperShopItemsEnabled ? 300 : __instance.price;
                 ArchipelagoItem ShopItem = ItemLookup.ItemList[LocationId];
-                __instance.confirmPurchaseFormattedLanguageLine.text = $"bI for {Price} [money]?\n\t" + GhostHints.WordWrapString($"\"({Archipelago.instance.GetPlayerName(ShopItem.Player).ToUpper().Replace(" ", "\" \"")}'S {ShopItem.ItemName.ToUpper().Replace($" ", $"\" \"")})\"");
+                string itemToDisplay = Archipelago.instance.GetPlayerGame(ShopItem.Player) == "Tunic" && TextBuilderPatches.ItemNameToAbbreviation.ContainsKey(ShopItem.ItemName) ? TextBuilderPatches.ItemNameToAbbreviation[ShopItem.ItemName] : "[archipelago]";
+                __instance.confirmPurchaseFormattedLanguageLine.text = $"bI for {Price} [money]?\n\t" + GhostHints.WordWrapString($"\"({Archipelago.instance.GetPlayerName(ShopItem.Player).ToUpper().Replace(" ", "\" \"")}'S\" {itemToDisplay} \"{ShopItem.ItemName.ToUpper().Replace($" ", $"\" \"")})\"");
 
                 string CheckName = Locations.LocationIdToDescription[LocationId];
                 if (TunicArchipelago.Settings.SendHintsToServer && SaveFile.GetInt($"archipelago sent optional hint to server {CheckName}") == 0) {
@@ -240,6 +241,9 @@ namespace TunicArchipelago {
                     InventoryItem.collectionMessage = ScriptableObject.CreateInstance<LanguageLine>();
                     InventoryItem.collectionMessage.text = $"fownd ahn Itehm!";
                 }
+                if (Item.Name == "Dath Stone") {
+                    Inventory.GetItemByName("Torch").Quantity = 1;
+                }
                 ItemPresentation.PresentItem(InventoryItem, Item.QuantityToGive);
                 if (TunicArchipelago.Settings.SkipItemAnimations && Item.Name == "Flask Shard" && Inventory.GetItemByName("Flask Shard").Quantity >= 3) {
                     Inventory.GetItemByName("Flask Shard").Quantity -= 3;
@@ -293,16 +297,14 @@ namespace TunicArchipelago {
                         SaveFile.SetInt(pagesForAbilities[Item.ItemNameForInventory], 1);
                         SaveFile.SetFloat($"{pagesForAbilities[Item.ItemNameForInventory]} time", SpeedrunData.inGameTime);
                         if(Item.ItemNameForInventory == "21") {
-                            foreach (ToggleObjectBySpell SpellToggle in Resources.FindObjectsOfTypeAll<ToggleObjectBySpell>()) {
-                                foreach (ToggleObjectBySpell Spell in SpellToggle.gameObject.GetComponents<ToggleObjectBySpell>()) {
-                                    Spell.enabled = true;
-                                }
-                            }
+                            ToggleHolyCrossObjects(true);
                         }
                     }
                 }
                 if (!TunicArchipelago.Settings.SkipItemAnimations) {
                     PageDisplay.ShowPage(int.Parse(Item.ItemNameForInventory, CultureInfo.InvariantCulture));
+                } else {
+                    SaveFile.SetInt("last page viewed", int.Parse(Item.ItemNameForInventory, CultureInfo.InvariantCulture));
                 }
             }
 
@@ -345,16 +347,9 @@ namespace TunicArchipelago {
                 (NotificationTop, NotificationBottom) = ApplyFoolEffect(networkItem.Player);
             }
 
-            if (Item.Type == ItemTypes.SPECIAL) {
-                Inventory.GetItemByName("Homeward Bone Statue").Quantity += Item.QuantityToGive;
-                Inventory.GetItemByName("Torch").Quantity = 1;
-                ItemPresentation.PresentItem(Inventory.GetItemByName("Key Special"));
-            }
-
             if(Item.Type == ItemTypes.HEXAGONQUEST) {
-                SaveFile.SetInt(GoldHexagonQuantity, SaveFile.GetInt(GoldHexagonQuantity) + 1);
-
-                int GoldHexes = SaveFile.GetInt(GoldHexagonQuantity);
+                Inventory.GetItemByName("Hexagon Gold").Quantity += 1;
+                int GoldHexes = Inventory.GetItemByName("Hexagon Gold").Quantity;
 
                 if (GoldHexes == SaveFile.GetInt(HexagonQuestPrayer)) {
                     SaveFile.SetInt(PrayerUnlocked, 1);
@@ -365,18 +360,14 @@ namespace TunicArchipelago {
                     SaveFile.SetInt(HolyCrossUnlocked, 1);
                     SaveFile.SetFloat(HolyCrossUnlockedTime, SpeedrunData.inGameTime);
                     NotificationBottom = $"\"HOLY CROSS Unlocked.\" sEk wuht iz rItfuhlE yorz";
-                    foreach (ToggleObjectBySpell SpellToggle in Resources.FindObjectsOfTypeAll<ToggleObjectBySpell>()) {
-                        foreach (ToggleObjectBySpell Spell in SpellToggle.gameObject.GetComponents<ToggleObjectBySpell>()) {
-                            Spell.enabled = true;
-                        }
-                    }
+                    ToggleHolyCrossObjects(true);
                 }
                 if (GoldHexes == SaveFile.GetInt(HexagonQuestIceRod)) {
                     SaveFile.SetInt(IceRodUnlocked, 1);
                     SaveFile.SetFloat(IceRodUnlockedTime, SpeedrunData.inGameTime);
                     NotificationBottom = $"\"ICE ROD Unlocked.\" #A wOnt nO wuht hit #ehm";
                 }
-                ItemPresentation.PresentItem(Inventory.GetItemByName("Hexagon Blue"));
+                ItemPresentation.PresentItem(Inventory.GetItemByName(Item.ItemNameForInventory));
             }
 
             if (ItemLookup.MajorItems.Contains(Item.Name)) {
@@ -390,7 +381,6 @@ namespace TunicArchipelago {
                 }
             }
 
-            TextBuilderPatches.CustomImageToDisplay = ItemName;
             if (networkItem.Player != Archipelago.instance.GetPlayerSlot()) {
                 var sender = Archipelago.instance.GetPlayerName(networkItem.Player);
                 NotificationTop = NotificationTop == "" ? $"\"{sender}\" sehnt yoo {(TextBuilderPatches.ItemNameToAbbreviation.ContainsKey(ItemName) ? TextBuilderPatches.ItemNameToAbbreviation[ItemName] : "")} \"{ItemName}!\"" : NotificationTop;
@@ -398,7 +388,7 @@ namespace TunicArchipelago {
                 ShowNotification(NotificationTop, NotificationBottom);
             }
 
-            if (networkItem.Player == Archipelago.instance.GetPlayerSlot() && TunicArchipelago.Settings.SkipItemAnimations) {
+            if (networkItem.Player == Archipelago.instance.GetPlayerSlot() && (TunicArchipelago.Settings.SkipItemAnimations || Item.Type == ItemTypes.FOOLTRAP)) {
                 NotificationTop = NotificationTop == "" ? $"yoo fownd {(TextBuilderPatches.ItemNameToAbbreviation.ContainsKey(ItemName) ? TextBuilderPatches.ItemNameToAbbreviation[ItemName] : "")} \"{ItemName}!\"" : NotificationTop;
                 NotificationBottom = NotificationBottom == "" ? $"$oud bE yoosfuhl!" : NotificationBottom;
                 ShowNotification(NotificationTop, NotificationBottom);
@@ -417,7 +407,7 @@ namespace TunicArchipelago {
             if (FoolType < 35) {
                 SFX.PlayAudioClipAtFox(PlayerCharacter.instance.bigHurtSFX);
                 PlayerCharacter.instance.IDamageable_ReceiveDamage(PlayerCharacter.instance.hp / 3, 0, Vector3.zero, 0, 0);
-                FoolMessageTop = $"yoo R A \"<#ffd700>FOOL<#ffffff>!!\" [customimage]";
+                FoolMessageTop = $"yoo R A \"<#ffd700>FOOL<#ffffff>!!\" [fooltrap]";
                 FoolMessageBottom = $"\"(\"it wuhz A swRm uhv <#ffd700>bEz\"...)\"";
                 PlayerCharacterPatches.StungByBee = true;
                 PlayerCharacter.instance.Flinch(true);
@@ -426,7 +416,7 @@ namespace TunicArchipelago {
                 PlayerCharacter.instance.stamina = 0;
                 PlayerCharacter.instance.cachedFireController.FireAmount = 3f;
                 SFX.PlayAudioClipAtFox(PlayerCharacter.instance.bigHurtSFX);
-                FoolMessageTop = $"yoo R A \"<#FF3333>FOOL<#ffffff>!!\" [customimage]";
+                FoolMessageTop = $"yoo R A \"<#FF3333>FOOL<#ffffff>!!\" [fooltrap]";
                 FoolMessageBottom = $"iz it hawt in hEr?";
                 PlayerCharacter.instance.Flinch(true);
             } else if (FoolType >= 50) {
@@ -434,7 +424,7 @@ namespace TunicArchipelago {
                 SFX.PlayAudioClipAtFox(PlayerCharacter.instance.bigHurtSFX);
                 SFX.PlayAudioClipAtFox(PlayerCharacter.standardFreezeSFX);
                 PlayerCharacter.instance.AddFreezeTime(3f);
-                FoolMessageTop = $"yoo R A \"<#86A5FF>FOOL<#ffffff>!!\" [customimage]";
+                FoolMessageTop = $"yoo R A \"<#86A5FF>FOOL<#ffffff>!!\" [fooltrap]";
                 FoolMessageBottom = $"hahvi^ ahn Is tIm?";
             }
 
@@ -443,6 +433,14 @@ namespace TunicArchipelago {
             }
 
             return (FoolMessageTop, FoolMessageBottom);
+        }
+
+        public static void ToggleHolyCrossObjects(bool isEnabled) {
+            foreach (ToggleObjectBySpell SpellToggle in Resources.FindObjectsOfTypeAll<ToggleObjectBySpell>()) {
+                foreach (ToggleObjectBySpell Spell in SpellToggle.gameObject.GetComponents<ToggleObjectBySpell>()) {
+                    Spell.enabled = isEnabled;
+                }
+            }
         }
 
         public static void PotionCombine_Show_PostFixPatch(PotionCombine __instance) {
@@ -476,13 +474,6 @@ namespace TunicArchipelago {
         public static bool FairyCollection_getFairyCount_PrefixPatch(FairyCollection __instance, ref int __result) {
             __result = TunicArchipelago.Tracker.ImportantItems["Fairies"];
             return false;
-        }
-
-        public static bool ItemPresentation_presentItem_PrefixPatch(ItemPresentation __instance) {
-            if(TunicArchipelago.Settings.SkipItemAnimations) {
-                return false;
-            }
-            return true;
         }
 
         private static void ShowNotification(string topLine, string bottomLine) {
