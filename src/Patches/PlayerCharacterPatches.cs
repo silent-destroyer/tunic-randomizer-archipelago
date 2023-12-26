@@ -226,17 +226,14 @@ namespace TunicArchipelago {
                 }
                 if (slotData.TryGetValue("start_with_sword", out var startWithSword)) {
                     if (SaveFile.GetInt("randomizer started with sword") == 0 && startWithSword.ToString() == "1") {
-                        Logger.LogInfo("start with sword enabled");
                         SaveFile.SetInt("randomizer started with sword", 1);
                         Inventory.GetItemByName("Sword").Quantity += 1;
                     }
                 }
                 if (slotData.TryGetValue("ability_shuffling", out var abilityShuffling)) {
                     if (SaveFile.GetInt(AbilityShuffle) == 0 && abilityShuffling.ToString() == "1") {
-                        Logger.LogInfo("ability shuffling enabled");
                         SaveFile.SetInt(AbilityShuffle, 1);
-                        if (SaveFile.GetInt(HexagonQuestEnabled) == 1)
-                        {
+                        if (SaveFile.GetInt(HexagonQuestEnabled) == 1) {
                             SaveFile.SetInt(HexagonQuestPrayer, int.Parse(slotData["Hexagon Quest Prayer"].ToString(), CultureInfo.InvariantCulture));
                             SaveFile.SetInt(HexagonQuestHolyCross, int.Parse(slotData["Hexagon Quest Holy Cross"].ToString(), CultureInfo.InvariantCulture));
                             SaveFile.SetInt(HexagonQuestIceRod, int.Parse(slotData["Hexagon Quest Ice Rod"].ToString(), CultureInfo.InvariantCulture));
@@ -260,17 +257,13 @@ namespace TunicArchipelago {
                         SaveFile.SetInt(KeysBehindBosses, 1);
                     }
                 }
-                if (slotData.TryGetValue("entrance_rando", out var entranceRando))
-                {
-                    if (SaveFile.GetInt(EntranceRando) == 0 && entranceRando.ToString() == "1")
-                    {
-                        Logger.LogInfo("entrance rando enabled");
+                if (slotData.TryGetValue("entrance_rando", out var entranceRando)) {
+                    if (SaveFile.GetInt(EntranceRando) == 0 && entranceRando.ToString() == "1") {
                         SaveFile.SetInt(EntranceRando, 1);
                         Inventory.GetItemByName("Torch").Quantity = 1;
                     }
                 }
-                if (slotData.TryGetValue("Entrance Rando", out var entranceRandoPortals))
-                {
+                if (slotData.TryGetValue("Entrance Rando", out var entranceRandoPortals)) {
                     TunicPortals.CreatePortalPairs(((JObject)slotData["Entrance Rando"]).ToObject<Dictionary<string, string>>());
                     TunicPortals.AltModifyPortals();
                 }
@@ -305,6 +298,11 @@ namespace TunicArchipelago {
                 ItemTracker.PopulateSpoilerLog();
                 GhostHints.GenerateHints();
                 Hints.PopulateHints();
+
+                string hintSceneName = SceneManager.GetActiveScene().name;
+                if (TunicArchipelago.Settings.HeroPathHintsEnabled && Hints.HintStructureScenes.ContainsValue(hintSceneName) && SaveFile.GetInt($"randomizer got {Hints.HintStructureScenes.FirstOrDefault(x => x.Value == hintSceneName).Key}") == 0) {
+                    Hints.ToggleHintIndicator(hintSceneName, false);
+                }
 
                 if (SaveFile.GetInt(AbilityShuffle) == 1 && SaveFile.GetInt(HolyCrossUnlocked) == 0) {
                     ItemPatches.ToggleHolyCrossObjects(false);
