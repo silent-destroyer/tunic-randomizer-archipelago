@@ -9,7 +9,7 @@ namespace TunicArchipelago {
         public const string HexagonQuestPrayer = "randomizer hexagon quest prayer requirement";
         public const string HexagonQuestHolyCross = "randomizer hexagon quest holy cross requirement";
         public const string HexagonQuestIceRod = "randomizer hexagon quest ice rod requirement";
-        public const string GoldHexagonQuantity = "randomizer inventory quantity Hexagon Gold";
+        public const string GoldHexagonQuantity = "inventory quantity Hexagon Gold";
         public const string HexagonQuestGoal = "randomizer hexagon quest goal";
 
         // Ability Shuffle Flags

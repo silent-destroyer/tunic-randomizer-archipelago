@@ -1,9 +1,6 @@
 ﻿using BepInEx.Logging;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using static TunicArchipelago.SaveFlags;
@@ -142,31 +139,6 @@ namespace TunicArchipelago {
                 Logger.LogError("Could not find sword object to replace with Sword Lvl 4!");
             }
         }
-
-        public static void CreateSwordItems() {
-            ButtonAssignableItem LibrarianSword = ScriptableObject.CreateInstance<ButtonAssignableItem>();
-            ButtonAssignableItem HeirSword = ScriptableObject.CreateInstance<ButtonAssignableItem>();
-            LibrarianSword.name = "Librarian Sword";
-            LibrarianSword.icon = ModelSwaps.FindSprite("Inventory items_koban_hp");
-            LibrarianSword.collectionMessage = new LanguageLine();
-            LibrarianSword.collectionMessage.text = $"\"        ? ? ? (<#ca7be4>Lv. 3<#FFFFFF>)\"";
-            HeirSword.name = "Heir Sword";
-            HeirSword.icon = ModelSwaps.FindSprite("Inventory items_koban_sp");
-            HeirSword.collectionMessage = new LanguageLine();
-            HeirSword.collectionMessage.text = $"\"        ! ! ! (<#5de7cf>Lv. 4<#FFFFFF>)\"";
-            LibrarianSword.controlAction = "";
-            HeirSword.controlAction = "";
-            LibrarianSword.suppressQuantity = true;
-            HeirSword.suppressQuantity = true;
-            for(int i = 0; i < Inventory.itemList.Count; i++) {
-                if (Inventory.itemList[i].name == "Sword") { 
-                    Inventory.itemList.Insert(i+1, LibrarianSword);
-                    Inventory.itemList.Insert(i+2, HeirSword);
-                    break;
-                }
-            }
-        }
-
 
         public static void CreateSwordItemBehaviours(PlayerCharacter instance) {
             GameObject swordProxy = GameObject.Find("_Fox(Clone)/Fox/root/pelvis/chest/arm_upper.R/arm_lower.R/hand.R/").transform.GetChild(1).gameObject;

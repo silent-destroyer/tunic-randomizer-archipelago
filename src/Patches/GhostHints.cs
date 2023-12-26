@@ -386,7 +386,7 @@ namespace TunicArchipelago {
                 string ItemPrefix = Item.ItemName.Contains("Money") ? "suhm" : Vowels.Contains(Item.ItemName.ToUpper()[0]) ? "ahn" : "uh";
                 string PlayerName = Archipelago.instance.GetPlayerName(Item.Player);
                 string ItemToDisplay = Archipelago.instance.GetPlayerGame(Item.Player) == "Tunic" && TextBuilderPatches.ItemNameToAbbreviation.ContainsKey(Item.ItemName) 
-                    ? TextBuilderPatches.ItemNameToAbbreviation[Item.ItemName] : "[customimage]";
+                    ? TextBuilderPatches.ItemNameToAbbreviation[Item.ItemName] : "[archipelago]";
                 string Hint = $"bI #uh wA, I hurd #aht \"{HintableLocationIds[Key].Replace(" ", "\" \"")}\" {LocationSuffix} gRdi^ {ItemToDisplay} \"{PlayerName.ToUpper().Replace(" ", "\" \"")}'S {Item.ItemName.ToUpper().Replace(" ", "\" \"").Replace("_", "\" \"")}.\"";
                 string ItemForHint = Archipelago.instance.GetPlayerGame(Item.Player) == "Tunic" ? Item.ItemName : "Archipelago Item";
                 LocationHints.Add((WordWrapString(Hint), ItemForHint, Locations.LocationIdToDescription[Key]));
@@ -467,8 +467,9 @@ namespace TunicArchipelago {
                     SceneItemCount++;
                 }
 
-                if (SceneItemCount == 0)
-                { continue; }
+                if (SceneItemCount == 0) { 
+                    continue; 
+                }
 
                 if (MoneyInScene >= 200 && SceneItemCount < 10) {
                     string ScenePrefix = Vowels.Contains(Scene[0]) ? "#E" : "#uh";
@@ -554,7 +555,7 @@ namespace TunicArchipelago {
                 LostFox.transform.transform.rotation = new Quaternion(0f, 0f, 0f, 1f);
 
                 LanguageLine LostFoxScript = ScriptableObject.CreateInstance<LanguageLine>();
-                if (Inventory.GetItemByName("Homeward Bone Statue").Quantity == 0) {
+                if (Inventory.GetItemByName("Dath Stone").Quantity == 0) {
                     LostFoxScript.text = $"I lawst mI mahjik stOn ahnd kahnt gO hOm...---if yoo fInd it, kahn yoo bri^ it too mE?\nit louks lIk #is: [dath]";
                 } else {
                     LostFoxScript.text = $"I lawst mI mahjik stOn ahnd kahnt gO hOm...---... wAt, yoo fownd it! plEz, yooz it now!";

@@ -20,26 +20,17 @@ namespace TunicArchipelago {
         public static GameObject ThirdSword = null;
         public static GameObject PagePickup = null;
         public static bool SwappedThisSceneAlready = false;
-        public static GameObject SecondSwordImage;
-        public static GameObject ThirdSwordImage;
         public static GameObject HexagonGoldImage;
         public static GameObject TuncTitleImage;
         public static GameObject TuncImage;
-        public static GameObject GardenKnightVoid;
-        public static GameObject MoneySfx;
+
         public static GameObject FairyAnimation;
         public static GameObject IceFlask;
 
-        public static GameObject RedKeyMaterial;
-        public static GameObject GreenKeyMaterial;
-        public static GameObject BlueKeyMaterial;
         public static GameObject HeroRelicMaterial;
 
         public static Dictionary<string, GameObject> CustomItemImages = new Dictionary<string, GameObject>();
 
-        public static bool DathStonePresentationAlreadySetup = false;
-        public static bool OldHouseKeyPresentationAlreadySetup = false;
-        public static bool SwordPresentationsAlreadySetup = false;
         public static GameObject GlowEffect;
         public static GameObject SpecialKeyPopup;
 
@@ -120,21 +111,6 @@ namespace TunicArchipelago {
             Items["Hexagon Green"] = ItemRoot.transform.GetChild(27).GetChild(0).gameObject;
             Items["Hexagon Blue"] = ItemRoot.transform.GetChild(28).GetChild(0).gameObject;
 
-            RedKeyMaterial = new GameObject();
-            RedKeyMaterial.AddComponent<MeshRenderer>().materials = new Material[] { Resources.FindObjectsOfTypeAll<Material>().Where(Material => Material.name == "Questagon (1) R").ToList()[0] };
-            GameObject.DontDestroyOnLoad(RedKeyMaterial);
-            GreenKeyMaterial = new GameObject();
-            GreenKeyMaterial.AddComponent<MeshRenderer>().materials = new Material[] { Resources.FindObjectsOfTypeAll<Material>().Where(Material => Material.name == "Questagon (2) G").ToList()[0] };
-            GameObject.DontDestroyOnLoad(GreenKeyMaterial);
-            BlueKeyMaterial = new GameObject();
-            BlueKeyMaterial.AddComponent<MeshRenderer>().materials = new Material[] { Resources.FindObjectsOfTypeAll<Material>().Where(Material => Material.name == "Questagon (3) B").ToList()[0] };
-            GameObject.DontDestroyOnLoad(BlueKeyMaterial);
-            Items["Hexagon Gold"] = GameObject.Instantiate(ItemRoot.transform.GetChild(28).GetChild(0).gameObject);
-            Items["Hexagon Gold"].GetComponent<MeshRenderer>().material = Items["GoldenTrophy_2"].GetComponent<MeshRenderer>().material;
-            Items["Hexagon Gold"].GetComponent<MeshRenderer>().materials[0] = Items["GoldenTrophy_2"].GetComponent<MeshRenderer>().material;
-            Items["Hexagon Gold"].SetActive(false);
-            GameObject.DontDestroyOnLoad(Items["Hexagon Gold"]);
-
             Items["Dath Stone"] = GameObject.Instantiate(ItemRoot.transform.GetChild(28).GetChild(0).gameObject);
             Items["Dath Stone"].SetActive(false);
             Material DathStoneMaterial = Items["Lantern"].GetComponent<MeshRenderer>().material;
@@ -154,13 +130,9 @@ namespace TunicArchipelago {
             GameObject.DontDestroyOnLoad(Items["money small"]);
             GameObject.DontDestroyOnLoad(Items["money medium"]);
             GameObject.DontDestroyOnLoad(Items["money large"]);
-            MoneySfx = new GameObject("moneysfx");
-            MoneySfx.AddComponent<FMODUnity.StudioEventEmitter>().EventReference = Resources.FindObjectsOfTypeAll<ItemPickup>().Where(ItemPickup => ItemPickup.name == "Coin Pickup 1(Clone)").ToList()[0].pickupSFX;
-            GameObject.DontDestroyOnLoad(MoneySfx);
             Items["money small"].SetActive(false);
             Items["money medium"].SetActive(false);
             Items["money large"].SetActive(false);
-            MoneySfx.SetActive(false);
 
             PaletteEditor.ToonFox = new GameObject("toon fox");
             GameObject.DontDestroyOnLoad(PaletteEditor.ToonFox);
@@ -175,10 +147,12 @@ namespace TunicArchipelago {
                 Cards[TrinketItem.name] = TrinketItem.CardGraphic;
             }
 
-            SetupOldHouseKeyItemPresentation();
+            LoadTextures();
+
+            ItemPresentationPatches.SetupOldHouseKeyItemPresentation();
             Items["Key (House)"] = ItemRoot.transform.GetChild(48).gameObject;
-            SetupDathStoneItemPresentation();
-            LoadTexture();
+            ItemPresentationPatches.SetupDathStoneItemPresentation();
+            ItemPresentationPatches.SetupHexagonQuestItemPresentation();
             InitializeExtras();
         }
 
@@ -1010,152 +984,6 @@ namespace TunicArchipelago {
             }
         }
 
-        public static void SetupHexagonQuest() {
-            try {
-                Items["Hexagon Blue"].GetComponent<MeshRenderer>().materials = Items["GoldenTrophy_2"].GetComponent<MeshRenderer>().materials;
-                Inventory.GetItemByName("Hexagon Blue").collectionMessage = ScriptableObject.CreateInstance<LanguageLine>();
-                Inventory.GetItemByName("Hexagon Blue").collectionMessage.text = $"    #uh sEl wEkinz\"...\"";
-            } catch (Exception e) {
-                Logger.LogInfo(e.Message);
-            }
-        }
-
-        public static void RestoreOriginalHexagons() {
-            try {
-                Items["Hexagon Red"].GetComponent<MeshRenderer>().materials = RedKeyMaterial.GetComponent<MeshRenderer>().materials;
-                Items["Hexagon Green"].GetComponent<MeshRenderer>().materials = GreenKeyMaterial.GetComponent<MeshRenderer>().materials;
-                Items["Hexagon Blue"].GetComponent<MeshRenderer>().materials = BlueKeyMaterial.GetComponent<MeshRenderer>().materials;
-                Inventory.GetItemByName("Hexagon Blue").collectionMessage = ScriptableObject.CreateInstance<LanguageLine>();
-                Inventory.GetItemByName("Hexagon Blue").collectionMessage.text = $"fownd ahn Itehm!";
-            } catch (Exception e) {
-                Logger.LogInfo(e.Message);
-            }
-        }
-
-        public static void SetupOldHouseKeyItemPresentation() {
-            if (!OldHouseKeyPresentationAlreadySetup) {
-                try {
-                    Resources.FindObjectsOfTypeAll<ItemPresentationGraphic>().Where(item => item.gameObject.name == "key twist")
-                        .ToList()[0].gameObject.GetComponent<ItemPresentationGraphic>().items = new Item[] { Inventory.GetItemByName("Key") };
-                    GameObject housekey = GameObject.Instantiate(Resources.FindObjectsOfTypeAll<ItemPresentationGraphic>().Where(item => item.gameObject.name == "key twist (special)")
-                        .ToList()[0].gameObject);
-                    housekey.SetActive(false);
-                    housekey.transform.parent = Resources.FindObjectsOfTypeAll<ItemPresentationGraphic>().Where(item => item.gameObject.name == "key twist (special)")
-                        .ToList()[0].gameObject.transform.parent;
-                    housekey.transform.localPosition = new Vector3(-0.071f, -0.123f, 0f);
-                    housekey.GetComponent<ItemPresentationGraphic>().items = new Item[] { Inventory.GetItemByName("Key (House)") };
-                    GameObject.DontDestroyOnLoad(housekey);
-                    List<ItemPresentationGraphic> newipgs = new List<ItemPresentationGraphic>() { };
-                    foreach (ItemPresentationGraphic ipg in ItemPresentation.instance.itemGraphics) {
-                        newipgs.Add(ipg);
-                    }
-                    newipgs.Add(housekey.GetComponent<ItemPresentationGraphic>());
-                    ItemPresentation.instance.itemGraphics = newipgs.ToArray();
-                    OldHouseKeyPresentationAlreadySetup = true;
-                } catch (Exception e) { 
-                    
-                }
-            }
-        }
-
-        public static void SetupCustomSwordItemPresentations() {
-            if (!SwordPresentationsAlreadySetup) {
-                try {
-                    GameObject SwordPresentation = Resources.FindObjectsOfTypeAll<GameObject>().Where(Item => Item.name == "User Rotation Root").ToList()[0].transform.GetChild(9).gameObject;
-                    GameObject LibrarianSword = GameObject.Instantiate(SwordPresentation);
-                    LibrarianSword.transform.parent = SwordPresentation.transform.parent;
-                    LibrarianSword.GetComponent<MeshFilter>().mesh = SecondSword.GetComponent<MeshFilter>().mesh;
-                    LibrarianSword.GetComponent<MeshRenderer>().materials = SecondSword.GetComponent<MeshRenderer>().materials;
-                    LibrarianSword.transform.localScale = new Vector3(0.25f, 0.2f, 0.25f);
-                    LibrarianSword.transform.localRotation = new Quaternion(-0.2071f, -0.1216f, 0.3247f, -0.9148f);
-                    LibrarianSword.transform.localPosition = SwordPresentation.transform.localPosition;
-                    LibrarianSword.SetActive(false);
-                    GameObject.DontDestroyOnLoad(LibrarianSword);
-
-                    GameObject HeirSword = GameObject.Instantiate(SwordPresentation);
-                    HeirSword.transform.parent = SwordPresentation.transform.parent;
-                    HeirSword.GetComponent<MeshFilter>().mesh = ThirdSword.GetComponent<MeshFilter>().mesh;
-                    HeirSword.GetComponent<MeshRenderer>().materials = ThirdSword.GetComponent<MeshRenderer>().materials;
-                    HeirSword.transform.localScale = new Vector3(0.175f, 0.175f, 0.175f);
-                    HeirSword.transform.localRotation = new Quaternion(-0.6533f, 0.2706f, -0.2706f, 0.6533f);
-                    HeirSword.transform.localPosition = SwordPresentation.transform.localPosition;
-                    HeirSword.SetActive(false);
-                    GameObject.DontDestroyOnLoad(HeirSword);
-
-                    LibrarianSword.GetComponent<ItemPresentationGraphic>().items = new List<Item>() { Inventory.GetItemByName("Librarian Sword") }.ToArray();
-                    HeirSword.GetComponent<ItemPresentationGraphic>().items = new List<Item>() { Inventory.GetItemByName("Heir Sword") }.ToArray();
-
-                    List<ItemPresentationGraphic> newipgs = ItemPresentation.instance.itemGraphics.ToList();
-                    newipgs.Add(LibrarianSword.GetComponent<ItemPresentationGraphic>());
-                    newipgs.Add(HeirSword.GetComponent<ItemPresentationGraphic>());
-                    ItemPresentation.instance.itemGraphics = newipgs.ToArray();
-
-                    SwordPresentationsAlreadySetup = true;
-                } catch (Exception e) {
-                }
-            }
-        }
-
-
-        public static void SetupDathStoneItemPresentation() {
-            if (!DathStonePresentationAlreadySetup) {
-                try {
-                    GameObject KeySpecial = Resources.FindObjectsOfTypeAll<ItemPresentationGraphic>().Where(Item => Item.gameObject.name == "key twist (special)").ToList()[0].gameObject;
-
-                    Inventory.GetItemByName("Key Special").collectionMessage = ScriptableObject.CreateInstance<LanguageLine>();
-                    Inventory.GetItemByName("Key Special").collectionMessage.text = $"dah% stOn\"!?\"";
-
-                    if (KeySpecial.GetComponent<MeshFilter>() != null) {
-                        GameObject.Destroy(KeySpecial.GetComponent<MeshRenderer>());
-                        GameObject.Destroy(KeySpecial.GetComponent<MeshFilter>());
-                    }
-                    if (KeySpecial.GetComponent<SpriteRenderer>() == null) {
-                        KeySpecial.AddComponent<SpriteRenderer>().sprite = Inventory.GetItemByName("Dash Stone").Icon;
-                        KeySpecial.GetComponent<SpriteRenderer>().color = new Color(1f, 1f, 1f, 0.5f);
-                        KeySpecial.GetComponent<SpriteRenderer>().material = Resources.FindObjectsOfTypeAll<Material>().Where(mat => mat.name == "UI Add").ToList()[0];
-                    }
-
-                    GameObject Torch = new GameObject("torch");
-                    Torch.AddComponent<SpriteRenderer>().sprite = FindSprite("Inventory items_torch");
-                    Torch.GetComponent<SpriteRenderer>().material = FindMaterial("UI Add");
-                    Torch.layer = KeySpecial.layer;
-                    Torch.transform.parent = KeySpecial.transform;
-                    Torch.transform.localPosition = new Vector3(0.7f, 0.2f, 0f);
-                    Torch.transform.localScale = new Vector3(0.35f, 0.35f, 0.35f);
-                    Torch.transform.localEulerAngles = Vector3.zero;
-
-                    GameObject Plus = new GameObject("plus");
-                    Plus.AddComponent<SpriteRenderer>().sprite = FindSprite("game gui_plus sign");
-                    Plus.GetComponent<SpriteRenderer>().material = FindMaterial("UI Add");
-                    Plus.layer = KeySpecial.layer;
-                    Plus.transform.parent = KeySpecial.transform;
-                    Plus.transform.localPosition = new Vector3(0.55f, 0.2f, 0f);
-                    Plus.transform.localScale = new Vector3(0.15f, 0.15f, 0.15f);
-                    Plus.transform.localEulerAngles = Vector3.zero;
-
-                    Torch.SetActive(SaveFile.GetInt("randomizer entrance rando enabled") == 0);
-                    Plus.SetActive(SaveFile.GetInt("randomizer entrance rando enabled") == 0);
-
-                    KeySpecial.transform.localScale = Vector3.one;
-                    KeySpecial.transform.localPosition = Vector3.zero;
-                    KeySpecial.transform.localRotation = Quaternion.identity;
-                    DathStonePresentationAlreadySetup = true;
-                } catch (Exception e) {
-                }
-            } else {
-                try {
-                    GameObject KeySpecial = Resources.FindObjectsOfTypeAll<ItemPresentationGraphic>().Where(Item => Item.gameObject.name == "key twist (special)").ToList()[0].gameObject;
-
-                    for (int i = 0; i < KeySpecial.transform.childCount; i++) {
-                        KeySpecial.transform.GetChild(i).gameObject.SetActive(SaveFile.GetInt("randomizer entrance rando enabled") == 0);
-                    }
-                } catch (Exception e) {
-
-                }
-            }
-
-        }
-
         public static void AddNewShopItems() {
             try {
                 if (IceFlask == null) {
@@ -1226,81 +1054,64 @@ namespace TunicArchipelago {
             }
         }
 
-        public static void LoadTexture() {
-
-            Texture2D GoldHexTexture = new Texture2D(160, 160, TextureFormat.DXT1, false);
-            ImageConversion.LoadImage(GoldHexTexture, Convert.FromBase64String(ImageData.GoldHex));
-            Texture2D SecondSwordTexture = new Texture2D(160, 160, TextureFormat.DXT1, false);
-            ImageConversion.LoadImage(SecondSwordTexture, Convert.FromBase64String(ImageData.SecondSword));
-            Texture2D ThirdSwordTexture = new Texture2D(160, 160, TextureFormat.DXT1, false);
-            ImageConversion.LoadImage(ThirdSwordTexture, Convert.FromBase64String(ImageData.ThirdSword));
-            Texture2D TuncTitleTexture = new Texture2D(1400, 742, TextureFormat.DXT1, false);
-            ImageConversion.LoadImage(TuncTitleTexture, Convert.FromBase64String(ImageData.TuncTitle));
-            Texture2D TuncTexture = new Texture2D(148, 148, TextureFormat.DXT1, false);
-            ImageConversion.LoadImage(TuncTexture, Convert.FromBase64String(ImageData.Tunc));
+        public static void LoadTextures() {
 
             Material ImageMaterial = FindMaterial("UI Add");
-            HexagonGoldImage = new GameObject("hexagon gold");
-            HexagonGoldImage.AddComponent<RawImage>().texture = GoldHexTexture;
-            HexagonGoldImage.GetComponent<RawImage>().material = ImageMaterial;
-            GameObject.DontDestroyOnLoad(HexagonGoldImage);
 
-            SecondSwordImage = new GameObject("second sword");
-            SecondSwordImage.AddComponent<RawImage>().texture = SecondSwordTexture;
-            SecondSwordImage.GetComponent<RawImage>().material = ImageMaterial;
-            GameObject.DontDestroyOnLoad(SecondSwordImage);
+            HexagonGoldImage = CreateSprite(ImageData.GoldHex, ImageMaterial, 160, 160, "Hexagon Quest");
+            TuncTitleImage = CreateSprite(ImageData.TuncTitle, ImageMaterial, 1400, 742, "tunc title logo");
+            TuncImage = CreateSprite(ImageData.Tunc, ImageMaterial, 148, 148, "tunc sprite");
 
-            ThirdSwordImage = new GameObject("third sword");
-            ThirdSwordImage.AddComponent<RawImage>().texture = ThirdSwordTexture;
-            ThirdSwordImage.GetComponent<RawImage>().material = ImageMaterial;
-            GameObject.DontDestroyOnLoad(ThirdSwordImage);
+            Logger.LogInfo("4");
+            CustomItemImages.Add("Librarian Sword", CreateSprite(ImageData.SecondSword, ImageMaterial, SpriteName: "Randomizer items_Librarian Sword"));
+            CustomItemImages.Add("Heir Sword", CreateSprite(ImageData.ThirdSword, ImageMaterial, SpriteName: "Randomizer items_Heir Sword"));
+            CustomItemImages.Add("Mr Mayor", CreateSprite(ImageData.MrMayor, ImageMaterial, SpriteName: "Randomizer items_Mr Mayor"));
+            CustomItemImages.Add("Secret Legend", CreateSprite(ImageData.SecretLegend, ImageMaterial, SpriteName: "Randomizer items_Secret Legend"));
+            CustomItemImages.Add("Sacred Geometry", CreateSprite(ImageData.SacredGeometry, ImageMaterial, SpriteName: "Randomizer items_Sacred Geometry"));
+            CustomItemImages.Add("Vintage", CreateSprite(ImageData.Vintage, ImageMaterial, SpriteName: "Randomizer items_Vintage"));
+            CustomItemImages.Add("Just Some Pals", CreateSprite(ImageData.JustSomePals, ImageMaterial, SpriteName: "Randomizer items_Just Some Pals"));
+            CustomItemImages.Add("Regal Weasel", CreateSprite(ImageData.RegalWeasel, ImageMaterial, SpriteName: "Randomizer items_Regal Weasel"));
+            CustomItemImages.Add("Spring Falls", CreateSprite(ImageData.SpringFalls, ImageMaterial, SpriteName: "Randomizer items_Spring Falls"));
+            CustomItemImages.Add("Power Up", CreateSprite(ImageData.PowerUp, ImageMaterial, SpriteName: "Randomizer items_Power Up"));
+            CustomItemImages.Add("Back To Work", CreateSprite(ImageData.BackToWork, ImageMaterial, SpriteName: "Randomizer items_Back To Work"));
+            CustomItemImages.Add("Phonomath", CreateSprite(ImageData.Phonomath, ImageMaterial, SpriteName: "Randomizer items_Phonomath"));
+            CustomItemImages.Add("Dusty", CreateSprite(ImageData.Dusty, ImageMaterial, SpriteName: "Randomizer items_Dusty"));
+            CustomItemImages.Add("Forever Friend", CreateSprite(ImageData.ForeverFriend, ImageMaterial, SpriteName: "Randomizer items_Forever Friend"));
+            CustomItemImages.Add("Red Questagon", CreateSprite(ImageData.RedQuestagon, ImageMaterial, SpriteName: "Randomizer items_Red Questagon"));
+            CustomItemImages.Add("Green Questagon", CreateSprite(ImageData.GreenQuestagon, ImageMaterial, SpriteName: "Randomizer items_Green Questagon"));
+            CustomItemImages.Add("Blue Questagon", CreateSprite(ImageData.BlueQuestagon, ImageMaterial, SpriteName: "Randomizer items_Blue Questagon"));
+            CustomItemImages.Add("Gold Questagon", CreateSprite(ImageData.GoldHex, ImageMaterial, SpriteName: "Randomizer items_Gold Questagon"));
+            CustomItemImages.Add("Hero Relic - ATT", CreateSprite(ImageData.HeroRelicATT, ImageMaterial, SpriteName: "Randomizer items_Hero Relic - ATT"));
+            CustomItemImages.Add("Hero Relic - DEF", CreateSprite(ImageData.HeroRelicDef, ImageMaterial, SpriteName: "Randomizer items_Hero Relic - DEF"));
+            CustomItemImages.Add("Hero Relic - POTION", CreateSprite(ImageData.HeroRelicPotion, ImageMaterial, SpriteName: "Randomizer items_Hero Relic - POTION"));
+            CustomItemImages.Add("Hero Relic - HP", CreateSprite(ImageData.HeroRelicHP, ImageMaterial, SpriteName: "Randomizer items_Hero Relic - HP"));
+            CustomItemImages.Add("Hero Relic - SP", CreateSprite(ImageData.HeroRelicSP, ImageMaterial, SpriteName: "Randomizer items_Hero Relic - SP"));
+            CustomItemImages.Add("Hero Relic - MP", CreateSprite(ImageData.HeroRelicMP, ImageMaterial, SpriteName: "Randomizer items_Hero Relic - MP"));
+            CustomItemImages.Add("Fool Trap", CreateSprite(ImageData.TinyFox, ImageMaterial, SpriteName: "Randomizer items_Fool Trap"));
+            CustomItemImages.Add("Archipelago Item", CreateSprite(ImageData.ArchipelagoItem, ImageMaterial, 128, 128, SpriteName: "Randomizer items_Archipelago Item"));
+            CustomItemImages.Add("Torch Redux", CreateSprite(ImageData.TorchRedux, ImageMaterial, 160, 160, SpriteName: "Randomizer items_Torch redux"));
 
-            TuncTitleImage = new GameObject("tunc title logo");
-            TuncTitleImage.AddComponent<RawImage>().texture = TuncTitleTexture;
-            TuncTitleImage.GetComponent<RawImage>().material = ImageMaterial;
-            GameObject.DontDestroyOnLoad(TuncTitleImage);
-
-            TuncImage = new GameObject("TUNC");
-            TuncImage.AddComponent<RawImage>().texture = TuncTexture;
-            //TuncImage.GetComponent<RawImage>().material = ImageMaterial;
-            GameObject.DontDestroyOnLoad(TuncImage);
-
-
-            CustomItemImages.Add("Mr Mayor", CreateImageObject(ImageData.MrMayor, ImageMaterial));
-            CustomItemImages.Add("Secret Legend", CreateImageObject(ImageData.SecretLegend, ImageMaterial));
-            CustomItemImages.Add("Sacred Geometry", CreateImageObject(ImageData.SacredGeometry, ImageMaterial));
-            CustomItemImages.Add("Vintage", CreateImageObject(ImageData.Vintage, ImageMaterial));
-            CustomItemImages.Add("Just Some Pals", CreateImageObject(ImageData.JustSomePals, ImageMaterial));
-            CustomItemImages.Add("Regal Weasel", CreateImageObject(ImageData.RegalWeasel, ImageMaterial));
-            CustomItemImages.Add("Spring Falls", CreateImageObject(ImageData.SpringFalls, ImageMaterial));
-            CustomItemImages.Add("Power Up", CreateImageObject(ImageData.PowerUp, ImageMaterial));
-            CustomItemImages.Add("Back To Work", CreateImageObject(ImageData.BackToWork, ImageMaterial));
-            CustomItemImages.Add("Phonomath", CreateImageObject(ImageData.Phonomath, ImageMaterial));
-            CustomItemImages.Add("Dusty", CreateImageObject(ImageData.Dusty, ImageMaterial));
-            CustomItemImages.Add("Forever Friend", CreateImageObject(ImageData.ForeverFriend, ImageMaterial));
-            CustomItemImages.Add("Red Questagon", CreateImageObject(ImageData.RedQuestagon, ImageMaterial));
-            CustomItemImages.Add("Green Questagon", CreateImageObject(ImageData.GreenQuestagon, ImageMaterial));
-            CustomItemImages.Add("Blue Questagon", CreateImageObject(ImageData.BlueQuestagon, ImageMaterial));
-            CustomItemImages.Add("Gold Questagon", CreateImageObject(ImageData.GoldHex, ImageMaterial));
-            CustomItemImages.Add("Hero Relic - ATT", CreateImageObject(ImageData.HeroRelicATT, ImageMaterial));
-            CustomItemImages.Add("Hero Relic - DEF", CreateImageObject(ImageData.HeroRelicDef, ImageMaterial));
-            CustomItemImages.Add("Hero Relic - POTION", CreateImageObject(ImageData.HeroRelicPotion, ImageMaterial));
-            CustomItemImages.Add("Hero Relic - HP", CreateImageObject(ImageData.HeroRelicHP, ImageMaterial));
-            CustomItemImages.Add("Hero Relic - SP", CreateImageObject(ImageData.HeroRelicSP, ImageMaterial));
-            CustomItemImages.Add("Hero Relic - MP", CreateImageObject(ImageData.HeroRelicMP, ImageMaterial));
-            CustomItemImages.Add("Fool Trap", CreateImageObject(ImageData.TinyFox, ImageMaterial));
-            CustomItemImages.Add("Archipelago Item", CreateImageObject(ImageData.ArchipelagoItem, ImageMaterial, 128, 128));
+            Inventory.GetItemByName("Librarian Sword").icon = CustomItemImages["Librarian Sword"].GetComponent<Image>().sprite;
+            Inventory.GetItemByName("Heir Sword").icon = CustomItemImages["Heir Sword"].GetComponent<Image>().sprite;
+            Inventory.GetItemByName("Dath Stone").icon = Inventory.GetItemByName("Dash Stone").icon;
+            Inventory.GetItemByName("Hexagon Gold").icon = CustomItemImages["Gold Questagon"].GetComponent<Image>().sprite;
+            Inventory.GetItemByName("Torch").icon = CustomItemImages["Torch Redux"].GetComponent<Image>().sprite;
         }
 
-        public static GameObject CreateImageObject(string ImageData, Material imgMaterial, int Width = 160, int Height = 160) {
+        public static GameObject CreateSprite(string ImageData, Material imgMaterial, int Width = 160, int Height = 160, string SpriteName = "") {
 
             Texture2D Texture = new Texture2D(Width, Height, TextureFormat.DXT1, false);
             ImageConversion.LoadImage(Texture, Convert.FromBase64String(ImageData));
 
-            GameObject obj = new GameObject();
-            obj.AddComponent<RawImage>().texture = Texture;
-            obj.GetComponent<RawImage>().material = imgMaterial;
+            GameObject obj = new GameObject(SpriteName + " image");
+            //Sprite.Create(Texture2D, Rect, Vector2, float, uint, SpriteMeshType, Vector4, bool)
+            Sprite sprite = Sprite.CreateSprite(Texture, new Rect(0, 0, Width, Height), new Vector2(0.5f, 0.5f), 100, 0, SpriteMeshType.FullRect, Vector4.zero, false);
+            sprite.name = SpriteName;
+            obj.AddComponent<Image>().sprite = sprite;
+            obj.GetComponent<Image>().material = imgMaterial;
             GameObject.DontDestroyOnLoad(obj);
+            obj.transform.position = new Vector3(-30000f, -30000f, -30000f);
+            obj.SetActive(false);
             return obj;
         }
 

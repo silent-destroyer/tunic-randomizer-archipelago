@@ -75,12 +75,11 @@ namespace TunicArchipelago {
         public static GameObject CompletionRate;
         public static GameObject CompletionCanvas;
 
-        public static bool ShowSwordAfterDelay = false;
         public static bool ShowCompletionStatsAfterDelay = false;
         public static bool SpeedrunFinishlineDisplay_showFinishline_PrefixPatch(SpeedrunFinishlineDisplay __instance) {
 
             SpeedrunReportItem DathStone = ScriptableObject.CreateInstance<SpeedrunReportItem>();
-            DathStone.icon = Inventory.GetItemByName("Homeward Bone Statue").icon;
+            DathStone.icon = Inventory.GetItemByName("Dath Stone").icon;
             SpeedrunReportItem GoldenItem = ScriptableObject.CreateInstance<SpeedrunReportItem>();
             GoldenItem.icon = Inventory.GetItemByName("Spear").icon;
             SpeedrunReportItem Manual = ScriptableObject.CreateInstance<SpeedrunReportItem>();
@@ -162,9 +161,10 @@ namespace TunicArchipelago {
                     if (SpriteName == "Inventory items_sword") {
                         if (SaveFile.GetInt(SwordProgressionEnabled) == 1) {
                             int SwordLevel = SaveFile.GetInt(SwordProgressionLevel);
-                            if (SwordLevel >= 3) {
-                                Icon.transform.GetChild(2).GetComponent<TMPro.TextMeshProUGUI>().faceColor = SwordLevel == 3 ? new Color32(255, 50, 150, 255) : new Color32(93, 231, 207, 255);
-                                ShowSwordAfterDelay = true;
+                            if (SwordLevel == 3) {
+                                Icon.transform.GetChild(1).GetComponent<Image>().sprite = Inventory.GetItemByName("Librarian Sword").icon;
+                            } else if(SwordLevel == 4) {
+                                Icon.transform.GetChild(1).GetComponent<Image>().sprite = Inventory.GetItemByName("Heir Sword").icon;
                             }
                         }
                     }

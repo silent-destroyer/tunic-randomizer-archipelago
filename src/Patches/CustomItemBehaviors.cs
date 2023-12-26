@@ -1,9 +1,6 @@
 ﻿using BepInEx.Logging;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
 using static TunicArchipelago.SaveFlags;
 
@@ -17,6 +14,49 @@ namespace TunicArchipelago {
         public static GameObject FoxHair;
         public static GameObject GhostFoxBody;
         public static GameObject GhostFoxHair;
+        public static void CreateCustomItems() {
+            ButtonAssignableItem LibrarianSword = ScriptableObject.CreateInstance<ButtonAssignableItem>();
+            ButtonAssignableItem HeirSword = ScriptableObject.CreateInstance<ButtonAssignableItem>();
+            Item GoldQuestagon = ScriptableObject.CreateInstance<Item>();
+            ButtonAssignableItem DathStone = ScriptableObject.CreateInstance<ButtonAssignableItem>();
+
+            LibrarianSword.name = "Librarian Sword";
+            LibrarianSword.collectionMessage = new LanguageLine();
+            LibrarianSword.collectionMessage.text = $"\"        ? ? ? (<#ca7be4>Lv. 3<#FFFFFF>)\"";
+            HeirSword.name = "Heir Sword";
+            HeirSword.collectionMessage = new LanguageLine();
+            HeirSword.collectionMessage.text = $"\"        ! ! ! (<#5de7cf>Lv. 4<#FFFFFF>)\"";
+            LibrarianSword.controlAction = "";
+            HeirSword.controlAction = "";
+            LibrarianSword.suppressQuantity = true;
+            HeirSword.suppressQuantity = true;
+            GoldQuestagon.name = "Hexagon Gold";
+            GoldQuestagon.collectionMessage = ScriptableObject.CreateInstance<LanguageLine>();
+            GoldQuestagon.collectionMessage.text = $"    #uh sEl wEkinz\"...\"";
+            GoldQuestagon.controlAction = "";
+            DathStone.name = "Dath Stone";
+            DathStone.collectionMessage = ScriptableObject.CreateInstance<LanguageLine>();
+            DathStone.collectionMessage.text = $"dah% stOn\"!?\"";
+            DathStone.controlAction = "";
+            DathStone.icon = Inventory.GetItemByName("Dash Stone").icon;
+            DathStone.suppressQuantity = true;
+
+            Inventory.itemList.Add(GoldQuestagon);
+            Inventory.itemList.Add(DathStone);
+            Item Torch = Inventory.GetItemByName("Torch");
+            for (int i = 0; i < Inventory.itemList.Count; i++) {
+                if (Inventory.itemList[i].name == "Sword") {
+                    Inventory.itemList.Insert(i + 1, LibrarianSword);
+                    Inventory.itemList.Insert(i + 2, HeirSword);
+                    break;
+                }
+                if (Inventory.itemList[i].name == "Torch") {
+                    Inventory.itemList.RemoveAt(i);
+                    Inventory.itemList.Add(Torch);
+                }
+            }
+        }
+
         public static bool SpearItemBehaviour_onActionButtonDown_PrefixPatch(SpearItemBehaviour __instance) {
             if (PlayerCharacter.GetMP() != 0 && (!CanTakeGoldenHit || !CanSwingGoldenSword)) {
                 PlayerCharacter.SetMP(PlayerCharacter.GetMP() - 40 > 0 ? PlayerCharacter.GetMP() - 40 : 0);
@@ -101,6 +141,7 @@ namespace TunicArchipelago {
         }
 
         public static void SetupTorchItemBehaviour(PlayerCharacter instance) {
+            instance.GetComponent<BoneItemBehaviour>().item = Inventory.GetItemByName("Dath Stone").TryCast<ButtonAssignableItem>();
             List<ItemBehaviour> itemBehaviours = instance.itemBehaviours.ToList();
             BoneItemBehaviour bone = instance.gameObject.AddComponent<BoneItemBehaviour>();
             bone.confirmationPromptLine = instance.gameObject.GetComponent<BoneItemBehaviour>().confirmationPromptLine;

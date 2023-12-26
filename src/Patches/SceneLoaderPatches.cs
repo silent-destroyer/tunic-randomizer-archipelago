@@ -1,13 +1,8 @@
-﻿using Archipelago.MultiClient.Net.Enums;
-using BepInEx.Logging;
-using Newtonsoft.Json;
+﻿using BepInEx.Logging;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.Remoting.Metadata.W3cXsd2001;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using static TunicArchipelago.SaveFlags;
@@ -138,6 +133,7 @@ namespace TunicArchipelago {
             }
             if (loadingScene.name == "Spirit Arena" && ModelSwaps.ThirdSword == null) {
                 ModelSwaps.InitializeThirdSword();
+                ItemPresentationPatches.SetupCustomSwordItemPresentations();
                 SceneLoader.LoadScene("Transit");
                 return;
             }
@@ -157,13 +153,14 @@ namespace TunicArchipelago {
                     GhostHints.InitializeGhostFox();
                 }
                 ModelSwaps.InitializeItems();
+                TextBuilderPatches.SetupCustomGlyphSprites();
                 EnemyRandomizer.InitializeEnemies("Overworld Redux");
                 SceneLoader.LoadScene("Cathedral Arena");
                 return;
             }
             if (ModelSwaps.Chests.Count == 0 && loadingScene.name == "TitleScreen") {
 
-                SwordProgression.CreateSwordItems();
+                CustomItemBehaviors.CreateCustomItems();
                 GameObject ArchipelagoObject = new GameObject("archipelago");
                 Archipelago.instance = ArchipelagoObject.AddComponent<Archipelago>();
                 GameObject.DontDestroyOnLoad(ArchipelagoObject);
@@ -350,12 +347,9 @@ namespace TunicArchipelago {
                 TunicPortals.ModifyPortals(loadingScene);
             }
 
+
             if (SaveFile.GetInt(AbilityShuffle) == 1 && SaveFile.GetInt(HolyCrossUnlocked) == 0) {
-                foreach (ToggleObjectBySpell SpellToggle in Resources.FindObjectsOfTypeAll<ToggleObjectBySpell>()) {
-                    foreach (ToggleObjectBySpell Spell in SpellToggle.gameObject.GetComponents<ToggleObjectBySpell>()) {
-                        Spell.enabled = false;
-                    }
-                }
+                ItemPatches.ToggleHolyCrossObjects(false);
             }
 
             try {

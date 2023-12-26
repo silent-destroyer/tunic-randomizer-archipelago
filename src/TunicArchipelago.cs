@@ -193,7 +193,7 @@ namespace TunicArchipelago {
 
             Harmony.Patch(AccessTools.Method(typeof(ShopManager._entrySequence_d__14), "MoveNext"), null, new HarmonyMethod(AccessTools.Method(typeof(ModelSwaps), "ShopManager_entrySequence_MoveNext_PostfixPatch")));
 
-            Harmony.Patch(AccessTools.Method(typeof(ItemPresentation), "presentItem"), new HarmonyMethod(AccessTools.Method(typeof(ItemPatches), "ItemPresentation_presentItem_PrefixPatch")));
+            Harmony.Patch(AccessTools.Method(typeof(ItemPresentation), "presentItem"), new HarmonyMethod(AccessTools.Method(typeof(ItemPresentationPatches), "ItemPresentation_presentItem_PrefixPatch")));
             
         }
     }
