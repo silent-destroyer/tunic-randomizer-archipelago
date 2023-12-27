@@ -28,7 +28,7 @@ namespace TunicArchipelago {
 
                 if (TunicArchipelago.Settings.SendHintsToServer && Hints.LocalHintsForServer.ContainsKey(Hints.HintLocations[InteractionLocation]) && SaveFile.GetInt($"archipelago sent optional hint to server {Hints.LocalHintsForServer[Hints.HintLocations[InteractionLocation]]}") == 0) {
                     string LocationName = Hints.LocalHintsForServer[Hints.HintLocations[InteractionLocation]];
-                    Archipelago.instance.integration.session.Locations.ScoutLocationsAsync(true, Archipelago.instance.GetLocationId(LocationName)).ContinueWith(locationInfoPacket => { }).Wait();
+                    Archipelago.instance.integration.session.Locations.ScoutLocationsAsync(true, Archipelago.instance.GetLocationId(LocationName));
                     SaveFile.SetInt($"archipelago sent optional hint to server {Hints.LocalHintsForServer[Hints.HintLocations[InteractionLocation]]}", 1);
                 }
 

@@ -152,8 +152,7 @@ namespace TunicArchipelago {
 
                 string CheckName = Locations.LocationIdToDescription[LocationId];
                 if (TunicArchipelago.Settings.SendHintsToServer && SaveFile.GetInt($"archipelago sent optional hint to server {CheckName}") == 0) {
-                    Archipelago.instance.integration.session.Locations.ScoutLocationsAsync(true, Archipelago.instance.GetLocationId(CheckName))
-                                            .ContinueWith(locationInfoPacket => { }).Wait();
+                    Archipelago.instance.integration.session.Locations.ScoutLocationsAsync(true, Archipelago.instance.GetLocationId(CheckName));
                     SaveFile.SetInt($"archipelago sent optional hint to server {CheckName}", 1);
                 }
             } else {
@@ -393,9 +392,6 @@ namespace TunicArchipelago {
                 NotificationBottom = NotificationBottom == "" ? $"$oud bE yoosfuhl!" : NotificationBottom;
                 ShowNotification(NotificationTop, NotificationBottom);
             }
-
-            TextBuilderPatches.CustomImageToDisplay = ItemName;
-            ShowNotification(NotificationTop, NotificationBottom);
 
             if (TunicArchipelago.Settings.HeroPathHintsEnabled) {
                 string slotLoc = networkItem.Player.ToString() + ", " + Archipelago.instance.GetLocationName(networkItem.Location);

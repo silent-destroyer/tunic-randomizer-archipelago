@@ -35,14 +35,6 @@ namespace TunicArchipelago {
 
         public static Dictionary<string, string> HintMessages = new Dictionary<string, string>();
         public static Dictionary<string, string> LocalHintsForServer = new Dictionary<string, string>();
-
-        public static string MailboxHintId = "";
-        public static string ForestHintId = "";
-        public static string FortressHintId = "";
-        public static string GardenHintId = "";
-        public static string SwampHintId = "";
-        public static string LibraryHintId = "";
-        public static string MonasteryHintId = "";
         public static Dictionary<string, string> HintStructureScenes = new Dictionary<string, string>();
 
         // Used for getting what sphere 1 is if you have ER on
@@ -146,15 +138,11 @@ namespace TunicArchipelago {
             if (SphereOnePlayer.Count > 0) {
                 key = SphereOnePlayer.Keys.ToList()[random.Next(SphereOnePlayer.Count)];
                 mailboxitem = SphereOnePlayer[key];
-                MailboxHintId = Locations.LocationIdToDescription[key];
-                Logger.LogInfo(key);
-                Hints.HintStructureScenes.Add(Hints.MailboxHintId, "Overworld Redux");
+                HintStructureScenes.Add(Locations.LocationIdToDescription[key], "Overworld Redux");
             } else if (SphereOneOthers.Count > 0) {
                 key = SphereOneOthers.Keys.ToList()[random.Next(SphereOneOthers.Count)];
                 mailboxitem = SphereOneOthers[key];
-                Logger.LogInfo(key);
-                MailboxHintId = Locations.LocationIdToDescription[key];
-                Hints.HintStructureScenes.Add(Hints.MailboxHintId, "Overworld Redux");
+                HintStructureScenes.Add(Locations.LocationIdToDescription[key], "Overworld Redux");
             }
             if (mailboxitem != null) {
                 Scene = Locations.SimplifiedSceneNames[Locations.VanillaLocations[key].Location.SceneName].ToUpper();
@@ -206,17 +194,14 @@ namespace TunicArchipelago {
                     Hint = $"lehjehnd sehz \"{Archipelago.instance.GetPlayerName((int)ItemHint.Player).ToUpper()}'S WORLD\" aht\n\"{ItemHint.Location.ToUpper()}\"";
                 }
                 Hint += $"\niz lOkAtid awn #uh \"<#ffd700>PATH OF THE HERO<#ffffff>...\"";
-                Hints.HintMessages.Add(HintGrave, Hint);
+                HintMessages.Add(HintGrave, Hint);
 
                 if (HintGrave == "East Forest Relic") {
-                    Hints.ForestHintId = $"{ItemHint.Player}, {ItemHint.Location}";
-                    Hints.HintStructureScenes.Add(Hints.ForestHintId, "East Forest Redux");
+                    HintStructureScenes.Add($"{ItemHint.Player}, {ItemHint.Location}", "East Forest Redux");
                 } else if (HintGrave == "Fortress Relic") {
-                    Hints.FortressHintId = $"{ItemHint.Player}, {ItemHint.Location}";
-                    Hints.HintStructureScenes.Add(Hints.FortressHintId, "Fortress Reliquary");
+                    HintStructureScenes.Add($"{ItemHint.Player}, {ItemHint.Location}", "Fortress Reliquary");
                 } else if (HintGrave == "West Garden Relic") {
-                    Hints.GardenHintId = $"{ItemHint.Player}, {ItemHint.Location}";
-                    Hints.HintStructureScenes.Add(Hints.GardenHintId, "Archipelagos Redux");
+                    HintStructureScenes.Add($"{ItemHint.Player}, {ItemHint.Location}", "Archipelagos Redux");
                 }
 
                 HintItems.Remove(HintItem);
@@ -252,17 +237,14 @@ namespace TunicArchipelago {
                 } else {
                     Hint = $"#A sA #uh {HexagonColors[Hexagon]}kwehstuhgawn [hexagram]<#FFFFFF> iz fownd aht\n\"{HexHint.Location.ToUpper()}\"\nin \"{Archipelago.instance.GetPlayerName((int)HexHint.Player).ToUpper()}'S WORLD...\"";
                 }
-                Hints.HintMessages.Add(HexagonHintArea, Hint);
+                HintMessages.Add(HexagonHintArea, Hint);
 
                 if (HexagonHintArea == "Swamp Relic") {
-                    Hints.SwampHintId = $"{HexHint.Player}, {HexHint.Location}";
-                    Hints.HintStructureScenes.Add(Hints.SwampHintId, "Swamp Redux 2");
+                    HintStructureScenes.Add($"{HexHint.Player}, {HexHint.Location}", "Swamp Redux 2");
                 } else if (HexagonHintArea == "Library Relic") {
-                    Hints.LibraryHintId = $"{HexHint.Player}, {HexHint.Location}";
-                    Hints.HintStructureScenes.Add(Hints.LibraryHintId, "Library Hall");
+                    HintStructureScenes.Add($"{HexHint.Player}, {HexHint.Location}", "Library Hall");
                 } else if (HexagonHintArea == "Monastery Relic") {
-                    Hints.MonasteryHintId = $"{HexHint.Player}, {HexHint.Location}";
-                    Hints.HintStructureScenes.Add(Hints.MonasteryHintId, "Monastery");
+                    HintStructureScenes.Add($"{HexHint.Player}, {HexHint.Location}", "Monastery");
                 }
 
                 Hexagons.Remove(Hexagon);
@@ -274,47 +256,47 @@ namespace TunicArchipelago {
                 foreach (PortalCombo Portal in TunicPortals.RandomizedPortals.Values)
                 {
                     if (Portal.Portal1.SceneDestinationTag == "Overworld Redux, Forest Belltower_")
-                    { Hints.HintMessages.Add("East Forest Sign", $"\"{Locations.SimplifiedSceneNames[Portal.Portal2.Scene]}\" [arrow_right]"); }
+                    { HintMessages.Add("East Forest Sign", $"\"{Locations.SimplifiedSceneNames[Portal.Portal2.Scene]}\" [arrow_right]"); }
                     if (Portal.Portal2.SceneDestinationTag == "Overworld Redux, Forest Belltower_")
-                    { Hints.HintMessages.Add("East Forest Sign", $"\"{Locations.SimplifiedSceneNames[Portal.Portal1.Scene]}\" [arrow_right]"); }
+                    { HintMessages.Add("East Forest Sign", $"\"{Locations.SimplifiedSceneNames[Portal.Portal1.Scene]}\" [arrow_right]"); }
 
                     if (Portal.Portal1.SceneDestinationTag == "Overworld Redux, Archipelagos Redux_lower")
-                    { Hints.HintMessages.Add("West Garden Sign", $"[arrow_left] \"{Locations.SimplifiedSceneNames[Portal.Portal2.Scene]}\""); }
+                    { HintMessages.Add("West Garden Sign", $"[arrow_left] \"{Locations.SimplifiedSceneNames[Portal.Portal2.Scene]}\""); }
                     if (Portal.Portal2.SceneDestinationTag == "Overworld Redux, Archipelagos Redux_lower")
-                    { Hints.HintMessages.Add("West Garden Sign", $"[arrow_left] \"{Locations.SimplifiedSceneNames[Portal.Portal1.Scene]}\""); }
+                    { HintMessages.Add("West Garden Sign", $"[arrow_left] \"{Locations.SimplifiedSceneNames[Portal.Portal1.Scene]}\""); }
 
                     if (Portal.Portal1.SceneDestinationTag == "Overworld Redux, Fortress Courtyard_")
-                    { Hints.HintMessages.Add("Fortress Sign", $"\"{Locations.SimplifiedSceneNames[Portal.Portal2.Scene]}\" [arrow_right]"); }
+                    { HintMessages.Add("Fortress Sign", $"\"{Locations.SimplifiedSceneNames[Portal.Portal2.Scene]}\" [arrow_right]"); }
                     if (Portal.Portal2.SceneDestinationTag == "Overworld Redux, Fortress Courtyard_")
-                    { Hints.HintMessages.Add("Fortress Sign", $"\"{Locations.SimplifiedSceneNames[Portal.Portal1.Scene]}\" [arrow_right]"); }
+                    { HintMessages.Add("Fortress Sign", $"\"{Locations.SimplifiedSceneNames[Portal.Portal1.Scene]}\" [arrow_right]"); }
 
                     if (Portal.Portal1.SceneDestinationTag == "Overworld Redux, Darkwoods Tunnel_")
-                    { Hints.HintMessages.Add("Quarry Sign", $"\"{Locations.SimplifiedSceneNames[Portal.Portal2.Scene]}\" [arrow_up]"); }
+                    { HintMessages.Add("Quarry Sign", $"\"{Locations.SimplifiedSceneNames[Portal.Portal2.Scene]}\" [arrow_up]"); }
                     if (Portal.Portal2.SceneDestinationTag == "Overworld Redux, Darkwoods Tunnel_")
-                    { Hints.HintMessages.Add("Quarry Sign", $"\"{Locations.SimplifiedSceneNames[Portal.Portal1.Scene]}\" [arrow_up]"); }
+                    { HintMessages.Add("Quarry Sign", $"\"{Locations.SimplifiedSceneNames[Portal.Portal1.Scene]}\" [arrow_up]"); }
 
                     if (Portal.Portal1.SceneDestinationTag == "Overworld Redux, Ruins Passage_west")
-                    { Hints.HintMessages.Add("Ruined Hall Sign", $"\"{Locations.SimplifiedSceneNames[Portal.Portal2.Scene]}\" [arrow_right]"); }
+                    { HintMessages.Add("Ruined Hall Sign", $"\"{Locations.SimplifiedSceneNames[Portal.Portal2.Scene]}\" [arrow_right]"); }
                     if (Portal.Portal2.SceneDestinationTag == "Overworld Redux, Ruins Passage_west")
-                    { Hints.HintMessages.Add("Ruined Hall Sign", $"\"{Locations.SimplifiedSceneNames[Portal.Portal1.Scene]}\" [arrow_right]"); }
+                    { HintMessages.Add("Ruined Hall Sign", $"\"{Locations.SimplifiedSceneNames[Portal.Portal1.Scene]}\" [arrow_right]"); }
 
                     if (Portal.Portal1.SceneDestinationTag == "Overworld Redux, Overworld Interiors_house")
-                    { Hints.HintMessages.Add("Town Sign", $"[arrow_left] \"{Locations.SimplifiedSceneNames[Portal.Portal2.Scene]}\""); }
+                    { HintMessages.Add("Town Sign", $"[arrow_left] \"{Locations.SimplifiedSceneNames[Portal.Portal2.Scene]}\""); }
                     if (Portal.Portal2.SceneDestinationTag == "Overworld Redux, Overworld Interiors_house")
-                    { Hints.HintMessages.Add("Town Sign", $"[arrow_left] \"{Locations.SimplifiedSceneNames[Portal.Portal1.Scene]}\""); }
+                    { HintMessages.Add("Town Sign", $"[arrow_left] \"{Locations.SimplifiedSceneNames[Portal.Portal1.Scene]}\""); }
 
                     if (Portal.Portal1.SceneDestinationTag == "East Forest Redux, Sword Access_lower") {
-                        Hints.HintMessages.Add("East East Forest Sign", $"\"{Locations.SimplifiedSceneNames[Portal.Portal2.Scene]}\" [arrow_right]");
+                        HintMessages.Add("East East Forest Sign", $"\"{Locations.SimplifiedSceneNames[Portal.Portal2.Scene]}\" [arrow_right]");
                     }
                     if (Portal.Portal2.SceneDestinationTag == "East Forest Redux, Sword Access_lower") {
-                        Hints.HintMessages.Add("East East Forest Sign", $"\"{Locations.SimplifiedSceneNames[Portal.Portal1.Scene]}\" [arrow_right]");
+                        HintMessages.Add("East East Forest Sign", $"\"{Locations.SimplifiedSceneNames[Portal.Portal1.Scene]}\" [arrow_right]");
                     }
 
                     if (Portal.Portal1.SceneDestinationTag == "East Forest Redux, East Forest Redux Laddercave_lower") {
-                        Hints.HintMessages.Add("West East Forest Sign", $"[arrow_left] \"{Locations.SimplifiedSceneNames[Portal.Portal2.Scene]}\"");
+                        HintMessages.Add("West East Forest Sign", $"[arrow_left] \"{Locations.SimplifiedSceneNames[Portal.Portal2.Scene]}\"");
                     }
                     if (Portal.Portal2.SceneDestinationTag == "East Forest Redux, East Forest Redux Laddercave_lower") {
-                        Hints.HintMessages.Add("West East Forest Sign", $"[arrow_left] \"{Locations.SimplifiedSceneNames[Portal.Portal1.Scene]}\"");
+                        HintMessages.Add("West East Forest Sign", $"[arrow_left] \"{Locations.SimplifiedSceneNames[Portal.Portal1.Scene]}\"");
                     }
                 }
             }

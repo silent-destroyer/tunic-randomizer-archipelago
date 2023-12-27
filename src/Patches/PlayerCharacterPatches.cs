@@ -294,7 +294,7 @@ namespace TunicArchipelago {
                         string ItemName = Archipelago.instance.integration.session.Items.GetItemName(Location.Item) == null ? "UNKNOWN ITEM" : Archipelago.instance.integration.session.Items.GetItemName(Location.Item);
                         ItemLookup.ItemList.Add(LocationId, new ArchipelagoItem(ItemName, Location.Player, Location.Flags));
                     }
-                }).Wait();
+                }).Wait(TimeSpan.FromSeconds(15.0));
                 ItemTracker.PopulateSpoilerLog();
                 GhostHints.GenerateHints();
                 Hints.PopulateHints();

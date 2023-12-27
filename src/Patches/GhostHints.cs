@@ -527,8 +527,7 @@ namespace TunicArchipelago {
         public static void CheckForServerHint(string npcName) {
             foreach (HintGhost HintGhost in HintGhosts) { 
                 if (HintGhost.Name == npcName && HintGhost.OptionalCheckID != "" && SaveFile.GetInt($"archipelago sent optional hint to server {HintGhost.OptionalCheckID}") == 0) {
-                    Archipelago.instance.integration.session.Locations.ScoutLocationsAsync(true, Archipelago.instance.GetLocationId(HintGhost.OptionalCheckID))
-                        .ContinueWith(locationInfoPacket => {}).Wait();
+                    Archipelago.instance.integration.session.Locations.ScoutLocationsAsync(true, Archipelago.instance.GetLocationId(HintGhost.OptionalCheckID));
                     SaveFile.SetInt($"archipelago sent optional hint to server {HintGhost.OptionalCheckID}", 1);
                 }
             }
