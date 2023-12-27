@@ -462,7 +462,25 @@ namespace TunicArchipelago {
 
         public static void ButtonAssignableItem_CheckFreeItemSpell_PostfixPatch(ButtonAssignableItem __instance, ref string s) {
             if (ItemLookup.BombCodes.ContainsKey(s) && StateVariable.GetStateVariableByName(ItemLookup.BombCodes[s]).BoolValue) {
-                Archipelago.instance.UpdateDataStorage(ItemLookup.BombCodes[s], true);
+                if (SaveFile.GetInt($"randomizer used free bomb code {s}") == 0) {
+                    Archipelago.instance.UpdateDataStorage(ItemLookup.BombCodes[s], true);
+                    SaveFile.SetInt($"randomizer used free bomb code {s}", 1);
+                    if (TunicArchipelago.Settings.SkipItemAnimations) { 
+                        switch(ItemLookup.BombCodes[s]) {
+                            case "Granted Firecracker":
+                                ShowNotification($"[firecracker] \"Firecracker Granted!\"", $"mAd fruhm slorm, #uh poudi^ #aht gOz boom.");
+                                break;
+                            case "Granted Firebomb":
+                                ShowNotification($"[firebomb] \"Fire Bomb Granted!\"", $"fIur fIur ehvurEwAr, ahnd ow ow ow ow ow.");
+                                break;
+                            case "Granted Icebomb":
+                                ShowNotification($"[icebomb] \"Ice Bomb Granted!\"", $"uhnstAboul powdur mAd fruhm #uh fArE uhv #uh wehst gRdin.");
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                }
             }
         }
 
