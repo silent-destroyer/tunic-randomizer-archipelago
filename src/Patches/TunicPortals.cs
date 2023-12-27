@@ -22,7 +22,7 @@ namespace TunicArchipelago
             public bool DeadEnd; // portals that are dead ends, like stick house or the gauntlet lower entry.
             public bool PrayerPortal; // portals that require prayer to enter. This is a more convenient version of GivesAccess for prayer portals.
             public bool OneWay; // portals that are one-way, such as the back entrance to monastery and the forest belltower top portal
-            public bool IgnoreScene; // portals that cannot reach the center of the region, and as such do not give region access, like the rail between bottom of the well and furnace
+            public bool IgnoreScene; // portals that cannot reach the center of the region, and as such do not give region access, like the rail between beneath the well and furnace
 
             public TunicPortal() { }
 
@@ -281,7 +281,7 @@ namespace TunicArchipelago
                 }
             },
             {
-                "Sewer", // Bottom of the Well
+                "Sewer", // Beneath the Well
                 new List<TunicPortal> {
                     new TunicPortal("Overworld Redux", "entrance", "Well Ladder Exit", granularRegion: "Sewer"),
                     new TunicPortal("Sewer_Boss", "", "Well to Well Boss", granularRegion: "Sewer"),
@@ -289,7 +289,7 @@ namespace TunicArchipelago
                 }
             },
             {
-                "Sewer_Boss", // Boss room in the Bottom of the Well
+                "Sewer_Boss", // Boss room in the Beneath the Well
                 new List<TunicPortal> {
                     new TunicPortal("Sewer", "", "Well Boss to Well", granularRegion: "Sewer_Boss"),
                     new TunicPortal("Crypt Redux", "", "Checkpoint to Dark Tomb", granularRegion: "Sewer_Boss", requiredItemsOr: new List<Dictionary<string, int>> { new Dictionary<string, int> { { "Sewer_Boss, Sewer_", 1 } }, new Dictionary<string, int> { { "Hyperdash", 1 } } }),

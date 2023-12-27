@@ -166,7 +166,7 @@ namespace TunicArchipelago {
                 }
             },
             {
-                "Bottom of the Well",
+                "Beneath the Well",
                 new List<string>() {
                     " couldn't escape the well.",
                     " tripped on a slorm.",

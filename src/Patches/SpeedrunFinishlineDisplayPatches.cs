@@ -65,7 +65,7 @@ namespace TunicArchipelago {
             { "Frog's Domain", "F<#eaa614>r<#ffffff>og's <#eaa614>D<#ffffff>omain" },
             { "Shop/Coin Wells", "Shop/Coin We<#eaa614>l<#ffffff>ls" },
             { "Bosses Defeated", "Bosses <#eaa614>D<#ffffff>efeate<#eaa614>d<#ffffff>" },
-            { "Bottom of the Well", "Bottom of the We<#eaa614>ll<#ffffff>" },
+            { "Beneath the Well", "Beneath the We<#eaa614>ll<#ffffff>" },
             { "Far Shore/Hero's Grave", "Far Sho<#eaa614>r<#ffffff>e/Hero's Grave" },
             { "Holy Cross Checks", "Ho<#eaa614>l<#ffffff>y Cross Checks" },
             { "Player Deaths", "P<#eaa614>l<#ffffff>ayer Deaths" },
@@ -216,7 +216,7 @@ namespace TunicArchipelago {
                 new List<string>(){"Overworld", "West Garden", "Ruined Atoll", "Quarry/Mountain", "Swamp"},
                 new List<string>(){"East Forest", "Eastern Vault Fortress", "Library", "Rooted Ziggurat", "Cathedral"},
                 new List<string>(){"Dark Tomb", "Frog's Domain", "Shop/Coin Wells", "Bosses Defeated", "Time Found"},
-                new List<string>(){"Bottom of the Well", "Far Shore/Hero's Grave", "Holy Cross Checks", "Player Deaths"},
+                new List<string>(){"Beneath the Well", "Far Shore/Hero's Grave", "Holy Cross Checks", "Player Deaths"},
             };
             List<int> Spacings = new List<int>() { -300, -198, 370, 465 };
             if ((Screen.width == 1920 && Screen.height == 1080) || (Screen.width == 2560 && Screen.height == 1440)) {
