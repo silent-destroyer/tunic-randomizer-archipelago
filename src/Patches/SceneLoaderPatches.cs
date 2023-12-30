@@ -319,6 +319,11 @@ namespace TunicArchipelago {
                 }
             } else if(SceneName == "frog cave main") { 
                 SetupFrogDomainSecret();
+            } else if(SceneName == "Sword Access") {
+                GameObject Bush = GameObject.Find("_Grass/bush (97)");
+                if (Bush != null) {
+                    Bush.SetActive(false);
+                }
             }
 
             if (TunicArchipelago.Settings.HeroPathHintsEnabled && Hints.HintStructureScenes.ContainsValue(SceneName) && SaveFile.GetInt($"randomizer got {Hints.HintStructureScenes.FirstOrDefault(x => x.Value == SceneName).Key}") == 0) {
