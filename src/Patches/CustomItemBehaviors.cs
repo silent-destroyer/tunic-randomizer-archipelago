@@ -12,6 +12,7 @@ namespace TunicArchipelago {
         public static bool CanSwingGoldenSword = false;
         public static GameObject FoxBody;
         public static GameObject FoxHair;
+        public static GameObject FoxCape;
         public static GameObject GhostFoxBody;
         public static GameObject GhostFoxHair;
         public static void CreateCustomItems() {
@@ -86,6 +87,8 @@ namespace TunicArchipelago {
                     GhostFoxBody.AddComponent<MeshRenderer>().materials = GameObject.Find("_Fox(Clone)/fox").GetComponent<CreatureMaterialManager>().ghostMaterialArray;
                     GhostFoxHair = new GameObject();
                     GhostFoxHair.AddComponent<MeshRenderer>().materials = GameObject.Find("_Fox(Clone)/fox hair").GetComponent<CreatureMaterialManager>().ghostMaterialArray;
+                    FoxCape = new GameObject();
+                    FoxCape.AddComponent<MeshRenderer>().materials = PaletteEditor.FoxCape.GetComponent<CreatureMaterialManager>().originalMaterials;
                 }
 
                 
@@ -93,6 +96,8 @@ namespace TunicArchipelago {
                 GameObject.Find("_Fox(Clone)/fox hair").GetComponent<CreatureMaterialManager>().originalMaterials = ModelSwaps.Items["GoldenTrophy_2"].GetComponent<MeshRenderer>().materials;
                 GameObject.Find("_Fox(Clone)/fox").GetComponent<CreatureMaterialManager>()._ghostMaterialArray = ModelSwaps.Items["GoldenTrophy_2"].GetComponent<MeshRenderer>().materials;
                 GameObject.Find("_Fox(Clone)/fox hair").GetComponent<CreatureMaterialManager>()._ghostMaterialArray = ModelSwaps.Items["GoldenTrophy_2"].GetComponent<MeshRenderer>().materials;
+                PaletteEditor.FoxCape.GetComponent<CreatureMaterialManager>().originalMaterials = ModelSwaps.Items["GoldenTrophy_2"].GetComponent<MeshRenderer>().materials;
+                PaletteEditor.FoxCape.GetComponent<CreatureMaterialManager>()._ghostMaterialArray = ModelSwaps.Items["GoldenTrophy_2"].GetComponent<MeshRenderer>().materials;
                 GameObject Hand = GameObject.Find("_Fox(Clone)/Fox/root/pelvis/chest/arm_upper.R/arm_lower.R/hand.R");
                 if (Hand != null) {
                     Hand.transform.GetChild(1).GetComponent<MeshRenderer>().materials = ModelSwaps.Items["GoldenTrophy_2"].GetComponent<MeshRenderer>().materials;
@@ -106,6 +111,7 @@ namespace TunicArchipelago {
                 GameObject.DontDestroyOnLoad(FoxHair);
                 GameObject.DontDestroyOnLoad(GhostFoxBody);
                 GameObject.DontDestroyOnLoad(GhostFoxHair);
+                GameObject.DontDestroyOnLoad(FoxCape);
 
                 CanTakeGoldenHit = true;
                 CanSwingGoldenSword = true;

@@ -124,6 +124,7 @@ namespace TunicArchipelago {
                     PlayerCharacter.instance.gameObject.GetComponent<Rotate>().eulerAnglesPerSecond += new Vector3(0, 3.5f, 0);
                 }
             }
+
             if(SaveFile.GetInt(AbilityShuffle) == 1) { 
                 if(SaveFile.GetInt(PrayerUnlocked) == 0) {
                     __instance.prayerBeginTimer = 0;
@@ -131,6 +132,10 @@ namespace TunicArchipelago {
                 if(SaveFile.GetInt(IceRodUnlocked) == 0) {
                     TechbowItemBehaviour.kIceShotWindow = 0;
                 }
+            }
+
+            if (PaletteEditor.FoxCape != null) {
+                PaletteEditor.FoxCape.GetComponent<CreatureMaterialManager>().UseSpecialGhostMat = __instance.transform.GetChild(1).GetComponent<CreatureMaterialManager>().UseSpecialGhostMat;
             }
 
             foreach (string Key in EnemyRandomizer.Enemies.Keys.ToList()) {
@@ -331,7 +336,7 @@ namespace TunicArchipelago {
 
             ItemPresentationPatches.SwitchDathStonePresentation();
 
-            PaletteEditor.GatherHyperdashRenderers(__instance);
+            PaletteEditor.GatherHyperdashRenderers();
             PaletteEditor.SetupPartyHat(__instance);
             PaletteEditor.SetupFoxCape(__instance);
 
@@ -383,6 +388,9 @@ namespace TunicArchipelago {
                     GameObject.Find("_Fox(Clone)/fox hair").GetComponent<CreatureMaterialManager>().originalMaterials = CustomItemBehaviors.FoxHair.GetComponent<MeshRenderer>().materials;
                     GameObject.Find("_Fox(Clone)/fox").GetComponent<CreatureMaterialManager>()._ghostMaterialArray = CustomItemBehaviors.GhostFoxBody.GetComponent<MeshRenderer>().materials;
                     GameObject.Find("_Fox(Clone)/fox hair").GetComponent<CreatureMaterialManager>()._ghostMaterialArray = CustomItemBehaviors.GhostFoxHair.GetComponent<MeshRenderer>().materials;
+                    PaletteEditor.FoxCape.GetComponent<CreatureMaterialManager>()._ghostMaterialArray = CustomItemBehaviors.GhostFoxBody.GetComponent<MeshRenderer>().materials;
+                    PaletteEditor.FoxCape.GetComponent<CreatureMaterialManager>().originalMaterials = CustomItemBehaviors.FoxCape.GetComponent<MeshRenderer>().materials;
+
                     SFX.PlayAudioClipAtFox(PlayerCharacter.instance.bigHurtSFX);
                     CustomItemBehaviors.CanTakeGoldenHit = false;
                     return false;

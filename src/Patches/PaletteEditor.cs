@@ -264,40 +264,44 @@ namespace TunicArchipelago {
             ChangeCapeColor(DefaultColors[15]);
         }
 
-        public static void GatherHyperdashRenderers(PlayerCharacter player) {
+        public static void GatherHyperdashRenderers() {
             HyperdashRenderers.Clear();
 
+            foreach (AnimationEvents HyperdashAnimationEvent in Resources.FindObjectsOfTypeAll<AnimationEvents>().Where(AnimationEvent => AnimationEvent.gameObject.name == "Hyperdash FX" || AnimationEvent.gameObject.name == "Hyperdash Termination FX")) {
+                GameObject HyperdashFX = HyperdashAnimationEvent.gameObject;
+                for (int i = 0; i < HyperdashFX.transform.childCount; i++) {
+                    if (HyperdashFX.transform.GetChild(i).GetComponent<MeshRenderer>() != null) {
+                        HyperdashRenderers.Add(HyperdashFX.transform.GetChild(i).GetComponent<MeshRenderer>());
+                    }
+                    if (HyperdashFX.transform.GetChild(i).GetComponent<ParticleSystemRenderer>() != null) {
+                        HyperdashRenderers.Add(HyperdashFX.transform.GetChild(i).GetComponent<ParticleSystemRenderer>());
+                    }
+                }
+            }
+
+            foreach (ParticleSystemRenderer psr in Resources.FindObjectsOfTypeAll<ParticleSystemRenderer>().Where(particles => particles.gameObject.name.Contains("DisapparFX"))) {
+                HyperdashRenderers.Add(psr);
+            }
+
+            GameObject HyperdashParticles = GameObject.Find("_Fox(Clone)/Hyperdash Appear/DisapparFX");
+            if (HyperdashParticles != null) {
+                if (HyperdashParticles.GetComponent<ParticleSystemRenderer>() != null) {
+                    HyperdashRenderers.Add(HyperdashParticles.GetComponent<ParticleSystemRenderer>());
+                }
+            }
+            if (ModelSwaps.Items.ContainsKey("Hyperdash") && ModelSwaps.Items["Hyperdash"] != null) {
+                HyperdashRenderers.Add(ModelSwaps.Items["Hyperdash"].GetComponent<MeshRenderer>());
+            }
         }
 
         public static void ChangeHyperdashColors(Color HyperdashColor) {
             GameObject Hyperdash = GameObject.Find("_Fox(Clone)/Fox/root/pelvis/chest/head/GameObject");
             if (Hyperdash != null) {
-                Hyperdash.GetComponent<MeshRenderer>().material.color = HyperdashColor;
-                foreach (AnimationEvents HyperdashAnimationEvent in Resources.FindObjectsOfTypeAll<AnimationEvents>().Where(AnimationEvent => AnimationEvent.gameObject.name == "Hyperdash FX" || AnimationEvent.gameObject.name == "Hyperdash Termination FX")) {
-                    GameObject HyperdashFX = HyperdashAnimationEvent.gameObject;
-                    for (int i = 0; i < HyperdashFX.transform.childCount; i++) {
-                        if (HyperdashFX.transform.GetChild(i).GetComponent<MeshRenderer>() != null) {
-                            HyperdashFX.transform.GetChild(i).GetComponent<MeshRenderer>().material.color = HyperdashColor;
-                        }
-                        if (HyperdashFX.transform.GetChild(i).GetComponent<ParticleSystemRenderer>() != null) {
-                            HyperdashFX.transform.GetChild(i).GetComponent<ParticleSystemRenderer>().material.color = HyperdashColor;
-                        }
-                    }
-                }
-
-                foreach (ParticleSystemRenderer psr in Resources.FindObjectsOfTypeAll<ParticleSystemRenderer>().Where(particles => particles.gameObject.name.Contains("DisapparFX"))) {
-                    psr.material.color = HyperdashColor;
-                }
-
-                GameObject HyperdashParticles = GameObject.Find("_Fox(Clone)/Hyperdash Appear/DisapparFX");
-                if (HyperdashParticles != null) {
-                    if (HyperdashParticles.GetComponent<ParticleSystemRenderer>() != null) {
-                        HyperdashParticles.GetComponent<ParticleSystemRenderer>().material.color = HyperdashColor;
-                    }
-                }
-
-                if (ModelSwaps.Items.ContainsKey("Hyperdash") && ModelSwaps.Items["Hyperdash"] != null) {
-                    ModelSwaps.Items["Hyperdash"].GetComponent<MeshRenderer>().material.color = HyperdashColor;
+                HyperdashRenderers.Add(Hyperdash.GetComponent<MeshRenderer>());
+            }
+            foreach (Renderer renderer in HyperdashRenderers) {
+                if (renderer != null && renderer.material != null) {
+                    renderer.material.color = HyperdashColor;
                 }
             }
         }
@@ -391,11 +395,13 @@ namespace TunicArchipelago {
         }
 
         public static void SetupFoxCape(PlayerCharacter player) {
-            //GameObject Cape = player.transform.GetChild(2).gameObject;
-            GameObject CapeTransform = GameObject.Find("_Fox(Clone)/Fox/root/pelvis/chest/cape_upper/");
+
             if (FoxCape != null) { 
                 GameObject.Destroy(FoxCape);
             }
+
+            GameObject CapeTransform = player.transform.GetChild(0).GetChild(0).GetChild(8).GetChild(0).GetChild(2).gameObject;
+
             if (CapeTransform != null) {
                 FoxCape = new GameObject("Cape");
                 FoxCape.transform.parent = CapeTransform.transform;
@@ -404,6 +410,7 @@ namespace TunicArchipelago {
                 FoxCape.AddComponent<VisibleByHavingInventoryItem>().enablingItem = Inventory.GetItemByName("Cape");
                 FoxCape.GetComponent<VisibleByHavingInventoryItem>().renderers = new Renderer[] { FoxCape.GetComponent<MeshRenderer>() };
                 FoxCape.GetComponent<VisibleByHavingInventoryItem>().lights = new Light[] { };
+                FoxCape.AddComponent<CreatureMaterialManager>();
                 FoxCape.transform.localScale = Vector3.one;
                 FoxCape.transform.localEulerAngles = new Vector3(30f, 0f, 180f);
                 FoxCape.transform.localPosition = new Vector3(0f, 1f, 0.8f);
