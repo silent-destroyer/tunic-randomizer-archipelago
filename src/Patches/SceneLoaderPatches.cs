@@ -134,6 +134,7 @@ namespace TunicArchipelago {
             if (loadingScene.name == "Spirit Arena" && ModelSwaps.ThirdSword == null) {
                 ModelSwaps.InitializeThirdSword();
                 ItemPresentationPatches.SetupCustomSwordItemPresentations();
+                ModelSwaps.SetupStarburstEffect();
                 SceneLoader.LoadScene("Transit");
                 return;
             }
@@ -264,10 +265,11 @@ namespace TunicArchipelago {
                         Questagon.GetComponent<MeshRenderer>().receiveShadows = false;
                     }
                 }
-                if (TunicArchipelago.Settings.HeroPathHintsEnabled && Inventory.GetItemByName("Hyperdash").Quantity == 0) {
+                if (TunicArchipelago.Settings.HeroPathHintsEnabled) {
                     GameObject HintStatueGlow = GameObject.Instantiate(ModelSwaps.GlowEffect);
                     HintStatueGlow.SetActive(true);
                     HintStatueGlow.transform.position = new Vector3(13f, 0f, 49f);
+                    HintStatueGlow.AddComponent<VisibleByNotHavingItem>().Item = Inventory.GetItemByName("Hyperdash");
                 }
             } else if (SceneName == "Overworld Redux") {
                 GameObject.Find("_Signposts/Signpost (3)/").GetComponent<Signpost>().message.text = $"#is wA too \"West Garden\"\n<#33FF33>[death] bEwAr uhv tArE [death]";
@@ -315,7 +317,10 @@ namespace TunicArchipelago {
                     chest.transform.GetChild(7).gameObject.SetActive(false);
                     chest.transform.parent.GetChild(2).gameObject.SetActive(false);
                 }
+            } else if(SceneName == "frog cave main") { 
+                SetupFrogDomainSecret();
             }
+
             if (TunicArchipelago.Settings.HeroPathHintsEnabled && Hints.HintStructureScenes.ContainsValue(SceneName) && SaveFile.GetInt($"randomizer got {Hints.HintStructureScenes.FirstOrDefault(x => x.Value == SceneName).Key}") == 0) {
                 Hints.ToggleHintIndicator(SceneName, false);
             }
@@ -390,6 +395,20 @@ namespace TunicArchipelago {
                 GameObject.Find("_Offerings").transform.GetChild(3).gameObject.SetActive(Inventory.GetItemByName("Relic - Hero Pendant HP").Quantity > 0);
                 GameObject.Find("_Offerings").transform.GetChild(4).gameObject.SetActive(Inventory.GetItemByName("Relic - Hero Pendant MP").Quantity > 0);
                 GameObject.Find("_Offerings").transform.GetChild(5).gameObject.SetActive(Inventory.GetItemByName("Relic - Hero Sword").Quantity > 0);
+            }
+        }
+
+        public static void SetupFrogDomainSecret() {
+            GameObject Plinth = GameObject.Find("_DR: Questagon Room/hexagon plinth/");
+            if(SceneManager.GetActiveScene().name == "frog cave main" && Plinth != null) {
+                GameObject CapeSecret = GameObject.Instantiate(ModelSwaps.StarburstEffect);
+                CapeSecret.transform.parent = Plinth.transform;
+                CapeSecret.name = "cape secret";
+                CapeSecret.transform.localPosition = new Vector3(0, 1f, 0);
+                CapeSecret.transform.localEulerAngles = Vector3.zero;
+                CapeSecret.transform.localScale = new Vector3(0.25f, 0.25f, 0.25f);
+                CapeSecret.transform.GetChild(0).localScale = new Vector3(0.5f, 0.5f, 0.5f);
+                CapeSecret.AddComponent<VisibleByNotHavingItem>().Item = Inventory.GetItemByName("Cape");
             }
         }
 

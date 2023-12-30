@@ -8,6 +8,7 @@ using UnhollowerBaseLib;
 using UnhollowerRuntimeLib;
 using BepInEx.Logging;
 using System.IO;
+using UnityEngine.SceneManagement;
 
 namespace TunicArchipelago {
     public class PaletteEditor : MonoBehaviour {
@@ -24,7 +25,7 @@ namespace TunicArchipelago {
             {3, "Tunic"},
             {4, "Fur\n(Secondary)"},
             {5, "Paws,\nNose"},
-            {6, "Unused"},
+            {6, "Cape...?"},
             {7, "Tunic\nUnderside"},
             {8, "Ear\n(Inner)"},
             {9, "Lure\n(Eye)"},
@@ -60,7 +61,7 @@ namespace TunicArchipelago {
             {3, new Color(0.5568628f, 0.8f, 0.4509804f) },
             {4, new Color(1f, 1f, 1f) },
             {5, new Color(0.4352941f, 0.2980392f, 0.2666667f) },
-            {6, new Color(0f, 0f, 0f) },
+            {6, new Color(0.9882353f, 0.4431373f, 0.945098f) },
             {7, new Color(0.2941177f, 0.5058824f, 0.2f) },
             {8, new Color(0.7647059f, 0.7490196f, 0.7450981f) },
             {9, new Color(0f, 0f, 0f) },
@@ -77,6 +78,8 @@ namespace TunicArchipelago {
         public static GameObject ToonFox;
         public static GameObject RegularFox;
         public static GameObject GhostFox;
+        public static GameObject FoxCape;
+        public static List<Renderer> HyperdashRenderers = new List<Renderer>();
         public static Font OdinRounded;
 
         private void OnGUI() {
@@ -132,6 +135,9 @@ namespace TunicArchipelago {
                 }
                 if (SelectedIndex == 14) {
                     ChangeSunglassesColor(SelectedColor);
+                }
+                if (SelectedIndex == 6) {
+                    ChangeCapeColor(SelectedColor);
                 }
             }
             bool RandomizeAll = GUI.Button(new Rect(555f, 235f, 200f, 30f), "Randomize all");
@@ -212,6 +218,7 @@ namespace TunicArchipelago {
                 PlayerPalette.runtimePalette.Apply();
                 ChangeHyperdashColors(PlayerPalette.runtimePalette.GetPixel(2, 3));
                 ChangeSunglassesColor(PlayerPalette.runtimePalette.GetPixel(2, 0));
+                ChangeCapeColor(PlayerPalette.runtimePalette.GetPixel(2, 2));
             }
         }
 
@@ -237,6 +244,8 @@ namespace TunicArchipelago {
                 TheRealest.GetComponent<MeshRenderer>().material.mainTexture = Texture2D.whiteTexture;
                 TheRealest.GetComponent<MeshRenderer>().material.color = new Color(UnityEngine.Random.value, UnityEngine.Random.value, UnityEngine.Random.value, 1);
             }
+
+            ChangeCapeColor(new Color(UnityEngine.Random.value, UnityEngine.Random.value, UnityEngine.Random.value, 1));
         }
 
         public static void RevertFoxColors() {
@@ -252,6 +261,12 @@ namespace TunicArchipelago {
                 TheRealest.GetComponent<MeshRenderer>().material.mainTexture = PlayerPalette.runtimePalette;
                 TheRealest.GetComponent<MeshRenderer>().material.color = new Color(1f, 1f, 1f, 1f);
             }
+            ChangeCapeColor(DefaultColors[15]);
+        }
+
+        public static void GatherHyperdashRenderers(PlayerCharacter player) {
+            HyperdashRenderers.Clear();
+
         }
 
         public static void ChangeHyperdashColors(Color HyperdashColor) {
@@ -268,16 +283,19 @@ namespace TunicArchipelago {
                             HyperdashFX.transform.GetChild(i).GetComponent<ParticleSystemRenderer>().material.color = HyperdashColor;
                         }
                     }
-                    foreach (ParticleSystemRenderer psr in Resources.FindObjectsOfTypeAll<ParticleSystemRenderer>().Where(particles => particles.gameObject.name.Contains("DisapparFX"))) {
-                        psr.material.color = HyperdashColor;
-                    }
-                    GameObject HyperdashParticles = GameObject.Find("_Fox(Clone)/Hyperdash Appear/DisapparFX");
-                    if (HyperdashParticles != null) {
-                        if (HyperdashParticles.GetComponent<ParticleSystemRenderer>() != null) {
-                            HyperdashParticles.GetComponent<ParticleSystemRenderer>().material.color = HyperdashColor;
-                        }
+                }
+
+                foreach (ParticleSystemRenderer psr in Resources.FindObjectsOfTypeAll<ParticleSystemRenderer>().Where(particles => particles.gameObject.name.Contains("DisapparFX"))) {
+                    psr.material.color = HyperdashColor;
+                }
+
+                GameObject HyperdashParticles = GameObject.Find("_Fox(Clone)/Hyperdash Appear/DisapparFX");
+                if (HyperdashParticles != null) {
+                    if (HyperdashParticles.GetComponent<ParticleSystemRenderer>() != null) {
+                        HyperdashParticles.GetComponent<ParticleSystemRenderer>().material.color = HyperdashColor;
                     }
                 }
+
                 if (ModelSwaps.Items.ContainsKey("Hyperdash") && ModelSwaps.Items["Hyperdash"] != null) {
                     ModelSwaps.Items["Hyperdash"].GetComponent<MeshRenderer>().material.color = HyperdashColor;
                 }
@@ -292,7 +310,22 @@ namespace TunicArchipelago {
                     TheRealest.GetComponent<MeshRenderer>().material.color = GlassesColor;
                 }
             } catch (Exception e) {
+                Logger.LogInfo("Error changing Sunglasses Color!" + e.Message);
+            }
+        }
 
+        public static void ChangeCapeColor(Color CapeColor) {
+            try {
+                if (FoxCape != null) {
+                    FoxCape.GetComponent<MeshRenderer>().material.mainTexture = Texture2D.whiteTexture;
+                    FoxCape.GetComponent<MeshRenderer>().material.color = CapeColor;
+                }
+                if (ModelSwaps.Items.ContainsKey("Cape") && ModelSwaps.Items["Cape"] != null) {
+                    ModelSwaps.Items["Cape"].GetComponent<MeshRenderer>().material.mainTexture = Texture2D.whiteTexture;
+                    ModelSwaps.Items["Cape"].GetComponent<MeshRenderer>().material.color = CapeColor;
+                }
+            } catch (Exception e) {
+                Logger.LogInfo("Error changing Cape Color!" + e.Message);
             }
         }
 
@@ -355,6 +388,31 @@ namespace TunicArchipelago {
                 npc.transform.GetChild(2).GetChild(1).GetComponent<SkinnedMeshRenderer>().material = GhostFox.GetComponent<MeshRenderer>().material;
             }
             CelShadingEnabled = false;
+        }
+
+        public static void SetupFoxCape(PlayerCharacter player) {
+            //GameObject Cape = player.transform.GetChild(2).gameObject;
+            GameObject CapeTransform = GameObject.Find("_Fox(Clone)/Fox/root/pelvis/chest/cape_upper/");
+            if (FoxCape != null) { 
+                GameObject.Destroy(FoxCape);
+            }
+            if (CapeTransform != null) {
+                FoxCape = new GameObject("Cape");
+                FoxCape.transform.parent = CapeTransform.transform;
+                FoxCape.AddComponent<MeshFilter>().mesh = player.transform.GetChild(2).GetComponent<SkinnedMeshRenderer>().sharedMesh;
+                FoxCape.AddComponent<MeshRenderer>().materials = player.transform.GetChild(1).GetComponent<CreatureMaterialManager>().originalMaterials;
+                FoxCape.AddComponent<VisibleByHavingInventoryItem>().enablingItem = Inventory.GetItemByName("Cape");
+                FoxCape.GetComponent<VisibleByHavingInventoryItem>().renderers = new Renderer[] { FoxCape.GetComponent<MeshRenderer>() };
+                FoxCape.GetComponent<VisibleByHavingInventoryItem>().lights = new Light[] { };
+                FoxCape.transform.localScale = Vector3.one;
+                FoxCape.transform.localEulerAngles = new Vector3(30f, 0f, 180f);
+                FoxCape.transform.localPosition = new Vector3(0f, 1f, 0.8f);
+
+                GameObject CapePresentation = Resources.FindObjectsOfTypeAll<ItemPresentationGraphic>().Where(ipg => ipg.name == "cape").First().gameObject;
+                CapePresentation.GetComponent<MeshFilter>().mesh = player.transform.GetChild(2).GetComponent<SkinnedMeshRenderer>().sharedMesh;
+                CapePresentation.GetComponent<MeshRenderer>().materials = player.transform.GetChild(1).GetComponent<CreatureMaterialManager>().originalMaterials;
+
+            }
         }
 
     }

@@ -53,7 +53,7 @@ namespace TunicArchipelago {
                     SpeedrunFinishlineDisplayPatches.CompletionCanvas.SetActive(!SpeedrunFinishlineDisplayPatches.CompletionCanvas.active);
                 }
             }
-
+            
             if (Input.GetKeyDown(KeyCode.R)) {
                 Archipelago.instance.Release();
             }
@@ -295,6 +295,7 @@ namespace TunicArchipelago {
                         ItemLookup.ItemList.Add(LocationId, new ArchipelagoItem(ItemName, Location.Player, Location.Flags));
                     }
                 }).Wait(TimeSpan.FromSeconds(15.0));
+
                 ItemTracker.PopulateSpoilerLog();
                 GhostHints.GenerateHints();
                 Hints.PopulateHints();
@@ -330,7 +331,9 @@ namespace TunicArchipelago {
 
             ItemPresentationPatches.SwitchDathStonePresentation();
 
+            PaletteEditor.GatherHyperdashRenderers(__instance);
             PaletteEditor.SetupPartyHat(__instance);
+            PaletteEditor.SetupFoxCape(__instance);
 
             if (TunicArchipelago.Settings.RandomFoxColorsEnabled) {
                 PaletteEditor.RandomizeFoxColors();

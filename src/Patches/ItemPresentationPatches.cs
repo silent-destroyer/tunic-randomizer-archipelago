@@ -12,8 +12,8 @@ namespace TunicArchipelago {
 
         public static bool DathStonePresentationAlreadyCreated = false;
 
-        public static bool ItemPresentation_presentItem_PrefixPatch(ItemPresentation __instance) {
-            if (TunicArchipelago.Settings.SkipItemAnimations) {
+        public static bool ItemPresentation_presentItem_PrefixPatch(ItemPresentation __instance, Item item) {
+            if (TunicArchipelago.Settings.SkipItemAnimations && item.name != "Cape") {
                 return false;
             }
             return true;
@@ -31,9 +31,7 @@ namespace TunicArchipelago {
 
                 GoldHexagon.GetComponent<ItemPresentationGraphic>().items = new List<Item>() { Inventory.GetItemByName("Hexagon Gold") }.ToArray();
 
-                List<ItemPresentationGraphic> newipgs = ItemPresentation.instance.itemGraphics.ToList();
-                newipgs.Add(GoldHexagon.GetComponent<ItemPresentationGraphic>());
-                ItemPresentation.instance.itemGraphics = newipgs.ToArray();
+                RegisterNewItemPresentation(GoldHexagon.GetComponent<ItemPresentationGraphic>());
 
                 ModelSwaps.Items["Hexagon Gold"] = GoldHexagon.transform.GetChild(0).gameObject;
             } catch (Exception e) {
@@ -54,12 +52,8 @@ namespace TunicArchipelago {
                 housekey.transform.localPosition = new Vector3(-0.071f, -0.123f, 0f);
                 housekey.GetComponent<ItemPresentationGraphic>().items = new Item[] { Inventory.GetItemByName("Key (House)") };
                 GameObject.DontDestroyOnLoad(housekey);
-                List<ItemPresentationGraphic> newipgs = new List<ItemPresentationGraphic>() { };
-                foreach (ItemPresentationGraphic ipg in ItemPresentation.instance.itemGraphics) {
-                    newipgs.Add(ipg);
-                }
-                newipgs.Add(housekey.GetComponent<ItemPresentationGraphic>());
-                ItemPresentation.instance.itemGraphics = newipgs.ToArray();
+ 
+                RegisterNewItemPresentation(housekey.GetComponent<ItemPresentationGraphic>());
             } catch (Exception e) {
                 Logger.LogError("Setup Old House Key Item Presentation: " + e.Message);
             }
@@ -91,10 +85,8 @@ namespace TunicArchipelago {
                 LibrarianSword.GetComponent<ItemPresentationGraphic>().items = new List<Item>() { Inventory.GetItemByName("Librarian Sword") }.ToArray();
                 HeirSword.GetComponent<ItemPresentationGraphic>().items = new List<Item>() { Inventory.GetItemByName("Heir Sword") }.ToArray();
 
-                List<ItemPresentationGraphic> newipgs = ItemPresentation.instance.itemGraphics.ToList();
-                newipgs.Add(LibrarianSword.GetComponent<ItemPresentationGraphic>());
-                newipgs.Add(HeirSword.GetComponent<ItemPresentationGraphic>());
-                ItemPresentation.instance.itemGraphics = newipgs.ToArray();
+                RegisterNewItemPresentation(LibrarianSword.GetComponent<ItemPresentationGraphic>());
+                RegisterNewItemPresentation(HeirSword.GetComponent<ItemPresentationGraphic>());
 
             } catch (Exception e) {
                 Logger.LogError("Setup Custom Sword Item Presentation: " + e.Message);
@@ -147,9 +139,7 @@ namespace TunicArchipelago {
                 Plus.SetActive(SaveFile.GetInt("randomizer entrance rando enabled") == 0);
                 DathStone.GetComponent<ItemPresentationGraphic>().items = new List<Item>() { Inventory.GetItemByName("Dath Stone") }.ToArray();
 
-                List<ItemPresentationGraphic> newipgs = ItemPresentation.instance.itemGraphics.ToList();
-                newipgs.Add(DathStone.GetComponent<ItemPresentationGraphic>());
-                ItemPresentation.instance.itemGraphics = newipgs.ToArray();
+                RegisterNewItemPresentation(DathStone.GetComponent<ItemPresentationGraphic>());
 
                 DathStone.transform.localScale = Vector3.one;
                 DathStone.transform.localPosition = Vector3.zero;
@@ -172,6 +162,32 @@ namespace TunicArchipelago {
             } catch (Exception e) {
                 Logger.LogError("Switch dath stone presentation error: " + e.Message);
             }
+        }
+
+        public static void SetupCapePresentation() { 
+            try {
+                GameObject PresentationBase = Resources.FindObjectsOfTypeAll<ItemPresentationGraphic>().Where(item => item.name == "key twist").First().gameObject;
+
+                GameObject CapePresentation = GameObject.Instantiate(PresentationBase);
+                CapePresentation.transform.parent = PresentationBase.transform.parent;
+                CapePresentation.transform.localScale = Vector3.one;
+                CapePresentation.transform.localPosition = new Vector3(0f, -0.7f, 0f);
+                CapePresentation.transform.localEulerAngles = Vector3.zero;
+                CapePresentation.name = "cape";
+                CapePresentation.GetComponent<ItemPresentationGraphic>().items = new Item[] { Inventory.GetItemByName("Cape") };
+                CapePresentation.SetActive(false);
+                ModelSwaps.Items["Cape"] = CapePresentation;
+
+                RegisterNewItemPresentation(CapePresentation.GetComponent<ItemPresentationGraphic>());
+            } catch (Exception e) {
+                Logger.LogError("Cape presentation error: " + e.Message);
+            }
+        }
+
+        private static void RegisterNewItemPresentation(ItemPresentationGraphic itemPresentationGraphic) {
+            List<ItemPresentationGraphic> newipgs = ItemPresentation.instance.itemGraphics.ToList();
+            newipgs.Add(itemPresentationGraphic);
+            ItemPresentation.instance.itemGraphics = newipgs.ToArray();
         }
 
     }

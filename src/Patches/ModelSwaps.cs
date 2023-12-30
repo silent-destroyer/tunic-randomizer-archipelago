@@ -32,6 +32,7 @@ namespace TunicArchipelago {
         public static Dictionary<string, GameObject> CustomItemImages = new Dictionary<string, GameObject>();
 
         public static GameObject GlowEffect;
+        public static GameObject StarburstEffect;
         public static GameObject SpecialKeyPopup;
 
         public static List<string> ShopItemIDs = new List<string>() {
@@ -153,6 +154,7 @@ namespace TunicArchipelago {
             Items["Key (House)"] = ItemRoot.transform.GetChild(48).gameObject;
             ItemPresentationPatches.SetupDathStoneItemPresentation();
             ItemPresentationPatches.SetupHexagonQuestItemPresentation();
+            ItemPresentationPatches.SetupCapePresentation();
             InitializeExtras();
         }
 
@@ -232,6 +234,12 @@ namespace TunicArchipelago {
             GameObject.Destroy(GlowEffect.GetComponent<StatefulActive>());
             GlowEffect.SetActive(false);
             GameObject.DontDestroyOnLoad(GlowEffect);
+        }
+
+        public static void SetupStarburstEffect() {
+            StarburstEffect = GameObject.Instantiate(Resources.FindObjectsOfTypeAll<ParticleSystem>().Where(ps => ps.name == "PS: starburst" && ps.transform.parent.name == "zzz_trash").FirstOrDefault().gameObject);
+            StarburstEffect.SetActive(false);
+            GameObject.DontDestroyOnLoad(StarburstEffect);
         }
 
         public static void InitializeSecondSword() {
@@ -1062,7 +1070,6 @@ namespace TunicArchipelago {
             TuncTitleImage = CreateSprite(ImageData.TuncTitle, ImageMaterial, 1400, 742, "tunc title logo");
             TuncImage = CreateSprite(ImageData.Tunc, ImageMaterial, 148, 148, "tunc sprite");
 
-            Logger.LogInfo("4");
             CustomItemImages.Add("Librarian Sword", CreateSprite(ImageData.SecondSword, ImageMaterial, SpriteName: "Randomizer items_Librarian Sword"));
             CustomItemImages.Add("Heir Sword", CreateSprite(ImageData.ThirdSword, ImageMaterial, SpriteName: "Randomizer items_Heir Sword"));
             CustomItemImages.Add("Mr Mayor", CreateSprite(ImageData.MrMayor, ImageMaterial, SpriteName: "Randomizer items_Mr Mayor"));

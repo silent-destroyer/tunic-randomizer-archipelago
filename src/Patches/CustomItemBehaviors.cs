@@ -19,21 +19,25 @@ namespace TunicArchipelago {
             ButtonAssignableItem HeirSword = ScriptableObject.CreateInstance<ButtonAssignableItem>();
             Item GoldQuestagon = ScriptableObject.CreateInstance<Item>();
             ButtonAssignableItem DathStone = ScriptableObject.CreateInstance<ButtonAssignableItem>();
+            ButtonAssignableItem Cape = ScriptableObject.CreateInstance<ButtonAssignableItem>();
 
             LibrarianSword.name = "Librarian Sword";
             LibrarianSword.collectionMessage = new LanguageLine();
             LibrarianSword.collectionMessage.text = $"\"        ? ? ? (<#ca7be4>Lv. 3<#FFFFFF>)\"";
+            LibrarianSword.controlAction = "";
+            LibrarianSword.suppressQuantity = true;
+
             HeirSword.name = "Heir Sword";
             HeirSword.collectionMessage = new LanguageLine();
             HeirSword.collectionMessage.text = $"\"        ! ! ! (<#5de7cf>Lv. 4<#FFFFFF>)\"";
-            LibrarianSword.controlAction = "";
             HeirSword.controlAction = "";
-            LibrarianSword.suppressQuantity = true;
             HeirSword.suppressQuantity = true;
+
             GoldQuestagon.name = "Hexagon Gold";
             GoldQuestagon.collectionMessage = ScriptableObject.CreateInstance<LanguageLine>();
             GoldQuestagon.collectionMessage.text = $"    #uh sEl wEkinz\"...\"";
             GoldQuestagon.controlAction = "";
+
             DathStone.name = "Dath Stone";
             DathStone.collectionMessage = ScriptableObject.CreateInstance<LanguageLine>();
             DathStone.collectionMessage.text = $"dah% stOn\"!?\"";
@@ -41,8 +45,20 @@ namespace TunicArchipelago {
             DathStone.icon = Inventory.GetItemByName("Dash Stone").icon;
             DathStone.suppressQuantity = true;
 
+            Cape.name = "Cape";
+            Cape.collectionMessage = ScriptableObject.CreateInstance<LanguageLine>();
+            Cape.collectionMessage.text = $"A kAp fruhm law^ uhgO...";
+            Cape.controlAction = "";
+            Cape.icon = null;
+            Cape.spellStringForFreeItem = "dldrulurdldrulu";
+            StateVariable GrantedCape = ScriptableObject.CreateInstance<StateVariable>();
+            GrantedCape.name = "Granted Cape";
+            StateVariable.stateVariableList.Add(GrantedCape);
+            Cape.freeItemCountStateVar = GrantedCape;
+
             Inventory.itemList.Add(GoldQuestagon);
             Inventory.itemList.Add(DathStone);
+            Inventory.itemList.Add(Cape);
             Item Torch = Inventory.GetItemByName("Torch");
             for (int i = 0; i < Inventory.itemList.Count; i++) {
                 if (Inventory.itemList[i].name == "Sword") {
@@ -148,6 +164,16 @@ namespace TunicArchipelago {
             bone.item = Inventory.GetItemByName("Torch").TryCast<ButtonAssignableItem>();
             itemBehaviours.Add(bone);
             instance.itemBehaviours = itemBehaviours.ToArray();
+        }
+
+        public static bool Item_shouldShowInInventory_GetterPatch(Item __instance, ref bool __result) {
+            switch (__instance.name) {
+                case "Cape":
+                    __result = false;
+                    return false;
+                default:
+                    return true;
+            }
         }
     }
 }

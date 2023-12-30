@@ -57,6 +57,14 @@ namespace TunicArchipelago {
                 (SceneLoaderPatches.SceneName == "Atoll Redux") && __instance.transform.position.ToString() == "(64.0, 4.0, 0.0)") {
                 PlayerCharacter.instance.transform.GetChild(0).GetChild(0).GetChild(10).GetChild(0).gameObject.GetComponent<MeshRenderer>().materials = ModelSwaps.Items["Key"].GetComponent<MeshRenderer>().materials;
             }
+            if (SceneManager.GetActiveScene().name == "frog cave main" && __instance.transform.position.ToString() == "(20.5, 10.1, -32.1)" && !StateVariable.GetStateVariableByName("Granted Cape").BoolValue) {
+                GenericMessage.ShowMessage(
+                    $"[arrow_down] [arrow_left] [arrow_down] [arrow_right] [arrow_up]\n" +
+                    $"[arrow_left] [arrow_up] [arrow_right] [arrow_down] [arrow_left]\n" +
+                    $"[arrow_down] [arrow_right] [arrow_up] [arrow_left] [arrow_up]"
+                    );
+                return false;
+            }
             if (SaveFile.GetInt(HexagonQuestEnabled) == 1) {
                 if (__instance.transform.position.ToString() == "(0.0, 0.0, 0.0)" && SceneLoaderPatches.SceneName == "Spirit Arena" && SaveFile.GetInt(GoldHexagonQuantity) < SaveFile.GetInt(HexagonQuestGoal)) {
                     GenericMessage.ShowMessage($"\"<#EAA615>Sealed Forever.\"");

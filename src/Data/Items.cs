@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Archipelago.MultiClient.Net.Enums;
+using System;
 using System.Collections.Generic;
 
 namespace TunicArchipelago {
@@ -50,6 +51,31 @@ namespace TunicArchipelago {
             Flag = flag;
             Translation = translation;
         }
+    }
+
+    public class ArchipelagoItem {
+
+        public string ItemName {
+            get;
+            set;
+        }
+
+        public int Player {
+            get;
+            set;
+        }
+
+        public ItemFlags Classification {
+            get;
+            set;
+        }
+
+        public ArchipelagoItem(string itemName, int player, ItemFlags classification) {
+            ItemName = itemName;
+            Player = player;
+            Classification = classification;
+        }
+
     }
 
     public class ItemData {

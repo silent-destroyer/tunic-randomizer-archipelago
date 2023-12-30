@@ -100,6 +100,10 @@ namespace TunicArchipelago {
                 OptionsGUI.addToggle("<#FFA500>BONUS: Cel Shaded Fox", "Off", "On", PaletteEditor.CelShadingEnabled ? 1 : 0, (OptionsGUIMultiSelect.MultiSelectAction)ToggleCelShading);
                 OptionsGUI.addToggle("<#00FFFF>BONUS: Party Hat", "Off", "On", PaletteEditor.PartyHatEnabled ? 1 : 0, (OptionsGUIMultiSelect.MultiSelectAction)TogglePartyHat);
             }
+            if (StateVariable.GetStateVariableByName("Granted Cape").BoolValue && SceneLoaderPatches.SceneName != "TitleScreen") {
+                OptionsGUI.addToggle("<#FF69B4>BONUS: Cape", "Off", "On", Inventory.GetItemByName("Cape").Quantity == 1 ? 1 : 0, (OptionsGUIMultiSelect.MultiSelectAction)ToggleCape);
+
+            }
             OptionsGUI.addButton("Reset to Defaults", (Action)ResetToDefaults);
         }
 
@@ -291,6 +295,10 @@ namespace TunicArchipelago {
             } else {
                 PaletteEditor.ApplyCelShading();
             }
+        }
+
+        public static void ToggleCape(int index) {
+            Inventory.GetItemByName("Cape").Quantity = index;
         }
 
         public static void TogglePartyHat(int index) {

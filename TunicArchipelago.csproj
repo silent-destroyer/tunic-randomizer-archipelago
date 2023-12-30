@@ -153,7 +153,6 @@
     <Compile Include="src\Archipelago\Archipelago.cs" />
     <Compile Include="src\Archipelago\ArchipelagoIntegration.cs" />
     <Compile Include="src\Archipelago\DeathLinkMessages.cs" />
-    <Compile Include="src\Data\ArchipelagoItem.cs" />
     <Compile Include="src\Data\Hints.cs" />
     <Compile Include="src\Data\ImageData.cs" />
     <Compile Include="src\Data\ItemListJson.cs" />
@@ -187,6 +186,7 @@
     <Compile Include="src\Patches\TextBuilderPatches.cs" />
     <Compile Include="src\Patches\TitleVersion.cs" />
     <Compile Include="src\Patches\TunicPortals.cs" />
+    <Compile Include="src\Patches\VisibleByNotHavingItem.cs" />
     <Compile Include="src\Patches\WaveSpell.cs" />
     <Compile Include="src\TunicArchipelago.cs" />
     <Compile Include="src\PluginInfo.cs" />
