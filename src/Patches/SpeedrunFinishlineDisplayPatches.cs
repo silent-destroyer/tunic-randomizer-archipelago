@@ -41,13 +41,13 @@ namespace TunicArchipelago {
             {"Inventory items_money triangle", "Golden Item"},
             {"Inventory items_book", "Pages"}
         };
-        public static Dictionary<string, string> HeroRelicIcons = new Dictionary<string, string>() {
-            {"Inventory items_offering_tooth", "Relic - Hero Sword"},
-            {"Inventory items_offering_effigy", "Relic - Hero Crown"},
-            {"Inventory items_offering_ash", "Relic - Hero Water"},
-            {"Inventory items_offering_flower", "Relic - Hero Pendant HP"},
-            {"Inventory items_offering_feather", "Relic - Hero Pendant MP"},
-            {"Inventory items_offering_orb", "Relic - Hero Pendant SP"},
+        public static Dictionary<string, (string, string)> HeroRelicIcons = new Dictionary<string, (string, string)>() {
+            {"Inventory items_offering_tooth", ("Relic - Hero Sword", "Randomizer items_Hero Relic - ATT")},
+            {"Inventory items_offering_effigy", ("Relic - Hero Crown", "Randomizer items_Hero Relic - DEF")},
+            {"Inventory items_offering_ash", ("Relic - Hero Water", "Randomizer items_Hero Relic - POTION")},
+            {"Inventory items_offering_flower", ("Relic - Hero Pendant HP", "Randomizer items_Hero Relic - HP")},
+            {"Inventory items_offering_orb", ("Relic - Hero Pendant SP", "Randomizer items_Hero Relic - SP")},
+            {"Inventory items_offering_feather", ("Relic - Hero Pendant MP", "Randomizer items_Hero Relic - MP")},
         };
 
         public static Dictionary<string, string> StatsScreenSecret = new Dictionary<string, string>() {
@@ -74,6 +74,7 @@ namespace TunicArchipelago {
 
         public static GameObject CompletionRate;
         public static GameObject CompletionCanvas;
+        public static bool WasSpeedrunModeOn = false;
 
         public static bool ShowCompletionStatsAfterDelay = false;
         public static bool SpeedrunFinishlineDisplay_showFinishline_PrefixPatch(SpeedrunFinishlineDisplay __instance) {
@@ -154,8 +155,8 @@ namespace TunicArchipelago {
                 foreach (ItemIcon Icon in Resources.FindObjectsOfTypeAll<ItemIcon>().Where(icon => icon.transform.parent.name.Contains("Item Parade Group"))) {
                     string SpriteName = Icon.transform.GetChild(1).GetComponent<Image>().sprite.name;
                     // Change quantity text to gold if hero relic obtained
-                    if (HeroRelicIcons.ContainsKey(SpriteName) && Inventory.GetItemByName(HeroRelicIcons[SpriteName]).Quantity > 0) {
-                        Icon.transform.GetChild(2).GetComponent<TMPro.TextMeshProUGUI>().faceColor = new Color32(234, 166, 20, 255);
+                    if (HeroRelicIcons.ContainsKey(SpriteName) && Inventory.GetItemByName(HeroRelicIcons[SpriteName].Item1).Quantity > 0) {
+                        Icon.transform.GetChild(1).GetComponent<Image>().sprite = ModelSwaps.FindSprite(HeroRelicIcons[SpriteName].Item2);
                     }
                     // Change sword icon for custom swords
                     if (SpriteName == "Inventory items_sword") {
@@ -238,6 +239,15 @@ namespace TunicArchipelago {
             CompletionCanvas.transform.parent = GameObject.Find("_GameGUI(Clone)/AreaLabels/").transform;
             CompletionCanvas.transform.localScale = new Vector3(2, 2, 2);
             CompletionCanvas.transform.position = new Vector3(0, 0, 200);
+
+            if (!Profile.GetAccessibilityPref(Profile.AccessibilityPrefs.SpeedrunMode)) {
+                GameObject TimeText = GameObject.Instantiate(SpeedrunFinishlineDisplay.instance.transform.GetChild(0).GetChild(0).GetChild(0).gameObject);
+                TimeText.transform.parent = CompletionCanvas.transform;
+                TimeText.transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
+                TimeText.transform.position = new Vector3(0, 185f, 210f);
+                TimeText.GetComponent<TextMeshPro>().text = FormatTime(SpeedrunData.inGameTime, false, true);
+                TimeText.transform.GetChild(2).GetComponent<TextMeshPro>().text = FormatTime(SpeedrunData.inGameTime, false, true);
+            }
 
             ShowCompletionStatsAfterDelay = true;
         }
@@ -359,14 +369,14 @@ namespace TunicArchipelago {
 
         }
 
-        public static string FormatTime(float Seconds, bool ItemTime) {
+        public static string FormatTime(float Seconds, bool ItemTime, bool isIgt = false) {
             if (Seconds == 0.0f && ItemTime) {
                 return "Not Found".PadRight(10);
             }
 
             TimeSpan TimeSpan = TimeSpan.FromSeconds(Seconds);
-            string TimeString = $"{TimeSpan.Hours.ToString().PadLeft(2, '0')}:{TimeSpan.Minutes.ToString().PadLeft(2, '0')}:{TimeSpan.Seconds.ToString().PadLeft(2, '0')}";
-            return TimeString.PadRight(10).Replace(":", "<size=100%>:<size=80%>");
+            string TimeString = $"{TimeSpan.Hours.ToString().PadLeft(2, '0')}:{TimeSpan.Minutes.ToString().PadLeft(2, '0')}:{TimeSpan.Seconds.ToString().PadLeft(2, '0')}{(isIgt ? $".{TimeSpan.Milliseconds.ToString().PadRight(3, '0')}" : "")}";
+            return isIgt ? TimeString : TimeString.PadRight(10).Replace(":", "<size=100%>:<size=80%>");
         }
 
         private static string GetOrdinalSuffix(int num) {
