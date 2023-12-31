@@ -212,6 +212,7 @@ namespace TunicArchipelago {
 
             string NotificationTop = "";
             string NotificationBottom = "";
+            bool DisplayMessageAnyway = false;
 
             ItemData Item = ItemLookup.Items[ItemName];
             string LocationId = Archipelago.instance.integration.session.Locations.GetLocationNameFromId(networkItem.Location);
@@ -285,17 +286,17 @@ namespace TunicArchipelago {
                     StateVariable.GetStateVariableByName("Has Been Betrayed").BoolValue = HasAllPages;
                 }
                 if (SaveFile.GetInt(AbilityShuffle) == 1) {
-                    Dictionary<string, string> pagesForAbilities = new Dictionary<string, string>() {
-                        { "12", PrayerUnlocked },
-                        { "21", HolyCrossUnlocked },
-                        { "26", IceRodUnlocked },
+                    Dictionary<string, (string, string, string)> pagesForAbilities = new Dictionary<string, (string, string, string)>() {
+                        { "12", (PrayerUnlocked, PrayerUnlockedTime, ItemLookup.PrayerUnlockedLine) },
+                        { "21", (HolyCrossUnlocked, HolyCrossUnlockedTime, ItemLookup.HolyCrossUnlockedLine) },
+                        { "26", (IceRodUnlocked, IceRodUnlockedTime, ItemLookup.IceRodUnlockedLine) },
                     };
                     if (pagesForAbilities.ContainsKey(Item.ItemNameForInventory)) {
-                        PageDisplayPatches.ShowAbilityUnlock = true;
-                        PageDisplayPatches.AbilityUnlockPage = Item.ItemNameForInventory;
-                        SaveFile.SetInt(pagesForAbilities[Item.ItemNameForInventory], 1);
-                        SaveFile.SetFloat($"{pagesForAbilities[Item.ItemNameForInventory]} time", SpeedrunData.inGameTime);
-                        if(Item.ItemNameForInventory == "21") {
+                        SaveFile.SetInt(pagesForAbilities[Item.ItemNameForInventory].Item1, 1);
+                        SaveFile.SetFloat(pagesForAbilities[Item.ItemNameForInventory].Item2, SpeedrunData.inGameTime);
+                        NotificationBottom = pagesForAbilities[Item.ItemNameForInventory].Item3;
+                        DisplayMessageAnyway = true;
+                        if (Item.ItemNameForInventory == "21") {
                             ToggleHolyCrossObjects(true);
                         }
                     }
@@ -344,28 +345,30 @@ namespace TunicArchipelago {
 
             if (Item.Type == ItemTypes.FOOLTRAP) {
                 (NotificationTop, NotificationBottom) = ApplyFoolEffect(networkItem.Player);
+                DisplayMessageAnyway = true;
             }
 
             if(Item.Type == ItemTypes.HEXAGONQUEST) {
                 Inventory.GetItemByName("Hexagon Gold").Quantity += 1;
                 int GoldHexes = Inventory.GetItemByName("Hexagon Gold").Quantity;
 
-                if (GoldHexes == SaveFile.GetInt(HexagonQuestPrayer)) {
-                    SaveFile.SetInt(PrayerUnlocked, 1);
-                    SaveFile.SetFloat(PrayerUnlockedTime, SpeedrunData.inGameTime);
-                    NotificationBottom = $"\"PRAYER Unlocked.\" Jahnuhl yor wizduhm, rooin sEkur";
+                if (SaveFile.GetInt(AbilityShuffle) == 1) {
+                    Dictionary<int, (string, string, string)> hexesForAbilities = new Dictionary<int, (string, string, string)>() {
+                        { SaveFile.GetInt(HexagonQuestPrayer), (PrayerUnlocked, PrayerUnlockedTime, ItemLookup.PrayerUnlockedLine) },
+                        { SaveFile.GetInt(HexagonQuestHolyCross), (HolyCrossUnlocked, HolyCrossUnlockedTime, ItemLookup.HolyCrossUnlockedLine) },
+                        { SaveFile.GetInt(HexagonQuestIceRod), (IceRodUnlocked, IceRodUnlockedTime, ItemLookup.IceRodUnlockedLine) },
+                    };
+                    if (hexesForAbilities.ContainsKey(GoldHexes)) {
+                        SaveFile.SetInt(hexesForAbilities[GoldHexes].Item1, 1);
+                        SaveFile.SetFloat(hexesForAbilities[GoldHexes].Item2, SpeedrunData.inGameTime);
+                        NotificationBottom = hexesForAbilities[GoldHexes].Item3;
+                        DisplayMessageAnyway = true;
+                        if (GoldHexes == SaveFile.GetInt(HexagonQuestHolyCross)) {
+                            ToggleHolyCrossObjects(true);
+                        }
+                    }
                 }
-                if (GoldHexes == SaveFile.GetInt(HexagonQuestHolyCross)) {
-                    SaveFile.SetInt(HolyCrossUnlocked, 1);
-                    SaveFile.SetFloat(HolyCrossUnlockedTime, SpeedrunData.inGameTime);
-                    NotificationBottom = $"\"HOLY CROSS Unlocked.\" sEk wuht iz rItfuhlE yorz";
-                    ToggleHolyCrossObjects(true);
-                }
-                if (GoldHexes == SaveFile.GetInt(HexagonQuestIceRod)) {
-                    SaveFile.SetInt(IceRodUnlocked, 1);
-                    SaveFile.SetFloat(IceRodUnlockedTime, SpeedrunData.inGameTime);
-                    NotificationBottom = $"\"ICE ROD Unlocked.\" #A wOnt nO wuht hit #ehm";
-                }
+
                 ItemPresentation.PresentItem(Inventory.GetItemByName(Item.ItemNameForInventory));
             }
 
@@ -382,13 +385,13 @@ namespace TunicArchipelago {
 
             if (networkItem.Player != Archipelago.instance.GetPlayerSlot()) {
                 var sender = Archipelago.instance.GetPlayerName(networkItem.Player);
-                NotificationTop = NotificationTop == "" ? $"\"{sender}\" sehnt yoo {(TextBuilderPatches.ItemNameToAbbreviation.ContainsKey(ItemName) ? TextBuilderPatches.ItemNameToAbbreviation[ItemName] : "")} \"{ItemName}!\"" : NotificationTop;
+                NotificationTop = NotificationTop == "" ? $"\"{sender}\" sehnt yoo  {(TextBuilderPatches.ItemNameToAbbreviation.ContainsKey(ItemName) ? TextBuilderPatches.ItemNameToAbbreviation[ItemName] : "")}  \"{ItemName}!\"" : NotificationTop;
                 NotificationBottom = NotificationBottom == "" ? $"Rnt #A nIs\"?\"" : NotificationBottom;
                 ShowNotification(NotificationTop, NotificationBottom);
             }
 
-            if (networkItem.Player == Archipelago.instance.GetPlayerSlot() && (TunicArchipelago.Settings.SkipItemAnimations || Item.Type == ItemTypes.FOOLTRAP)) {
-                NotificationTop = NotificationTop == "" ? $"yoo fownd {(TextBuilderPatches.ItemNameToAbbreviation.ContainsKey(ItemName) ? TextBuilderPatches.ItemNameToAbbreviation[ItemName] : "")} \"{ItemName}!\"" : NotificationTop;
+            if (networkItem.Player == Archipelago.instance.GetPlayerSlot() && (TunicArchipelago.Settings.SkipItemAnimations || DisplayMessageAnyway)) {
+                NotificationTop = NotificationTop == "" ? $"yoo fownd  {(TextBuilderPatches.ItemNameToAbbreviation.ContainsKey(ItemName) ? TextBuilderPatches.ItemNameToAbbreviation[ItemName] : "")}  \"{ItemName}!\"" : NotificationTop;
                 NotificationBottom = NotificationBottom == "" ? $"$oud bE yoosfuhl!" : NotificationBottom;
                 ShowNotification(NotificationTop, NotificationBottom);
             }

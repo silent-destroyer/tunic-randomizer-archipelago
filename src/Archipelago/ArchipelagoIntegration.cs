@@ -259,7 +259,7 @@ namespace TunicArchipelago {
 
                 if (networkItem.Player != session.ConnectionInfo.Slot) {
                     SaveFile.SetInt("archipelago items sent to other players", SaveFile.GetInt("archipelago items sent to other players")+1);
-                    ShowNotification($"yoo sehnt {(TextBuilderPatches.ItemNameToAbbreviation.ContainsKey(itemName) && Archipelago.instance.GetPlayerGame(networkItem.Player) == "Tunic" ? TextBuilderPatches.ItemNameToAbbreviation[itemName] : "[archipelago]")} \"{itemName.Replace("_", " ")}\" too \"{receiver}!\"", $"hOp #A lIk it!");
+                    ShowNotification($"yoo sehnt  {(TextBuilderPatches.ItemNameToAbbreviation.ContainsKey(itemName) && Archipelago.instance.GetPlayerGame(networkItem.Player) == "Tunic" ? TextBuilderPatches.ItemNameToAbbreviation[itemName] : "[archipelago]")}  \"{itemName.Replace("_", " ")}\" too \"{receiver}!\"", $"hOp #A lIk it!");
                 }
                 
                 yield return true;

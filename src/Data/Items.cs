@@ -341,6 +341,11 @@ namespace TunicArchipelago {
                 "Hero Relic - MP", "Red Questagon", "Green Questagon", "Blue Questagon", "Gold Questagon", "Pages 24-25 (Prayer)", "Pages 42-43 (Holy Cross)", "Pages 52-53 (Ice Rod)"
         };
 
+        public static string PrayerUnlockedLine = $"\"PRAYER Unlocked.\" Jahnuhl yor wizduhm, rooin sEkur.";
+        public static string HolyCrossUnlockedLine = $"\"HOLY CROSS Unlocked.\" sEk wuht iz rItfuhlE yorz.";
+        public static string IceRodUnlockedLine = $"\"ICE ROD Unlocked.\" #A wOnt nO wuht hit #ehm";
+
+
         public static Dictionary<string, string> SimplifiedItemNames = new Dictionary<string, string>() {
             {"Firecracker", "Firecracker"},
             {"Firebomb", "Fire Bomb"},
