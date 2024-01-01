@@ -387,7 +387,7 @@ namespace TunicArchipelago {
                 string PlayerName = Archipelago.instance.GetPlayerName(Item.Player);
                 string ItemToDisplay = Archipelago.instance.GetPlayerGame(Item.Player) == "Tunic" && TextBuilderPatches.ItemNameToAbbreviation.ContainsKey(Item.ItemName) 
                     ? TextBuilderPatches.ItemNameToAbbreviation[Item.ItemName] : "[archipelago]";
-                string Hint = $"bI #uh wA, I hurd #aht \"{HintableLocationIds[Key].Replace(" ", "\" \"")}\" {LocationSuffix} gRdi^ {ItemToDisplay} \"{PlayerName.ToUpper().Replace(" ", "\" \"")}'S {Item.ItemName.ToUpper().Replace(" ", "\" \"").Replace("_", "\" \"")}.\"";
+                string Hint = $"bI #uh wA, I hurd #aht \"{HintableLocationIds[Key].Replace(" ", "\" \"")}\" {LocationSuffix} gRdi^  {ItemToDisplay}  \"{PlayerName.ToUpper().Replace(" ", "\" \"")}'S {Item.ItemName.ToUpper().Replace(" ", "\" \"").Replace("_", "\" \"")}.\"";
                 string ItemForHint = Archipelago.instance.GetPlayerGame(Item.Player) == "Tunic" ? Item.ItemName : "Archipelago Item";
                 LocationHints.Add((WordWrapString(Hint), ItemForHint, Locations.LocationIdToDescription[Key]));
             }
@@ -411,16 +411,16 @@ namespace TunicArchipelago {
                         string Scene = HintLocation.Location == "Your Pocket" ? HintLocation.Location.ToUpper() : Locations.SimplifiedSceneNames[Locations.VanillaLocations[Locations.LocationDescriptionToId[HintLocation.Location]].Location.SceneName].ToUpper();
                         string ScenePrefix = Scene == "Trinket Well" ? "%rOi^" : "aht #uh";
                         string ItemToDisplay = TextBuilderPatches.ItemNameToAbbreviation.ContainsKey(HintLocation.Item) ? TextBuilderPatches.ItemNameToAbbreviation[HintLocation.Item] : "";
-                        Hint = $"bI #uh wA, I saw A {ItemToDisplay} \"{Item.ToUpper().Replace(" ", "\" \"")}\" #uh lahst tIm I wuhs {ScenePrefix} \"{Scene.Replace(" ", "\" \"")}.\"";
+                        Hint = $"bI #uh wA, I saw A  {ItemToDisplay}  \"{Item.ToUpper().Replace(" ", "\" \"")}\" #uh lahst tIm I wuhs {ScenePrefix} \"{Scene.Replace(" ", "\" \"")}.\"";
 
                         ItemHints.Add((WordWrapString(Hint), HintLocation.Item, HintLocation.Location));
                     }
                 }
             }
             if (SaveFile.GetInt(HexagonQuestEnabled) == 1 && SaveFile.GetInt(AbilityShuffle) == 1) {
-                ItemHints.Add(($"bI #uh wA, I hurd #aht \"{SaveFile.GetInt(HexagonQuestPrayer)} GOLD QUESTAGONS\"\nwil grahnt yoo #uh powur uhv \"PRAYER.\"", "", ""));
-                ItemHints.Add(($"bI #uh wA, I hurd #aht \"{SaveFile.GetInt(HexagonQuestHolyCross)} GOLD QUESTAGONS\"\nwil grahnt yoo #uh powur uhv #uh \"HOLY CROSS.\"", "", ""));
-                ItemHints.Add(($"bI #uh wA, I hurd #aht \"{SaveFile.GetInt(HexagonQuestIceRod)} GOLD QUESTAGONS\"\nwil grahnt yoo #uh #uh powur uhv #uh \"ICE ROD.\"", "", ""));
+                ItemHints.Add(($"bI #uh wA, I hurd #aht [goldhex] \"{SaveFile.GetInt(HexagonQuestPrayer)} GOLD QUESTAGONS\"\nwil grahnt yoo #uh powur uhv \"PRAYER.\"", "", ""));
+                ItemHints.Add(($"bI #uh wA, I hurd #aht [goldhex] \"{SaveFile.GetInt(HexagonQuestHolyCross)} GOLD QUESTAGONS\"\nwil grahnt yoo #uh powur uhv #uh \"HOLY CROSS.\"", "", ""));
+                ItemHints.Add(($"bI #uh wA, I hurd #aht [goldhex] \"{SaveFile.GetInt(HexagonQuestIceRod)} GOLD QUESTAGONS\"\nwil grahnt yoo #uh #uh powur uhv #uh \"ICE ROD.\"", "", ""));
             }
         }
 

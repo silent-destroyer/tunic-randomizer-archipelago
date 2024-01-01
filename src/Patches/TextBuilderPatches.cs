@@ -306,8 +306,6 @@ namespace TunicArchipelago {
                     } 
                     else if (renderer.sprite.name == "game gui_money_icon") {
                         renderer.transform.localScale *= 1.25f;
-                    } else if (renderer.sprite.name == "Randomizer items_Archipelago Item") {
-                        renderer.transform.localScale *= 0.85f;
                     } else if (renderer.sprite.name == "Randomizer items_Fool Trap") {
                         renderer.transform.localEulerAngles = new Vector3(0f, 0f, 180f);
                         renderer.transform.localScale *= 0.75f;
