@@ -126,5 +126,32 @@ namespace TunicArchipelago {
 
             return true;
         }
+
+        public static void SpawnMoreSkulls() {
+            if (TunicArchipelago.Settings.MoreSkulls && SceneManager.GetActiveScene().name == "Swamp Redux 2") {
+                GameObject Skull = GameObject.Find("skull (gold) (0)");
+                if (Skull != null) {
+                    GameObject.Instantiate(Skull, new Vector3(69.3966f, 4.0462f, -64.6f), Quaternion.EulerRotation(new Vector3(0f, 230f, 0f)), Skull.transform.parent).name = "skull (gold) (4)";
+                    GameObject.Instantiate(Skull, new Vector3(37.6797f, 0.0178f, -90.9843f), Quaternion.EulerRotation(new Vector3(0f, 26f, 0f)), Skull.transform.parent).name = "skull (gold) (5)";
+                    GameObject.Instantiate(Skull, new Vector3(104f, -0.0654f, -79.2f), Quaternion.EulerRotation(new Vector3(0f, 324f, 0f)), Skull.transform.parent).name = "skull (gold) (6)";
+                    GameObject.Instantiate(Skull, new Vector3(31.6891f, -0.0654f, -70.3681f), Quaternion.EulerRotation(new Vector3(0f, 90f, 0f)), Skull.transform.parent).name = "skull (gold) (7)";
+                }
+            }
+        }
+
+        public static bool SpecialSwampTrigger_OnTriggerEnter_PrefixPatch(SpecialSwampTrigger __instance, Collider c) {
+
+            if (TunicArchipelago.Settings.MoreSkulls && c.GetComponent<SpecialSwampRB>() != null) {
+                __instance.list.Add(c.GetComponent<SpecialSwampRB>());
+                c.gameObject.SetActive(false);
+
+                if (__instance.list.Count == 8) {
+                    __instance.enableWhenSatisfied.BoolValue = true;
+                }
+                return false;
+            }
+
+            return true;
+        }
     }
 }

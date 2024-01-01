@@ -75,6 +75,7 @@ namespace TunicArchipelago {
             OptionsGUI.addToggle("Disable Chest Interruption", "Off", "On", TunicArchipelago.Settings.DisableChestInterruption ? 1 : 0, (OptionsGUIMultiSelect.MultiSelectAction)ToggleChestInterruption);
             OptionsGUI.addToggle("Skip Upgrade Animation", "Off", "On", TunicArchipelago.Settings.FasterUpgrades ? 1 : 0, (OptionsGUIMultiSelect.MultiSelectAction)ToggleFasterUpgrades);
             OptionsGUI.addToggle("???", "Off", "On", CameraController.Flip ? 1 : 0, (OptionsGUIMultiSelect.MultiSelectAction)ToggleWeirdMode);
+            OptionsGUI.addToggle("More Skulls", "Off", "On", TunicArchipelago.Settings.MoreSkulls ? 1 : 0, (OptionsGUIMultiSelect.MultiSelectAction)ToggleMoreSkulls);
         }
 
         public static void EnemyRandomizerSettings() {
@@ -221,6 +222,11 @@ namespace TunicArchipelago {
 
         public static void ToggleFasterUpgrades(int index) {
             TunicArchipelago.Settings.FasterUpgrades = !TunicArchipelago.Settings.FasterUpgrades;
+            SaveSettings();
+        }
+
+        public static void ToggleMoreSkulls(int index) {
+            TunicArchipelago.Settings.MoreSkulls = !TunicArchipelago.Settings.MoreSkulls;
             SaveSettings();
         }
 

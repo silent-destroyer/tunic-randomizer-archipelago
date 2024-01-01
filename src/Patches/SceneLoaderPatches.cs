@@ -288,6 +288,10 @@ namespace TunicArchipelago {
                 }
                 // Activate night bridge to allow access to shortcut ladder
                 GameObject.Find("_Setpieces Etc/NightBridge/").GetComponent<DayNightBridge>().dayOrNight = StateVariable.GetStateVariableByName("Is Night").BoolValue ? DayNightBridge.DayNight.NIGHT : DayNightBridge.DayNight.DAY;
+
+                if (TunicArchipelago.Settings.MoreSkulls) {
+                    InteractionPatches.SpawnMoreSkulls();
+                }
             } else if (SceneName == "g_elements") {
                 GhostHints.SpawnLostGhostFox();
             } else if (SceneName == "Posterity") {
