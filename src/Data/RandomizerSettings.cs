@@ -73,13 +73,18 @@ namespace TunicArchipelago {
             set;
         }
 
-        // Enemy Randomization Settings
-        public bool EnemyRandomizerEnabled {
+        public bool FasterUpgrades {
             get;
             set;
         }
 
-        public bool FasterUpgrades {
+        public bool MoreSkulls {
+            get;
+            set;
+        }
+
+        // Enemy Randomization Settings
+        public bool EnemyRandomizerEnabled {
             get;
             set;
         }
@@ -156,6 +161,7 @@ namespace TunicArchipelago {
             BonusStatUpgradesEnabled = true;
             DisableChestInterruption = false;
             FasterUpgrades = false;
+            MoreSkulls = false;
 
             EnemyRandomizerEnabled = false;
             EnemyDifficulty = EnemyRandomizationType.BALANCED;
