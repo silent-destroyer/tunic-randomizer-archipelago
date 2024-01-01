@@ -383,7 +383,7 @@ namespace TunicArchipelago {
         public static void SpawnNewEnemies() {
             EnemiesInCurrentScene.Clear();
 
-            string CurrentScene = SceneLoaderPatches.SceneName;
+            string CurrentScene = SceneManager.GetActiveScene().name;
 
             List<BombFlask> bombFlasks = Resources.FindObjectsOfTypeAll<BombFlask>().Where(bomb => bomb.name != "Firecracker").ToList();
 
@@ -512,6 +512,9 @@ namespace TunicArchipelago {
                     if (NewEnemy.GetComponent<TunicKnightVoid>() != null && NewEnemy.GetComponent<Creature>().defaultStartingMaxHP != null) {
                         NewEnemy.GetComponent<Creature>().defaultStartingMaxHP._value = 200;
                     }
+                    if (NewEnemy.GetComponent<Shadowreaper>() != null && NewEnemy.GetComponent<Creature>().defaultStartingMaxHP != null) {
+                        NewEnemy.GetComponent<Creature>().defaultStartingMaxHP._value = 100;
+                    }
                     if (NewEnemy.name.Contains("BlobBigger") && NewEnemy.GetComponent<Creature>().defaultStartingMaxHP != null) {
                         NewEnemy.GetComponent<Creature>().defaultStartingMaxHP._value = 25;
                     }
@@ -602,6 +605,69 @@ namespace TunicArchipelago {
             } catch (Exception e) {
 
             }
+        }
+
+        public static void ToggleArachnophobiaMode() {
+            Sprite sRune = ModelSwaps.FindSprite("Alphabet New_33");
+            Sprite pRune = ModelSwaps.FindSprite("Alphabet New_21");
+            Sprite iRune = ModelSwaps.FindSprite("Alphabet New_13");
+            Sprite dRune = ModelSwaps.FindSprite("Alphabet New_24");
+            Sprite urRune = ModelSwaps.FindSprite("Alphabet New_8");
+
+            Sprite ehRune = ModelSwaps.FindSprite("Alphabet New_3");
+            Sprite nRune = ModelSwaps.FindSprite("Alphabet New_19");
+            Sprite tRune = ModelSwaps.FindSprite("Alphabet New_23");
+            Sprite uhRune = ModelSwaps.FindSprite("Alphabet New_2");
+            Sprite ERune = ModelSwaps.FindSprite("Alphabet New_6");
+            Material material = ModelSwaps.FindMaterial("UI Add");
+            foreach (Spider spider in Resources.FindObjectsOfTypeAll<Spider>().Where(spider => spider.gameObject.scene.name == SceneManager.GetActiveScene().name)) {
+                if (spider.transform.GetChild(0).GetComponent<SkinnedMeshRenderer>() != null) {
+                    spider.transform.GetChild(0).gameObject.SetActive(false);
+                }
+                Color color = spider.name.ToLower().Contains("small") ? new Color(1, 0.5f, 0.2f, 1) : new Color(0, 0.5f, 1, 1);
+                float localXAngle = spider.name.ToLower().Contains("small") ? 0.8f : 0.6f;
+                GameObject runes = new GameObject("runes");
+                runes.transform.parent = spider.transform;
+                runes.transform.localPosition = spider.transform.localPosition;
+                GameObject s = CreateRune("s", runes.transform, new Vector3(-0.7f, 1, -0.1f), new Vector3(1.5f, 1.5f, 1.5f), sRune, color);
+                GameObject p = CreateRune("p", runes.transform, new Vector3(0.8f, 1f, -0.1f), new Vector3(1.5f, 1.5f, 1.5f), pRune, color, material);
+                GameObject i = CreateRune("i", runes.transform, new Vector3(0.8f, 1f, -0.1f), new Vector3(1.5f, 1.5f, 1.5f), iRune, color);
+                GameObject d = CreateRune("d", runes.transform, new Vector3(2.3f, 1f, -0.1f), new Vector3(1.5f, 1.5f, 1.5f), dRune, color, material);
+                GameObject ur = CreateRune("ur", runes.transform, new Vector3(2.3f, 1f, -0.1f), new Vector3(1.5f, 1.5f, 1.5f), urRune, color);
+                runes.transform.localPosition = new Vector3(localXAngle, 0, 0);
+                runes.transform.localEulerAngles = new Vector3(0, 180, 0);
+            }
+            foreach (Centipede centipede in Resources.FindObjectsOfTypeAll<Centipede>().Where(centipede => centipede.gameObject.scene.name == SceneManager.GetActiveScene().name)) { 
+                if (centipede.transform.GetChild(0).GetComponent<SkinnedMeshRenderer>() != null) {
+                    centipede.transform.GetChild(0).gameObject.SetActive(false);
+                }
+
+                Color color = new Color(1, 0, 1, 1);
+
+                Transform armature = centipede.transform.GetChild(5);
+                Vector3 localScale = new Vector3(1.1278f, 1.1278f, 1.1278f);
+                CreateRune("s", armature.GetChild(0).GetChild(1), Vector3.zero, localScale, sRune, color).transform.localEulerAngles = new Vector3(0, 90, 90);
+                CreateRune("eh", armature.GetChild(0).GetChild(1), Vector3.zero, localScale, ehRune, color, material).transform.localEulerAngles = new Vector3(0, 90, 90);
+                CreateRune("n", armature.GetChild(0).GetChild(1).GetChild(4), Vector3.zero, localScale, nRune, color).transform.localEulerAngles = new Vector3(0, 90, 90);
+                CreateRune("t", armature.GetChild(0).GetChild(1).GetChild(4).GetChild(4), Vector3.zero, localScale, tRune, color).transform.localEulerAngles = new Vector3(0, 90, 90);
+                CreateRune("uh", armature.GetChild(0).GetChild(1).GetChild(4).GetChild(4), Vector3.zero, localScale, uhRune, color, material).transform.localEulerAngles = new Vector3(0, 90, 90);
+                CreateRune("p", armature.GetChild(0).GetChild(1).GetChild(4).GetChild(4).GetChild(4), Vector3.zero, localScale, pRune, color).transform.localEulerAngles = new Vector3(0, 90, 90);
+                CreateRune("E", armature.GetChild(0).GetChild(1).GetChild(4).GetChild(4).GetChild(4), Vector3.zero, localScale, ERune, color, material).transform.localEulerAngles = new Vector3(0, 90, 90);
+                CreateRune("E", armature.GetChild(0).GetChild(1).GetChild(4).GetChild(4).GetChild(4).GetChild(4), Vector3.zero, localScale, dRune, color).transform.localEulerAngles = new Vector3(0, 90, 90);
+            }
+        }
+
+        private static GameObject CreateRune(string name, Transform parent, Vector3 localPosition, Vector3 localScale, Sprite sprite, Color color, Material material = null) {
+            GameObject rune = new GameObject(name);
+            rune.transform.parent = parent;
+            rune.transform.localPosition = localPosition;
+            rune.transform.localScale = localScale;
+            rune.AddComponent<SpriteRenderer>().sprite = sprite;
+            rune.GetComponent<SpriteRenderer>().color = color;
+            if (material != null) {
+                rune.GetComponent<SpriteRenderer>().material = material;
+            }
+            return rune;
         }
 
         public static bool Monster_Die_MoveNext_PrefixPatch(Monster._Die_d__77 __instance, ref bool __result) {

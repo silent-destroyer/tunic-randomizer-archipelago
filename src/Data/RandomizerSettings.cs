@@ -83,6 +83,11 @@ namespace TunicArchipelago {
             set;
         }
 
+        public bool ArachnophobiaMode {
+            get;
+            set;
+        }
+
         // Enemy Randomization Settings
         public bool EnemyRandomizerEnabled {
             get;
@@ -162,6 +167,7 @@ namespace TunicArchipelago {
             DisableChestInterruption = false;
             FasterUpgrades = false;
             MoreSkulls = false;
+            ArachnophobiaMode = false;
 
             EnemyRandomizerEnabled = false;
             EnemyDifficulty = EnemyRandomizationType.BALANCED;

@@ -335,53 +335,57 @@ namespace TunicArchipelago {
             }
 
             if (Archipelago.instance != null && Archipelago.instance.integration != null && Archipelago.instance.integration.connected) {
-            if (TunicArchipelago.Settings.EnemyRandomizerEnabled && EnemyRandomizer.Enemies.Count > 0 && !EnemyRandomizer.ExcludedScenes.Contains(SceneName)) {
-                EnemyRandomizer.SpawnNewEnemies();
-            }
-
-            try {
-                if (TunicArchipelago.Settings.UseCustomTexture) {
-                    PaletteEditor.LoadCustomTexture();
+                if (TunicArchipelago.Settings.EnemyRandomizerEnabled && EnemyRandomizer.Enemies.Count > 0 && !EnemyRandomizer.ExcludedScenes.Contains(SceneName)) {
+                    EnemyRandomizer.SpawnNewEnemies();
                 }
-            } catch (Exception ex) {
-                Logger.LogError("An error occurred applying custom texture:");
-                Logger.LogError(ex.Message + " " + ex.StackTrace);
-            }
-            try {
-                if (!ModelSwaps.SwappedThisSceneAlready && (ItemLookup.ItemList.Count > 0 && SaveFile.GetInt("seed") != 0)) {
-                    ModelSwaps.SwapItemsInScene();
+
+                if (TunicArchipelago.Settings.ArachnophobiaMode) {
+                    EnemyRandomizer.ToggleArachnophobiaMode();
                 }
-            } catch (Exception ex) {
-                Logger.LogError("An error occurred swapping item models in this scene:");
-                Logger.LogError(ex.Message + " " + ex.StackTrace);
-            }
 
-            if (SaveFile.GetInt("randomizer entrance rando enabled") == 1) {
-                TunicPortals.CreatePortalPairs(((JObject)Archipelago.instance.GetPlayerSlotData()["Entrance Rando"]).ToObject<Dictionary<string, string>>());
-                TunicPortals.ModifyPortals(loadingScene);
-            }
-
-
-            if (SaveFile.GetInt(AbilityShuffle) == 1 && SaveFile.GetInt(HolyCrossUnlocked) == 0) {
-                ItemPatches.ToggleHolyCrossObjects(false);
-            }
-
-            try {
-                if (TunicArchipelago.Settings.GhostFoxHintsEnabled && GhostHints.HintGhosts.Count > 0 && SaveFile.GetInt("seed") != 0) {
-                    GhostHints.SpawnHintGhosts(SceneName);
-                    SpawnedGhosts = true;
+                try {
+                    if (TunicArchipelago.Settings.UseCustomTexture) {
+                        PaletteEditor.LoadCustomTexture();
+                    }
+                } catch (Exception ex) {
+                    Logger.LogError("An error occurred applying custom texture:");
+                    Logger.LogError(ex.Message + " " + ex.StackTrace);
                 }
-            } catch (Exception ex) {
-                Logger.LogError("An error occurred spawning hint ghost foxes:");
-                Logger.LogError(ex.Message + " " + ex.StackTrace);
-            }
+                try {
+                    if (!ModelSwaps.SwappedThisSceneAlready && (ItemLookup.ItemList.Count > 0 && SaveFile.GetInt("seed") != 0)) {
+                        ModelSwaps.SwapItemsInScene();
+                    }
+                } catch (Exception ex) {
+                    Logger.LogError("An error occurred swapping item models in this scene:");
+                    Logger.LogError(ex.Message + " " + ex.StackTrace);
+                }
 
-            try {
-                FairyTargets.CreateFairyTargets();
-            } catch (Exception ex) {
-                Logger.LogError("An error occurred creating new fairy seeker spell targets:");
-                Logger.LogError(ex.Message + " " + ex.StackTrace);
-            }
+                if (SaveFile.GetInt("randomizer entrance rando enabled") == 1) {
+                    TunicPortals.CreatePortalPairs(((JObject)Archipelago.instance.GetPlayerSlotData()["Entrance Rando"]).ToObject<Dictionary<string, string>>());
+                    TunicPortals.ModifyPortals(loadingScene);
+                }
+
+
+                if (SaveFile.GetInt(AbilityShuffle) == 1 && SaveFile.GetInt(HolyCrossUnlocked) == 0) {
+                    ItemPatches.ToggleHolyCrossObjects(false);
+                }
+
+                try {
+                    if (TunicArchipelago.Settings.GhostFoxHintsEnabled && GhostHints.HintGhosts.Count > 0 && SaveFile.GetInt("seed") != 0) {
+                        GhostHints.SpawnHintGhosts(SceneName);
+                        SpawnedGhosts = true;
+                    }
+                } catch (Exception ex) {
+                    Logger.LogError("An error occurred spawning hint ghost foxes:");
+                    Logger.LogError(ex.Message + " " + ex.StackTrace);
+                }
+
+                try {
+                    FairyTargets.CreateFairyTargets();
+                } catch (Exception ex) {
+                    Logger.LogError("An error occurred creating new fairy seeker spell targets:");
+                    Logger.LogError(ex.Message + " " + ex.StackTrace);
+                }
 
                 if (TunicArchipelago.Settings.RealestAlwaysOn) {
                     try {
