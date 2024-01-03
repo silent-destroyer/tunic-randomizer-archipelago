@@ -45,7 +45,7 @@ namespace TunicArchipelago {
                     stringToEdit += Input.inputString;
                 }
             }
-            if (Input.GetKey(KeyCode.Backspace)) {
+            if (Input.GetKeyDown(KeyCode.Backspace)) {
                 if (stringToEdit.Length >= 2) {
                     stringToEdit = stringToEdit.Substring(0, stringToEdit.Length - 1);
                 } else {

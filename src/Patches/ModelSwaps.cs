@@ -709,6 +709,12 @@ namespace TunicArchipelago {
             GameObject Plinth = GameObject.Find("_Hexagon Plinth Assembly/hexagon plinth/PRISM/questagon");
             string ItemId = "Hexagon Red [Fortress Arena]";
             int Player = Archipelago.instance.GetPlayerSlot();
+
+            if (TunicArchipelago.Settings.CollectReflectsInWorld && SaveFile.GetInt($"randomizer {ItemId} was collected") == 1) {
+                GameObject.Destroy(Plinth);
+                return;
+            }
+
             if (Plinth != null && ItemLookup.ItemList.ContainsKey(ItemId)) {
                 ArchipelagoItem Item = ItemLookup.ItemList[ItemId];
                 if (Item.Player == Player && ItemLookup.Items.ContainsKey(Item.ItemName) && ItemLookup.Items[Item.ItemName].ItemNameForInventory == "Hexagon Red") {
@@ -761,7 +767,10 @@ namespace TunicArchipelago {
             GameObject Plinth = GameObject.Find("_Plinth/turn off when taken/questagon");
             string ItemId = "Hexagon Blue [ziggurat2020_3]";
             int Player = Archipelago.instance.GetPlayerSlot();
-
+            if (TunicArchipelago.Settings.CollectReflectsInWorld && SaveFile.GetInt($"randomizer {ItemId} was collected") == 1) {
+                GameObject.Destroy(Plinth);
+                return;
+            }
             if (Plinth != null && ItemLookup.ItemList.ContainsKey(ItemId)) {
                 ArchipelagoItem Item = ItemLookup.ItemList[ItemId];
                 if (Item.Player == Player && ItemLookup.Items.ContainsKey(Item.ItemName) && ItemLookup.Items[Item.ItemName].ItemNameForInventory == "Hexagon Blue") {
@@ -814,7 +823,10 @@ namespace TunicArchipelago {
             GameObject VaultKey = GameObject.Find("Spidertank/Spidertank_skeleton/root/thorax/vault key graphic");
 
             string ItemId = "Vault Key (Red) [Fortress Arena]";
-
+            if (TunicArchipelago.Settings.CollectReflectsInWorld && SaveFile.GetInt($"randomizer {ItemId} was collected") == 1) {
+                GameObject.Destroy(VaultKey);
+                return;
+            }
             if (VaultKey != null && ItemLookup.ItemList.ContainsKey(ItemId)) {
                 ArchipelagoItem Item = ItemLookup.ItemList[ItemId];
 
@@ -1097,6 +1109,9 @@ namespace TunicArchipelago {
             CustomItemImages.Add("Fool Trap", CreateSprite(ImageData.TinyFox, ImageMaterial, SpriteName: "Randomizer items_Fool Trap"));
             CustomItemImages.Add("Archipelago Item", CreateSprite(ImageData.ArchipelagoItem, ImageMaterial, 128, 128, SpriteName: "Randomizer items_Archipelago Item"));
             CustomItemImages.Add("Torch Redux", CreateSprite(ImageData.TorchRedux, ImageMaterial, 160, 160, SpriteName: "Randomizer items_Torch redux"));
+            CustomItemImages.Add("Prayer", CreateSprite(ImageData.Prayer, ImageMaterial, 160, 160, SpriteName: "Randomizer items_Prayer"));
+            CustomItemImages.Add("Holy Cross", CreateSprite(ImageData.HolyCross, ImageMaterial, 160, 160, SpriteName: "Randomizer items_Holy Cross"));
+            CustomItemImages.Add("Ice Rod", CreateSprite(ImageData.IceRod, ImageMaterial, 160, 160, SpriteName: "Randomizer items_Ice Rod"));
 
             Inventory.GetItemByName("Librarian Sword").icon = CustomItemImages["Librarian Sword"].GetComponent<Image>().sprite;
             Inventory.GetItemByName("Heir Sword").icon = CustomItemImages["Heir Sword"].GetComponent<Image>().sprite;
