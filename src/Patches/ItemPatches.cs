@@ -53,9 +53,9 @@ namespace TunicArchipelago {
             if (TunicArchipelago.Settings.DisableChestInterruption) {
                 return false;
             }
-            if (__instance.chestID == 0 || __instance.chestID == 5) {
+/*            if (__instance.chestID == 0 || __instance.chestID == 5) {
                 return false;
-            }
+            }*/
             return true;
         }
 
@@ -87,26 +87,12 @@ namespace TunicArchipelago {
                 return false;
             }
 
-/*            if (__instance.chestID == 19) {
-                if (ActiveScene == "Sword Cave") {
-                    __result = SaveFile.GetInt("randomizer picked up 19 [Sword Cave]") == 1;
-                } else {
-                    __result = SaveFile.GetInt("randomizer picked up 19 [Forest Belltower]") == 1;
-                }
-                return false;
-            }
-            if (__instance.chestID == 5) {
-                __result = SaveFile.GetInt("randomizer picked up 5 [Overworld Redux]") == 1;
-                return false;
-            }*/
-            string FairyId = $"{__instance.gameObject.scene.name}-{__instance.transform.position.ToString()}";
-            if (ItemLookup.FairyLookup.ContainsKey(FairyId)) {
-                __result = SaveFile.GetInt($"randomizer opened fairy chest {FairyId}") == 1;
-                return false;
-            }
-            string ChestObjectId = $"{__instance.chestID} [{ActiveScene}]";
+            string ChestObjectId = __instance.chestID == 0 ? $"{__instance.gameObject.scene.name}-{__instance.transform.position.ToString()} [{ActiveScene}]" : $"{__instance.chestID} [{ActiveScene}]";
             if (Locations.LocationIdToDescription.ContainsKey(ChestObjectId)) {
                 __result = SaveFile.GetInt($"randomizer picked up {ChestObjectId}") == 1 || (TunicArchipelago.Settings.CollectReflectsInWorld && SaveFile.GetInt($"randomizer {ChestObjectId} was collected") == 1);
+                if (__result && __instance.GetComponentInParent<ToggleObjectBySpell>() != null && TunicArchipelago.Settings.CollectReflectsInWorld) {
+                    __instance.GetComponentInParent<ToggleObjectBySpell>().stateVar = StateVariable.GetStateVariableByName("true");
+                }
                 return false;
             }
             return true;
