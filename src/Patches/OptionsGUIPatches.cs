@@ -43,15 +43,17 @@ namespace TunicArchipelago {
             OptionsGUI.addToggle("Auto-open !collect-ed Checks", "Off", "On", TunicArchipelago.Settings.CollectReflectsInWorld ? 1 : 0, (OptionsGUIMultiSelect.MultiSelectAction)ToggleUpdateOnCollect);
             OptionsGUI.addToggle("Skip Item Animations", "Off", "On", TunicArchipelago.Settings.SkipItemAnimations ? 1 : 0, (OptionsGUIMultiSelect.MultiSelectAction)ToggleSkipItemAnimations);
             OptionsGUI.addToggle("Send Hints to Server", "Off", "On", TunicArchipelago.Settings.SendHintsToServer ? 1 : 0, (OptionsGUIMultiSelect.MultiSelectAction)ToggleSendHintsToServer);
+            OptionsGUI.addButton("Open Local Spoiler Log", (Action)OpenLocalSpoilerLog);
         }
 
         public static void LogicSettingsPage() {
             OptionsGUI OptionsGUI = GameObject.FindObjectOfType<OptionsGUI>();
-            OptionsGUI.addButton("Game Mode", SaveFile.GetString("randomizer game mode"), null);
-            OptionsGUI.addButton("Keys Behind Bosses", SaveFile.GetInt(KeysBehindBosses) == 1 ? "<#00ff00>On" : "<#ff0000>Off", null);
             OptionsGUI.addButton("Sword Progression", SaveFile.GetInt(SwordProgressionEnabled) == 1 ? "<#00ff00>On" : "<#ff0000>Off", null);
+            OptionsGUI.addButton("Keys Behind Bosses", SaveFile.GetInt(KeysBehindBosses) == 1 ? "<#00ff00>On" : "<#ff0000>Off", null);
+            OptionsGUI.addButton("Hexagon Quest", SaveFile.GetInt(HexagonQuestEnabled) == 1 ? "<#00ff00>On" : "<#ff0000>Off", null);
             OptionsGUI.addButton("Started With Sword", SaveFile.GetInt("randomizer started with sword") == 1 ? "<#00ff00>Yes" : "<#ff0000>No", null);
             OptionsGUI.addButton("Shuffled Abilities", SaveFile.GetInt(AbilityShuffle) == 1 ? "<#00ff00>On" : "<#ff0000>Off", null);
+            OptionsGUI.addButton("Entrance Randomizer", SaveFile.GetInt(EntranceRando) == 1 ? "<#00ff00>On" : "<#ff0000>Off", null);
             OptionsGUI.setHeading("Logic");
         }
 
@@ -151,7 +153,13 @@ namespace TunicArchipelago {
             TunicArchipelago.Settings.SendHintsToServer = !TunicArchipelago.Settings.SendHintsToServer;
             SaveSettings();
         }
-        
+
+        public static void OpenLocalSpoilerLog() {
+            if (File.Exists(TunicArchipelago.SpoilerLogPath)) {
+                System.Diagnostics.Process.Start(TunicArchipelago.SpoilerLogPath);
+            }
+        }
+
         public static void ToggleSunglasses(int index) {
             TunicArchipelago.Settings.RealestAlwaysOn = !TunicArchipelago.Settings.RealestAlwaysOn;
             if (TunicArchipelago.Settings.RealestAlwaysOn) {
