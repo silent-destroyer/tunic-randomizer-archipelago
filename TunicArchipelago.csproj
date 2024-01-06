@@ -170,6 +170,7 @@
     <Compile Include="src\Patches\FairyTargets.cs" />
     <Compile Include="src\Patches\GhostHints.cs" />
     <Compile Include="src\Patches\CustomItemBehaviors.cs" />
+    <Compile Include="src\Util\HeroGraveToggle.cs" />
     <Compile Include="src\Patches\InteractionPatches.cs" />
     <Compile Include="src\Patches\ItemPatches.cs" />
     <Compile Include="src\Patches\ItemPresentationPatches.cs" />
@@ -186,10 +187,11 @@
     <Compile Include="src\Patches\TextBuilderPatches.cs" />
     <Compile Include="src\Patches\TitleVersion.cs" />
     <Compile Include="src\Patches\TunicPortals.cs" />
-    <Compile Include="src\Patches\VisibleByNotHavingItem.cs" />
+    <Compile Include="src\Util\VisibleByNotHavingItem.cs" />
     <Compile Include="src\Patches\WaveSpell.cs" />
     <Compile Include="src\TunicArchipelago.cs" />
     <Compile Include="src\PluginInfo.cs" />
+    <Compile Include="src\Util\MailboxFlag.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />

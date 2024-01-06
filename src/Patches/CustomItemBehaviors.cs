@@ -57,6 +57,10 @@ namespace TunicArchipelago {
             StateVariable.stateVariableList.Add(GrantedCape);
             Cape.freeItemCountStateVar = GrantedCape;
 
+            StateVariable GraveHintStateVar = ScriptableObject.CreateInstance<StateVariable>();
+            GraveHintStateVar.name = "randomizer got all 6 grave items";
+            StateVariable.stateVariableList.Add(GraveHintStateVar);
+
             Inventory.itemList.Add(GoldQuestagon);
             Inventory.itemList.Add(DathStone);
             Inventory.itemList.Add(Cape);

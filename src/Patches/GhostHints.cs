@@ -413,7 +413,7 @@ namespace TunicArchipelago {
                         string ItemToDisplay = TextBuilderPatches.ItemNameToAbbreviation.ContainsKey(HintLocation.Item) ? TextBuilderPatches.ItemNameToAbbreviation[HintLocation.Item] : "";
                         Hint = $"bI #uh wA, I saw A  {ItemToDisplay}  \"{Item.ToUpper().Replace(" ", "\" \"")}\" #uh lahst tIm I wuhs {ScenePrefix} \"{Scene.Replace(" ", "\" \"")}.\"";
 
-                        ItemHints.Add((WordWrapString(Hint), HintLocation.Item, HintLocation.Location));
+                        ItemHints.Add((WordWrapString(Hint), HintLocation.Item, ""));
                     }
                 }
             }

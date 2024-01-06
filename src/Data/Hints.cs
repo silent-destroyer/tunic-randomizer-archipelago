@@ -9,6 +9,8 @@ using Archipelago.MultiClient.Net.Enums;
 using static TunicArchipelago.SaveFlags;
 using BepInEx.Logging;
 using UnityEngine;
+using Archipelago.MultiClient.Net.Models;
+using Il2CppSystem;
 
 namespace TunicArchipelago {
     public class Hints {
@@ -33,9 +35,29 @@ namespace TunicArchipelago {
             {"East Forest Redux (144.0, 0.0, -23.0)", "East East Forest Sign"},
         };
 
+        public struct HeroGraveHint {
+            public string PathHintId;
+            public string PathHint;
+            public string RelicHintId;
+            public string RelicHint;
+            public string SceneName;
+            public string GraveObjectPath;
+            public bool PointLight;
+
+            public HeroGraveHint(string pathHintId, string pathHint, string relicHintId, string relicHint, string sceneName, string graveObjectPath, bool pointLight) { 
+                PathHintId = pathHintId;
+                PathHint = pathHint;
+                RelicHintId = relicHintId;
+                RelicHint = relicHint; 
+                SceneName = sceneName;
+                GraveObjectPath = graveObjectPath;
+                PointLight = pointLight;
+            }
+        }
+        
+        public static Dictionary<string, HeroGraveHint> HeroGraveHints = new Dictionary<string, HeroGraveHint>();
+
         public static Dictionary<string, string> HintMessages = new Dictionary<string, string>();
-        public static Dictionary<string, string> LocalHintsForServer = new Dictionary<string, string>();
-        public static Dictionary<string, string> HintStructureScenes = new Dictionary<string, string>();
 
         // Used for getting what sphere 1 is if you have ER on
         // Gives you items in Overworld or items in adjacent scenes
@@ -80,8 +102,7 @@ namespace TunicArchipelago {
 
         public static void PopulateHints() {
             HintMessages.Clear();
-            LocalHintsForServer.Clear();
-            HintStructureScenes.Clear();
+            HeroGraveHints.Clear();
             System.Random random = new System.Random(SaveFile.GetInt("seed"));
             string Hint = "";
             string Scene = "";
@@ -138,17 +159,17 @@ namespace TunicArchipelago {
             if (SphereOnePlayer.Count > 0) {
                 key = SphereOnePlayer.Keys.ToList()[random.Next(SphereOnePlayer.Count)];
                 mailboxitem = SphereOnePlayer[key];
-                HintStructureScenes.Add(Locations.LocationIdToDescription[key], "Overworld Redux");
             } else if (SphereOneOthers.Count > 0) {
                 key = SphereOneOthers.Keys.ToList()[random.Next(SphereOneOthers.Count)];
                 mailboxitem = SphereOneOthers[key];
-                HintStructureScenes.Add(Locations.LocationIdToDescription[key], "Overworld Redux");
             }
             if (mailboxitem != null) {
                 Scene = Locations.SimplifiedSceneNames[Locations.VanillaLocations[key].Location.SceneName].ToUpper();
                 Prefix = Vowels.Contains(Scene[0]) ? "#E" : "#uh";
+                SaveFile.SetString("randomizer mailbox hint location", key);
                 Hint = $"lehjehnd sehz {Prefix} \"{Scene.ToUpper()}\"\nkuhntAnz wuhn uhv mehnE \"<#00FFFF>FIRST STEPS<#ffffff>\" ahn yor jurnE.";
             } else {
+                SaveFile.SetString("randomizer mailbox hint location", "no first steps");
                 Hint = $"yor frehndz muhst furst hehlp yoo fInd yor wA...\ngoud luhk, rooin sEkur.";
             }
             HintMessages.Add("Mailbox", Hint);
@@ -158,16 +179,15 @@ namespace TunicArchipelago {
                 Scene = Hyperdash.Location == "Your Pocket" ? Hyperdash.Location.ToUpper() : Locations.SimplifiedSceneNames[Locations.VanillaLocations[Locations.LocationDescriptionToId[Hyperdash.Location]].Location.SceneName].ToUpper();
                 Prefix = Vowels.Contains(Scene[0]) ? "#E" : "#uh";
                 Hint += $"\nuhwAts yoo in {Prefix} \"{Scene}...\"";
-                if (Locations.LocationDescriptionToId.ContainsKey(Hyperdash.Location)) {
-                    LocalHintsForServer.Add("Temple Statue", Hyperdash.Location);
-                }
             } else if (Archipelago.instance.GetPlayerGame((int)Hyperdash.Player) == "Tunic") {
                 Scene = Locations.SimplifiedSceneNames[Locations.VanillaLocations[Locations.LocationDescriptionToId[Hyperdash.Location]].Location.SceneName].ToUpper();
                 Hint += $"\nuhwAts yoo in \"{Archipelago.instance.GetPlayerName((int)Hyperdash.Player).ToUpper()}'S\"\n\"{Scene}...\"";
             } else {
-                Hint += $" uhwAts yoo aht\n\"{Hyperdash.Location.ToUpper()}\"\nin\"{Archipelago.instance.GetPlayerName((int)Hyperdash.Player).ToUpper()}'S WORLD...\"";  
+                Hint += $" uhwAts yoo aht\n\"{Hyperdash.Location.Replace("_", " ").ToUpper()}\"\nin\"{Archipelago.instance.GetPlayerName((int)Hyperdash.Player).ToUpper()}'S WORLD...\"";  
             }
             HintMessages.Add("Temple Statue", Hint);
+
+            List<(string, string)> relicHints = CreateHeroRelicHints();
             List<string> HintItems = new List<string>() { "Magic Wand", "Magic Orb", "Magic Dagger" };
             if (SaveFile.GetInt(AbilityShuffle) == 1 && SaveFile.GetInt(HexagonQuestEnabled) == 0) {
                 HintItems.Add("Pages 24-25 (Prayer)");
@@ -179,6 +199,7 @@ namespace TunicArchipelago {
                 string HintItem = HintItems[random.Next(HintItems.Count)];
                 ArchipelagoHint ItemHint = Locations.MajorItemLocations[HintItem][0];
                 string HintGrave = HintGraves[random.Next(HintGraves.Count)];
+                (string, string) RelicHint = relicHints[random.Next(relicHints.Count)];
 
                 if (ItemHint.Player == Player) {
                     Scene = ItemHint.Location == "Your Pocket" ? ItemHint.Location.ToUpper() : Locations.SimplifiedSceneNames[Locations.VanillaLocations[Locations.LocationDescriptionToId[ItemHint.Location]].Location.SceneName].ToUpper();
@@ -191,19 +212,19 @@ namespace TunicArchipelago {
                     Scene = Locations.SimplifiedSceneNames[Locations.VanillaLocations[Locations.LocationDescriptionToId[ItemHint.Location]].Location.SceneName].ToUpper();
                     Hint = $"lehjehnd sehz \"{Archipelago.instance.GetPlayerName((int)ItemHint.Player).ToUpper()}'S\"\n\"{Scene}\"";
                 } else {
-                    Hint = $"lehjehnd sehz \"{Archipelago.instance.GetPlayerName((int)ItemHint.Player).ToUpper()}'S WORLD\" aht\n\"{ItemHint.Location.ToUpper()}\"";
+                    Hint = $"lehjehnd sehz \"{Archipelago.instance.GetPlayerName((int)ItemHint.Player).ToUpper()}'S WORLD\" aht\n\"{ItemHint.Location.Replace("_", " ").ToUpper()}\"";
                 }
                 Hint += $"\niz lOkAtid awn #uh \"<#ffd700>PATH OF THE HERO<#ffffff>...\"";
-                HintMessages.Add(HintGrave, Hint);
 
+                string slotLocation = ItemHint.Location == "Your Pocket" ? $"0, Server" : $"{ItemHint.Player}, {ItemHint.Location}";
                 if (HintGrave == "East Forest Relic") {
-                    HintStructureScenes.Add($"{ItemHint.Player}, {ItemHint.Location}", "East Forest Redux");
+                    HeroGraveHints.Add(HintGrave, new HeroGraveHint(slotLocation, Hint, RelicHint.Item1, RelicHint.Item2, "Sword Access", "_Setpieces/RelicPlinth (1)/", true));
                 } else if (HintGrave == "Fortress Relic") {
-                    HintStructureScenes.Add($"{ItemHint.Player}, {ItemHint.Location}", "Fortress Reliquary");
+                    HeroGraveHints.Add(HintGrave, new HeroGraveHint(slotLocation, Hint, RelicHint.Item1, RelicHint.Item2, "Fortress Reliquary", "RelicPlinth", true));
                 } else if (HintGrave == "West Garden Relic") {
-                    HintStructureScenes.Add($"{ItemHint.Player}, {ItemHint.Location}", "Archipelagos Redux");
+                    HeroGraveHints.Add(HintGrave, new HeroGraveHint(slotLocation, Hint, RelicHint.Item1, RelicHint.Item2, "Archipelagos Redux", "_Environment Prefabs/RelicPlinth/", false));
                 }
-
+                relicHints.Remove(RelicHint);
                 HintItems.Remove(HintItem);
                 HintGraves.Remove(HintGrave);
             }
@@ -220,36 +241,39 @@ namespace TunicArchipelago {
             for (int i = 0; i < 3; i++) {
                 string Hexagon = Hexagons[random.Next(Hexagons.Count)];
                 string HexagonHintArea = HexagonHintGraves[random.Next(HexagonHintGraves.Count)];
+                (string, string) RelicHint = relicHints[random.Next(relicHints.Count)];
                 ArchipelagoHint HexHint = Hexagon == "Gold Questagon" ? Locations.MajorItemLocations[Hexagon][i] : Locations.MajorItemLocations[Hexagon][0];
 
                 if (HexHint.Player == Player) {
                     Scene = HexHint.Location == "Your Pocket" ? HexHint.Location.ToUpper() : Locations.SimplifiedSceneNames[Locations.VanillaLocations[Locations.LocationDescriptionToId[HexHint.Location]].Location.SceneName].ToUpper();
                     Prefix = Vowels.Contains(Scene[0]) ? "#E" : "#uh";
                     Hint = $"#A sA {Prefix} \"{Scene.ToUpper()}\" iz \nwAr #uh {HexagonColors[Hexagon]}kwehstuhgawn [hexagram]<#FFFFFF> iz fownd\"...\"";
-
-                    if (Locations.LocationDescriptionToId.ContainsKey(HexHint.Location)) {
-                        LocalHintsForServer.Add(HexagonHintArea, HexHint.Location);
-                    }
                 } else if (Archipelago.instance.GetPlayerGame((int)HexHint.Player) == "Tunic") {
                     Scene = Locations.SimplifiedSceneNames[Locations.VanillaLocations[Locations.LocationDescriptionToId[HexHint.Location]].Location.SceneName].ToUpper();
                     Prefix = Vowels.Contains(Scene[0]) ? "#E" : "#uh";
                     Hint = $"#A sA \"{Archipelago.instance.GetPlayerName((int)HexHint.Player).ToUpper()}'S\"\n\"{Scene}\"\niz wAr #uh {HexagonColors[Hexagon]}kwehstuhgawn [hexagram]<#FFFFFF> iz fownd\"...\"";
                 } else {
-                    Hint = $"#A sA #uh {HexagonColors[Hexagon]}kwehstuhgawn [hexagram]<#FFFFFF> iz fownd aht\n\"{HexHint.Location.ToUpper()}\"\nin \"{Archipelago.instance.GetPlayerName((int)HexHint.Player).ToUpper()}'S WORLD...\"";
+                    Hint = $"#A sA #uh {HexagonColors[Hexagon]}kwehstuhgawn [hexagram]<#FFFFFF> iz fownd aht\n\"{HexHint.Location.Replace("_", " ").ToUpper()}\"\nin \"{Archipelago.instance.GetPlayerName((int)HexHint.Player).ToUpper()}'S WORLD...\"";
                 }
-                HintMessages.Add(HexagonHintArea, Hint);
+
+                string slotLocation = HexHint.Location == "Your Pocket" ? $"0, Server" : $"{HexHint.Player}, {HexHint.Location}";
 
                 if (HexagonHintArea == "Swamp Relic") {
-                    HintStructureScenes.Add($"{HexHint.Player}, {HexHint.Location}", "Swamp Redux 2");
-                } else if (HexagonHintArea == "Library Relic") {
-                    HintStructureScenes.Add($"{HexHint.Player}, {HexHint.Location}", "Library Hall");
+                    HeroGraveHints.Add(HexagonHintArea, new HeroGraveHint(slotLocation, Hint, RelicHint.Item1, RelicHint.Item2, "Swamp Redux 2", "_Setpieces Etc/RelicPlinth/", false));
                 } else if (HexagonHintArea == "Monastery Relic") {
-                    HintStructureScenes.Add($"{HexHint.Player}, {HexHint.Location}", "Monastery");
+                    HeroGraveHints.Add(HexagonHintArea, new HeroGraveHint(slotLocation, Hint, RelicHint.Item1, RelicHint.Item2, "Monastery", "Root/RelicPlinth (1)/", false));
+                } else if (HexagonHintArea == "Library Relic") {
+                    HeroGraveHints.Add(HexagonHintArea, new HeroGraveHint(slotLocation, Hint, RelicHint.Item1, RelicHint.Item2, "Library Hall", "_Special/RelicPlinth/", false));
                 }
 
+                relicHints.Remove(RelicHint);
                 Hexagons.Remove(Hexagon);
                 HexagonHintGraves.Remove(HexagonHintArea);
             }
+
+            // Hack to make start inventory from pool'd items toggle the hero graves
+            SaveFile.SetInt($"randomizer hint found 0, Server", 1);
+
             // make the in-game signs tell you what area they're pointing to
             if (SaveFile.GetInt(EntranceRando) == 1)
             {
@@ -302,6 +326,35 @@ namespace TunicArchipelago {
             }
         }
 
+        private static List<(string, string)> CreateHeroRelicHints() {
+            List<ItemData> Relics = ItemLookup.Items.Values.Where(item => item.Type == ItemTypes.RELIC).ToList();
+            List<(string, string)> RelicHints = new List<(string, string)>();
+            string Scene = "";
+            string Prefix = "";
+            string RelicHint = "";
+            int Player = Archipelago.instance.GetPlayerSlot();
+            foreach (ItemData Relic in Relics) {
+                ArchipelagoHint RelicItemHint = Locations.MajorItemLocations[Relic.Name][0];
+                string itemDisplayText = $"{TextBuilderPatches.ItemNameToAbbreviation[Relic.Name]}  {ItemLookup.BonusUpgrades[Relic.ItemNameForInventory].CustomPickupMessage.ToUpper()}";
+                if (RelicItemHint.Player == Player) {
+                    Scene = RelicItemHint.Location == "Your Pocket" ? RelicItemHint.Location.ToUpper() : Locations.SimplifiedSceneNames[Locations.VanillaLocations[Locations.LocationDescriptionToId[RelicItemHint.Location]].Location.SceneName].ToUpper();
+
+                    Prefix = Vowels.Contains(Scene[0]) ? "#E" : "#uh";
+                    RelicHint = $"lehjehnd sehz #uh  {itemDisplayText}\nkahn bE fownd aht {Prefix} \"{Scene}.\"";
+                } else if (Archipelago.instance.GetPlayerGame((int)RelicItemHint.Player) == "Tunic") {
+                    Scene = Locations.SimplifiedSceneNames[Locations.VanillaLocations[Locations.LocationDescriptionToId[RelicItemHint.Location]].Location.SceneName].ToUpper();
+                    Prefix = Vowels.Contains(Scene[0]) ? "#E" : "#uh";
+                    RelicHint = $"lehjehnd sehz #uh  {itemDisplayText}\nkahn bE fownd aht {Prefix} \"{Scene}\"\nin \"{Archipelago.instance.GetPlayerName((int)RelicItemHint.Player).ToUpper()}'S WORLD.\"";
+                } else {
+                    RelicHint = $"lehjehnd sehz #uh  {itemDisplayText}\nkahn bE fownd in \"{Archipelago.instance.GetPlayerName((int)RelicItemHint.Player).ToUpper()}'S WORLD\"\naht \"{RelicItemHint.Location.Replace("_", " ").ToUpper()}.\"";
+                }
+                string slotLocation = RelicItemHint.Player == Player && RelicItemHint.Location == "Your Pocket" ? "0, Server" : $"{RelicItemHint.Player}, {RelicItemHint.Location}";
+                RelicHints.Add((slotLocation, RelicHint));
+            }
+
+            return RelicHints;
+        }
+
         public static string WordWrapString(string Hint) {
             string formattedHint = "";
 
@@ -324,31 +377,16 @@ namespace TunicArchipelago {
             return formattedHint;
         }
 
-        public static void ToggleHintIndicator(string sceneName, bool onOrOff) {
-            if (sceneName == "Sword Access") {
-                GameObject.Find("_Setpieces/RelicPlinth (1)/cathedral_candleflame").SetActive(onOrOff);
-            } else if (sceneName == "Fortress Reliquary") {
-                GameObject.Find("RelicPlinth/cathedral_candleflame").SetActive(onOrOff);
-            } else if (sceneName == "Archipelagos Redux") {
-                GameObject.Find("_Environment Prefabs/RelicPlinth/cathedral_candleflame").SetActive(onOrOff);
-                GameObject.Find("_Environment Prefabs/RelicPlinth/Point Light").SetActive(onOrOff);
-            } else if (sceneName == "Swamp Redux 2") {
-                GameObject.Find("_Setpieces Etc/RelicPlinth/cathedral_candleflame").SetActive(onOrOff);
-                GameObject.Find("_Setpieces Etc/RelicPlinth/Point Light").SetActive(onOrOff);
-            } else if (sceneName == "Library Hall") {
-                GameObject.Find("_Special/RelicPlinth/cathedral_candleflame").SetActive(onOrOff);
-                GameObject.Find("_Special/RelicPlinth/Point Light").SetActive(onOrOff);
-            } else if (sceneName == "Monastery") {
-                GameObject.Find("Root/RelicPlinth (1)/cathedral_candleflame").SetActive(onOrOff);
-                GameObject.Find("Root/RelicPlinth (1)/Point Light").SetActive(onOrOff);
-            } else if (sceneName == "Overworld Redux") {
-                if (onOrOff) {
-                    GameObject.Find("_Environment/_Decorations/Mailbox (1)/mailbox flag").transform.rotation = new Quaternion(0.0f, 0.0f, 0.0f, 0.0f);
+        public static void SetupHeroGraveToggle() {
+            if (Hints.HeroGraveHints.Values.Where(hint => hint.SceneName == SceneManager.GetActiveScene().name).Any()) {
+                HeroGraveHint hint = Hints.HeroGraveHints.Values.Where(hintgrave => hintgrave.SceneName == SceneManager.GetActiveScene().name).First();
+                GameObject relicPlinth = GameObject.Find(hint.GraveObjectPath);
+                if (relicPlinth.GetComponent<HeroGraveToggle>() == null) {
+                    relicPlinth.AddComponent<HeroGraveToggle>().heroGravehint = hint;
                 } else {
-                    GameObject.Find("_Environment/_Decorations/Mailbox (1)/mailbox flag").transform.rotation = new Quaternion(0.5f, -0.5f, 0.5f, 0.5f);
+                    relicPlinth.GetComponent<HeroGraveToggle>().heroGravehint = hint;
                 }
             }
         }
-
     }
 }

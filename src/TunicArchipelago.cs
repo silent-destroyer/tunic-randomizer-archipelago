@@ -41,6 +41,8 @@ namespace TunicArchipelago {
             ClassInjector.RegisterTypeInIl2Cpp<Archipelago>();
             ClassInjector.RegisterTypeInIl2Cpp<WaveSpell>();
             ClassInjector.RegisterTypeInIl2Cpp<VisibleByNotHavingItem>();
+            ClassInjector.RegisterTypeInIl2Cpp<HeroGraveToggle>();
+            ClassInjector.RegisterTypeInIl2Cpp<MailboxFlag>();
 
             ClassInjector.RegisterTypeInIl2Cpp<PaletteEditor>();
             UnityEngine.Object.DontDestroyOnLoad(new GameObject("palette editor gui", new Il2CppSystem.Type[]

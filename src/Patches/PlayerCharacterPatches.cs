@@ -304,12 +304,10 @@ namespace TunicArchipelago {
                 ItemTracker.PopulateSpoilerLog();
                 GhostHints.GenerateHints();
                 Hints.PopulateHints();
-
-                string hintSceneName = SceneManager.GetActiveScene().name;
-                if (TunicArchipelago.Settings.HeroPathHintsEnabled && Hints.HintStructureScenes.ContainsValue(hintSceneName) && SaveFile.GetInt($"randomizer got {Hints.HintStructureScenes.FirstOrDefault(x => x.Value == hintSceneName).Key}") == 0) {
-                    Hints.ToggleHintIndicator(hintSceneName, false);
+                if (Hints.HeroGraveHints.Count != 0) {
+                    Hints.SetupHeroGraveToggle();
                 }
-
+                
                 if (SaveFile.GetInt(AbilityShuffle) == 1 && SaveFile.GetInt(HolyCrossUnlocked) == 0) {
                     ItemPatches.ToggleHolyCrossObjects(false);
                 }

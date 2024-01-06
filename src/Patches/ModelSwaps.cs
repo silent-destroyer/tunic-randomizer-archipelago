@@ -33,7 +33,7 @@ namespace TunicArchipelago {
 
         public static GameObject GlowEffect;
         public static GameObject StarburstEffect;
-        public static GameObject SpecialKeyPopup;
+        public static GameObject BlueFire;
 
         public static List<string> ShopItemIDs = new List<string>() {
             "Potion (First) [Shop]",
@@ -1109,9 +1109,6 @@ namespace TunicArchipelago {
             CustomItemImages.Add("Fool Trap", CreateSprite(ImageData.TinyFox, ImageMaterial, SpriteName: "Randomizer items_Fool Trap"));
             CustomItemImages.Add("Archipelago Item", CreateSprite(ImageData.ArchipelagoItem, ImageMaterial, 128, 128, SpriteName: "Randomizer items_Archipelago Item"));
             CustomItemImages.Add("Torch Redux", CreateSprite(ImageData.TorchRedux, ImageMaterial, 160, 160, SpriteName: "Randomizer items_Torch redux"));
-            CustomItemImages.Add("Prayer", CreateSprite(ImageData.Prayer, ImageMaterial, 160, 160, SpriteName: "Randomizer items_Prayer"));
-            CustomItemImages.Add("Holy Cross", CreateSprite(ImageData.HolyCross, ImageMaterial, 160, 160, SpriteName: "Randomizer items_Holy Cross"));
-            CustomItemImages.Add("Ice Rod", CreateSprite(ImageData.IceRod, ImageMaterial, 160, 160, SpriteName: "Randomizer items_Ice Rod"));
 
             Inventory.GetItemByName("Librarian Sword").icon = CustomItemImages["Librarian Sword"].GetComponent<Image>().sprite;
             Inventory.GetItemByName("Heir Sword").icon = CustomItemImages["Heir Sword"].GetComponent<Image>().sprite;

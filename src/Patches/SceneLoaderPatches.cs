@@ -107,6 +107,9 @@ namespace TunicArchipelago {
             }
             if (loadingScene.name == "Fortress Basement" && !EnemyRandomizer.Enemies.ContainsKey("Spider Small")) {
                 EnemyRandomizer.InitializeEnemies("Fortress Basement");
+                ModelSwaps.BlueFire = GameObject.Instantiate(GameObject.Find("Room - Big Room/Fortress wall lamp small unlit (1)/Fire/lamp fire"));
+                ModelSwaps.BlueFire.SetActive(false);
+                GameObject.DontDestroyOnLoad(ModelSwaps.BlueFire);
                 SceneLoader.LoadScene("Crypt");
                 return;
             }
@@ -240,14 +243,13 @@ namespace TunicArchipelago {
                 }
             } else if (SceneName == "Overworld Interiors") {
                 GameObject.Find("Trophy Stuff").transform.GetChild(4).gameObject.SetActive(true);
-                /*                foreach (string Key in ItemLookup.HeroRelicLookup.Keys) {
-                                    StateVariable.GetStateVariableByName(ItemLookup.HeroRelicLookup[Key].Flag).BoolValue = Inventory.GetItemByName(Key).Quantity == 1;
-                                }*/
-                ToggleOldHouseRelics();
+
                 GameObject.Destroy(GameObject.Find("_Special/Bed Toggle Trigger/"));
                 if ((StateVariable.GetStateVariableByName("Has Been Betrayed").BoolValue || StateVariable.GetStateVariableByName("Has Died To God").BoolValue) && SaveFile.GetInt(HexagonQuestEnabled) == 0) {
                     InteractionPatches.SetupDayNightHourglass();
                 }
+
+                SetupOldHouseRelicToggles();
                 if (GameObject.Find("_Offerings/ash group/")) {
                     GameObject.Find("_Offerings/ash group/").transform.position = new Vector3(-24.2824f, 29.8f, -45.4f);
                 }
@@ -274,7 +276,7 @@ namespace TunicArchipelago {
             } else if (SceneName == "Overworld Redux") {
                 GameObject.Find("_Signposts/Signpost (3)/").GetComponent<Signpost>().message.text = $"#is wA too \"West Garden\"\n<#33FF33>[death] bEwAr uhv tArE [death]";
                 GameObject.Find("_Environment Special/Door (1)/door/key twist").GetComponent<MeshRenderer>().materials = ModelSwaps.Items["Key (House)"].GetComponent<MeshRenderer>().materials;
-                
+                GameObject.Find("_Environment/_Decorations/Mailbox (1)/mailbox flag").AddComponent<MailboxFlag>();
                 if (SaveFile.GetInt("randomizer entrance rando enabled") == 1 || (Archipelago.instance.integration.slotData.ContainsKey("entrance_rando") && Archipelago.instance.integration.slotData["entrance_rando"].ToString() == "1" && SaveFile.GetInt("seed") == 0)) {
                     GhostHints.SpawnTorchHintGhost();
                 }
@@ -330,10 +332,6 @@ namespace TunicArchipelago {
                 }
             }
 
-            if (TunicArchipelago.Settings.HeroPathHintsEnabled && Hints.HintStructureScenes.ContainsValue(SceneName) && SaveFile.GetInt($"randomizer got {Hints.HintStructureScenes.FirstOrDefault(x => x.Value == SceneName).Key}") == 0) {
-                Hints.ToggleHintIndicator(SceneName, false);
-            }
-
             if (Archipelago.instance != null && Archipelago.instance.integration != null && Archipelago.instance.integration.connected) {
                 if (TunicArchipelago.Settings.EnemyRandomizerEnabled && EnemyRandomizer.Enemies.Count > 0 && !EnemyRandomizer.ExcludedScenes.Contains(SceneName)) {
                     EnemyRandomizer.SpawnNewEnemies();
@@ -343,6 +341,9 @@ namespace TunicArchipelago {
                     EnemyRandomizer.ToggleArachnophobiaMode();
                 }
 
+                if (Hints.HeroGraveHints.Count != 0) {
+                    Hints.SetupHeroGraveToggle();
+                }
                 try {
                     if (TunicArchipelago.Settings.UseCustomTexture) {
                         PaletteEditor.LoadCustomTexture();
@@ -400,14 +401,21 @@ namespace TunicArchipelago {
             ItemTracker.SaveTrackerFile();
         }
 
-        public static void ToggleOldHouseRelics() {
+        public static void SetupOldHouseRelicToggles() {
             if (SceneManager.GetActiveScene().name == "Overworld Interiors" && GameObject.Find("_Offerings") != null && GameObject.Find("_Offerings").transform.childCount >= 5) {
-                GameObject.Find("_Offerings").transform.GetChild(0).gameObject.SetActive(Inventory.GetItemByName("Relic - Hero Water").Quantity > 0);
-                GameObject.Find("_Offerings").transform.GetChild(1).gameObject.SetActive(Inventory.GetItemByName("Relic - Hero Crown").Quantity > 0);
-                GameObject.Find("_Offerings").transform.GetChild(2).gameObject.SetActive(Inventory.GetItemByName("Relic - Hero Pendant SP").Quantity > 0);
-                GameObject.Find("_Offerings").transform.GetChild(3).gameObject.SetActive(Inventory.GetItemByName("Relic - Hero Pendant HP").Quantity > 0);
-                GameObject.Find("_Offerings").transform.GetChild(4).gameObject.SetActive(Inventory.GetItemByName("Relic - Hero Pendant MP").Quantity > 0);
-                GameObject.Find("_Offerings").transform.GetChild(5).gameObject.SetActive(Inventory.GetItemByName("Relic - Hero Sword").Quantity > 0);
+                GameObject Offerings = GameObject.Find("_Offerings");
+                GameObject.Destroy(Offerings.transform.GetChild(2).GetChild(1).gameObject);
+                GameObject.Destroy(Offerings.transform.GetChild(2).GetChild(2).gameObject);
+                List<string> relics = new List<string>() { "Relic - Hero Water", "Relic - Hero Crown", "Relic - Hero Pendant SP", "Relic - Hero Pendant HP", "Relic - Hero Pendant MP", "Relic - Hero Sword" };
+                for (int i = 0; i < 6; i++) {
+                    GameObject Offering = Offerings.transform.GetChild(i).gameObject;
+                    if (Offering.GetComponent<StatefulActive>() != null) {
+                        GameObject.Destroy(Offering.GetComponent<StatefulActive>());
+                    }
+                    Offering.AddComponent<VisibleByHavingInventoryItem>().enablingItem = Inventory.GetItemByName(relics[i]);
+                    Offering.GetComponent<VisibleByHavingInventoryItem>().renderers = Offering.GetComponentsInChildren<Renderer>().ToArray();
+                    Offering.SetActive(true);
+                }
             }
         }
 

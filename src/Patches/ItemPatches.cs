@@ -134,7 +134,7 @@ namespace TunicArchipelago {
                 int Price = TunicArchipelago.Settings.CheaperShopItemsEnabled ? 300 : __instance.price;
                 ArchipelagoItem ShopItem = ItemLookup.ItemList[LocationId];
                 string itemToDisplay = Archipelago.instance.GetPlayerGame(ShopItem.Player) == "Tunic" && TextBuilderPatches.ItemNameToAbbreviation.ContainsKey(ShopItem.ItemName) ? TextBuilderPatches.ItemNameToAbbreviation[ShopItem.ItemName] : "[archipelago]";
-                __instance.confirmPurchaseFormattedLanguageLine.text = $"bI for {Price} [money]?\n\t" + GhostHints.WordWrapString($"\"({Archipelago.instance.GetPlayerName(ShopItem.Player).ToUpper().Replace(" ", "\" \"")}'S\" {itemToDisplay} \"{ShopItem.ItemName.ToUpper().Replace($" ", $"\" \"")})\"");
+                __instance.confirmPurchaseFormattedLanguageLine.text = $"bI for {Price} [money]?\n    {itemToDisplay} " + GhostHints.WordWrapString($"\"{Archipelago.instance.GetPlayerName(ShopItem.Player).ToUpper().Replace(" ", "\" \"")}'S\" \"{ShopItem.ItemName.ToUpper().Replace($" ", $"\" \"")}\"");
 
                 string CheckName = Locations.LocationIdToDescription[LocationId];
                 if (TunicArchipelago.Settings.SendHintsToServer && SaveFile.GetInt($"archipelago sent optional hint to server {CheckName}") == 0) {
@@ -324,9 +324,6 @@ namespace TunicArchipelago {
                 RelicItem.collectionMessage.text = ItemLookup.BonusUpgrades[Item.ItemNameForInventory].CustomPickupMessage;
                 
                 ItemPresentation.PresentItem(RelicItem);
-                if (SceneManager.GetActiveScene().name == "Overworld Interiors") {
-                    SceneLoaderPatches.ToggleOldHouseRelics();
-                }
             }
 
             if (Item.Type == ItemTypes.FOOLTRAP) {
@@ -382,18 +379,14 @@ namespace TunicArchipelago {
                 ShowNotification(NotificationTop, NotificationBottom);
             }
 
-            if (TunicArchipelago.Settings.HeroPathHintsEnabled) {
-                string slotLoc = networkItem.Player.ToString() + ", " + Archipelago.instance.GetLocationName(networkItem.Location);
-                foreach (string hintId in Hints.HintStructureScenes.Keys) {
-                    if (hintId == slotLoc) {
-                        SaveFile.SetInt($"randomizer got {hintId}", 1);
-                        string sceneName = SceneManager.GetActiveScene().name;
-                        if (sceneName == Hints.HintStructureScenes[hintId]) {
-                            Hints.ToggleHintIndicator(sceneName, true);
-                        }
-                    }
-                }
+            string slotLoc = $"{networkItem.Player}, {Archipelago.instance.GetLocationName(networkItem.Location)}";
+            if (Hints.HeroGraveHints.Values.Where(hint => hint.PathHintId == slotLoc || hint.RelicHintId == slotLoc).Any()) {
+                SaveFile.SetInt($"randomizer hint found {slotLoc}", 1);
             }
+            if (Hints.HeroGraveHints.Values.Where(hint => SaveFile.GetInt($"randomizer hint found {hint.PathHintId}") == 1).Count() == 6) {
+                StateVariable.GetStateVariableByName("randomizer got all 6 grave items").BoolValue = true;
+            }
+            
 
             TunicArchipelago.Tracker.SetCollectedItem(ItemName, true);
 

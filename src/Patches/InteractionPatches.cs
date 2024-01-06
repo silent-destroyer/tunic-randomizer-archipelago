@@ -1,6 +1,7 @@
 ﻿using BepInEx.Logging;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using static TunicArchipelago.Hints;
 using static TunicArchipelago.SaveFlags;
 
 namespace TunicArchipelago {
@@ -26,14 +27,14 @@ namespace TunicArchipelago {
                 LanguageLine Hint = ScriptableObject.CreateInstance<LanguageLine>();
                 Hint.text = Hints.HintMessages[Hints.HintLocations[InteractionLocation]];
 
-                if (TunicArchipelago.Settings.SendHintsToServer && Hints.LocalHintsForServer.ContainsKey(Hints.HintLocations[InteractionLocation]) && SaveFile.GetInt($"archipelago sent optional hint to server {Hints.LocalHintsForServer[Hints.HintLocations[InteractionLocation]]}") == 0) {
-                    string LocationName = Hints.LocalHintsForServer[Hints.HintLocations[InteractionLocation]];
-                    Archipelago.instance.integration.session.Locations.ScoutLocationsAsync(true, Archipelago.instance.GetLocationId(LocationName));
-                    SaveFile.SetInt($"archipelago sent optional hint to server {Hints.LocalHintsForServer[Hints.HintLocations[InteractionLocation]]}", 1);
-                }
-
                 GenericMessage.ShowMessage(Hint);
+                return false;
+            }
+            if (__instance.GetComponentInParent<HeroGraveToggle>() != null && TunicArchipelago.Settings.HeroPathHintsEnabled) {
+                bool showRelicHint = StateVariable.GetStateVariableByName("randomizer got all 6 grave items").BoolValue;
+                HeroGraveHint hint = __instance.GetComponentInParent<HeroGraveToggle>().heroGravehint;
 
+                GenericMessage.ShowMessage(showRelicHint ? hint.RelicHint : hint.PathHint);
                 return false;
             }
             if (SceneLoaderPatches.SceneName == "Waterfall" && __instance.transform.position.ToString() == "(-47.4, 46.9, 3.0)" && TunicArchipelago.Tracker.ImportantItems["Fairies"] < 10) {
