@@ -283,6 +283,7 @@ namespace TunicArchipelago {
                         Logger.LogInfo("Loading seed: " + SaveFile.GetInt("seed"));
                     }
                 }
+                SaveFile.SaveToDisk();
 
                 Locations.PopulateMajorItemLocations(slotData);
 
