@@ -59,6 +59,12 @@ namespace TunicArchipelago {
                 }
             },
             {
+                "Sewer",
+                new List<string>() {
+                    "Spinnerbot (3)",
+                }
+            },
+            {
                 "Archipelagos Redux",
                 new List<string>() {
                     "crocodoo Voidtouched",
@@ -76,7 +82,6 @@ namespace TunicArchipelago {
                     "Crabbit",
                     "Crabbo (1)",
                     "Crabbit with Shell",
-                    "Spinnerbot Corrupted",
                     "Spinnerbot Baby",
                 }
             },
@@ -330,6 +335,7 @@ namespace TunicArchipelago {
                 { "Frog (7)", "Frog" },
                 { "Hedgehog Trap (1)", "Hedgehog Trap" },
                 { "Centipede from egg (Varient)", "Centipede" },
+                { "Spinnerbot (3)", "Spinnerbot Corrupted" },
             };
             foreach (string LocationEnemy in LocationEnemies[SceneName]) {
                 string EnemyName = LocationEnemy;
@@ -572,6 +578,11 @@ namespace TunicArchipelago {
                         if (NewEnemy.name.Contains("stunner")) {
                             NewEnemy.GetComponent<Scavenger>().laserEndSphere = Enemies["Scavenger"].GetComponent<Scavenger>().laserEndSphere;
                         }
+                    }
+
+                    if (NewEnemy.name.Contains("Spinnerbot Corrupted") && Random.Next(100) == 99) {
+                        NewEnemy.transform.localScale = new Vector3(2f, 2f, 2f);
+                        NewEnemy.GetComponent<Monster>().defaultStartingMaxHP._value = 30;
                     }
 
                     NewEnemy.name += $" {i}";

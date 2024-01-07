@@ -118,9 +118,14 @@ namespace TunicArchipelago {
                 SceneLoader.LoadScene("Fortress Basement");
                 return;
             }
+            if (loadingScene.name == "Sewer" && !EnemyRandomizer.Enemies.ContainsKey("Spinnerbot Corrupted")) {
+                EnemyRandomizer.InitializeEnemies("Sewer");
+                SceneLoader.LoadScene("frog cave main");
+                return;
+            }
             if (loadingScene.name == "Atoll Redux" && !EnemyRandomizer.Enemies.ContainsKey("plover")) {
                 EnemyRandomizer.InitializeEnemies("Atoll Redux");
-                SceneLoader.LoadScene("frog cave main");
+                SceneLoader.LoadScene("Sewer");
                 return;
             }
             if (loadingScene.name == "Archipelagos Redux" && ModelSwaps.GlowEffect == null) {
