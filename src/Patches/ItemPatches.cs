@@ -370,13 +370,13 @@ namespace TunicArchipelago {
                 var sender = Archipelago.instance.GetPlayerName(networkItem.Player);
                 NotificationTop = NotificationTop == "" ? $"\"{sender}\" sehnt yoo  {(TextBuilderPatches.ItemNameToAbbreviation.ContainsKey(ItemName) ? TextBuilderPatches.ItemNameToAbbreviation[ItemName] : "")}  \"{ItemName}!\"" : NotificationTop;
                 NotificationBottom = NotificationBottom == "" ? $"Rnt #A nIs\"?\"" : NotificationBottom;
-                ShowNotification(NotificationTop, NotificationBottom);
+                Notifications.Show(NotificationTop, NotificationBottom);
             }
 
             if (networkItem.Player == Archipelago.instance.GetPlayerSlot() && (TunicArchipelago.Settings.SkipItemAnimations || DisplayMessageAnyway)) {
                 NotificationTop = NotificationTop == "" ? $"yoo fownd  {(TextBuilderPatches.ItemNameToAbbreviation.ContainsKey(ItemName) ? TextBuilderPatches.ItemNameToAbbreviation[ItemName] : "")}  \"{ItemName}!\"" : NotificationTop;
                 NotificationBottom = NotificationBottom == "" ? $"$oud bE yoosfuhl!" : NotificationBottom;
-                ShowNotification(NotificationTop, NotificationBottom);
+                Notifications.Show(NotificationTop, NotificationBottom);
             }
 
             string slotLoc = $"{networkItem.Player}, {Archipelago.instance.GetLocationName(networkItem.Location)}";
@@ -450,13 +450,13 @@ namespace TunicArchipelago {
                     if (TunicArchipelago.Settings.SkipItemAnimations) { 
                         switch(ItemLookup.BombCodes[s]) {
                             case "Granted Firecracker":
-                                ShowNotification($"[firecracker] \"Firecracker Granted!\"", $"mAd fruhm slorm, #uh poudi^ #aht gOz boom.");
+                                Notifications.Show($"[firecracker] \"Firecracker Granted!\"", $"mAd fruhm slorm, #uh poudi^ #aht gOz boom.");
                                 break;
                             case "Granted Firebomb":
-                                ShowNotification($"[firebomb] \"Fire Bomb Granted!\"", $"fIur fIur ehvurEwAr, ahnd ow ow ow ow ow.");
+                                Notifications.Show($"[firebomb] \"Fire Bomb Granted!\"", $"fIur fIur ehvurEwAr, ahnd ow ow ow ow ow.");
                                 break;
                             case "Granted Icebomb":
-                                ShowNotification($"[icebomb] \"Ice Bomb Granted!\"", $"uhnstAboul powdur mAd fruhm #uh fArE uhv #uh wehst gRdin.");
+                                Notifications.Show($"[icebomb] \"Ice Bomb Granted!\"", $"uhnstAboul powdur mAd fruhm #uh fArE uhv #uh wehst gRdin.");
                                 break;
                             default:
                                 break;
@@ -469,7 +469,7 @@ namespace TunicArchipelago {
 
         public static bool UpgradeAltar_DoOfferingSequence_PrefixPatch(UpgradeAltar __instance, OfferingItem offeringItemToOffer) {
             if (TunicArchipelago.Settings.FasterUpgrades) {
-                ShowNotification($"{TextBuilderPatches.SpriteNameToAbbreviation[offeringItemToOffer.icon.name]} \"{offeringItemToOffer.statLabelLocKey}\" wehnt uhp fruhm {offeringItemToOffer.upgradeItemReceived.Quantity-1} [arrow_right] {offeringItemToOffer.upgradeItemReceived.Quantity}!", $"#E Ar ahksehpts yor awfuri^.");
+                Notifications.Show($"{TextBuilderPatches.SpriteNameToAbbreviation[offeringItemToOffer.icon.name]} \"{offeringItemToOffer.statLabelLocKey}\" wehnt uhp fruhm {offeringItemToOffer.upgradeItemReceived.Quantity-1} [arrow_right] {offeringItemToOffer.upgradeItemReceived.Quantity}!", $"#E Ar ahksehpts yor awfuri^.");
                 UpgradeMenu.instance.__Exit();
                 return false;
             }
@@ -488,18 +488,5 @@ namespace TunicArchipelago {
             return false;
         }
 
-        private static void ShowNotification(string topLine, string bottomLine) {
-            var topLineObject = ScriptableObject.CreateInstance<LanguageLine>();
-            topLineObject.text = topLine;
-
-            var bottomLineObject = ScriptableObject.CreateInstance<LanguageLine>();
-            bottomLineObject.text = bottomLine;
-
-            var areaData = ScriptableObject.CreateInstance<AreaData>();
-            areaData.topLine = topLineObject;
-            areaData.bottomLine = bottomLineObject;
-
-            AreaLabel.ShowLabel(areaData);
-        }
     }
 }

@@ -187,6 +187,7 @@
     <Compile Include="src\Patches\TextBuilderPatches.cs" />
     <Compile Include="src\Patches\TitleVersion.cs" />
     <Compile Include="src\Patches\TunicPortals.cs" />
+    <Compile Include="src\Util\Notifications.cs" />
     <Compile Include="src\Util\VisibleByNotHavingItem.cs" />
     <Compile Include="src\Patches\WaveSpell.cs" />
     <Compile Include="src\TunicArchipelago.cs" />

@@ -52,6 +52,7 @@ namespace TunicArchipelago {
                 GameObject.DontDestroyOnLoad(Backing);
 
                 Title = SetupText("title", new Vector3(275f, 35f, 0f), Stats.transform, 24f, FontAsset, FontMaterial);
+                Title.GetComponent<TextMeshProUGUI>().text = $"Randomizer Stats";
                 //Title = SetupTitle(Stats.transform);
                 // sep line 3.4464 -0.0155 0.05, 217.3751 27.471 0
                 Sprite SepLine = Resources.FindObjectsOfTypeAll<Sprite>().Where(Sprite => Sprite.name == "UI_separator_line_single").ToList()[0];
@@ -72,6 +73,12 @@ namespace TunicArchipelago {
                 CoinsTossed = SetupText("coins tossed", new Vector3(370f, -30f, 0f), Stats.transform, 20f, FontAsset, FontMaterial);
                 ThisArea = SetupText("this area", new Vector3(195f, -60f, 0f), Stats.transform, 20f, FontAsset, FontMaterial);
                 Total = SetupText("total", new Vector3(370f, -60f, 0f), Stats.transform, 20f, FontAsset, FontMaterial);
+                Pages.GetComponent<TextMeshProUGUI>().text = $"Pages:\t\t0/28";
+                Fairies.GetComponent<TextMeshProUGUI>().text = $"Fairies:\t  0/20";
+                Treasures.GetComponent<TextMeshProUGUI>().text = $"Treasures:\t0/12";
+                CoinsTossed.GetComponent<TextMeshProUGUI>().text = $"Coins Tossed: 0/15";
+                ThisArea.GetComponent<TextMeshProUGUI>().text = $"This Area:\t0/0";
+                Total.GetComponent<TextMeshProUGUI>().text = $"Total:\t\t  0/302";
                 GameObject.DontDestroyOnLoad(Title);
                 GameObject.DontDestroyOnLoad(SepLine1);
                 GameObject.DontDestroyOnLoad(SepLine2);
@@ -94,6 +101,7 @@ namespace TunicArchipelago {
                 GoldHex.SetActive(true);
                 HexBacking.transform.GetChild(0).localScale = new Vector3(0.75f, 0.75f, 0.75f);
                 GoldHexagons = SetupText("gold hexagons", new Vector3(-237f, 200f, 0f), HexagonQuest.transform, 24f, FontAsset, FontMaterial);
+                GoldHexagons.GetComponent<TextMeshProUGUI>().text = $"0/0";
                 GoldHexagons.GetComponent<RectTransform>().sizeDelta = new Vector2(350f, 50f);
                 GoldHexagons.transform.parent = HexagonQuest.transform;
                 if (Screen.width <= 1280 && Screen.height <= 800) {
@@ -191,31 +199,30 @@ namespace TunicArchipelago {
 
         public static void Update() {
             try {
-                int ObtainedItemCount = Locations.VanillaLocations.Keys.Where(loc => Locations.CheckedLocations[loc] || (TunicArchipelago.Settings.CollectReflectsInWorld && SaveFile.GetInt($"randomizer {loc} was collected") == 1)).ToList().Count;
-                int ObtainedItemCountInCurrentScene = Locations.VanillaLocations.Keys.Where(loc => Locations.VanillaLocations[loc].Location.SceneName == SceneLoaderPatches.SceneName && (Locations.CheckedLocations[loc] || (TunicArchipelago.Settings.CollectReflectsInWorld && SaveFile.GetInt($"randomizer {loc} was collected") == 1))).ToList().Count;
-                int TotalItemCountInCurrentScene = Locations.VanillaLocations.Keys.Where(loc => Locations.VanillaLocations[loc].Location.SceneName == SceneLoaderPatches.SceneName).ToList().Count;
-                Title.GetComponent<TextMeshProUGUI>().text = $"Randomizer Stats";
-                Pages.GetComponent<TextMeshProUGUI>().text = $"Pages:\t\t{TunicArchipelago.Tracker.ImportantItems["Pages"]}/28";
-                Pages.GetComponent<TextMeshProUGUI>().color = TunicArchipelago.Tracker.ImportantItems["Pages"] == 28 ? new Color(0.917f, 0.65f, .08f) : Color.white;
-                Fairies.GetComponent<TextMeshProUGUI>().text = $"Fairies:\t  {TunicArchipelago.Tracker.ImportantItems["Fairies"]}/20";
-                Fairies.GetComponent<TextMeshProUGUI>().color = TunicArchipelago.Tracker.ImportantItems["Fairies"] == 20 ? new Color(0.917f, 0.65f, .08f) : Color.white;
-                Treasures.GetComponent<TextMeshProUGUI>().text = $"Treasures:\t{TunicArchipelago.Tracker.ImportantItems["Golden Trophies"]}/12";
-                Treasures.GetComponent<TextMeshProUGUI>().color = TunicArchipelago.Tracker.ImportantItems["Golden Trophies"] == 12 ? new Color(0.917f, 0.65f, .08f) : Color.white;
-                CoinsTossed.GetComponent<TextMeshProUGUI>().text = $"Coins Tossed: {TunicArchipelago.Tracker.ImportantItems["Coins Tossed"]}/15";
-                CoinsTossed.GetComponent<TextMeshProUGUI>().color = TunicArchipelago.Tracker.ImportantItems["Coins Tossed"] >= 15 ? new Color(0.917f, 0.65f, .08f) : Color.white;
-                ThisArea.GetComponent<TextMeshProUGUI>().text = $"This Area:\t{ObtainedItemCountInCurrentScene}/{TotalItemCountInCurrentScene}";
-                ThisArea.GetComponent<TextMeshProUGUI>().color = (ObtainedItemCountInCurrentScene == TotalItemCountInCurrentScene) ? new Color(0.917f, 0.65f, .08f) : Color.white;
-                Total.GetComponent<TextMeshProUGUI>().text = $"Total:\t\t  {ObtainedItemCount}/302";
-                if (GoldHexagons != null) {
-                    GoldHexagons.GetComponent<TextMeshProUGUI>().text = $"{Inventory.GetItemByName("Hexagon Gold").Quantity}/{SaveFile.GetInt(HexagonQuestGoal)}";
-                    GoldHexagons.GetComponent<TextMeshProUGUI>().color = Inventory.GetItemByName("Hexagon Gold").Quantity >= SaveFile.GetInt(HexagonQuestGoal) ? new Color(0.917f, 0.65f, .08f) : Color.white;
+                if (Locations.VanillaLocations.Count > 0) {
+                    int ObtainedItemCount = Locations.VanillaLocations.Keys.Where(loc => Locations.CheckedLocations[loc] || (TunicArchipelago.Settings.CollectReflectsInWorld && SaveFile.GetInt($"randomizer {loc} was collected") == 1)).ToList().Count;
+                    int ObtainedItemCountInCurrentScene = Locations.VanillaLocations.Keys.Where(loc => Locations.VanillaLocations[loc].Location.SceneName == SceneLoaderPatches.SceneName && (Locations.CheckedLocations[loc] || (TunicArchipelago.Settings.CollectReflectsInWorld && SaveFile.GetInt($"randomizer {loc} was collected") == 1))).ToList().Count;
+                    int TotalItemCountInCurrentScene = Locations.VanillaLocations.Keys.Where(loc => Locations.VanillaLocations[loc].Location.SceneName == SceneLoaderPatches.SceneName).ToList().Count;
+                    Pages.GetComponent<TextMeshProUGUI>().text = $"Pages:\t\t{TunicArchipelago.Tracker.ImportantItems["Pages"]}/28";
+                    Pages.GetComponent<TextMeshProUGUI>().color = TunicArchipelago.Tracker.ImportantItems["Pages"] == 28 ? new Color(0.917f, 0.65f, .08f) : Color.white;
+                    Fairies.GetComponent<TextMeshProUGUI>().text = $"Fairies:\t  {TunicArchipelago.Tracker.ImportantItems["Fairies"]}/20";
+                    Fairies.GetComponent<TextMeshProUGUI>().color = TunicArchipelago.Tracker.ImportantItems["Fairies"] == 20 ? new Color(0.917f, 0.65f, .08f) : Color.white;
+                    Treasures.GetComponent<TextMeshProUGUI>().text = $"Treasures:\t{TunicArchipelago.Tracker.ImportantItems["Golden Trophies"]}/12";
+                    Treasures.GetComponent<TextMeshProUGUI>().color = TunicArchipelago.Tracker.ImportantItems["Golden Trophies"] == 12 ? new Color(0.917f, 0.65f, .08f) : Color.white;
+                    CoinsTossed.GetComponent<TextMeshProUGUI>().text = $"Coins Tossed: {TunicArchipelago.Tracker.ImportantItems["Coins Tossed"]}/15";
+                    CoinsTossed.GetComponent<TextMeshProUGUI>().color = TunicArchipelago.Tracker.ImportantItems["Coins Tossed"] >= 15 ? new Color(0.917f, 0.65f, .08f) : Color.white;
+                    ThisArea.GetComponent<TextMeshProUGUI>().text = $"This Area:\t{ObtainedItemCountInCurrentScene}/{TotalItemCountInCurrentScene}";
+                    ThisArea.GetComponent<TextMeshProUGUI>().color = (ObtainedItemCountInCurrentScene == TotalItemCountInCurrentScene) ? new Color(0.917f, 0.65f, .08f) : Color.white;
+                    Total.GetComponent<TextMeshProUGUI>().text = $"Total:\t\t  {ObtainedItemCount}/302";
+                    if (GoldHexagons != null) {
+                        GoldHexagons.GetComponent<TextMeshProUGUI>().text = $"{Inventory.GetItemByName("Hexagon Gold").Quantity}/{SaveFile.GetInt(HexagonQuestGoal)}";
+                        GoldHexagons.GetComponent<TextMeshProUGUI>().color = Inventory.GetItemByName("Hexagon Gold").Quantity >= SaveFile.GetInt(HexagonQuestGoal) ? new Color(0.917f, 0.65f, .08f) : Color.white;
+                    }
+                    if (Inventory.GetItemByName("Spear").Quantity == 1) {
+                        QuestionMark.SetActive(false);
+                    }
+                    Total.GetComponent<TextMeshProUGUI>().color = (ObtainedItemCount >= 302) ? new Color(0.917f, 0.65f, .08f) : Color.white;
                 }
-                if (Inventory.GetItemByName("Spear").Quantity == 1) {
-                    QuestionMark.SetActive(false);
-                }
-                Total.GetComponent<TextMeshProUGUI>().color = (ObtainedItemCount >= 302) ? new Color(0.917f, 0.65f, .08f) : Color.white;
-
-
             } catch (Exception e) {
 
             }

@@ -308,6 +308,13 @@ namespace TunicArchipelago {
                 GenericMessage.ShowMessage("<#FF0000>[death] \"<#FF0000>warning!\" <#FF0000>[death]\n\"Non-Archipelago file selected.\"\n\"Returning to menu.\"");
                 return false;
             }
+            if (SaveFile.GetString("archipelago player name") != "") {
+                if (SaveFile.GetString("archipelago player name") != TunicArchipelago.Settings.ConnectionSettings.Player || (Archipelago.instance.integration.connected && int.Parse(Archipelago.instance.integration.slotData["seed"].ToString()) != SaveFile.GetInt("seed"))) {
+                    Logger.LogInfo("Save does not match connected slot! Connected to " + TunicArchipelago.Settings.ConnectionSettings.Player + " [seed " + Archipelago.instance.integration.slotData["seed"].ToString() + "] but slot name in save file is " + SaveFile.GetString("archipelago player name") + " [seed " + SaveFile.GetInt("seed") + "]");
+                    GenericMessage.ShowMessage("<#FF0000>[death] \"<#FF0000>warning!\" <#FF0000>[death]\n\"Save does not match connected slot.\"\n\"Returning to menu.\"");
+                    return false;
+                }
+            }
             return true;
         }
 

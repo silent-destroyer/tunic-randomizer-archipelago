@@ -43,7 +43,7 @@ namespace TunicArchipelago {
 
             if (DiedToDeathLink) {
                 if (DeathLinkMessage != "") {
-                    Archipelago.instance.integration.ShowNotification(DeathLinkMessage, DeathLinkMessages.SecondaryMessages[new System.Random().Next(DeathLinkMessages.SecondaryMessages.Count)]);
+                    Notifications.Show(DeathLinkMessage, DeathLinkMessages.SecondaryMessages[new System.Random().Next(DeathLinkMessages.SecondaryMessages.Count)]);
                     DeathLinkMessage = "";
                 }
                 __instance.hp = -1;
@@ -147,7 +147,9 @@ namespace TunicArchipelago {
 
 
         public static void PlayerCharacter_Start_PostfixPatch(PlayerCharacter __instance) {
-            
+
+            SceneLoaderPatches.TimeOfLastSceneTransition = SaveFile.GetFloat("playtime");
+
             // hide inventory prompt button so it doesn't overlap item messages
             GameObject InvButton = Resources.FindObjectsOfTypeAll<Animator>().Where(animator => animator.gameObject.name == "LB Prompt").ToList()[0].gameObject;
             if (InvButton != null) {
@@ -291,46 +293,51 @@ namespace TunicArchipelago {
                     Locations.CheckedLocations.Add(Key, SaveFile.GetInt($"randomizer picked up {Key}") == 1);
                     LocationIDs.Add(Archipelago.instance.integration.session.Locations.GetLocationIdFromName("Tunic", Locations.LocationIdToDescription[Key]));
                 }
-
-                SceneLoaderPatches.TimeOfLastSceneTransition = SaveFile.GetFloat("playtime");
-                Archipelago.instance.integration.session.Locations.ScoutLocationsAsync(LocationIDs.ToArray()).ContinueWith(locationInfoPacket => {
-                    foreach (NetworkItem Location in locationInfoPacket.Result.Locations) {
-                        string LocationId = Locations.LocationDescriptionToId[Archipelago.instance.integration.session.Locations.GetLocationNameFromId(Location.Location)];
-                        string ItemName = Archipelago.instance.integration.session.Items.GetItemName(Location.Item) == null ? "UNKNOWN ITEM" : Archipelago.instance.integration.session.Items.GetItemName(Location.Item);
-                        ItemLookup.ItemList.Add(LocationId, new ArchipelagoItem(ItemName, Location.Player, Location.Flags));
+                if (LocationIDs.Contains(-1L)) {
+                    Notifications.Show($"\"An error has occurred!\"", $"\"Connected slot is incompatible with this client version.\"");
+                    Logger.LogInfo("Error: Connected slot is incompatible with this client version.");
+                    Archipelago.instance.Disconnect();
+                } else {
+                    Archipelago.instance.integration.session.Locations.ScoutLocationsAsync(LocationIDs.ToArray()).ContinueWith(locationInfoPacket => {
+                        foreach (NetworkItem Location in locationInfoPacket.Result.Locations) {
+                            string LocationId = Locations.LocationDescriptionToId[Archipelago.instance.integration.session.Locations.GetLocationNameFromId(Location.Location)];
+                            string ItemName = Archipelago.instance.integration.session.Items.GetItemName(Location.Item) == null ? "UNKNOWN ITEM" : Archipelago.instance.integration.session.Items.GetItemName(Location.Item);
+                            ItemLookup.ItemList.Add(LocationId, new ArchipelagoItem(ItemName, Location.Player, Location.Flags));
+                        }
+                    }).Wait(); 
+                    Logger.LogInfo("Successfully scouted locations for item placements");
+                    ItemTracker.PopulateSpoilerLog();
+                    GhostHints.GenerateHints();
+                    Hints.PopulateHints();
+                    if (Hints.HeroGraveHints.Count != 0) {
+                        Hints.SetupHeroGraveToggle();
                     }
-                }).Wait(TimeSpan.FromSeconds(15.0));
 
-                ItemTracker.PopulateSpoilerLog();
-                GhostHints.GenerateHints();
-                Hints.PopulateHints();
-                if (Hints.HeroGraveHints.Count != 0) {
-                    Hints.SetupHeroGraveToggle();
-                }
-                
-                if (SaveFile.GetInt(AbilityShuffle) == 1 && SaveFile.GetInt(HolyCrossUnlocked) == 0) {
-                    ItemPatches.ToggleHolyCrossObjects(false);
-                }
+                    if (SaveFile.GetInt(AbilityShuffle) == 1 && SaveFile.GetInt(HolyCrossUnlocked) == 0) {
+                        ItemPatches.ToggleHolyCrossObjects(false);
+                    }
 
-                if(SaveFile.GetInt(HexagonQuestEnabled) == 1) {
-                    TunicArchipelago.Tracker.ImportantItems["Pages"] = 28;
-                    SaveFile.SetInt("last page viewed", 0);
-                }
+                    if (SaveFile.GetInt(HexagonQuestEnabled) == 1) {
+                        TunicArchipelago.Tracker.ImportantItems["Pages"] = 28;
+                        SaveFile.SetInt("last page viewed", 0);
+                    }
 
-                FairyTargets.CreateFairyTargets();
+                    FairyTargets.CreateFairyTargets();
 
-                if (!SceneLoaderPatches.SpawnedGhosts) {
-                    GhostHints.SpawnHintGhosts(SceneLoaderPatches.SceneName);
-                }
+                    if (!SceneLoaderPatches.SpawnedGhosts) {
+                        GhostHints.SpawnHintGhosts(SceneLoaderPatches.SceneName);
+                    }
 
-                if (!ModelSwaps.SwappedThisSceneAlready) {
-                    ModelSwaps.SwapItemsInScene();
+                    if (!ModelSwaps.SwappedThisSceneAlready) {
+                        ModelSwaps.SwapItemsInScene();
+                    }
+
+                    Archipelago.instance.integration.UpdateDataStorageOnLoad();
                 }
 
-                OptionsGUIPatches.SaveSettings();
-
-                Archipelago.instance.integration.UpdateDataStorageOnLoad();
             }
+
+            OptionsGUIPatches.SaveSettings();
 
             ItemPresentationPatches.SwitchDathStonePresentation();
 

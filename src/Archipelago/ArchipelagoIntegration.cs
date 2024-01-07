@@ -123,7 +123,7 @@ namespace TunicArchipelago {
             } else {
                 LoginFailure loginFailure = (LoginFailure)LoginResult;
                 Logger.LogInfo("Error connecting to Archipelago:");
-                ShowNotification($"\"Failed to connect to Archipelago!\"", $"\"Check your settings and/or log output.\"");
+                Notifications.Show($"\"Failed to connect to Archipelago!\"", $"\"Check your settings and/or log output.\"");
                 foreach (string Error in loginFailure.Errors) {
                     Logger.LogInfo(Error);
                 }
@@ -259,7 +259,7 @@ namespace TunicArchipelago {
 
                 if (networkItem.Player != session.ConnectionInfo.Slot) {
                     SaveFile.SetInt("archipelago items sent to other players", SaveFile.GetInt("archipelago items sent to other players")+1);
-                    ShowNotification($"yoo sehnt  {(TextBuilderPatches.ItemNameToAbbreviation.ContainsKey(itemName) && Archipelago.instance.GetPlayerGame(networkItem.Player) == "Tunic" ? TextBuilderPatches.ItemNameToAbbreviation[itemName] : "[archipelago]")}  \"{itemName.Replace("_", " ")}\" too \"{receiver}!\"", $"hOp #A lIk it!");
+                    Notifications.Show($"yoo sehnt  {(TextBuilderPatches.ItemNameToAbbreviation.ContainsKey(itemName) && Archipelago.instance.GetPlayerGame(networkItem.Player) == "Tunic" ? TextBuilderPatches.ItemNameToAbbreviation[itemName] : "[archipelago]")}  \"{itemName.Replace("_", " ")}\" too \"{receiver}!\"", $"hOp #A lIk it!");
                 }
                 
                 yield return true;
@@ -291,7 +291,7 @@ namespace TunicArchipelago {
 
             } else {
                 Logger.LogWarning("Failed to get unique name for check " + LocationId);
-                ShowNotification($"\"Unknown Check: {LocationId}\"", $"\"Please file a bug!\"");
+                Notifications.Show($"\"Unknown Check: {LocationId}\"", $"\"Please file a bug!\"");
             }
         }
 
@@ -354,20 +354,6 @@ namespace TunicArchipelago {
             }
 
             deathLinkService.SendDeathLink(new DeathLink(Player, $"{Player}{DeathLinkMessages.Causes[AreaDiedIn][new System.Random().Next(DeathLinkMessages.Causes[AreaDiedIn].Count)]}"));
-        }
-
-        public void ShowNotification(string topLine, string bottomLine) {
-            var topLineObject = ScriptableObject.CreateInstance<LanguageLine>();
-            topLineObject.text = topLine;
-
-            var bottomLineObject = ScriptableObject.CreateInstance<LanguageLine>();
-            bottomLineObject.text = bottomLine;
-
-            var areaData = ScriptableObject.CreateInstance<AreaData>();
-            areaData.topLine = topLineObject;
-            areaData.bottomLine = bottomLineObject;
-
-            AreaLabel.ShowLabel(areaData);
         }
 
         private void SetupDataStorage() {
