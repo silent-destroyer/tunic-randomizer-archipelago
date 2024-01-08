@@ -376,6 +376,7 @@ namespace TunicArchipelago {
                     Enemies["Crabbo"].transform.localScale = Vector3.one;
                     Enemies["Crabbo"].transform.GetChild(1).GetComponent<CreatureMaterialManager>().originalMaterials = Crabbo.transform.GetChild(1).GetComponent<CreatureMaterialManager>().originalMaterials;
                     Enemies["Crabbo"].transform.GetChild(1).GetComponent<SkinnedMeshRenderer>().materials = Crabbo.transform.GetChild(1).GetComponent<SkinnedMeshRenderer>().materials;
+                    Enemies["Crabbo"].GetComponent<HitReceiver>().blockEnabled = true;
                     Enemies["Crabbo"].GetComponent<Crabbo>().attackDistance = 5f;
                     Enemies["Crabbo"].GetComponent<Crabbo>().averageAttackCooldown = 1.25f;
                     Enemies["Crabbo"].SetActive(false);
