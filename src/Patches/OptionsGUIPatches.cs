@@ -72,6 +72,7 @@ namespace TunicArchipelago {
             OptionsGUI OptionsGUI = GameObject.FindObjectOfType<OptionsGUI>();
             OptionsGUI.setHeading("General");
             OptionsGUI.addToggle("Easier Heir Fight", "Off", "On", TunicArchipelago.Settings.HeirAssistModeEnabled ? 1 : 0, (OptionsGUIMultiSelect.MultiSelectAction)ToggleHeirAssistMode);
+            OptionsGUI.addToggle("Clear Early Bushes", "Off", "On", TunicArchipelago.Settings.ClearEarlyBushes ? 1 : 0, (OptionsGUIMultiSelect.MultiSelectAction)ToggleClearEarlyBushes);
             OptionsGUI.addToggle("Cheaper Shop Items", "Off", "On", TunicArchipelago.Settings.CheaperShopItemsEnabled ? 1 : 0, (OptionsGUIMultiSelect.MultiSelectAction)ToggleCheaperShopItems);
             OptionsGUI.addToggle("Bonus Upgrades", "Off", "On", TunicArchipelago.Settings.BonusStatUpgradesEnabled ? 1 : 0, (OptionsGUIMultiSelect.MultiSelectAction)ToggleBonusStatUpgrades);
             OptionsGUI.addToggle("Disable Chest Interruption", "Off", "On", TunicArchipelago.Settings.DisableChestInterruption ? 1 : 0, (OptionsGUIMultiSelect.MultiSelectAction)ToggleChestInterruption);
@@ -211,6 +212,11 @@ namespace TunicArchipelago {
 
         public static void ToggleHeirAssistMode(int index) {
             TunicArchipelago.Settings.HeirAssistModeEnabled = !TunicArchipelago.Settings.HeirAssistModeEnabled;
+            SaveSettings();
+        }
+
+        public static void ToggleClearEarlyBushes(int index) {
+            TunicArchipelago.Settings.ClearEarlyBushes = !TunicArchipelago.Settings.ClearEarlyBushes;
             SaveSettings();
         }
 

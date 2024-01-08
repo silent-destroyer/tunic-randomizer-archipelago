@@ -285,6 +285,15 @@ namespace TunicArchipelago {
                 if (SaveFile.GetInt("randomizer entrance rando enabled") == 1 || (Archipelago.instance.integration.slotData.ContainsKey("entrance_rando") && Archipelago.instance.integration.slotData["entrance_rando"].ToString() == "1" && SaveFile.GetInt("seed") == 0)) {
                     GhostHints.SpawnTorchHintGhost();
                 }
+
+                if (TunicArchipelago.Settings.ClearEarlyBushes) {
+                    int[] bushesToClear = new int[] { 7, 2, 16, 47, 42 };
+                    foreach (int bush in bushesToClear) {
+                        if (GameObject.Find($"_Bush and Grass/bush ({bush})/") != null) {
+                            GameObject.Find($"_Bush and Grass/bush ({bush})/").SetActive(false);
+                        }
+                    }
+                }
             } else if (SceneName == "Swamp Redux 2") {
                 GhostHints.SpawnCathedralDoorGhost();
 

@@ -58,6 +58,11 @@ namespace TunicArchipelago {
             set;
         }
 
+        public bool ClearEarlyBushes {
+            get;
+            set;
+        }
+
         public bool CheaperShopItemsEnabled {
             get;
             set;
@@ -162,6 +167,7 @@ namespace TunicArchipelago {
             ChestsMatchContentsEnabled = true;
 
             HeirAssistModeEnabled = false;
+            ClearEarlyBushes = false;
             CheaperShopItemsEnabled = true;
             BonusStatUpgradesEnabled = true;
             DisableChestInterruption = false;
