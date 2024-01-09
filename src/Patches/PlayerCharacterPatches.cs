@@ -338,6 +338,8 @@ namespace TunicArchipelago {
 
             }
 
+            ItemStatsHUD.UpdateAbilitySection();
+
             OptionsGUIPatches.SaveSettings();
 
             ItemPresentationPatches.SwitchDathStonePresentation();

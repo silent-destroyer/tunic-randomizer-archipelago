@@ -354,6 +354,11 @@ namespace TunicArchipelago {
                     button.specialBadge.gameObject.active = true;
                     button.specialBadge.transform.localScale = new Vector3(0.4f, 0.4f, 0.4f);
                     button.specialBadge.transform.localPosition = new Vector3(-75f, -27f, 0f);
+                    
+                    if (SaveFile.GetInt(HexagonQuestEnabled) == 1) { 
+                        button.ngpBadge.gameObject.SetActive(true);
+                        button.ngpBadge.sprite = Inventory.GetItemByName("Hexagon Gold").icon;
+                    }
                     button.playtimeString.enableAutoSizing = false;
                     if (SaveFile.GetInt("archipelago") != 0) {
                         button.playtimeString.text += $" <size=65%>archipelago";

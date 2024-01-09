@@ -285,6 +285,7 @@ namespace TunicArchipelago {
                         if (Item.ItemNameForInventory == "21") {
                             ToggleHolyCrossObjects(true);
                         }
+                        ItemStatsHUD.UpdateAbilitySection();
                     }
                 }
                 if (!TunicArchipelago.Settings.SkipItemAnimations) {
@@ -349,6 +350,8 @@ namespace TunicArchipelago {
                         if (GoldHexes == SaveFile.GetInt(HexagonQuestHolyCross)) {
                             ToggleHolyCrossObjects(true);
                         }
+
+                        ItemStatsHUD.UpdateAbilitySection();
                     }
                 }
 

@@ -1,4 +1,5 @@
 ﻿using BepInEx.Logging;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using static TunicArchipelago.Hints;
@@ -19,6 +20,12 @@ namespace TunicArchipelago {
                         __instance.gameObject.GetComponent<NPC>().script.text = $"I lawst mI mahjik stOn [dath] ahnd kahnt gO hOm...---... wAt, yoo fownd it! plEz, yooz it now!";
                     }
                 }
+
+                if (GhostHints.HintGhosts.ContainsKey(__instance.name) && GhostHints.HexQuestHintLookup.ContainsKey(GhostHints.HintGhosts[__instance.name].Hint)) {
+                    SaveFile.SetInt($"randomizer hex quest read {GhostHints.HexQuestHintLookup[GhostHints.HintGhosts[__instance.name].Hint]} hint", 1);
+                    ItemStatsHUD.UpdateAbilitySection();
+                }
+
                 if (TunicArchipelago.Settings.SendHintsToServer) {
                     GhostHints.CheckForServerHint(__instance.name);
                 }

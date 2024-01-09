@@ -31,6 +31,7 @@ namespace TunicArchipelago {
             public string Hint;
             public string HintedItem;
             public string OptionalCheckID;
+            public string HexQuestAbilityHint;
 
             public HintGhost() { }
 
@@ -57,7 +58,8 @@ namespace TunicArchipelago {
         public static List<(string, string, string)> BarrenAndTreasureHints = new List<(string, string, string)>();
         public static string HeirHint;
 
-        public static List<HintGhost> HintGhosts = new List<HintGhost>();
+        public static Dictionary<string, HintGhost> HintGhosts = new Dictionary<string, HintGhost>();
+        public static Dictionary<string, string> HexQuestHintLookup = new Dictionary<string, string>();
 
         public static Dictionary<string, string> HintableLocationIds = new Dictionary<string, string>() {
             { "1005 [Swamp Redux 2]", "FOUR SKULLS" },
@@ -272,7 +274,7 @@ namespace TunicArchipelago {
         }
 
         public static void SpawnHintGhosts(string SceneName) {
-            foreach (HintGhost HintGhost in HintGhosts) {
+            foreach (HintGhost HintGhost in HintGhosts.Values) {
                 if (HintGhost.SceneName == SceneName) {
                     GhostFox.GetComponent<NPC>().nPCAnimState = HintGhost.AnimState;
                     GameObject NewGhostFox = GameObject.Instantiate(GhostFox);
@@ -294,6 +296,7 @@ namespace TunicArchipelago {
 
         public static void GenerateHints() {
             HintGhosts.Clear();
+            HexQuestHintLookup.Clear();
             List<string> GhostSpawns = GhostLocations.Keys.ToList();
             if (SaveFile.GetInt(EntranceRando) == 0) { 
                 GhostSpawns.Remove("Purgatory"); 
@@ -307,7 +310,7 @@ namespace TunicArchipelago {
             }
             foreach (string Location in SelectedSpawns) {
                 HintGhost HintGhost = GhostLocations[Location][random.Next(GhostLocations[Location].Count)];
-                HintGhosts.Add(HintGhost);
+                HintGhosts.Add(HintGhost.Name, HintGhost);
             }
 
             GenerateLocationHints();
@@ -354,9 +357,9 @@ namespace TunicArchipelago {
                 }
             }
             if (Hints.Count < 15) {
-                HintGhosts = HintGhosts.Take(Hints.Count).ToList();
+                HintGhosts = HintGhosts.Take(Hints.Count).ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
             }
-            foreach (HintGhost HintGhost in HintGhosts) {
+            foreach (HintGhost HintGhost in HintGhosts.Values) {
                 (string, string, string) Hint = Hints[random.Next(Hints.Count)];
                 HintGhost.Hint = Hint.Item1;
                 HintGhost.HintedItem = Hint.Item2;
@@ -418,9 +421,15 @@ namespace TunicArchipelago {
                 }
             }
             if (SaveFile.GetInt(HexagonQuestEnabled) == 1 && SaveFile.GetInt(AbilityShuffle) == 1) {
-                ItemHints.Add(($"bI #uh wA, I hurd #aht [goldhex] \"{SaveFile.GetInt(HexagonQuestPrayer)} GOLD QUESTAGONS\"\nwil grahnt yoo #uh powur uhv \"PRAYER.\"", "", ""));
-                ItemHints.Add(($"bI #uh wA, I hurd #aht [goldhex] \"{SaveFile.GetInt(HexagonQuestHolyCross)} GOLD QUESTAGONS\"\nwil grahnt yoo #uh powur uhv #uh \"HOLY CROSS.\"", "", ""));
-                ItemHints.Add(($"bI #uh wA, I hurd #aht [goldhex] \"{SaveFile.GetInt(HexagonQuestIceRod)} GOLD QUESTAGONS\"\nwil grahnt yoo #uh #uh powur uhv #uh \"ICE ROD.\"", "", ""));
+                string prayerHint = $"bI #uh wA, I hurd #aht [goldhex] \"{SaveFile.GetInt(HexagonQuestPrayer)} GOLD QUESTAGONS\"\nwil grahnt yoo #uh powur uhv \"PRAYER.\"";
+                string holyCrossHint = $"bI #uh wA, I hurd #aht [goldhex] \"{SaveFile.GetInt(HexagonQuestHolyCross)} GOLD QUESTAGONS\"\nwil grahnt yoo #uh powur uhv #uh \"HOLY CROSS.\"";
+                string iceRodHint = $"bI #uh wA, I hurd #aht [goldhex] \"{SaveFile.GetInt(HexagonQuestIceRod)} GOLD QUESTAGONS\"\nwil grahnt yoo #uh #uh powur uhv #uh \"ICE ROD.\"";
+                ItemHints.Add((prayerHint, "", ""));
+                ItemHints.Add((holyCrossHint, "", ""));
+                ItemHints.Add((iceRodHint, "", ""));
+                HexQuestHintLookup.Add(prayerHint, "Prayer");
+                HexQuestHintLookup.Add(holyCrossHint, "Holy Cross");
+                HexQuestHintLookup.Add(iceRodHint, "Ice Rod");
             }
         }
 
@@ -485,7 +494,7 @@ namespace TunicArchipelago {
                             BarrenArea = false;
                             break;
                         }
-                        if (HintGhosts.Where(HintGhost => HintGhost.SceneName == Key).ToList().Count > 0) {
+                        if (HintGhosts.Where(HintGhost => HintGhost.Value.SceneName == Key).ToList().Count > 0) {
                             BarrenArea = false;
                             break;
                         }
@@ -525,7 +534,7 @@ namespace TunicArchipelago {
         }
 
         public static void CheckForServerHint(string npcName) {
-            foreach (HintGhost HintGhost in HintGhosts) { 
+            foreach (HintGhost HintGhost in HintGhosts.Values) { 
                 if (HintGhost.Name == npcName && HintGhost.OptionalCheckID != "" && SaveFile.GetInt($"archipelago sent optional hint to server {HintGhost.OptionalCheckID}") == 0) {
                     Archipelago.instance.integration.session.Locations.ScoutLocationsAsync(true, Archipelago.instance.GetLocationId(HintGhost.OptionalCheckID));
                     SaveFile.SetInt($"archipelago sent optional hint to server {HintGhost.OptionalCheckID}", 1);

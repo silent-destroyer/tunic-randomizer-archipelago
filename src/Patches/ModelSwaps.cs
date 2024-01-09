@@ -1109,6 +1109,7 @@ namespace TunicArchipelago {
             CustomItemImages.Add("Fool Trap", CreateSprite(ImageData.TinyFox, ImageMaterial, SpriteName: "Randomizer items_Fool Trap"));
             CustomItemImages.Add("Archipelago Item", CreateSprite(ImageData.ArchipelagoItem, ImageMaterial, 128, 128, SpriteName: "Randomizer items_Archipelago Item"));
             CustomItemImages.Add("Torch Redux", CreateSprite(ImageData.TorchRedux, ImageMaterial, 160, 160, SpriteName: "Randomizer items_Torch redux"));
+            CustomItemImages.Add("AbilityShuffle", CreateSprite(ImageData.Abilities, ImageMaterial, 200, 100, SpriteName: "Randomizer heading_Abilities"));
 
             Inventory.GetItemByName("Librarian Sword").icon = CustomItemImages["Librarian Sword"].GetComponent<Image>().sprite;
             Inventory.GetItemByName("Heir Sword").icon = CustomItemImages["Heir Sword"].GetComponent<Image>().sprite;

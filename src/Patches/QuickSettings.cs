@@ -258,7 +258,7 @@ namespace TunicArchipelago {
                 GUI.Toggle(new Rect(10f, 220f, 180f, 30f), slotData["keys_behind_bosses"].ToString() == "1", "Keys Behind Bosses");
                 GUI.Toggle(new Rect(220f, 220f, 210f, 30f), slotData["sword_progression"].ToString() == "1", "Sword Progression");
                 GUI.Toggle(new Rect(10f, 260f, 175f, 30f), slotData["start_with_sword"].ToString() == "1", "Start With Sword");
-                GUI.Toggle(new Rect(220f, 260f, 175f, 30f), slotData["ability_shuffling"].ToString() == "1", "Shuffle Abilities");
+                GUI.Toggle(new Rect(220f, 260f, 175f, 30f), slotData["ability_shuffling"].ToString() == "1", "Shuffled Abilities");
                 GUI.Toggle(new Rect(10f, 300f, 185f, 30f), slotData["hexagon_quest"].ToString() == "1", slotData["hexagon_quest"].ToString() == "1" ? 
                     $"Hexagon Quest (<color=#E3D457>{slotData["Hexagon Quest Goal"].ToString()}</color>)" : $"Hexagon Quest");
                 int FoolIndex = int.Parse(slotData["fool_traps"].ToString());
@@ -279,7 +279,7 @@ namespace TunicArchipelago {
                 GUI.Toggle(new Rect(10f, 220f, 180f, 30f), false, "Keys Behind Bosses");
                 GUI.Toggle(new Rect(220f, 220f, 210f, 30f), false, "Sword Progression");
                 GUI.Toggle(new Rect(10f, 260f, 175f, 30f), false, "Start With Sword");
-                GUI.Toggle(new Rect(220f, 260f, 175f, 30f), false, "Shuffle Abilities");
+                GUI.Toggle(new Rect(220f, 260f, 175f, 30f), false, "Shuffled Abilities");
                 GUI.Toggle(new Rect(10f, 300f, 175f, 30f), false, "Hexagon Quest");
                 GUI.Toggle(new Rect(220f, 300f, 175f, 30f), false, "Fool Traps: Off");
                 GUI.Toggle(new Rect(10f, 340f, 195f, 30f), false, $"Entrance Randomizer");
