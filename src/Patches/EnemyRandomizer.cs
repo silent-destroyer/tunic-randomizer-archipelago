@@ -604,8 +604,12 @@ namespace TunicArchipelago {
                     }
 
                     if (NewEnemy.name.Contains("Crabbo") && NewEnemy.GetComponent<Crabbo>() != null) {
-                        NewEnemy.GetComponent<Monster>().animatorSpeedMultiplier._value = 1f;
-                        NewEnemy.GetComponent<Monster>().defaultStartingMaxHP._value = 50f;
+                        if (NewEnemy.GetComponent<Monster>().animatorSpeedMultiplier != null) {
+                            NewEnemy.GetComponent<Monster>().animatorSpeedMultiplier.Value = 1f;
+                        }
+                        if (NewEnemy.GetComponent<Monster>().defaultStartingMaxHP != null) {
+                            NewEnemy.GetComponent<Monster>().defaultStartingMaxHP.Value = 50f;
+                        }
                     }
 
                     NewEnemy.name += $" {i}";

@@ -256,7 +256,6 @@ namespace TunicArchipelago {
                     GameObject subscript = new GameObject($"subscript {i}");
                     subscript.transform.parent = AbilityShuffle.transform;
                     subscript.transform.localScale = Vector3.one;
-                    subscript.transform.localPosition = new Vector3(-560, 10 - (i * 96), 0f);
                     subscript.AddComponent<TextMeshProUGUI>().font = odin;
                     subscript.GetComponent<TextMeshProUGUI>().fontMaterial = fontMaterial;
                     subscript.GetComponent<TextMeshProUGUI>().fontSize = 36;
@@ -269,7 +268,6 @@ namespace TunicArchipelago {
                     GameObject subscript = new GameObject($"hex subscript {i}");
                     subscript.transform.parent = AbilityShuffle.transform;
                     subscript.transform.localScale = Vector3.one;
-                    subscript.transform.localPosition = new Vector3(-530, 10 - (i * 96), 0f);
                     subscript.AddComponent<TextMeshProUGUI>().font = odin;
                     subscript.GetComponent<TextMeshProUGUI>().fontMaterial = fontMaterial;
                     subscript.GetComponent<TextMeshProUGUI>().fontSize = 36;
@@ -301,15 +299,6 @@ namespace TunicArchipelago {
             Color Faded = new Color(1, 1, 1, 0.5f);
             bool isHexQuest = SaveFile.GetInt(HexagonQuestEnabled) == 1;
 
-            for (int i = 7; i < 10; i++) {
-                AbilityShuffle.transform.GetChild(i).gameObject.SetActive(!isHexQuest);
-                AbilityShuffle.transform.GetChild(i + 9).gameObject.SetActive(!isHexQuest);
-            }
-            for (int i = 10; i < 13; i++) {
-                AbilityShuffle.transform.GetChild(i).gameObject.SetActive(isHexQuest);
-                AbilityShuffle.transform.GetChild(i + 9).gameObject.SetActive(isHexQuest);
-            }
-
             if (isHexQuest) {
                 SortedDictionary<int, string> HexUnlocks = new SortedDictionary<int, string>() {
                     { SaveFile.GetInt(HexagonQuestPrayer), "Prayer" },
@@ -339,6 +328,11 @@ namespace TunicArchipelago {
                 AbilityShuffle.transform.GetChild(19).GetComponent<TextMeshProUGUI>().text = $"{unlocks[0]}";
                 AbilityShuffle.transform.GetChild(20).GetComponent<TextMeshProUGUI>().text = $"{unlocks[1]}";
                 AbilityShuffle.transform.GetChild(21).GetComponent<TextMeshProUGUI>().text = $"{unlocks[2]}";
+                for (int i = 19; i < 22; i++) {
+                    AbilityShuffle.transform.GetChild(i).GetComponent<TextMeshProUGUI>().horizontalAlignment = HorizontalAlignmentOptions.Right;
+                    AbilityShuffle.transform.GetChild(i).GetComponent<TextMeshProUGUI>().autoSizeTextContainer = false;
+                    AbilityShuffle.transform.GetChild(i).GetComponent<TextMeshProUGUI>().autoSizeTextContainer = true;
+                }
 
                 AbilityShuffle.transform.GetChild(19).GetComponent<TextMeshProUGUI>().color = hasAbility1 ? Full : Faded;
                 AbilityShuffle.transform.GetChild(20).GetComponent<TextMeshProUGUI>().color = hasAbility2 ? Full : Faded;
@@ -360,6 +354,11 @@ namespace TunicArchipelago {
                 AbilityShuffle.transform.GetChild(16).GetComponent<TextMeshProUGUI>().text = "24-25";
                 AbilityShuffle.transform.GetChild(17).GetComponent<TextMeshProUGUI>().text = "42-43";
                 AbilityShuffle.transform.GetChild(18).GetComponent<TextMeshProUGUI>().text = "52-53";
+                for (int i = 16; i < 19; i++) {
+                    AbilityShuffle.transform.GetChild(i).GetComponent<TextMeshProUGUI>().horizontalAlignment = HorizontalAlignmentOptions.Center;
+                    AbilityShuffle.transform.GetChild(i).GetComponent<TextMeshProUGUI>().autoSizeTextContainer = false;
+                    AbilityShuffle.transform.GetChild(i).GetComponent<TextMeshProUGUI>().autoSizeTextContainer = true;
+                }
 
                 AbilityShuffle.transform.GetChild(16).GetComponent<TextMeshProUGUI>().color = HasPrayer ? Full : Faded;
                 AbilityShuffle.transform.GetChild(17).GetComponent<TextMeshProUGUI>().color = HasHolyCross ? Full : Faded;
@@ -485,11 +484,16 @@ namespace TunicArchipelago {
 
                 AbilityShuffle.transform.localPosition = new Vector3(465f, 0f, 0f);
                 AbilityShuffle.transform.GetChild(0).localPosition = new Vector3(146.9f, -72.5f, 0f);
+                bool hexQuest = SaveFile.GetInt(HexagonQuestEnabled) == 1;
                 for (int i = 16; i < 19; i++) {
-                    AbilityShuffle.transform.GetChild(i).localPosition = new Vector3(52, -197 - ((i-16) * 96), 0f);
+                    AbilityShuffle.transform.GetChild(i).localPosition = new Vector3(52, -197 - ((i - 16) * 96), 0f);
+                    AbilityShuffle.transform.GetChild(i).gameObject.SetActive(!hexQuest);
+                    AbilityShuffle.transform.GetChild(i - 9).gameObject.SetActive(!hexQuest);
                 }
                 for (int i = 19; i < AbilityShuffle.transform.childCount; i++) {
                     AbilityShuffle.transform.GetChild(i).localPosition = new Vector3(77, -197 - ((i - 19) * 96), 0f);
+                    AbilityShuffle.transform.GetChild(i).gameObject.SetActive(hexQuest);
+                    AbilityShuffle.transform.GetChild(i - 9).gameObject.SetActive(hexQuest);
                 }
             }
 
