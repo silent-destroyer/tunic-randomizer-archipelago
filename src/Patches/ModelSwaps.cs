@@ -112,15 +112,6 @@ namespace TunicArchipelago {
             Items["Hexagon Green"] = ItemRoot.transform.GetChild(27).GetChild(0).gameObject;
             Items["Hexagon Blue"] = ItemRoot.transform.GetChild(28).GetChild(0).gameObject;
 
-            Items["Dath Stone"] = GameObject.Instantiate(ItemRoot.transform.GetChild(28).GetChild(0).gameObject);
-            Items["Dath Stone"].SetActive(false);
-            Material DathStoneMaterial = Items["Lantern"].GetComponent<MeshRenderer>().material;
-            DathStoneMaterial.color = new UnityEngine.Color(1, 1, 1);
-            Items["Dath Stone"].GetComponent<MeshRenderer>().material = DathStoneMaterial;
-            Items["Dath Stone"].GetComponent<MeshRenderer>().materials[0] = DathStoneMaterial;
-            GameObject.Destroy(Items["Dath Stone"].GetComponent<Rotate>());
-            GameObject.DontDestroyOnLoad(Items["Dath Stone"]);
-
             Items["money small"] = GameObject.Instantiate(Resources.FindObjectsOfTypeAll<ItemPickup>().Where(ItemPickup => ItemPickup.name == "Coin Pickup 1(Clone)").ToList()[0].gameObject.transform.GetChild(0).gameObject);
             Items["money medium"] = GameObject.Instantiate(Resources.FindObjectsOfTypeAll<ItemPickup>().Where(ItemPickup => ItemPickup.name == "Coin Pickup 2(Clone)").ToList()[0].gameObject.transform.GetChild(0).gameObject);
             Items["money large"] = GameObject.Instantiate(Resources.FindObjectsOfTypeAll<ItemPickup>().Where(ItemPickup => ItemPickup.name == "Coin Pickup 3(Clone)").ToList()[0].gameObject.transform.GetChild(0).gameObject);
@@ -149,6 +140,15 @@ namespace TunicArchipelago {
             }
 
             LoadTextures();
+
+            Items["Dath Stone"] = new GameObject();
+            Items["Dath Stone"].AddComponent<MeshFilter>().mesh = MeshData.CreateMesh(MeshData.DathStone);
+            Items["Dath Stone"].AddComponent<MeshRenderer>().material = FindMaterial("grass tuft");
+            Items["Dath Stone"].GetComponent<MeshRenderer>().material.mainTexture = CustomItemImages["Dath Stone Texture"].GetComponent<Image>().sprite.texture;
+            Items["Dath Stone"].GetComponent<MeshRenderer>().material.color = new Color(1, 1, 1, 1);
+            Items["Dath Stone"].SetActive(false);
+            Items["Dath Stone"].name = "dath stone";
+            GameObject.DontDestroyOnLoad(Items["Dath Stone"]);
 
             ItemPresentationPatches.SetupOldHouseKeyItemPresentation();
             Items["Key (House)"] = ItemRoot.transform.GetChild(48).gameObject;
@@ -1110,6 +1110,8 @@ namespace TunicArchipelago {
             CustomItemImages.Add("Archipelago Item", CreateSprite(ImageData.ArchipelagoItem, ImageMaterial, 128, 128, SpriteName: "Randomizer items_Archipelago Item"));
             CustomItemImages.Add("Torch Redux", CreateSprite(ImageData.TorchRedux, ImageMaterial, 160, 160, SpriteName: "Randomizer items_Torch redux"));
             CustomItemImages.Add("AbilityShuffle", CreateSprite(ImageData.Abilities, ImageMaterial, 200, 100, SpriteName: "Randomizer heading_Abilities"));
+            CustomItemImages.Add("Dath Stone Texture", CreateSprite(ImageData.dashstone, ImageMaterial, 200, 100, SpriteName: "Randomizer dath stone texture"));
+            CustomItemImages.Add("Dath Stone Texture Spec", CreateSprite(ImageData.dashstonespec, ImageMaterial, 200, 100, SpriteName: "Randomizer dath stone texture spec"));
 
             Inventory.GetItemByName("Librarian Sword").icon = CustomItemImages["Librarian Sword"].GetComponent<Image>().sprite;
             Inventory.GetItemByName("Heir Sword").icon = CustomItemImages["Heir Sword"].GetComponent<Image>().sprite;

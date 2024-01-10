@@ -161,6 +161,7 @@
     <Compile Include="src\Data\ItemTracker.cs" />
     <Compile Include="src\Data\Locations.cs" />
     <Compile Include="src\Data\ConnectionSettings.cs" />
+    <Compile Include="src\Data\MeshData.cs" />
     <Compile Include="src\Data\Portal.cs" />
     <Compile Include="src\Data\PortalCombo.cs" />
     <Compile Include="src\Data\RandomizerSettings.cs" />

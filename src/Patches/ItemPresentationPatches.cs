@@ -102,38 +102,27 @@ namespace TunicArchipelago {
                 DathStone.transform.parent = KeySpecial.transform.parent;
                 DathStone.name = "dath stone";
                 DathStone.layer = KeySpecial.layer;
-
-                if (DathStone.GetComponent<MeshFilter>() != null) {
-                    GameObject.Destroy(DathStone.GetComponent<MeshRenderer>());
-                    GameObject.Destroy(DathStone.GetComponent<MeshFilter>());
-                }
-                GameObject DathSprite = new GameObject("dath stone sprite");
-                DathSprite.AddComponent<SpriteRenderer>().sprite = Inventory.GetItemByName("Dash Stone").icon;
-                DathSprite.GetComponent<SpriteRenderer>().color = new Color(1f, 1f, 1f, 0.5f);
-                DathSprite.GetComponent<SpriteRenderer>().material = Resources.FindObjectsOfTypeAll<Material>().Where(mat => mat.name == "UI Add").ToList()[0];
-                DathSprite.transform.parent = DathStone.transform;
-                DathSprite.layer = KeySpecial.layer;
-                DathSprite.transform.localPosition = Vector3.zero;
-                DathSprite.transform.localScale = Vector3.one;
-                DathSprite.transform.localEulerAngles = Vector3.zero;
+                DathStone.GetComponent<MeshFilter>().mesh = ModelSwaps.Items["Dath Stone"].GetComponent<MeshFilter>().mesh;
+                DathStone.GetComponent<MeshRenderer>().material = ModelSwaps.Items["Dath Stone"].GetComponent<MeshRenderer>().material;
+                DathStone.transform.localEulerAngles = new Vector3(345.5225f, 153.9672f, 344.4959f);
 
                 GameObject Torch = new GameObject("torch");
                 Torch.AddComponent<SpriteRenderer>().sprite = ModelSwaps.FindSprite("Randomizer items_Torch redux");
                 Torch.GetComponent<SpriteRenderer>().material = ModelSwaps.FindMaterial("UI Add");
                 Torch.layer = KeySpecial.layer;
                 Torch.transform.parent = DathStone.transform;
-                Torch.transform.localPosition = new Vector3(0.7f, 0.2f, 0f);
+                Torch.transform.localPosition = new Vector3(-0.9f, 0.2f, 0f);
                 Torch.transform.localScale = new Vector3(0.35f, 0.35f, 0.35f);
-                Torch.transform.localEulerAngles = Vector3.zero;
+                Torch.transform.localEulerAngles = new Vector3(0, 180, 0);
 
                 GameObject Plus = new GameObject("plus");
                 Plus.AddComponent<SpriteRenderer>().sprite = ModelSwaps.FindSprite("game gui_plus sign");
                 Plus.GetComponent<SpriteRenderer>().material = ModelSwaps.FindMaterial("UI Add");
                 Plus.layer = KeySpecial.layer;
                 Plus.transform.parent = DathStone.transform;
-                Plus.transform.localPosition = new Vector3(0.55f, 0.2f, 0f);
+                Plus.transform.localPosition = new Vector3(-0.75f, 0.2f, 0f);
                 Plus.transform.localScale = new Vector3(0.15f, 0.15f, 0.15f);
-                Plus.transform.localEulerAngles = Vector3.zero;
+                Plus.transform.localEulerAngles = new Vector3(0, 0, 15);
 
                 Torch.SetActive(SaveFile.GetInt("randomizer entrance rando enabled") == 0);
                 Plus.SetActive(SaveFile.GetInt("randomizer entrance rando enabled") == 0);
@@ -143,7 +132,6 @@ namespace TunicArchipelago {
 
                 DathStone.transform.localScale = Vector3.one;
                 DathStone.transform.localPosition = Vector3.zero;
-                DathStone.transform.localRotation = Quaternion.identity;
 
                 GameObject.DontDestroyOnLoad(DathStone);
                 DathStone.SetActive(false);
@@ -156,7 +144,7 @@ namespace TunicArchipelago {
             try {
                 GameObject DathStone = Resources.FindObjectsOfTypeAll<ItemPresentationGraphic>().Where(Item => Item.gameObject.name == "dath stone").ToList()[0].gameObject;
 
-                for (int i = 1; i < DathStone.transform.childCount; i++) {
+                for (int i = 0; i < DathStone.transform.childCount; i++) {
                     DathStone.transform.GetChild(i).gameObject.SetActive(SaveFile.GetInt("randomizer entrance rando enabled") == 0);
                 }
             } catch (Exception e) {

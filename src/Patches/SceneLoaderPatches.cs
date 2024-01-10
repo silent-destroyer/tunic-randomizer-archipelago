@@ -282,6 +282,7 @@ namespace TunicArchipelago {
                 GameObject.Find("_Signposts/Signpost (3)/").GetComponent<Signpost>().message.text = $"#is wA too \"West Garden\"\n<#33FF33>[death] bEwAr uhv tArE [death]";
                 GameObject.Find("_Environment Special/Door (1)/door/key twist").GetComponent<MeshRenderer>().materials = ModelSwaps.Items["Key (House)"].GetComponent<MeshRenderer>().materials;
                 GameObject.Find("_Environment/_Decorations/Mailbox (1)/mailbox flag").AddComponent<MailboxFlag>();
+
                 if (SaveFile.GetInt("randomizer entrance rando enabled") == 1 || (Archipelago.instance.integration.slotData.ContainsKey("entrance_rando") && Archipelago.instance.integration.slotData["entrance_rando"].ToString() == "1" && SaveFile.GetInt("seed") == 0)) {
                     GhostHints.SpawnTorchHintGhost();
                 }
