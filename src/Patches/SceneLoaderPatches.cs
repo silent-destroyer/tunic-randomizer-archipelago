@@ -445,6 +445,7 @@ namespace TunicArchipelago {
                 CapeSecret.transform.localScale = new Vector3(0.25f, 0.25f, 0.25f);
                 CapeSecret.transform.GetChild(0).localScale = new Vector3(0.5f, 0.5f, 0.5f);
                 CapeSecret.AddComponent<VisibleByNotHavingItem>().Item = Inventory.GetItemByName("Cape");
+                CapeSecret.SetActive(true);
             }
         }
 
