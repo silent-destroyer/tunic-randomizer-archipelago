@@ -305,6 +305,7 @@ namespace TunicArchipelago {
             CloseAPSettingsWindow();
             SaveFile.LoadFromFile(filename);
             if (SaveFile.GetInt("archipelago") == 0) {
+                Logger.LogInfo("Non-Archipelago file selected!");
                 GenericMessage.ShowMessage("<#FF0000>[death] \"<#FF0000>warning!\" <#FF0000>[death]\n\"Non-Archipelago file selected.\"\n\"Returning to menu.\"");
                 return false;
             }
