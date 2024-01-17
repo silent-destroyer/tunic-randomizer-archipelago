@@ -388,10 +388,10 @@ namespace TunicArchipelago {
                 string LocationSuffix = Location[Location.Length - 1] == 'S' ? "R" : "iz";
                 string ItemPrefix = Item.ItemName.Contains("Money") ? "suhm" : Vowels.Contains(Item.ItemName.ToUpper()[0]) ? "ahn" : "uh";
                 string PlayerName = Archipelago.instance.GetPlayerName(Item.Player);
-                string ItemToDisplay = Archipelago.instance.GetPlayerGame(Item.Player) == "Tunic" && TextBuilderPatches.ItemNameToAbbreviation.ContainsKey(Item.ItemName) 
+                string ItemToDisplay = Archipelago.instance.IsTunicPlayer(Item.Player) && TextBuilderPatches.ItemNameToAbbreviation.ContainsKey(Item.ItemName) 
                     ? TextBuilderPatches.ItemNameToAbbreviation[Item.ItemName] : "[archipelago]";
                 string Hint = $"bI #uh wA, I hurd #aht \"{HintableLocationIds[Key].Replace(" ", "\" \"")}\" {LocationSuffix} gRdi^  {ItemToDisplay}  \"{PlayerName.ToUpper().Replace(" ", "\" \"")}'S {Item.ItemName.ToUpper().Replace(" ", "\" \"").Replace("_", "\" \"")}.\"";
-                string ItemForHint = Archipelago.instance.GetPlayerGame(Item.Player) == "Tunic" ? Item.ItemName : "Archipelago Item";
+                string ItemForHint = Archipelago.instance.IsTunicPlayer(Item.Player) ? Item.ItemName : "Archipelago Item";
                 LocationHints.Add((WordWrapString(Hint), ItemForHint, Locations.LocationIdToDescription[Key]));
             }
         }

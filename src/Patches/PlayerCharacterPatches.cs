@@ -292,7 +292,7 @@ namespace TunicArchipelago {
                 List<long> LocationIDs = new List<long>();
                 foreach (string Key in Locations.VanillaLocations.Keys) {
                     Locations.CheckedLocations.Add(Key, SaveFile.GetInt($"randomizer picked up {Key}") == 1);
-                    LocationIDs.Add(Archipelago.instance.integration.session.Locations.GetLocationIdFromName("Tunic", Locations.LocationIdToDescription[Key]));
+                    LocationIDs.Add(Archipelago.instance.integration.session.Locations.GetLocationIdFromName("TUNIC", Locations.LocationIdToDescription[Key]));
                 }
                 if (LocationIDs.Contains(-1L)) {
                     Notifications.Show($"\"An error has occurred!\"", $"\"Connected slot is incompatible with this client version.\"");

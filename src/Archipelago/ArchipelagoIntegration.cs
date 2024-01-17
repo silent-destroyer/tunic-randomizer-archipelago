@@ -92,7 +92,7 @@ namespace TunicArchipelago {
             TunicArchipelago.Tracker = new ItemTracker();
 
             try {
-                LoginResult = session.TryConnectAndLogin("Tunic", TunicArchipelago.Settings.ConnectionSettings.Player, ItemsHandlingFlags.AllItems, requestSlotData: true, password: TunicArchipelago.Settings.ConnectionSettings.Password);
+                LoginResult = session.TryConnectAndLogin("TUNIC", TunicArchipelago.Settings.ConnectionSettings.Player, ItemsHandlingFlags.AllItems, requestSlotData: true, password: TunicArchipelago.Settings.ConnectionSettings.Password);
             } catch (Exception e) {
                 LoginResult = new LoginFailure(e.GetBaseException().Message);
             }
@@ -259,7 +259,7 @@ namespace TunicArchipelago {
 
                 if (networkItem.Player != session.ConnectionInfo.Slot) {
                     SaveFile.SetInt("archipelago items sent to other players", SaveFile.GetInt("archipelago items sent to other players")+1);
-                    Notifications.Show($"yoo sehnt  {(TextBuilderPatches.ItemNameToAbbreviation.ContainsKey(itemName) && Archipelago.instance.GetPlayerGame(networkItem.Player) == "Tunic" ? TextBuilderPatches.ItemNameToAbbreviation[itemName] : "[archipelago]")}  \"{itemName.Replace("_", " ")}\" too \"{receiver}!\"", $"hOp #A lIk it!");
+                    Notifications.Show($"yoo sehnt  {(TextBuilderPatches.ItemNameToAbbreviation.ContainsKey(itemName) && Archipelago.instance.IsTunicPlayer(networkItem.Player) ? TextBuilderPatches.ItemNameToAbbreviation[itemName] : "[archipelago]")}  \"{itemName.Replace("_", " ")}\" too \"{receiver}!\"", $"hOp #A lIk it!");
                 }
                 
                 yield return true;

@@ -68,6 +68,10 @@ namespace TunicArchipelago {
             return integration.session.Players.Players[0][Slot].Game;
         }
 
+        public bool IsTunicPlayer(int Slot) {
+            return GetPlayerGame(Slot) == "TUNIC";
+        }
+
         public string GetItemName(long id) {
             return integration.session.Items.GetItemName(id);
         }
@@ -77,7 +81,7 @@ namespace TunicArchipelago {
         }
 
         public long GetLocationId(string name) {
-            return integration.session.Locations.GetLocationIdFromName("Tunic", name);
+            return integration.session.Locations.GetLocationIdFromName("TUNIC", name);
         }
 
     }

@@ -118,7 +118,7 @@ namespace TunicArchipelago {
                 ArchipelagoItem item = ItemLookup.ItemList[itemkey];
                 // In ER, we need to check more info, since every item has a required item count
                 if (SaveFile.GetInt(EntranceRando) == 1) {
-                    if (Archipelago.instance.GetPlayerGame(item.Player) == "Tunic" && MailboxItems.Contains(item.ItemName)) {
+                    if (Archipelago.instance.IsTunicPlayer(item.Player) && MailboxItems.Contains(item.ItemName)) {
                         var requirements = Locations.VanillaLocations[itemkey].Location.RequiredItemsDoors[0].Keys;
                         foreach (string req in requirements) {
                             int checkCount = 0;
@@ -146,7 +146,7 @@ namespace TunicArchipelago {
                         }
                     }
                 } else {
-                    if (Archipelago.instance.GetPlayerGame(item.Player) == "Tunic" && MailboxItems.Contains(item.ItemName) && Locations.VanillaLocations[itemkey].Location.RequiredItems.Count == 0) {
+                    if (Archipelago.instance.IsTunicPlayer(item.Player) && MailboxItems.Contains(item.ItemName) && Locations.VanillaLocations[itemkey].Location.RequiredItems.Count == 0) {
                         SphereOnePlayer.Add(itemkey, item);
                     }
                     if (item.Player != Archipelago.instance.GetPlayerSlot() && item.Classification == ItemFlags.Advancement && Locations.VanillaLocations[itemkey].Location.RequiredItems.Count == 0) {
@@ -179,7 +179,7 @@ namespace TunicArchipelago {
                 Scene = Hyperdash.Location == "Your Pocket" ? Hyperdash.Location.ToUpper() : Locations.SimplifiedSceneNames[Locations.VanillaLocations[Locations.LocationDescriptionToId[Hyperdash.Location]].Location.SceneName].ToUpper();
                 Prefix = Vowels.Contains(Scene[0]) ? "#E" : "#uh";
                 Hint += $"\nuhwAts yoo in {Prefix} \"{Scene}...\"";
-            } else if (Archipelago.instance.GetPlayerGame((int)Hyperdash.Player) == "Tunic") {
+            } else if (Archipelago.instance.IsTunicPlayer((int)Hyperdash.Player)) {
                 Scene = Locations.SimplifiedSceneNames[Locations.VanillaLocations[Locations.LocationDescriptionToId[Hyperdash.Location]].Location.SceneName].ToUpper();
                 Hint += $"\nuhwAts yoo in \"{Archipelago.instance.GetPlayerName((int)Hyperdash.Player).ToUpper()}'S\"\n\"{Scene}...\"";
             } else {
@@ -208,7 +208,7 @@ namespace TunicArchipelago {
                     }
                     Prefix = Vowels.Contains(Scene[0]) ? "#E" : "#uh";
                     Hint = $"lehjehnd sehz {Prefix} \"{Scene}\"";
-                } else if (Archipelago.instance.GetPlayerGame((int)ItemHint.Player) == "Tunic") {
+                } else if (Archipelago.instance.IsTunicPlayer((int)ItemHint.Player)) {
                     Scene = Locations.SimplifiedSceneNames[Locations.VanillaLocations[Locations.LocationDescriptionToId[ItemHint.Location]].Location.SceneName].ToUpper();
                     Hint = $"lehjehnd sehz \"{Archipelago.instance.GetPlayerName((int)ItemHint.Player).ToUpper()}'S\"\n\"{Scene}\"";
                 } else {
@@ -248,7 +248,7 @@ namespace TunicArchipelago {
                     Scene = HexHint.Location == "Your Pocket" ? HexHint.Location.ToUpper() : Locations.SimplifiedSceneNames[Locations.VanillaLocations[Locations.LocationDescriptionToId[HexHint.Location]].Location.SceneName].ToUpper();
                     Prefix = Vowels.Contains(Scene[0]) ? "#E" : "#uh";
                     Hint = $"#A sA {Prefix} \"{Scene.ToUpper()}\" iz \nwAr #uh {HexagonColors[Hexagon]}kwehstuhgawn [hexagram]<#FFFFFF> iz fownd\"...\"";
-                } else if (Archipelago.instance.GetPlayerGame((int)HexHint.Player) == "Tunic") {
+                } else if (Archipelago.instance.IsTunicPlayer((int)HexHint.Player)) {
                     Scene = Locations.SimplifiedSceneNames[Locations.VanillaLocations[Locations.LocationDescriptionToId[HexHint.Location]].Location.SceneName].ToUpper();
                     Prefix = Vowels.Contains(Scene[0]) ? "#E" : "#uh";
                     Hint = $"#A sA \"{Archipelago.instance.GetPlayerName((int)HexHint.Player).ToUpper()}'S\"\n\"{Scene}\"\niz wAr #uh {HexagonColors[Hexagon]}kwehstuhgawn [hexagram]<#FFFFFF> iz fownd\"...\"";
@@ -342,7 +342,7 @@ namespace TunicArchipelago {
 
                     Prefix = Vowels.Contains(Scene[0]) ? "#E" : "#uh";
                     RelicHint = $"lehjehnd sehz #uh  {itemDisplayText}\nkahn bE fownd aht {Prefix} \"{Scene}.\"";
-                } else if (Archipelago.instance.GetPlayerGame((int)RelicItemHint.Player) == "Tunic") {
+                } else if (Archipelago.instance.IsTunicPlayer((int)RelicItemHint.Player)) {
                     Scene = Locations.SimplifiedSceneNames[Locations.VanillaLocations[Locations.LocationDescriptionToId[RelicItemHint.Location]].Location.SceneName].ToUpper();
                     Prefix = Vowels.Contains(Scene[0]) ? "#E" : "#uh";
                     RelicHint = $"lehjehnd sehz #uh  {itemDisplayText}\nkahn bE fownd aht {Prefix} \"{Scene}\"\nin \"{Archipelago.instance.GetPlayerName((int)RelicItemHint.Player).ToUpper()}'S WORLD.\"";
