@@ -472,7 +472,7 @@ namespace TunicArchipelago {
 
         public static bool UpgradeAltar_DoOfferingSequence_PrefixPatch(UpgradeAltar __instance, OfferingItem offeringItemToOffer) {
             if (TunicArchipelago.Settings.FasterUpgrades) {
-                Notifications.Show($"{TextBuilderPatches.SpriteNameToAbbreviation[offeringItemToOffer.icon.name]} \"{offeringItemToOffer.statLabelLocKey}\" wehnt uhp fruhm {offeringItemToOffer.upgradeItemReceived.Quantity-1} [arrow_right] {offeringItemToOffer.upgradeItemReceived.Quantity}!", $"#E Ar ahksehpts yor awfuri^.");
+                Notifications.Show($"{TextBuilderPatches.SpriteNameToAbbreviation[offeringItemToOffer.icon.name]} \"{offeringItemToOffer.statLabelLocKey}\" wehnt uhp fruhm {offeringItemToOffer.upgradeItemReceived.Quantity} [arrow_right] {offeringItemToOffer.upgradeItemReceived.Quantity+1}!", $"#E Ar ahksehpts yor awfuri^.");
                 UpgradeMenu.instance.__Exit();
                 return false;
             }
