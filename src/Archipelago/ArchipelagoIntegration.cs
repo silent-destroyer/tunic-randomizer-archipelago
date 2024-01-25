@@ -198,7 +198,7 @@ namespace TunicArchipelago {
                 }
 
                 // Delay until a few seconds after connecting/screen transition
-                while (SpeedrunData.inGameTime < SceneLoaderPatches.TimeOfLastSceneTransition + 3.0f) {
+                while (SaveFile.GetFloat("playtime") < SceneLoaderPatches.TimeOfLastSceneTransition + 3.0f) {
                     yield return true;
                 }
 
