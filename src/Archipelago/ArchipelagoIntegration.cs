@@ -41,6 +41,10 @@ namespace TunicArchipelago {
         private int ItemIndex = 0;
 
         public void Update() {
+            if ((SceneManager.GetActiveScene().name == "TitleScreen" && TunicArchipelago.Settings.Mode != RandomizerSettings.RandomizerType.ARCHIPELAGO) || SaveFile.GetInt("archipelago") == 0) {
+                return;
+            }
+
             if (!connected) {
                 return;
             }

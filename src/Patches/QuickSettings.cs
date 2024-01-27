@@ -1,6 +1,9 @@
 ﻿using BepInEx.Logging;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
+using System.IO;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -13,7 +16,7 @@ namespace TunicArchipelago {
         public static Font OdinRounded;
         public static List<string> FoolChoices = new List<string>() { "Off", "Normal", "Double", "<size=19>Onslaught</size>" };
         public static List<string> FoolColors = new List<string>() { "white", "#4FF5D4", "#E3D457", "#FF3333" };
-        private static float height = 450f;
+        private static bool ShowHexQuestSliders;
         private static bool ShowAPSettingsWindow = false;
         private static string stringToEdit = "";
         private static bool editingPlayer = false;
@@ -27,47 +30,311 @@ namespace TunicArchipelago {
             if (SceneManager.GetActiveScene().name == "TitleScreen" && GameObject.FindObjectOfType<TitleScreen>() != null) {
                 GUI.skin.font = PaletteEditor.OdinRounded == null ? GUI.skin.font : PaletteEditor.OdinRounded;
                 Cursor.visible = true;
-                GUI.Window(101, new Rect(20f, 150f, 430f, 490f), new Action<int>(QuickSettingsWindow), "Quick Settings");
-                
-                if (ShowAPSettingsWindow) {
+                switch (TunicArchipelago.Settings.Mode) {
+                    case RandomizerSettings.RandomizerType.SINGLEPLAYER:
+                        GUI.Window(101, new Rect(20f, 150f, 430f, ShowHexQuestSliders && TunicArchipelago.Settings.GameMode == RandomizerSettings.GameModes.HEXAGONQUEST ? 610f : 550f), new Action<int>(SinglePlayerQuickSettingsWindow), "Quick Settings");
+                        ShowAPSettingsWindow = false; 
+                        editingPlayer = false;
+                        editingHostname = false;
+                        editingPort = false;
+                        editingPassword = false;
+                        break;
+                    case RandomizerSettings.RandomizerType.ARCHIPELAGO:
+                        GUI.Window(101, new Rect(20f, 150f, 430f, 570f), new Action<int>(ArchipelagoQuickSettingsWindow), "Quick Settings");
+                        break;
+                }
+
+                if (ShowAPSettingsWindow && TunicArchipelago.Settings.Mode == RandomizerSettings.RandomizerType.ARCHIPELAGO) {
                     GUI.Window(103, new Rect(460f, 150f, 350f, 490f), new Action<int>(QuickAPSettings), "Archipelago Config");
                 }
             }
         }
 
         private void Update() {
-            
-            if (Input.anyKeyDown && !Input.GetKeyDown(KeyCode.Return) && !Input.GetKeyDown(KeyCode.Tab) && !Input.GetKeyDown(KeyCode.Backspace)) {
+            if (ShowAPSettingsWindow && SceneManager.GetActiveScene().name == "TitleScreen") {
+                if (Input.anyKeyDown && !Input.GetKeyDown(KeyCode.Return) && !Input.GetKeyDown(KeyCode.Tab) && !Input.GetKeyDown(KeyCode.Backspace)) {
 
-                if (editingPort && Input.inputString != "" && int.TryParse(Input.inputString, out int num)) {
-                    stringToEdit += Input.inputString;
-                } else if (!editingPort && Input.inputString != "") {
-                    stringToEdit += Input.inputString;
+                    if (editingPort && Input.inputString != "" && int.TryParse(Input.inputString, out int num)) {
+                        stringToEdit += Input.inputString;
+                    } else if (!editingPort && Input.inputString != "") {
+                        stringToEdit += Input.inputString;
+                    }
+                }
+                if (Input.GetKeyDown(KeyCode.Backspace)) {
+                    if (stringToEdit.Length >= 2) {
+                        stringToEdit = stringToEdit.Substring(0, stringToEdit.Length - 1);
+                    } else {
+                        stringToEdit = "";
+                    }
+                }
+                if (editingPlayer) {
+                    TunicArchipelago.Settings.ConnectionSettings.Player = stringToEdit;
+                }
+                if (editingHostname) {
+                    TunicArchipelago.Settings.ConnectionSettings.Hostname = stringToEdit;
+                }
+
+                if (editingPort) {
+                    if (int.TryParse(stringToEdit, out int num)) {
+                        TunicArchipelago.Settings.ConnectionSettings.Port = num;
+                    } else if (stringToEdit == "") {
+                        TunicArchipelago.Settings.ConnectionSettings.Port = 0;
+                    }
+                }
+                if (editingPassword) {
+                    TunicArchipelago.Settings.ConnectionSettings.Password = stringToEdit;
                 }
             }
-            if (Input.GetKeyDown(KeyCode.Backspace)) {
-                if (stringToEdit.Length >= 2) {
-                    stringToEdit = stringToEdit.Substring(0, stringToEdit.Length - 1);
+        }
+
+        private static void ArchipelagoQuickSettingsWindow(int windowID) {
+            GUI.skin.label.fontSize = 25;
+            GUI.skin.button.fontSize = 20;
+            GUI.skin.toggle.fontSize = 20;
+            GUI.skin.label.alignment = TextAnchor.UpperLeft;
+            GUI.skin.label.clipping = TextClipping.Overflow;
+            GUI.color = Color.white;
+            GUI.DragWindow(new Rect(500f, 50f, 500f, 30f));
+
+            float y = 20f;
+
+            GUI.skin.toggle.fontSize = 15; 
+            GUI.skin.button.fontSize = 15;
+            bool ToggleSpoilerLog = GUI.Toggle(new Rect(TunicArchipelago.Settings.CreateSpoilerLog ? 280f : 330f, y, 90f, 30f), TunicArchipelago.Settings.CreateSpoilerLog, "Spoiler Log");
+            TunicArchipelago.Settings.CreateSpoilerLog = ToggleSpoilerLog;
+            if (ToggleSpoilerLog) {
+                bool OpenSpoilerLog = GUI.Button(new Rect(370f, y, 50f, 25f), "Open");
+                if (OpenSpoilerLog) {
+                    if (File.Exists(TunicArchipelago.SpoilerLogPath)) {
+                        System.Diagnostics.Process.Start(TunicArchipelago.SpoilerLogPath);
+                    }
+                }
+            }
+
+            GUI.skin.toggle.fontSize = 20;
+            GUI.skin.button.fontSize = 20;
+
+            GUI.Label(new Rect(10f, 20f, 300f, 30f), "Randomizer Mode");
+            y += 40f;
+            bool ToggleSinglePlayer = GUI.Toggle(new Rect(10f, y, 130f, 30f), TunicArchipelago.Settings.Mode == RandomizerSettings.RandomizerType.SINGLEPLAYER, "Single Player");
+            if (ToggleSinglePlayer) {
+                TunicArchipelago.Settings.Mode = RandomizerSettings.RandomizerType.SINGLEPLAYER;
+            }
+            bool ToggleArchipelago = GUI.Toggle(new Rect(150f, y, 150f, 30f), TunicArchipelago.Settings.Mode == RandomizerSettings.RandomizerType.ARCHIPELAGO, "Archipelago");
+            if (ToggleArchipelago) {
+                TunicArchipelago.Settings.Mode = RandomizerSettings.RandomizerType.ARCHIPELAGO;
+            }
+            y += 40f;
+            GUI.Label(new Rect(10f, y, 500f, 30f), $"Player: {TunicArchipelago.Settings.ConnectionSettings.Player}");
+            y += 40f;
+            GUI.Label(new Rect(10f, y, 80f, 30f), $"Status:");
+            if (Archipelago.instance.integration != null && Archipelago.instance.integration.connected) {
+                GUI.color = Color.green;
+                GUI.Label(new Rect(95f, y, 150f, 30f), $"Connected!");
+                GUI.color = Color.white;
+                GUI.Label(new Rect(250f, y, 300f, 30f), $"(world {Archipelago.instance.integration.session.ConnectionInfo.Slot} of {Archipelago.instance.integration.session.Players.Players[0].Count-1})");
+            } else {
+                GUI.color = Color.red;
+                GUI.Label(new Rect(95f, y, 300f, 30f), $"Disconnected");
+            }
+            GUI.color = Color.white;
+            y += 40f;
+            bool Connect = GUI.Button(new Rect(10f, y, 200f, 30f), "Connect");
+            if (Connect) {
+                Archipelago.instance.Connect();
+            }
+
+            bool Disconnect = GUI.Button(new Rect(220f, y, 200f, 30f), "Disconnect");
+            if (Disconnect) {
+                Archipelago.instance.Disconnect();
+            }
+            y += 40f;
+            bool OpenSettings = GUI.Button(new Rect(10f, y, 200f, 30f), "Open Settings File");
+            if (OpenSettings) {
+                try {
+                    System.Diagnostics.Process.Start(TunicArchipelago.SettingsPath);
+                } catch (Exception e) {
+                    Logger.LogError(e);
+                }
+            }
+            bool OpenAPSettings = GUI.Button(new Rect(220f, y, 200f, 30f), ShowAPSettingsWindow ? "Close AP Config" : "Edit AP Config");
+            if (OpenAPSettings) {
+                if (ShowAPSettingsWindow) {
+                    CloseAPSettingsWindow();
+                    Archipelago.instance.Connect();
                 } else {
-                    stringToEdit = "";
+                    Archipelago.instance.Disconnect();
+                    ShowAPSettingsWindow = true;
                 }
             }
-            if (editingPlayer) {
-                TunicArchipelago.Settings.ConnectionSettings.Player = stringToEdit;
+            y += 40f;
+            GUI.Label(new Rect(10f, y, 200f, 30f), $"World Settings");
+            if (Archipelago.instance.integration != null && Archipelago.instance.integration.connected) {
+                Dictionary<string, object> slotData = Archipelago.instance.GetPlayerSlotData();
+                y += 40f;
+                GUI.Toggle(new Rect(10f, y, 180f, 30f), slotData["keys_behind_bosses"].ToString() == "1", "Keys Behind Bosses");
+                GUI.Toggle(new Rect(220f, y, 210f, 30f), slotData["sword_progression"].ToString() == "1", "Sword Progression");
+                y += 40f;
+                GUI.Toggle(new Rect(10f, y, 175f, 30f), slotData["start_with_sword"].ToString() == "1", "Start With Sword");
+                GUI.Toggle(new Rect(220f, y, 175f, 30f), slotData["ability_shuffling"].ToString() == "1", "Shuffled Abilities");
+                y += 40f;
+                GUI.Toggle(new Rect(10f, y, 185f, 30f), slotData["hexagon_quest"].ToString() == "1", slotData["hexagon_quest"].ToString() == "1" ? 
+                    $"Hexagon Quest (<color=#E3D457>{slotData["Hexagon Quest Goal"].ToString()}</color>)" : $"Hexagon Quest");
+                int FoolIndex = int.Parse(slotData["fool_traps"].ToString());
+                GUI.Toggle(new Rect(220f, y, 195f, 60f), FoolIndex != 0, $"Fool Traps: {(FoolIndex == 0 ? "Off" : $"<color={FoolColors[FoolIndex]}>{FoolChoices[FoolIndex]}</color>")}");
+
+                if (slotData.ContainsKey("entrance_rando")) {
+                    y += 40f;
+                    GUI.Toggle(new Rect(10f, y, 195f, 30f), slotData["entrance_rando"].ToString() == "1", $"Entrance Randomizer");
+                } else {
+                    y += 40f;
+                    GUI.Toggle(new Rect(10f, y, 195f, 30f), false, $"Entrance Randomizer");
+                }
+            } else {
+                y += 40f;
+                GUI.Toggle(new Rect(10f, y, 180f, 30f), false, "Keys Behind Bosses");
+                GUI.Toggle(new Rect(220f, y, 210f, 30f), false, "Sword Progression");
+                y += 40f;
+                GUI.Toggle(new Rect(10f, y, 175f, 30f), false, "Start With Sword");
+                GUI.Toggle(new Rect(220f, y, 175f, 30f), false, "Shuffled Abilities");
+                y += 40f;
+                GUI.Toggle(new Rect(10f, y, 175f, 30f), false, "Hexagon Quest");
+                GUI.Toggle(new Rect(220f, y, 175f, 30f), false, "Fool Traps: Off");
+                y += 40f;
+                GUI.Toggle(new Rect(10f, y, 195f, 30f), false, $"Entrance Randomizer");
             }
-            if (editingHostname) { 
-                TunicArchipelago.Settings.ConnectionSettings.Hostname = stringToEdit;
+            y += 40f;
+            GUI.Label(new Rect(10f, y, 200f, 30f), $"Other Settings");
+            y += 40f;
+            bool DeathLink = GUI.Toggle(new Rect(10f, y, 115f, 30f), TunicArchipelago.Settings.DeathLinkEnabled, "Death Link");
+            TunicArchipelago.Settings.DeathLinkEnabled = DeathLink;
+            bool EnemyRandomizer = GUI.Toggle(new Rect(150f, y, 180f, 30f), TunicArchipelago.Settings.EnemyRandomizerEnabled, "Enemy Randomizer");
+            TunicArchipelago.Settings.EnemyRandomizerEnabled = EnemyRandomizer;
+            GUI.skin.label.fontSize = 20;
+            y += 30f;
+            GUI.Label(new Rect(10f, y, 500f, 30f), $"More settings in options menu!");
+        }
+
+        private static void SinglePlayerQuickSettingsWindow(int windowID) {
+            GUI.skin.label.fontSize = 25;
+            //GUI.skin.toggle.fontSize = 25;
+            //GUI.skin.toggle.alignment = TextAnchor.UpperLeft;
+            GUI.skin.toggle.fontSize = 20;
+            GUI.skin.label.alignment = TextAnchor.UpperLeft;
+            GUI.skin.label.clipping = TextClipping.Overflow;
+            GUI.color = Color.white;
+            GUI.DragWindow(new Rect(500f, 50f, 500f, 30f));
+            float y = 20f;
+
+            GUI.skin.toggle.fontSize = 15;
+            bool ToggleSpoilerLog = GUI.Toggle(new Rect(TunicArchipelago.Settings.CreateSpoilerLog ? 280f : 330f, y, 90f, 30f), TunicArchipelago.Settings.CreateSpoilerLog, "Spoiler Log");
+            TunicArchipelago.Settings.CreateSpoilerLog = ToggleSpoilerLog;
+            if (ToggleSpoilerLog) {
+                GUI.skin.button.fontSize = 15;
+                bool OpenSpoilerLog = GUI.Button(new Rect(370f, y, 50f, 25f), "Open");
+                if (OpenSpoilerLog) {
+                    if (File.Exists(TunicArchipelago.SpoilerLogPath)) {
+                        System.Diagnostics.Process.Start(TunicArchipelago.SpoilerLogPath);
+                    }
+                }
             }
 
-            if (editingPort) {
-                if (int.TryParse(stringToEdit, out int num)) {
-                    TunicArchipelago.Settings.ConnectionSettings.Port = num;
-                } else if (stringToEdit == "") {
-                    TunicArchipelago.Settings.ConnectionSettings.Port = 0;
+            GUI.skin.toggle.fontSize = 20;
+
+            GUI.Label(new Rect(10f, 20f, 300f, 30f), "Randomizer Mode");
+            y += 40f;
+            bool ToggleSinglePlayer = GUI.Toggle(new Rect(10f, y, 130f, 30f), TunicArchipelago.Settings.Mode == RandomizerSettings.RandomizerType.SINGLEPLAYER, "Single Player");
+            if (ToggleSinglePlayer) {
+                TunicArchipelago.Settings.Mode = RandomizerSettings.RandomizerType.SINGLEPLAYER;
+            }
+            bool ToggleArchipelago = GUI.Toggle(new Rect(150f, y, 150f, 30f), TunicArchipelago.Settings.Mode == RandomizerSettings.RandomizerType.ARCHIPELAGO, "Archipelago");
+            if (ToggleArchipelago) {
+                TunicArchipelago.Settings.Mode = RandomizerSettings.RandomizerType.ARCHIPELAGO;
+            }
+            y += 40f;
+            GUI.Label(new Rect(10f, y, 200f, 30f), "Game Mode");
+            y += 40f;
+            bool ToggleRandomizer = GUI.Toggle(new Rect(10f, y, 125f, 30f), TunicArchipelago.Settings.GameMode == RandomizerSettings.GameModes.RANDOMIZER, "Randomizer");
+            if (ToggleRandomizer) {
+                TunicArchipelago.Settings.GameMode = RandomizerSettings.GameModes.RANDOMIZER;
+            }
+            bool ToggleHexagonQuest = GUI.Toggle(new Rect(140f, y, 150f, 30f), TunicArchipelago.Settings.GameMode == RandomizerSettings.GameModes.HEXAGONQUEST, "Hexagon Quest");
+           
+            if (ToggleHexagonQuest) {
+                TunicArchipelago.Settings.GameMode = RandomizerSettings.GameModes.HEXAGONQUEST;
+                GUI.skin.button.fontSize = 16;
+                y += 2.5f;
+                bool ConfigureHexQuest = GUI.Button(new Rect(300f, y, 100f, 25f), ShowHexQuestSliders ? "Hide" : "Configure");
+                y -= 2.5f;
+                if (ConfigureHexQuest) {
+                    ShowHexQuestSliders = !ShowHexQuestSliders;
+                }
+                if (ShowHexQuestSliders) {
+                    y += 30; 
+                    GUI.Label(new Rect(10f, y, 220f, 20f), $"<size=18>Hexagons Required:</size>"); 
+                    GUI.Label(new Rect(190f, y, 30f, 30f), $"<size=18>{TunicArchipelago.Settings.HexagonQuestGoal}</size>");
+                    TunicArchipelago.Settings.HexagonQuestGoal = (int)GUI.HorizontalSlider(new Rect(220f, y+15, 200f, 20f), TunicArchipelago.Settings.HexagonQuestGoal, 15, 50);
+                    y += 30f;
+                    GUI.Label(new Rect(10f, y, 220f, 30f), $"<size=18>Hexagons in Item Pool:</size>");
+                    GUI.Label(new Rect(190f, y, 30f, 30f), $"<size=18>{(int)Math.Round((100f + TunicArchipelago.Settings.HexagonQuestExtraPercentage) / 100f * TunicArchipelago.Settings.HexagonQuestGoal)}</size>");
+                    TunicArchipelago.Settings.HexagonQuestExtraPercentage = (int)GUI.HorizontalSlider(new Rect(220f, y+15, 200f, 30f), TunicArchipelago.Settings.HexagonQuestExtraPercentage, 0, 100);
+
                 }
             }
-            if (editingPassword) {
-                TunicArchipelago.Settings.ConnectionSettings.Password = stringToEdit;
+
+            GUI.skin.toggle.fontSize = 20;
+            y += 40f;
+            GUI.Label(new Rect(10f, y, 200f, 30f), "Logic Settings");
+            y += 45f;
+            bool TopggleBossKeys = GUI.Toggle(new Rect(10f, y, 200f, 30f), TunicArchipelago.Settings.KeysBehindBosses, "Keys Behind Bosses");
+            TunicArchipelago.Settings.KeysBehindBosses = TopggleBossKeys;
+            bool ToggleSwordProgression = GUI.Toggle(new Rect(240f, y, 180f, 30f), TunicArchipelago.Settings.SwordProgressionEnabled, "Sword Progression");
+            TunicArchipelago.Settings.SwordProgressionEnabled = ToggleSwordProgression;
+            y += 40f;
+            bool ToggleSwordStart = GUI.Toggle(new Rect(10f, y, 175f, 30f), TunicArchipelago.Settings.StartWithSwordEnabled, "Start With Sword");
+            TunicArchipelago.Settings.StartWithSwordEnabled = ToggleSwordStart;
+            bool ToggleAbilityShuffle = GUI.Toggle(new Rect(240f, y, 175f, 30f), TunicArchipelago.Settings.ShuffleAbilities, "Shuffle Abilities");
+            TunicArchipelago.Settings.ShuffleAbilities = ToggleAbilityShuffle;
+            y += 40f;
+            bool ToggleEntranceRando = GUI.Toggle(new Rect(10f, y, 200f, 30f), TunicArchipelago.Settings.EntranceRandoEnabled, "Entrance Randomizer");
+            TunicArchipelago.Settings.EntranceRandoEnabled = ToggleEntranceRando;
+            if (ToggleEntranceRando) { TunicArchipelago.Settings.ERFixedShop = GUI.Toggle(new Rect(240f, y, 175f, 30f), TunicArchipelago.Settings.ERFixedShop, "Fixed Shop"); }
+            y += 40f;
+            GUI.Label(new Rect(10f, y, 400f, 30f), "Other Settings <size=18>(more in options menu!)</size>");
+            y += 40f;
+            bool ToggleEnemyRandomizer = GUI.Toggle(new Rect(10f, y, 200f, 30f), TunicArchipelago.Settings.EnemyRandomizerEnabled, "Enemy Randomizer");
+            TunicArchipelago.Settings.EnemyRandomizerEnabled = ToggleEnemyRandomizer;
+            GUI.skin.button.fontSize = 20;
+            y += 40f;
+            GUI.Label(new Rect(10f, y, 300f, 30f), $"Custom Seed: {(CustomSeed == 0 ? "Not Set" : CustomSeed.ToString())}");
+            if (CustomSeed != 0) {
+                bool ClearSeed = GUI.Button(new Rect(300f, y, 110f, 30f), "Clear");
+                if (ClearSeed) {
+                    CustomSeed = 0;
+                }
+            }
+            y += 40f;
+            bool GenerateSeed = GUI.Button(new Rect(10f, y, 200f, 30f), "Generate Seed");
+            if (GenerateSeed) {
+                CustomSeed = new System.Random().Next();
+            }
+
+            bool PasteSeed = GUI.Button(new Rect(220f, y, 200f, 30f), "Paste Seed");
+            if (PasteSeed) {
+                try {
+                    CustomSeed = int.Parse(GUIUtility.systemCopyBuffer, CultureInfo.InvariantCulture);
+                } catch (System.Exception e) {
+
+                }
+            }
+            y += 40f;
+            bool CopySettings = GUI.Button(new Rect(10f, y, 200f, 30f), "Copy Seed + Settings");
+            if (CopySettings) {
+                CopyQuickSettings();
+            }
+            bool PasteSettings = GUI.Button(new Rect(220f, y, 200f, 30f), "Paste Seed + Settings");
+            if (PasteSettings) {
+                PasteQuickSettings();
             }
         }
 
@@ -127,7 +394,7 @@ namespace TunicArchipelago {
                 editingHostname = false;
                 OptionsGUIPatches.SaveSettings();
             }
-            
+
             GUI.Label(new Rect(10f, 250f, 300f, 30f), $"Port: {(editingPort ? (showPort ? stringToEdit : new string('*', stringToEdit.Length)) : (showPort ? TunicArchipelago.Settings.ConnectionSettings.Port.ToString() : new string('*', TunicArchipelago.Settings.ConnectionSettings.Port.ToString().Length)))}");
             showPort = GUI.Toggle(new Rect(270f, 260f, 75f, 30f), showPort, "Show");
             bool EditPort = GUI.Button(new Rect(10f, 300f, 75f, 30f), editingPort ? "Save" : "Edit");
@@ -201,100 +468,99 @@ namespace TunicArchipelago {
             OptionsGUIPatches.SaveSettings();
         }
 
-        private static void QuickSettingsWindow(int windowID) {
-            GUI.skin.label.fontSize = 25;
-            GUI.skin.button.fontSize = 20;
-            GUI.skin.toggle.fontSize = 20;
-            GUI.skin.label.alignment = TextAnchor.UpperLeft;
-            GUI.skin.label.clipping = TextClipping.Overflow;
-            GUI.color = Color.white;
-            GUI.DragWindow(new Rect(500f, 50f, 500f, 30f));
-            GUI.Label(new Rect(10f, 20f, 500f, 30f), $"Player: {TunicArchipelago.Settings.ConnectionSettings.Player}");
-            GUI.Label(new Rect(10f, 60f, 80f, 30f), $"Status:");
-            if (Archipelago.instance.integration != null && Archipelago.instance.integration.connected) {
-                GUI.color = Color.green;
-                GUI.Label(new Rect(95f, 60f, 150f, 30f), $"Connected!");
-                GUI.color = Color.white;
-                GUI.Label(new Rect(250f, 60f, 300f, 30f), $"(world {Archipelago.instance.integration.session.ConnectionInfo.Slot} of {Archipelago.instance.integration.session.Players.Players[0].Count-1})");
-            } else {
-                GUI.color = Color.red;
-                GUI.Label(new Rect(95f, 60f, 300f, 30f), $"Disconnected");
+        public static void CopyQuickSettings() {
+            List<string> Settings = new List<string>() { CustomSeed.ToString(), Enum.GetName(typeof(RandomizerSettings.GameModes), TunicArchipelago.Settings.GameMode).ToLower() };
+            if (TunicArchipelago.Settings.GameMode == RandomizerSettings.GameModes.HEXAGONQUEST) {
+                Settings.Add($"hexagon_quest_goal={TunicArchipelago.Settings.HexagonQuestGoal}=");
+                Settings.Add($"hexagon_quest_extras~{TunicArchipelago.Settings.HexagonQuestExtraPercentage}~");
             }
-            GUI.color = Color.white;
-
-            bool Connect = GUI.Button(new Rect(10f, 100f, 200f, 30f), "Connect");
-            if (Connect) {
-                Archipelago.instance.Connect();
+            if (TunicArchipelago.Settings.KeysBehindBosses) {
+                Settings.Add("keys_behind_bosses");
             }
-
-            bool Disconnect = GUI.Button(new Rect(220f, 100f, 200f, 30f), "Disconnect");
-            if (Disconnect) {
-                Archipelago.instance.Disconnect();
+            if (TunicArchipelago.Settings.SwordProgressionEnabled) {
+                Settings.Add("sword_progression");
             }
-
-            bool OpenSettings = GUI.Button(new Rect(10f, 140f, 200f, 30f), "Open Settings File");
-            if (OpenSettings) {
-                try {
-                    System.Diagnostics.Process.Start(TunicArchipelago.SettingsPath);
-                } catch (Exception e) {
-                    Logger.LogError(e);
-                }
+            if (TunicArchipelago.Settings.StartWithSwordEnabled) {
+                Settings.Add("start_with_sword");
             }
-            bool OpenAPSettings = GUI.Button(new Rect(220f, 140f, 200f, 30f), ShowAPSettingsWindow ? "Close AP Config" : "Edit AP Config");
-            if (OpenAPSettings) {
-                if (ShowAPSettingsWindow) {
-                    CloseAPSettingsWindow();
-                    Archipelago.instance.Connect();
-                } else {
-                    Archipelago.instance.Disconnect();
-                    ShowAPSettingsWindow = true;
-                }
+            if (TunicArchipelago.Settings.ShuffleAbilities) {
+                Settings.Add("shuffle_abilities");
             }
-
-            GUI.Label(new Rect(10f, 180f, 200f, 30f), $"World Settings");
-            float y = 340f;
-            if (Archipelago.instance.integration != null && Archipelago.instance.integration.connected) {
-                Dictionary<string, object> slotData = Archipelago.instance.GetPlayerSlotData();
-                GUI.Toggle(new Rect(10f, 220f, 180f, 30f), slotData["keys_behind_bosses"].ToString() == "1", "Keys Behind Bosses");
-                GUI.Toggle(new Rect(220f, 220f, 210f, 30f), slotData["sword_progression"].ToString() == "1", "Sword Progression");
-                GUI.Toggle(new Rect(10f, 260f, 175f, 30f), slotData["start_with_sword"].ToString() == "1", "Start With Sword");
-                GUI.Toggle(new Rect(220f, 260f, 175f, 30f), slotData["ability_shuffling"].ToString() == "1", "Shuffled Abilities");
-                GUI.Toggle(new Rect(10f, 300f, 185f, 30f), slotData["hexagon_quest"].ToString() == "1", slotData["hexagon_quest"].ToString() == "1" ? 
-                    $"Hexagon Quest (<color=#E3D457>{slotData["Hexagon Quest Goal"].ToString()}</color>)" : $"Hexagon Quest");
-                int FoolIndex = int.Parse(slotData["fool_traps"].ToString());
-                GUI.Toggle(new Rect(220f, 300f, 195f, 60f), FoolIndex != 0, $"Fool Traps: {(FoolIndex == 0 ? "Off" : $"<color={FoolColors[FoolIndex]}>{FoolChoices[FoolIndex]}</color>")}");
-
-                if (slotData.ContainsKey("entrance_rando")) {
-                    height = 490f;
-                    y += 40f;
-                    GUI.Toggle(new Rect(10f, 340f, 195f, 30f), slotData["entrance_rando"].ToString() == "1", $"Entrance Randomizer");
-                } else {
-                    height = 490f;
-                    y += 40f;
-                    GUI.Toggle(new Rect(10f, 340f, 195f, 30f), false, $"Entrance Randomizer");
-                }
-            } else {
-                height = 490f;
-                y += 40f;
-                GUI.Toggle(new Rect(10f, 220f, 180f, 30f), false, "Keys Behind Bosses");
-                GUI.Toggle(new Rect(220f, 220f, 210f, 30f), false, "Sword Progression");
-                GUI.Toggle(new Rect(10f, 260f, 175f, 30f), false, "Start With Sword");
-                GUI.Toggle(new Rect(220f, 260f, 175f, 30f), false, "Shuffled Abilities");
-                GUI.Toggle(new Rect(10f, 300f, 175f, 30f), false, "Hexagon Quest");
-                GUI.Toggle(new Rect(220f, 300f, 175f, 30f), false, "Fool Traps: Off");
-                GUI.Toggle(new Rect(10f, 340f, 195f, 30f), false, $"Entrance Randomizer");
+            if (TunicArchipelago.Settings.EntranceRandoEnabled) {
+                Settings.Add("entrance_randomizer");
             }
-
-            GUI.Label(new Rect(10f, y, 200f, 30f), $"Other Settings");
-            y += 40f;
-            bool DeathLink = GUI.Toggle(new Rect(10f, y, 115f, 30f), TunicArchipelago.Settings.DeathLinkEnabled, "Death Link");
-            TunicArchipelago.Settings.DeathLinkEnabled = DeathLink;
-            bool EnemyRandomizer = GUI.Toggle(new Rect(150f, y, 180f, 30f), TunicArchipelago.Settings.EnemyRandomizerEnabled, "Enemy Randomizer");
-            TunicArchipelago.Settings.EnemyRandomizerEnabled = EnemyRandomizer;
-            GUI.skin.label.fontSize = 20;
-            y += 30f;
-            GUI.Label(new Rect(10f, y, 500f, 30f), $"More settings in options menu!");
+            if (TunicArchipelago.Settings.ERFixedShop) {
+                Settings.Add("er_fixed_shop");
+            }
+            GUIUtility.systemCopyBuffer = string.Join(",", Settings.ToArray());
         }
+
+        public static void CopyQuickSettingsInGame() {
+            List<string> Settings = new List<string>() { SaveFile.GetInt("seed").ToString(), SaveFile.GetString("randomizer game mode").ToLower() };
+            if (SaveFile.GetInt("randomizer hexagon quest enabled") == 1) {
+
+                Settings.Add($"hexagon_quest_goal={SaveFile.GetInt("randomizer hexagon quest goal")}=");
+                Settings.Add($"hexagon_quest_extras~{SaveFile.GetInt("randomizer hexagon quest extras")}~");
+            }
+            if (SaveFile.GetInt("randomizer keys behind bosses") == 1) {
+                Settings.Add("keys_behind_bosses");
+            }
+            if (SaveFile.GetInt("randomizer sword progression enabled") == 1) {
+                Settings.Add("sword_progression");
+            }
+            if (SaveFile.GetInt("randomizer started with sword") == 1) {
+                Settings.Add("start_with_sword");
+            }
+            if (SaveFile.GetInt("randomizer shuffled abilities") == 1) {
+                Settings.Add("shuffle_abilities");
+            }
+            if (SaveFile.GetInt("randomizer entrance rando enabled") == 1) {
+                Settings.Add("entrance_randomizer");
+            }
+            if (SaveFile.GetInt("randomizer ER fixed shop") == 1) {
+                Settings.Add("er_fixed_shop");
+            }
+            GUIUtility.systemCopyBuffer = string.Join(",", Settings.ToArray());
+        }
+
+
+        public static void PasteQuickSettings() {
+            try {
+                string SettingsString = GUIUtility.systemCopyBuffer;
+                string[] SplitSettings = SettingsString.Split(',');
+                CustomSeed = int.Parse(SplitSettings[0], CultureInfo.InvariantCulture);
+                RandomizerSettings.GameModes NewGameMode;
+                if (Enum.TryParse<RandomizerSettings.GameModes>(SplitSettings[1].ToUpper(), true, out NewGameMode)) {
+                    TunicArchipelago.Settings.GameMode = NewGameMode;
+                } else {
+                    TunicArchipelago.Settings.GameMode = RandomizerSettings.GameModes.RANDOMIZER;
+                }
+                if (SettingsString.Split('=').Count() > 1) {
+                    try {
+                        TunicArchipelago.Settings.HexagonQuestGoal = int.Parse(SettingsString.Split('=')[1]);
+                    } catch (Exception e) {
+                        TunicArchipelago.Settings.HexagonQuestGoal = 20;
+                    }
+                }
+                if (SettingsString.Split('~').Count() > 1) {
+                    try {
+                        TunicArchipelago.Settings.HexagonQuestExtraPercentage = int.Parse(SettingsString.Split('~')[1]);
+                    } catch (Exception e) {
+                        TunicArchipelago.Settings.HexagonQuestExtraPercentage = 50;
+                    }
+                }
+                TunicArchipelago.Settings.KeysBehindBosses = SettingsString.Contains("keys_behind_bosses");
+                TunicArchipelago.Settings.SwordProgressionEnabled = SettingsString.Contains("sword_progression");
+                TunicArchipelago.Settings.StartWithSwordEnabled = SettingsString.Contains("start_with_sword");
+                TunicArchipelago.Settings.ShuffleAbilities = SettingsString.Contains("shuffle_abilities");
+                TunicArchipelago.Settings.EntranceRandoEnabled = SettingsString.Contains("entrance_randomizer");
+                TunicArchipelago.Settings.ERFixedShop = SettingsString.Contains("er_fixed_shop");
+            } catch (Exception e) {
+                Logger.LogError("Error parsing quick settings string!");
+            }
+
+        }
+
 
         public static bool TitleScreen___NewGame_PrefixPatch(TitleScreen __instance) {
             CloseAPSettingsWindow();
@@ -304,11 +570,11 @@ namespace TunicArchipelago {
         public static bool FileManagement_LoadFileAndStart_PrefixPatch(FileManagementGUI __instance, string filename) {
             CloseAPSettingsWindow();
             SaveFile.LoadFromFile(filename);
-            if (SaveFile.GetInt("archipelago") == 0) {
+/*            if (SaveFile.GetInt("archipelago") == 0) {
                 Logger.LogInfo("Non-Archipelago file selected!");
                 GenericMessage.ShowMessage("<#FF0000>[death] \"<#FF0000>warning!\" <#FF0000>[death]\n\"Non-Archipelago file selected.\"\n\"Returning to menu.\"");
                 return false;
-            }
+            }*/
             if (SaveFile.GetString("archipelago player name") != "") {
                 if (SaveFile.GetString("archipelago player name") != TunicArchipelago.Settings.ConnectionSettings.Player || (Archipelago.instance.integration.connected && int.Parse(Archipelago.instance.integration.slotData["seed"].ToString()) != SaveFile.GetInt("seed"))) {
                     Logger.LogInfo("Save does not match connected slot! Connected to " + TunicArchipelago.Settings.ConnectionSettings.Player + " [seed " + Archipelago.instance.integration.slotData["seed"].ToString() + "] but slot name in save file is " + SaveFile.GetString("archipelago player name") + " [seed " + SaveFile.GetInt("seed") + "]");

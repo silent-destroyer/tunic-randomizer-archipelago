@@ -26,14 +26,12 @@ namespace TunicArchipelago {
         public static void RandomizerSettingsPage() {
             OptionsGUI OptionsGUI = GameObject.FindObjectOfType<OptionsGUI>();
             OptionsGUI.setHeading("Randomizer");
-            addPageButton("Archipelago Settings", ArchipelagoSettingsPage);
-            if (SceneLoaderPatches.SceneName != "TitleScreen") {
-                addPageButton("Logic Settings", LogicSettingsPage);
-            }
+            addPageButton("Logic Settings", LogicSettingsPage);
             addPageButton("Hint Settings", HintsSettingsPage);
             addPageButton("General Settings", GeneralSettingsPage);
             addPageButton("Enemy Randomizer Settings", EnemyRandomizerSettings);
             addPageButton("Fox Customization", CustomFoxSettingsPage);
+            addPageButton("Archipelago Settings", ArchipelagoSettingsPage);
         }
 
         public static void ArchipelagoSettingsPage() {
@@ -41,20 +39,42 @@ namespace TunicArchipelago {
             OptionsGUI.setHeading("Archipelago");
             OptionsGUI.addToggle("Death Link", "Off", "On", TunicArchipelago.Settings.DeathLinkEnabled ? 1 : 0, (OptionsGUIMultiSelect.MultiSelectAction)ToggleDeathLink);
             OptionsGUI.addToggle("Auto-open !collect-ed Checks", "Off", "On", TunicArchipelago.Settings.CollectReflectsInWorld ? 1 : 0, (OptionsGUIMultiSelect.MultiSelectAction)ToggleUpdateOnCollect);
-            OptionsGUI.addToggle("Skip Item Animations", "Off", "On", TunicArchipelago.Settings.SkipItemAnimations ? 1 : 0, (OptionsGUIMultiSelect.MultiSelectAction)ToggleSkipItemAnimations);
             OptionsGUI.addToggle("Send Hints to Server", "Off", "On", TunicArchipelago.Settings.SendHintsToServer ? 1 : 0, (OptionsGUIMultiSelect.MultiSelectAction)ToggleSendHintsToServer);
-            OptionsGUI.addButton("Open Local Spoiler Log", (Action)OpenLocalSpoilerLog);
         }
 
         public static void LogicSettingsPage() {
             OptionsGUI OptionsGUI = GameObject.FindObjectOfType<OptionsGUI>();
-            OptionsGUI.addButton("Sword Progression", SaveFile.GetInt(SwordProgressionEnabled) == 1 ? "<#00ff00>On" : "<#ff0000>Off", null);
-            OptionsGUI.addButton("Keys Behind Bosses", SaveFile.GetInt(KeysBehindBosses) == 1 ? "<#00ff00>On" : "<#ff0000>Off", null);
-            OptionsGUI.addButton("Hexagon Quest", SaveFile.GetInt(HexagonQuestEnabled) == 1 ? "<#00ff00>On" : "<#ff0000>Off", null);
-            OptionsGUI.addButton("Started With Sword", SaveFile.GetInt("randomizer started with sword") == 1 ? "<#00ff00>Yes" : "<#ff0000>No", null);
-            OptionsGUI.addButton("Shuffled Abilities", SaveFile.GetInt(AbilityShuffle) == 1 ? "<#00ff00>On" : "<#ff0000>Off", null);
-            OptionsGUI.addButton("Entrance Randomizer", SaveFile.GetInt(EntranceRando) == 1 ? "<#00ff00>On" : "<#ff0000>Off", null);
-            OptionsGUI.setHeading("Logic");
+            if (SceneLoaderPatches.SceneName == "TitleScreen") {
+                Il2CppStringArray GameModes = (Il2CppStringArray)new string[] { "<#FFA300>Randomizer", "<#ffd700>Hexagon Quest", "<#4FF5D4>Vanilla" };
+                Il2CppStringArray LaurelsLocations = (Il2CppStringArray)new string[] { "<#FFA300>Anywhere", "<#ffd700>6 Coins", "<#ffd700>10 Coins", "<#ffd700>10 Fairies" };
+                OptionsGUI.addMultiSelect("Game Mode", GameModes, GetGameModeIndex(), (OptionsGUIMultiSelect.MultiSelectAction)ChangeGameMode).wrap = true;
+                OptionsGUI.addToggle("Keys Behind Bosses", "Off", "On", TunicArchipelago.Settings.KeysBehindBosses ? 1 : 0, (OptionsGUIMultiSelect.MultiSelectAction)ToggleKeysBehindBosses);
+                OptionsGUI.addToggle("Sword Progression", "Off", "On", TunicArchipelago.Settings.SwordProgressionEnabled ? 1 : 0, (OptionsGUIMultiSelect.MultiSelectAction)ToggleSwordProgression);
+                OptionsGUI.addToggle("Start With Sword", "Off", "On", TunicArchipelago.Settings.StartWithSwordEnabled ? 1 : 0, (OptionsGUIMultiSelect.MultiSelectAction)ToggleStartWithSword);
+                OptionsGUI.addToggle("Shuffle Abilities", "Off", "On", TunicArchipelago.Settings.ShuffleAbilities ? 1 : 0, (OptionsGUIMultiSelect.MultiSelectAction)ToggleAbilityShuffling);
+                OptionsGUI.addToggle("Entrance Randomizer", "Off", "On", TunicArchipelago.Settings.EntranceRandoEnabled ? 1 : 0, (OptionsGUIMultiSelect.MultiSelectAction)ToggleEntranceRando);
+                OptionsGUI.addToggle("Fixed Shop Entrance", "Off", "On", TunicArchipelago.Settings.EntranceRandoEnabled ? 1 : 0, (OptionsGUIMultiSelect.MultiSelectAction)ToggleFixedShop);
+                OptionsGUI.addMultiSelect("Laurels Location", LaurelsLocations, GetLaurelsLocationIndex(), (OptionsGUIMultiSelect.MultiSelectAction)ChangeLaurelsLocation).wrap = true;
+                OptionsGUI.setHeading("Single Player Logic");
+            } else {
+                if (SaveFile.GetInt("randomizer") == 1) {
+                    OptionsGUI.addButton("Game Mode", SaveFile.GetString("randomizer game mode"), null);
+                    if (SaveFile.GetInt("randomizer hexagon quest enabled") == 1) {
+                        OptionsGUI.addButton("Hexagon Quest Goal", SaveFile.GetInt("randomizer hexagon quest goal").ToString(), null);
+                        OptionsGUI.addButton("Hexagons in Item Pool", ((int)Math.Round((100f + SaveFile.GetInt("randomizer hexagon quest extras")) / 100f * SaveFile.GetInt("randomizer hexagon quest goal"))).ToString(), null);
+                    }
+                }
+
+                OptionsGUI.addButton("Keys Behind Bosses", SaveFile.GetInt("randomizer keys behind bosses") == 1 ? "<#00ff00>On" : "<#ff0000>Off", null);
+                OptionsGUI.addButton("Sword Progression", SaveFile.GetInt("randomizer sword progression enabled") == 1 ? "<#00ff00>On" : "<#ff0000>Off", null);
+                OptionsGUI.addButton("Started With Sword", SaveFile.GetInt("randomizer started with sword") == 1 ? "<#00ff00>Yes" : "<#ff0000>No", null);
+                OptionsGUI.addButton("Shuffled Abilities", SaveFile.GetInt("randomizer shuffled abilities") == 1 ? "<#00ff00>On" : "<#ff0000>Off", null);
+                OptionsGUI.addButton("Entrance Randomizer", SaveFile.GetInt("randomizer entrance rando enabled") == 1 ? "<#00ff00>On" : "<#ff0000>Off", null);
+                if (SaveFile.GetInt("randomizer entrance rando enabled") == 1 && TunicArchipelago.Settings.Mode == RandomizerSettings.RandomizerType.SINGLEPLAYER) {
+                    OptionsGUI.addButton("ER Fixed Shop", SaveFile.GetInt("randomizer ER fixed shop") == 1 ? "<#00ff00>On" : "<#ff0000>Off", null);
+                }
+                OptionsGUI.setHeading("Logic");
+            }
         }
 
         public static void HintsSettingsPage() {
@@ -63,6 +83,7 @@ namespace TunicArchipelago {
             OptionsGUI.addToggle("Ghost Fox Hints", "Off", "On", TunicArchipelago.Settings.GhostFoxHintsEnabled ? 1 : 0, (OptionsGUIMultiSelect.MultiSelectAction)ToggleGhostFoxHints);
             OptionsGUI.addToggle("Freestanding Items Match Contents", "Off", "On", TunicArchipelago.Settings.ShowItemsEnabled ? 1 : 0, (OptionsGUIMultiSelect.MultiSelectAction)ToggleShowItems);
             OptionsGUI.addToggle("Chests Match Contents", "Off", "On", TunicArchipelago.Settings.ChestsMatchContentsEnabled ? 1 : 0, (OptionsGUIMultiSelect.MultiSelectAction)ToggleChestsMatchContents);
+            OptionsGUI.addButton("Open Local Spoiler Log", (Action)OpenLocalSpoilerLog);
             OptionsGUI.setHeading("Hints");
         }
 
@@ -76,6 +97,7 @@ namespace TunicArchipelago {
             OptionsGUI.addToggle("Cheaper Shop Items", "Off", "On", TunicArchipelago.Settings.CheaperShopItemsEnabled ? 1 : 0, (OptionsGUIMultiSelect.MultiSelectAction)ToggleCheaperShopItems);
             OptionsGUI.addToggle("Bonus Upgrades", "Off", "On", TunicArchipelago.Settings.BonusStatUpgradesEnabled ? 1 : 0, (OptionsGUIMultiSelect.MultiSelectAction)ToggleBonusStatUpgrades);
             OptionsGUI.addToggle("Disable Chest Interruption", "Off", "On", TunicArchipelago.Settings.DisableChestInterruption ? 1 : 0, (OptionsGUIMultiSelect.MultiSelectAction)ToggleChestInterruption);
+            OptionsGUI.addToggle("Skip Item Animations", "Off", "On", TunicArchipelago.Settings.SkipItemAnimations ? 1 : 0, (OptionsGUIMultiSelect.MultiSelectAction)ToggleSkipItemAnimations);
             OptionsGUI.addToggle("Skip Upgrade Animation", "Off", "On", TunicArchipelago.Settings.FasterUpgrades ? 1 : 0, (OptionsGUIMultiSelect.MultiSelectAction)ToggleFasterUpgrades);
             OptionsGUI.addToggle("???", "Off", "On", CameraController.Flip ? 1 : 0, (OptionsGUIMultiSelect.MultiSelectAction)ToggleWeirdMode);
             OptionsGUI.addToggle("More Skulls", "Off", "On", TunicArchipelago.Settings.MoreSkulls ? 1 : 0, (OptionsGUIMultiSelect.MultiSelectAction)ToggleMoreSkulls);
@@ -124,6 +146,56 @@ namespace TunicArchipelago {
             OptionsGUI OptionsGUI = GameObject.FindObjectOfType<OptionsGUI>();
             OptionsGUI.pushPage(DelegateSupport.ConvertDelegate<OptionsGUI.PageMethod>(pageMethod));
             OptionsGUI.addButton("Return", new Action(OptionsGUI.popPage));
+        }
+
+        // Logic Settings
+
+        public static void ChangeGameMode(int index) {
+            TunicArchipelago.Settings.GameMode = (RandomizerSettings.GameModes)index;
+            SaveSettings();
+        }
+
+        public static int GetGameModeIndex() {
+            return (int)TunicArchipelago.Settings.GameMode;
+        }
+
+        public static void ChangeLaurelsLocation(int index) {
+            TunicArchipelago.Settings.FixedLaurelsOption = (RandomizerSettings.FixedLaurelsType)index;
+            SaveSettings();
+        }
+
+        public static int GetLaurelsLocationIndex() {
+            return (int)TunicArchipelago.Settings.FixedLaurelsOption;
+        }
+
+        public static void ToggleKeysBehindBosses(int index) {
+            TunicArchipelago.Settings.KeysBehindBosses = !TunicArchipelago.Settings.KeysBehindBosses;
+            SaveSettings();
+        }
+
+        public static void ToggleStartWithSword(int index) {
+            TunicArchipelago.Settings.StartWithSwordEnabled = !TunicArchipelago.Settings.StartWithSwordEnabled;
+            SaveSettings();
+        }
+
+        public static void ToggleSwordProgression(int index) {
+            TunicArchipelago.Settings.SwordProgressionEnabled = !TunicArchipelago.Settings.SwordProgressionEnabled;
+            SaveSettings();
+        }
+
+        public static void ToggleAbilityShuffling(int index) {
+            TunicArchipelago.Settings.ShuffleAbilities = !TunicArchipelago.Settings.ShuffleAbilities;
+            SaveSettings();
+        }
+
+        public static void ToggleEntranceRando(int index) {
+            TunicArchipelago.Settings.EntranceRandoEnabled = !TunicArchipelago.Settings.EntranceRandoEnabled;
+            SaveSettings();
+        }
+
+        public static void ToggleFixedShop(int index) {
+            TunicArchipelago.Settings.ERFixedShop = !TunicArchipelago.Settings.ERFixedShop;
+            SaveSettings();
         }
 
         public static void ToggleDeathLink(int index) {

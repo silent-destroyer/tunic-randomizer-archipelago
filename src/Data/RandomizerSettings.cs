@@ -10,6 +10,67 @@ namespace TunicArchipelago {
 
         public ConnectionSettings ConnectionSettings { get; set; }
 
+        public enum RandomizerType { 
+            SINGLEPLAYER,
+            ARCHIPELAGO
+        }
+
+        public RandomizerType Mode {
+            get;
+            set;
+        }
+
+        // Single Player Settings
+        public GameModes GameMode {
+            get;
+            set;
+        }
+
+        public bool KeysBehindBosses {
+            get;
+            set;
+        }
+
+        public bool StartWithSwordEnabled {
+            get;
+            set;
+        }
+
+        public bool SwordProgressionEnabled {
+            get;
+            set;
+        }
+
+        public bool ShuffleAbilities {
+            get;
+            set;
+        }
+
+        public bool EntranceRandoEnabled {
+            get;
+            set;
+        }
+
+        public bool ERFixedShop {
+            get;
+            set;
+        }
+
+        public int HexagonQuestGoal {
+            get;
+            set;
+        }
+
+        public int HexagonQuestExtraPercentage {
+            get;
+            set;
+        }
+
+        public FixedLaurelsType FixedLaurelsOption {
+            get;
+            set;
+        }
+
         // Archipelago Settings
         public bool DeathLinkEnabled {
             get;
@@ -48,6 +109,16 @@ namespace TunicArchipelago {
         }
 
         public bool ChestsMatchContentsEnabled {
+            get;
+            set;
+        }
+
+        public bool UseTrunicTranslations {
+            get;
+            set;
+        }
+
+        public bool CreateSpoilerLog {
             get;
             set;
         }
@@ -131,6 +202,12 @@ namespace TunicArchipelago {
             set;
         }
 
+        public enum GameModes {
+            RANDOMIZER,
+            HEXAGONQUEST,
+            VANILLA
+        }
+
         public enum FoolTrapOption {
             NONE,
             NORMAL,
@@ -148,24 +225,45 @@ namespace TunicArchipelago {
             BALANCED
         }
 
+        public enum FixedLaurelsType {
+            ANYWHERE,
+            SIXCOINS,
+            TENCOINS,
+            TENFAIRIES,
+        }
+
         public RandomizerSettings() {
 
             ConnectionSettings = new ConnectionSettings();
-/*            GameMode = GameModes.RANDOMIZER;
+            Mode = RandomizerType.SINGLEPLAYER;
+
+            // Single Player
+            GameMode = GameModes.RANDOMIZER;
             KeysBehindBosses = false;
             SwordProgressionEnabled = true;
             StartWithSwordEnabled = false;
-            ShuffleAbilities = false;*/
+            ShuffleAbilities = false;
+            EntranceRandoEnabled = false;
+            ERFixedShop = false;
+            HexagonQuestGoal = 20;
+            HexagonQuestExtraPercentage = 50;
+            FixedLaurelsOption = FixedLaurelsType.ANYWHERE;
+
+            // Archipelago 
             DeathLinkEnabled = false;
             CollectReflectsInWorld = false;
             SkipItemAnimations = false;
             SendHintsToServer = false;
 
+            // Hints
             HeroPathHintsEnabled = true;
             GhostFoxHintsEnabled = true;
             ShowItemsEnabled = true;
             ChestsMatchContentsEnabled = true;
+            UseTrunicTranslations = false;
+            CreateSpoilerLog = true;
 
+            // General
             HeirAssistModeEnabled = false;
             ClearEarlyBushes = false;
             CheaperShopItemsEnabled = true;
@@ -175,11 +273,13 @@ namespace TunicArchipelago {
             MoreSkulls = false;
             ArachnophobiaMode = false;
 
+            // Enemy Randomizer
             EnemyRandomizerEnabled = false;
             EnemyDifficulty = EnemyRandomizationType.BALANCED;
             EnemyGeneration = EnemyGenerationType.SEEDED;
             ExtraEnemiesEnabled = false;
 
+            // Fox Customization
             RandomFoxColorsEnabled = true;
             RealestAlwaysOn = false;
             UseCustomTexture = false;

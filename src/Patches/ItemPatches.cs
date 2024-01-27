@@ -53,9 +53,7 @@ namespace TunicArchipelago {
             if (TunicArchipelago.Settings.DisableChestInterruption) {
                 return false;
             }
-/*            if (__instance.chestID == 0 || __instance.chestID == 5) {
-                return false;
-            }*/
+
             return true;
         }
 

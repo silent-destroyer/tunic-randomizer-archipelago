@@ -262,7 +262,7 @@ namespace TunicArchipelago {
                 SaveFile.SetInt("chest open 19", 0);
             } else if (SceneName == "TitleScreen") {
                 TitleVersion.Initialize();
-                if (!Archipelago.instance.integration.connected) {
+                if (!Archipelago.instance.integration.connected && TunicArchipelago.Settings.Mode == RandomizerSettings.RandomizerType.ARCHIPELAGO) {
                     Archipelago.instance.Connect();
                 }
             } else if (SceneName == "Temple") {

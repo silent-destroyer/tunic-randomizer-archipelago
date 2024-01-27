@@ -15,7 +15,7 @@ namespace TunicArchipelago {
     public class TitleVersion {
 
         public static bool Loaded = false;
-        public static GameObject TitleLogo;
+        public static GameObject VersionString;
         public static bool DevBuild = true;
         public static void Initialize() {
             if (!Loaded) {
@@ -35,25 +35,25 @@ namespace TunicArchipelago {
                 }
                 TMP_FontAsset FontAsset = Resources.FindObjectsOfTypeAll<TMP_FontAsset>().Where(Font => Font.name == "Latin Rounded").ToList()[0];
                 Material FontMaterial = Resources.FindObjectsOfTypeAll<Material>().Where(Material => Material.name == "Latin Rounded - Quantity Outline").ToList()[0];
-                GameObject TitleVersion = new GameObject("randomizer version");
-                TitleVersion.AddComponent<TextMeshProUGUI>().text = $"Randomizer + Archipelago Mod Ver. {PluginInfo.VERSION}{(DevBuild ? "-dev" : "")}";
+                VersionString = new GameObject("randomizer version");
+                VersionString.AddComponent<TextMeshProUGUI>().text = $"Randomizer + Archipelago Mod Ver. {PluginInfo.VERSION}{(DevBuild ? "-dev" : "")}";
                 if (UpdateAvailable) {
-                    TitleVersion.GetComponent<TextMeshProUGUI>().text += $" (Update Available: v{UpdateVersion}!)";
+                    VersionString.GetComponent<TextMeshProUGUI>().text += $" (Update Available: v{UpdateVersion}!)";
                 }
-                TitleVersion.GetComponent<TextMeshProUGUI>().color = new Color(1.0f, 0.64f, 0.0f);
-                TitleVersion.GetComponent<TextMeshProUGUI>().fontMaterial = FontMaterial;
-                TitleVersion.GetComponent<TextMeshProUGUI>().font = FontAsset;
-                TitleVersion.GetComponent<TextMeshProUGUI>().fontSize = 16;
-                TitleVersion.layer = 5;
-                TitleVersion.transform.parent = GameObject.Find("_GameGUI(Clone)/Title Canvas/Title Screen Root/").transform;
-                TitleVersion.GetComponent<RectTransform>().sizeDelta = new Vector2(700f, 50f);
+                VersionString.GetComponent<TextMeshProUGUI>().color = new Color(1.0f, 0.64f, 0.0f);
+                VersionString.GetComponent<TextMeshProUGUI>().fontMaterial = FontMaterial;
+                VersionString.GetComponent<TextMeshProUGUI>().font = FontAsset;
+                VersionString.GetComponent<TextMeshProUGUI>().fontSize = 16;
+                VersionString.layer = 5;
+                VersionString.transform.parent = GameObject.Find("_GameGUI(Clone)/Title Canvas/Title Screen Root/").transform;
+                VersionString.GetComponent<RectTransform>().sizeDelta = new Vector2(700f, 50f);
                 if (Screen.width <= 1280 && Screen.height <= 800) {
-                    TitleVersion.transform.localPosition = new Vector3(-122f, 240f, 0f);
+                    VersionString.transform.localPosition = new Vector3(-122f, 240f, 0f);
                 } else {
-                    TitleVersion.transform.localPosition = new Vector3(-176f, 240f, 0f);
+                    VersionString.transform.localPosition = new Vector3(-176f, 240f, 0f);
                 }
-                TitleVersion.transform.localScale = Vector3.one;
-                GameObject.DontDestroyOnLoad(TitleVersion);
+                VersionString.transform.localScale = Vector3.one;
+                GameObject.DontDestroyOnLoad(VersionString);
                 System.Random Random = new System.Random();
 
                 if (Random.Next(100) < 10) {

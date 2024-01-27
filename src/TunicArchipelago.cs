@@ -25,9 +25,9 @@ namespace TunicArchipelago {
         public static ManualLogSource Logger;
         public static RandomizerSettings Settings = new RandomizerSettings();
 
-        public static string SettingsPath = Application.dataPath + "/../BepInEx/plugins/Tunic Archipelago/ArchipelagoSettings.json";
+        public static string SettingsPath = Application.dataPath + "/../BepInEx/plugins/Tunic Randomizer/Settings.json";
         public static string ItemTrackerPath = Application.persistentDataPath + "/Randomizer/ItemTracker.json";
-        public static string SpoilerLogPath = Application.persistentDataPath + "/Randomizer/ArchipelagoSpoiler.log";
+        public static string SpoilerLogPath = Application.persistentDataPath + "/Randomizer/Spoiler.log";
         public static ItemTracker Tracker;
 
         public override void Load() {
@@ -63,8 +63,8 @@ namespace TunicArchipelago {
                 Directory.CreateDirectory(Application.persistentDataPath + "/Randomizer/");
             }
 
-            if (!Directory.Exists(Application.dataPath + "/../BepInEx/plugins/Tunic Archipelago")) {
-                Directory.CreateDirectory(Application.dataPath + "/../BepInEx/plugins/Tunic Archipelago");
+            if (!Directory.Exists(Application.dataPath + "/../BepInEx/plugins/Tunic Randomizer")) {
+                Directory.CreateDirectory(Application.dataPath + "/../BepInEx/plugins/Tunic Randomizer");
             }
 
             if (!File.Exists(SettingsPath)) {
