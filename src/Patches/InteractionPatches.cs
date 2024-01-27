@@ -93,6 +93,8 @@ namespace TunicArchipelago {
             if (isNight) {
                 CycleController.AnimateSunrise();
             } else {
+                SaveFile.SetString("last campfire scene name", "Overworld Redux");
+                SaveFile.SetString("last campfire id", "checkpoint");
                 CycleController.AnimateSunset();
             }
             CycleController.IsNight = !isNight;
