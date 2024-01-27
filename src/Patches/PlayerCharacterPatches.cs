@@ -57,7 +57,19 @@ namespace TunicArchipelago {
                     SpeedrunFinishlineDisplayPatches.CompletionCanvas.SetActive(!SpeedrunFinishlineDisplayPatches.CompletionCanvas.active);
                 }
             }
-            
+
+            if (Input.GetKeyDown(KeyCode.Alpha2) && SaveFile.GetInt("randomizer") == 1) {
+                GenericPrompt.ShowPrompt($"\"Copy Current Game Settings?\"\n\"-----------------\"\n" +
+                    $"\"Seed.................{SaveFile.GetInt("seed").ToString().PadLeft(12, '.')}\"\n" +
+                    $"\"Game Mode............{SaveFile.GetString("randomizer game mode").PadLeft(12, '.')}\"\n" +
+                    $"\"Keys Behind Bosses...{(SaveFile.GetInt("randomizer keys behind bosses") == 0 ? "<#ff0000>Off" : "<#00ff00>On").PadLeft(21, '.')}\"\n" +
+                    $"\"Sword Progression....{(SaveFile.GetInt("randomizer sword progression enabled") == 0 ? "<#ff0000>Off" : "<#00ff00>On").PadLeft(21, '.')}\"\n" +
+                    $"\"Started With Sword...{(SaveFile.GetInt("randomizer started with sword") == 0 ? "<#ff0000>No" : "<#00ff00>Yes").PadLeft(21, '.')}\"\n" +
+                    $"\"Shuffled Abilities...{(SaveFile.GetInt("randomizer shuffled abilities") == 0 ? "<#ff0000>Off" : "<#00ff00>On").PadLeft(21, '.')}\"\n" +
+                    $"\"Entrance Randomizer..{(SaveFile.GetInt("randomizer entrance rando enabled") == 0 ? "<#ff0000>Off" : "<#00ff00>On").PadLeft(21, '.')}\"",
+                    (Il2CppSystem.Action)QuickSettings.CopyQuickSettingsInGame, null);
+            }
+
             if (Input.GetKeyDown(KeyCode.R)) {
                 Archipelago.instance.Release();
             }
@@ -149,7 +161,6 @@ namespace TunicArchipelago {
 
         }
 
-
         public static void PlayerCharacter_Start_PostfixPatch(PlayerCharacter __instance) {
 
             SceneLoaderPatches.TimeOfLastSceneTransition = SaveFile.GetFloat("playtime");
@@ -167,25 +178,6 @@ namespace TunicArchipelago {
                     string SceneName = Path.GetFileNameWithoutExtension(SceneUtility.GetScenePathByBuildIndex(i));
                     Locations.AllScenes.Add(SceneName);
                 }
-            }
-
-            if (SaveFile.GetInt("archipelago") == 0 && SaveFile.GetInt("randomizer") == 0) {
-                if (TunicArchipelago.Settings.Mode == RandomizerSettings.RandomizerType.SINGLEPLAYER) {
-                    SaveFile.SetInt("randomizer", 1);
-                } else if (TunicArchipelago.Settings.Mode == RandomizerSettings.RandomizerType.ARCHIPELAGO) {
-                    SaveFile.SetInt("archipelago", 1);
-                }
-            }
-
-            if (SaveFile.GetInt("randomizer") == 1) {
-                PlayerCharacter_Start_SinglePlayerSetup();
-            } else if (SaveFile.GetInt("archipelago") == 1) {
-                PlayerCharacter_Start_ArchipelagoSetup();
-            }
-
-
-            if (PaletteEditor.ToonFox.GetComponent<MeshRenderer>() == null) {
-                PaletteEditor.ToonFox.AddComponent<MeshRenderer>().material = __instance.transform.GetChild(25).GetComponent<SkinnedMeshRenderer>().material;
             }
 
             StateVariable.GetStateVariableByName("SV_ShopTrigger_Fortress").BoolValue = true;
@@ -216,6 +208,59 @@ namespace TunicArchipelago {
 
             ItemPresentationPatches.SwitchDathStonePresentation();
 
+            int seed = SaveFile.GetInt("seed");
+
+            if (seed == 0 && SaveFile.GetInt("archipelago") == 0 && SaveFile.GetInt("randomizer") == 0) {
+                if (TunicArchipelago.Settings.Mode == RandomizerSettings.RandomizerType.SINGLEPLAYER) {
+                    SaveFile.SetInt("randomizer", 1);
+                } else if (TunicArchipelago.Settings.Mode == RandomizerSettings.RandomizerType.ARCHIPELAGO) {
+                    SaveFile.SetInt("archipelago", 1);
+                }
+                SaveFile.SaveToDisk();
+            }
+
+            if (SaveFile.GetInt("randomizer") == 1) {
+                Archipelago.instance.Disconnect();
+                PlayerCharacter_Start_SinglePlayerSetup();
+            } else if (SaveFile.GetInt("archipelago") == 1) {
+                PlayerCharacter_Start_ArchipelagoSetup();
+            }
+
+            /*ItemTracker.PopulateSpoilerLog();
+            GhostHints.GenerateHints();
+            Hints.PopulateHints();
+            if (Hints.HeroGraveHints.Count != 0) {
+                Hints.SetupHeroGraveToggle();
+            }*/
+
+            if (SaveFile.GetInt(AbilityShuffle) == 1 && SaveFile.GetInt(HolyCrossUnlocked) == 0) {
+                ItemPatches.ToggleHolyCrossObjects(false);
+            }
+
+            if (SaveFile.GetInt(HexagonQuestEnabled) == 1) {
+                TunicArchipelago.Tracker.ImportantItems["Pages"] = 28;
+                SaveFile.SetInt("last page viewed", 0);
+            }
+
+            //FairyTargets.CreateFairyTargets();
+
+            /*            if (!SceneLoaderPatches.SpawnedGhosts) {
+                            GhostHints.SpawnHintGhosts(SceneLoaderPatches.SceneName);
+                        }
+
+                        if (!ModelSwaps.SwappedThisSceneAlready) {
+                            ModelSwaps.SwapItemsInScene();
+                        }*/
+
+            // this is here for the first time you're loading in, assumes you're in Overworld
+            if (SaveFile.GetInt("randomizer entrance rando enabled") == 1) {
+                TunicPortals.AltModifyPortals();
+            }
+
+            if (PaletteEditor.ToonFox.GetComponent<MeshRenderer>() == null) {
+                PaletteEditor.ToonFox.AddComponent<MeshRenderer>().material = __instance.transform.GetChild(25).GetComponent<SkinnedMeshRenderer>().material;
+            }
+
             PaletteEditor.GatherHyperdashRenderers();
             PaletteEditor.SetupPartyHat(__instance);
             PaletteEditor.SetupFoxCape(__instance);
@@ -241,8 +286,70 @@ namespace TunicArchipelago {
             }
         }
 
-        private static void PlayerCharacter_Start_SinglePlayerSetup() { 
-            
+        private static void PlayerCharacter_Start_SinglePlayerSetup() {
+            int seed = SaveFile.GetInt("seed");
+
+            if (seed == 0) {
+                seed = QuickSettings.CustomSeed == 0 ? new System.Random().Next() : QuickSettings.CustomSeed;
+                Logger.LogInfo($"Starting new single player file with seed: " + seed);
+                SaveFile.SetInt("seed", seed);
+                SaveFile.SetInt("randomizer", 1);
+                SaveFile.SetString("randomizer game mode", Enum.GetName(typeof(RandomizerSettings.GameModes), TunicArchipelago.Settings.GameMode));
+                if (TunicArchipelago.Settings.GameMode == RandomizerSettings.GameModes.HEXAGONQUEST) {
+                    SaveFile.SetInt(HexagonQuestEnabled, 1);
+                    SaveFile.SetInt("randomizer hexagon quest goal", TunicArchipelago.Settings.HexagonQuestGoal);
+                    SaveFile.SetInt("randomizer hexagon quest extras", TunicArchipelago.Settings.HexagonQuestExtraPercentage);
+
+                    for (int i = 0; i < 28; i++) {
+                        SaveFile.SetInt($"randomizer obtained page {i}", 1);
+                    }
+
+                    StateVariable.GetStateVariableByName("Placed Hexagon 1 Red").BoolValue = true;
+                    StateVariable.GetStateVariableByName("Placed Hexagon 2 Green").BoolValue = true;
+                    StateVariable.GetStateVariableByName("Placed Hexagon 3 Blue").BoolValue = true;
+                    StateVariable.GetStateVariableByName("Placed Hexagons ALL").BoolValue = true;
+                    StateVariable.GetStateVariableByName("Has Been Betrayed").BoolValue = true;
+                    StateVariable.GetStateVariableByName("Has Died To God").BoolValue = true;
+                }
+                if (TunicArchipelago.Settings.SwordProgressionEnabled) {
+                    SaveFile.SetInt("randomizer sword progression enabled", 1);
+                    SaveFile.SetInt("randomizer sword progression level", 0);
+                }
+                if (TunicArchipelago.Settings.KeysBehindBosses) {
+                    SaveFile.SetInt("randomizer keys behind bosses", 1);
+                }
+                if (TunicArchipelago.Settings.StartWithSwordEnabled) {
+                    Inventory.GetItemByName("Sword").Quantity = 1;
+                    SaveFile.SetInt("randomizer started with sword", 1);
+                }
+
+                SaveFile.SetInt("randomizer laurels location", (int)TunicArchipelago.Settings.FixedLaurelsOption);
+
+                if (TunicArchipelago.Settings.EntranceRandoEnabled) {
+                    Inventory.GetItemByName("Torch").Quantity = 1;
+                    SaveFile.SetInt("randomizer entrance rando enabled", 1);
+                }
+                if (TunicArchipelago.Settings.ERFixedShop) {
+                    SaveFile.SetInt("randomizer ER fixed shop", 1);
+                }
+                if (TunicArchipelago.Settings.ShuffleAbilities) {
+                    SaveFile.SetInt("randomizer shuffled abilities", 1);
+                }
+                foreach (string Scene in Locations.AllScenes) {
+                    SaveFile.SetFloat($"randomizer play time {Scene}", 0.0f);
+                }
+
+                EnemyRandomizer.CreateAreaSeeds();
+
+                SaveFile.SaveToDisk();
+            }
+            TunicArchipelago.Tracker = new ItemTracker();
+            TunicArchipelago.Tracker.Seed = seed;
+            TunicArchipelago.Randomizer = new System.Random(seed);
+            Logger.LogInfo("Loading single player seed: " + seed);
+            ItemRandomizer.PopulateSphereZero();
+            ItemRandomizer.RandomizeAndPlaceItems();
+
         }
 
         private static void PlayerCharacter_Start_ArchipelagoSetup() {
@@ -333,7 +440,7 @@ namespace TunicArchipelago {
                     if (SaveFile.GetInt("seed") == 0) {
                         SaveFile.SetInt("seed", int.Parse(Seed.ToString(), CultureInfo.InvariantCulture));
                         EnemyRandomizer.CreateAreaSeeds();
-                        Logger.LogInfo("Imported seed from archipelago: " + Seed);
+                        Logger.LogInfo("Starting new archipelago file with seed: " + Seed);
                     } else {
                         Logger.LogInfo("Loading seed: " + SaveFile.GetInt("seed"));
                     }
@@ -362,31 +469,6 @@ namespace TunicArchipelago {
                         }
                     }).Wait();
                     Logger.LogInfo("Successfully scouted locations for item placements");
-                    ItemTracker.PopulateSpoilerLog();
-                    GhostHints.GenerateHints();
-                    Hints.PopulateHints();
-                    if (Hints.HeroGraveHints.Count != 0) {
-                        Hints.SetupHeroGraveToggle();
-                    }
-
-                    if (SaveFile.GetInt(AbilityShuffle) == 1 && SaveFile.GetInt(HolyCrossUnlocked) == 0) {
-                        ItemPatches.ToggleHolyCrossObjects(false);
-                    }
-
-                    if (SaveFile.GetInt(HexagonQuestEnabled) == 1) {
-                        TunicArchipelago.Tracker.ImportantItems["Pages"] = 28;
-                        SaveFile.SetInt("last page viewed", 0);
-                    }
-
-                    FairyTargets.CreateFairyTargets();
-
-                    if (!SceneLoaderPatches.SpawnedGhosts) {
-                        GhostHints.SpawnHintGhosts(SceneLoaderPatches.SceneName);
-                    }
-
-                    if (!ModelSwaps.SwappedThisSceneAlready) {
-                        ModelSwaps.SwapItemsInScene();
-                    }
 
                     Archipelago.instance.integration.UpdateDataStorageOnLoad();
                 }

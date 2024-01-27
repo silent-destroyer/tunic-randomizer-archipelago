@@ -24,7 +24,7 @@ namespace TunicArchipelago {
 
         public static ManualLogSource Logger;
         public static RandomizerSettings Settings = new RandomizerSettings();
-
+        public static System.Random Randomizer = null;
         public static string SettingsPath = Application.dataPath + "/../BepInEx/plugins/Tunic Randomizer/Settings.json";
         public static string ItemTrackerPath = Application.persistentDataPath + "/Randomizer/ItemTracker.json";
         public static string SpoilerLogPath = Application.persistentDataPath + "/Randomizer/Spoiler.log";

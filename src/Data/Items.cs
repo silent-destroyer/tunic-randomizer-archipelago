@@ -1,6 +1,7 @@
 ﻿using Archipelago.MultiClient.Net.Enums;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace TunicArchipelago {
 
@@ -280,6 +281,17 @@ namespace TunicArchipelago {
             { "Pages 54-55", new ItemData("Pages 54-55", "useful", "27", ItemTypes.PAGE, 1) },
         };
 
+        public static ItemData GetItemDataFromCheck(Check Check) {
+            if (ItemLookup.FairyLookup.ContainsKey(Check.Reward.Name)) {
+                return Items["Fairy"];
+            } else if (Check.Reward.Name == "Sword Progression") {
+                return Items["Sword Upgrade"];
+            } else {
+                string itemName = ItemLookup.Items.Values.Where(itemdata => itemdata.ItemNameForInventory == Check.Reward.Name && itemdata.QuantityToGive == Check.Reward.Amount).FirstOrDefault().Name;
+                return Items.ContainsKey(itemName) ? Items[itemName] : Items["Money x1"];
+            }
+        }
+
         public static List<string> LevelUpItems = new List<string>() { "Level Up - Attack", "Level Up - DamageResist", "Level Up - PotionEfficiency", "Level Up - Health", "Level Up - Stamina", "Level Up - Magic" };
 
         public static Dictionary<string, BonusUpgrade> BonusUpgrades = new Dictionary<string, BonusUpgrade>() {
@@ -344,7 +356,6 @@ namespace TunicArchipelago {
         public static string PrayerUnlockedLine = $"\"PRAYER Unlocked.\" Jahnuhl yor wizduhm, rooin sEkur.";
         public static string HolyCrossUnlockedLine = $"\"HOLY CROSS Unlocked.\" sEk wuht iz rItfuhlE yorz.";
         public static string IceRodUnlockedLine = $"\"ICE ROD Unlocked.\" #A wOnt nO wuht hit #ehm";
-
 
         public static Dictionary<string, string> SimplifiedItemNames = new Dictionary<string, string>() {
             {"Firecracker", "Firecracker"},
@@ -475,6 +486,18 @@ namespace TunicArchipelago {
             { "drurululdldr", "Granted Firecracker" },
             { "lurdrurdrurdl", "Granted Firebomb" },
             { "ldrurdrurdrul", "Granted Icebomb" },
+        };
+
+        public static Dictionary<string, List<int>> FillerItems = new Dictionary<string, List<int>>() {
+            { "Firecracker", new List<int>() { 2, 3, 4, 5, 6 } },
+            { "Firebomb", new List<int>() { 2, 3 } },
+            { "Ice Bomb", new List<int>() { 2, 3, 5 } },
+            { "Bait", new List<int>() { 1, 2 } },
+            { "Pepper", new List<int>() { 2 } },
+            { "Ivy", new List<int>() { 3 } },
+            { "Berry_HP", new List<int>() { 1, 2, 3 } },
+            { "Berry_MP", new List<int>() { 1, 2, 3 } },
+            { "money", new List<int>() { 20, 25, 30, 32, 40, 48, 50 } },
         };
     }
 

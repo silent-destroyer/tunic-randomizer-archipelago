@@ -307,7 +307,7 @@ namespace TunicArchipelago {
         }
 
         public void Release() {
-            if (sentCompletion && !sentRelease) {
+            if (connected && sentCompletion && !sentRelease) {
                 session.Socket.SendPacket(new SayPacket() { Text = "!release" });
                 sentRelease = true;
                 Logger.LogInfo("Released remaining checks.");
@@ -315,7 +315,7 @@ namespace TunicArchipelago {
         }
 
         public void Collect() {
-            if (sentCompletion && !sentCollect) {
+            if (connected && sentCompletion && !sentCollect) {
                 session.Socket.SendPacket(new SayPacket() { Text = "!collect" });
                 sentCollect = true;
                 Logger.LogInfo("Collected remaining items.");

@@ -23,7 +23,7 @@ namespace TunicArchipelago
             public bool PrayerPortal; // portals that require prayer to enter. This is a more convenient version of GivesAccess for prayer portals.
             public bool OneWay; // portals that are one-way, such as the back entrance to monastery and the forest belltower top portal
             public bool IgnoreScene; // portals that cannot reach the center of the region, and as such do not give region access, like the rail between beneath the well and furnace
-
+            public bool SpecialReqs; // portals that have weird rules, basically, where we'll be way more verbose in requireditems or requireditemsor
             public TunicPortal() { }
 
             public TunicPortal(string destination, string destinationTag, string portalName, string granularRegion) {
@@ -32,7 +32,7 @@ namespace TunicArchipelago
                 PortalName = portalName;
                 GranularRegion = granularRegion;
             }
-            public TunicPortal(string destination, string destinationTag, string portalName, string granularRegion, bool prayerPortal = false, bool deadEnd = false, bool oneWay = false, bool ignoreScene = false) {
+            public TunicPortal(string destination, string destinationTag, string portalName, string granularRegion, bool prayerPortal = false, bool deadEnd = false, bool oneWay = false, bool ignoreScene = false, bool specialReqs = false) {
                 Destination = destination;
                 DestinationTag = destinationTag;
                 PortalName = portalName;
@@ -41,8 +41,9 @@ namespace TunicArchipelago
                 DeadEnd = deadEnd;
                 OneWay = oneWay;
                 IgnoreScene = ignoreScene;
+                SpecialReqs = specialReqs;
             }
-            public TunicPortal(string destination, string destinationTag, string portalName, string granularRegion, Dictionary<string, int> entryItems, bool prayerPortal = false, bool deadEnd = false, bool oneWay = false, bool ignoreScene = false) {
+            public TunicPortal(string destination, string destinationTag, string portalName, string granularRegion, Dictionary<string, int> entryItems, bool prayerPortal = false, bool deadEnd = false, bool oneWay = false, bool ignoreScene = false, bool specialReqs = false) {
                 Destination = destination;
                 DestinationTag = destinationTag;
                 PortalName = portalName;
@@ -52,8 +53,9 @@ namespace TunicArchipelago
                 DeadEnd = deadEnd;
                 OneWay = oneWay;
                 IgnoreScene = ignoreScene;
+                SpecialReqs = specialReqs;
             }
-            public TunicPortal(string destination, string destinationTag, string portalName, string granularRegion, Dictionary<string, int> requiredItems, bool prayerPortal = false, bool deadEnd = false, bool ignoreScene = false) {
+            public TunicPortal(string destination, string destinationTag, string portalName, string granularRegion, Dictionary<string, int> requiredItems, bool prayerPortal = false, bool deadEnd = false, bool ignoreScene = false, bool specialReqs = false) {
                 Destination = destination;
                 DestinationTag = destinationTag;
                 PortalName = portalName;
@@ -62,14 +64,16 @@ namespace TunicArchipelago
                 PrayerPortal = prayerPortal;
                 DeadEnd = deadEnd;
                 IgnoreScene = ignoreScene;
+                SpecialReqs = specialReqs;
             }
-            public TunicPortal(string destination, string destinationTag, string portalName, string granularRegion, List<string> givesAccess, bool ignoreScene = false, bool oneWay = false) {
+            public TunicPortal(string destination, string destinationTag, string portalName, string granularRegion, List<string> givesAccess, bool ignoreScene = false, bool oneWay = false, bool specialReqs = false) {
                 Destination = destination;
                 DestinationTag = destinationTag;
                 PortalName = portalName;
                 GranularRegion = granularRegion;
                 GivesAccess = givesAccess;
                 IgnoreScene = ignoreScene;
+                SpecialReqs = specialReqs;
                 OneWay = oneWay;
             }
             public TunicPortal(string destination, string destinationTag, string portalName, string granularRegion, Dictionary<string, int> requiredItems) {
@@ -79,16 +83,18 @@ namespace TunicArchipelago
                 GranularRegion = granularRegion;
                 RequiredItems = requiredItems;
             }
-            public TunicPortal(string destination, string destinationTag, string portalName, string granularRegion, Dictionary<string, int> requiredItems, List<string> givesAccess, bool ignoreScene = false) {
+            public TunicPortal(string destination, string destinationTag, string portalName, string granularRegion, Dictionary<string, int> requiredItems, List<string> givesAccess, bool ignoreScene = false, bool specialReqs = false, bool prayerPortal = false) {
                 Destination = destination;
                 DestinationTag = destinationTag;
                 PortalName = portalName;
                 GranularRegion = granularRegion;
                 RequiredItems = requiredItems;
                 IgnoreScene = ignoreScene;
+                SpecialReqs = specialReqs;
                 GivesAccess = givesAccess;
+                PrayerPortal = prayerPortal;
             }
-            public TunicPortal(string destination, string destinationTag, string portalName, string granularRegion, List<Dictionary<string, int>> requiredItemsOr, bool prayerPortal = false, bool ignoreScene = false) {
+            public TunicPortal(string destination, string destinationTag, string portalName, string granularRegion, List<Dictionary<string, int>> requiredItemsOr, bool prayerPortal = false, bool ignoreScene = false, bool specialReqs = false) {
                 Destination = destination;
                 DestinationTag = destinationTag;
                 PortalName = portalName;
@@ -96,6 +102,19 @@ namespace TunicArchipelago
                 RequiredItemsOr = requiredItemsOr;
                 PrayerPortal = prayerPortal;
                 IgnoreScene = ignoreScene;
+                SpecialReqs = specialReqs;
+            }
+
+            public TunicPortal(string destination, string destinationTag, string portalName, string granularRegion, List<string> givesAccess, List<Dictionary<string, int>> requiredItemsOr, bool prayerPortal = false, bool ignoreScene = false, bool specialReqs = false) {
+                Destination = destination;
+                DestinationTag = destinationTag;
+                PortalName = portalName;
+                GranularRegion = granularRegion;
+                GivesAccess = givesAccess;
+                RequiredItemsOr = requiredItemsOr;
+                PrayerPortal = prayerPortal;
+                IgnoreScene = ignoreScene;
+                SpecialReqs = specialReqs;
             }
 
             public TunicPortal(string destination, string destinationTag, string portalName, string granularRegion, Dictionary<string, int> requiredItems, List<string> givesAccess) {
@@ -668,6 +687,268 @@ namespace TunicArchipelago
             },
         };
 
+        public static void ShuffleList<T>(IList<T> list, int seed) {
+            var rng = new System.Random(seed);
+            int n = list.Count;
+
+            while (n > 1) {
+                n--;
+                int k = rng.Next(n + 1);
+                T value = list[k];
+                list[k] = list[n];
+                list[n] = value;
+            }
+        }
+
+        // function to see if we're placing a lock before its key, since doing that can possibly self-lock
+        public static bool LockBeforeKey(Portal checkPortal) {
+            if (checkPortal.SceneDestinationTag == "Overworld Redux, Temple_main") {
+                // check if the belltower upper has been placed yet, if not then reshuffle the two plus portals list (since this list is gonna be the bigger one)
+                int i = 0;
+                foreach (Portal portal in deadEndPortals) {
+                    if (portal.SceneDestinationTag == "Forest Belltower, Forest Boss Room_") {
+                        i++;
+                        break;
+                    }
+                }
+                if (i == 1) { return true; }
+            } else if (checkPortal.SceneDestinationTag == "Fortress Main, Fortress Arena_") {
+                // check if none of the portals that lead to the necessary fuses have been placed
+                int i = 0;
+                int j = 0;
+                int k = 0;
+                foreach (Portal portal in twoPlusPortals) {
+                    if (portal.SceneDestinationTag == "Fortress Courtyard, Fortress Reliquary_upper"
+                        || portal.SceneDestinationTag == "Fortress Courtyard, Fortress East_") { i++; }
+                    if (portal.Scene == "Fortress Basement") { j++; }
+                    if (portal.Scene == "Fortress Main") { k++; }
+                }
+                if (i == 2 || j == 2 || k == 6) { return true; }
+            } else if (checkPortal.SceneDestinationTag == "Fortress Arena, Transit_teleporter_spidertank"
+                  || checkPortal.SceneDestinationTag == "Transit, Fortress Arena_teleporter_spidertank") {
+                // check if none of the portals that lead to the necessary fuses have been placed
+                int i = 0;
+                int j = 0;
+                int k = 0;
+                foreach (Portal portal in twoPlusPortals) {
+                    if (portal.Scene == "Fortress Courtyard") { i++; }
+                    if (portal.Scene == "Fortress Basement") { j++; }
+                    if (portal.Scene == "Fortress Main") { k++; }
+                }
+                if (i == 8 || j == 2 || k == 6) { return true; }
+            } else if (checkPortal.SceneDestinationTag == "Swamp Redux 2, Cathedral Redux_main") {
+                int i = 0;
+                foreach (Portal portal in twoPlusPortals) {
+                    if (portal.SceneDestinationTag == "Swamp Redux 2, Overworld Redux_conduit"
+                        || portal.SceneDestinationTag == "Swamp Redux 2, Shop_"
+                        || portal.SceneDestinationTag == "Swamp Redux 2, Cathedral Redux_secret") { i++; }
+                }
+                if (i == 3) { return true; }
+            } else if (checkPortal.SceneDestinationTag == "ziggurat2020_FTRoom, ziggurat2020_3") {
+                int i = 0;
+                foreach (Portal portal in twoPlusPortals) {
+                    if (portal.Scene == "ziggurat2020_3") { i++; }
+                }
+                if (i == 2) { return true; }
+            } else if (checkPortal.SceneDestinationTag == "Quarry Redux, Transit_teleporter_quarry teleporter") {
+                int i = 0;
+                foreach (Portal portal in twoPlusPortals) {
+                    if (portal.Scene == "Darkwoods Tunnel") { i++; }
+                }
+                if (i == 2) { return true; }
+            } else if (checkPortal.SceneDestinationTag == "Transit, Quarry Redux_teleporter_quarry teleporter") {
+                int i = 0;
+                int j = 0;
+                foreach (Portal portal in twoPlusPortals) {
+                    if (portal.Scene == "Darkwoods Tunnel") { i++; }
+                    if (portal.Scene == "Quarry Redux") { j++; }
+                }
+                if (i == 2 || j == 7) { return true; }
+            } else if (checkPortal.SceneDestinationTag == "Transit, Library Lab_teleporter_library teleporter") {
+                int i = 0;
+                foreach (Portal portal in twoPlusPortals) {
+                    if (portal.Scene == "Library Lab") { i++; }
+                }
+                if (i == 3) { return true; }
+            } else if (checkPortal.SceneDestinationTag == "Transit, Archipelagos Redux_teleporter_archipelagos_teleporter") {
+                int i = 0;
+                foreach (Portal portal in twoPlusPortals) {
+                    if (portal.Scene == "Archipelagos Redux") { i++; }
+                }
+                if (i == 7) { return true; }
+            }
+            return false;
+        }
+
+        // if we have some granular regions, we get another one. This is for one-way connections, basically
+        // so that we don't unnecessarily force the back of house to be connected to a non-dead-end, for example
+        public static List<string> AddDependentRegions(string region) {
+            List<string> regions = new List<string>();
+            // idk if we need to clear it
+            regions.Clear();
+            regions.Add(region);
+
+            if (region == "Old House Front") {
+                regions.Add("Old House Back");
+            } else if (region == "Frog's Domain Front") {
+                regions.Add("Frog's Domain Back");
+            } else if (region == "Sword Access") {
+                regions.Add("Sword Access Back");
+            } else if (region == "Forest Belltower Upper") {
+                regions.Add("Forest Belltower Main");
+                regions.Add("Forest Belltower Lower");
+            } else if (region == "Forest Beltower Main") {
+                regions.Add("Forest Belltower Lower");
+            } else if (region == "Fortress Courtyard Upper") {
+                regions.Add("Fortress Courtyard");
+            } else if (region == "Fortress East") {
+                regions.Add("Fortress East Lower");
+            } else if (region == "Monastery Rope") {
+                regions.Add("Quarry");
+            } else if (region == "Zig 1 Top") {
+                regions.Add("Zig 1 Bottom");
+            } else if (region == "Zig 2 Top") {
+                regions.Add("Zig 2 Bottom");
+            } else if (region == "Gauntlet Top") {
+                regions.Add("Gauntlet Bottom");
+            }
+
+            return regions;
+        }
+
+        // making a separate lists for portals connected to one, two, or three+ regions, to be populated by the foreach coming up next
+        public static List<Portal> deadEndPortals = new List<Portal>();
+        public static List<Portal> twoPlusPortals = new List<Portal>();
+        // create a list of all portals with their information loaded in, just a slightly expanded version of the above to include destinations
+        public static void RandomizePortals(int seed) {
+            RandomizedPortals.Clear();
+
+            // separate the portals into their respective lists
+            foreach (KeyValuePair<string, List<TunicPortal>> region_group in PortalList) {
+                if (region_group.Key == "Shop") {
+                    continue;
+                }
+                string region_name = region_group.Key;
+                List<TunicPortal> region_portals = region_group.Value;
+                foreach (TunicPortal portal in region_portals) {
+                    Portal newPortal = new Portal(destination: portal.Destination, tag: portal.DestinationTag, name: portal.PortalName, scene: region_name, region: portal.GranularRegion, requiredItems: portal.RequiredItems, requiredItemsOr: portal.RequiredItemsOr, entryItems: portal.EntryItems, givesAccess: portal.GivesAccess, deadEnd: portal.DeadEnd, prayerPortal: portal.PrayerPortal, oneWay: portal.OneWay, ignoreScene: portal.IgnoreScene, specialReqs: portal.SpecialReqs);
+                    if (newPortal.DeadEnd == true) { deadEndPortals.Add(newPortal); } else twoPlusPortals.Add(newPortal);
+                }
+            }
+            if (SaveFile.GetInt("randomizer ER fixed shop") == 1) {
+                foreach (Portal portal in twoPlusPortals) {
+                    if (portal.SceneDestinationTag == "Overworld Redux, Windmill_") {
+                        twoPlusPortals.Remove(portal);
+                        break;
+                    }
+                }
+            }
+
+            // making a list of accessible regions that will be updated as we gain access to more regions
+            List<string> accessibleRegions = new List<string>();
+            accessibleRegions.Clear();
+
+            // just picking a static start region for now, can modify later if we want to do random start location
+            string start_region = "Overworld";
+            accessibleRegions.Add(start_region);
+
+            int comboNumber = 0;
+
+            // This might be way too much shuffling -- was done to not favor connecting new regions to the first regions added to the list
+            // create a portal combo for every region in the threePlusRegions list, so that every region can now be accessed (ignoring rules for now)
+            // todo: make it add regions to the list based on previously gotten regions
+            while (accessibleRegions.Count < 57) {
+                ShuffleList(twoPlusPortals, seed);
+                // later on, start by making the first several portals into shop portals
+                Portal portal1 = null;
+                Portal portal2 = null;
+                foreach (Portal portal in twoPlusPortals) {
+                    // find a portal in a region we can't access yet
+                    if (LockBeforeKey(portal) == false && !accessibleRegions.Contains(portal.Region)) {
+                        portal1 = portal;
+                    }
+                }
+                if (portal1 == null) { Logger.LogInfo("something messed up in portal pairing for portal 1"); }
+                twoPlusPortals.Remove(portal1);
+                ShuffleList(twoPlusPortals, seed);
+                foreach (Portal secondPortal in twoPlusPortals) {
+                    if (LockBeforeKey(secondPortal) == false && accessibleRegions.Contains(secondPortal.Region)) {
+                        portal2 = secondPortal;
+                        twoPlusPortals.Remove(secondPortal);
+                        break;
+                    }
+                }
+                if (portal2 == null) { Logger.LogInfo("something messed up in portal pairing for portal 2"); }
+                // add the portal combo to the randomized portals list
+                RandomizedPortals.Add(comboNumber.ToString(), new PortalCombo(portal1, portal2));
+                foreach (string region in AddDependentRegions(portal1.Region)) {
+                    if (!accessibleRegions.Contains(region)) {
+                        accessibleRegions.Add(region);
+                    }
+                }
+                comboNumber++;
+            }
+
+            // since the dead ends only have one exit, we just append them 1 to 1 to a random portal in the two plus list
+            ShuffleList(deadEndPortals, seed);
+            ShuffleList(twoPlusPortals, seed);
+            while (deadEndPortals.Count > 0) {
+                if (LockBeforeKey(twoPlusPortals[0]) == true) { ShuffleList(twoPlusPortals, seed); } else {
+                    comboNumber++;
+                    RandomizedPortals.Add(comboNumber.ToString(), new PortalCombo(deadEndPortals[0], twoPlusPortals[0]));
+                    deadEndPortals.RemoveAt(0);
+                    twoPlusPortals.RemoveAt(0);
+                }
+            }
+            List<string> shopRegionList = new List<string>();
+            int shopCount = 6;
+            if (SaveFile.GetInt("randomizer ER fixed shop") == 1) {
+                shopCount = 1;
+                Portal windmillPortal = new Portal(destination: "Windmill", tag: "", name: "Windmill Entrance", scene: "Overworld Redux");
+                Portal shopPortal = new Portal(destination: "Previous Region", tag: "", name: "Shop portal", scene: "Shop", region: "Shop");
+                RandomizedPortals.Add("fixedshop", new PortalCombo(windmillPortal, shopPortal));
+                shopRegionList.Add("Overworld Redux");
+            }
+            int regionNumber = 0;
+            while (shopCount > 0) {
+                // manually making a portal for the shop, because it has some special properties
+                Portal shopPortal = new Portal(destination: "Previous Region", tag: "", name: "Shop portal", scene: "Shop", region: "Shop");
+                // check that a shop has not already been added to this region, since two shops in the same region causes problems
+                if (!shopRegionList.Contains(twoPlusPortals[regionNumber].Scene)) {
+                    comboNumber++;
+                    shopRegionList.Add(twoPlusPortals[regionNumber].Scene);
+                    RandomizedPortals.Add(comboNumber.ToString(), new PortalCombo(twoPlusPortals[regionNumber], shopPortal));
+                    twoPlusPortals.RemoveAt(regionNumber);
+                    shopCount--;
+                } else {
+                    regionNumber++;
+                }
+                if (regionNumber == twoPlusPortals.Count - 1) {
+                    Logger.LogInfo("too many shops, not enough regions, add more shops");
+                }
+            }
+
+            // now we have every region accessible
+            // the twoPlusPortals list still has items left in it, so now we pair them off
+            while (twoPlusPortals.Count > 1) {
+                // I don't think the LockBeforeKey check can lead to an infinite loop?
+                if (LockBeforeKey(twoPlusPortals[0]) == true || LockBeforeKey(twoPlusPortals[1]) == true) { ShuffleList(twoPlusPortals, seed); } else {
+                    comboNumber++;
+                    RandomizedPortals.Add(comboNumber.ToString(), new PortalCombo(twoPlusPortals[0], twoPlusPortals[1]));
+                    twoPlusPortals.RemoveAt(1); // I could do removeat0 twice, but I don't like how that looks
+                    twoPlusPortals.RemoveAt(0);
+                }
+            }
+            if (twoPlusPortals.Count == 1) {
+                // if this triggers, increase or decrease shop count by 1
+                Logger.LogInfo("one extra dead end remaining alone, rip. It's " + twoPlusPortals[0].Name);
+            }
+
+            // todo: figure out why the quarry portal isn't working right
+            //Portal betaQuarryPortal = new Portal(destination: "Darkwoods", tag: "", name: "Beta Quarry", scene: "Quarry", region: "Quarry", requiredItems: new Dictionary<string, int>(), givesAccess: new List<string>(), deadEnd: true, prayerPortal: false, oneWay: false, ignoreScene: false);
+            //Portal zigSkipPortal = new Portal(destination: "ziggurat2020_3", tag: "zig2_skip", name: "Zig Skip", scene: "ziggurat2020_1", region: "Zig 1", requiredItems: new Dictionary<string, int>(), givesAccess: new List<string>(), deadEnd: true, prayerPortal: false, oneWay: false, ignoreScene: false);
+            //RandomizedPortals.Add("zigsecret", new PortalCombo(betaQuarryPortal, zigSkipPortal));
+        }
 
         public static void CreatePortalPairs(Dictionary<string, string> APPortalStrings) {
             RandomizedPortals.Clear();

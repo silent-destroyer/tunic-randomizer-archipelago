@@ -390,8 +390,10 @@ namespace TunicArchipelago {
                 int Player = Archipelago.instance.GetPlayerSlot();
 
                 string ItemId = Chest.chestID == 0 ? $"{SceneLoaderPatches.SceneName}-{Chest.transform.position.ToString()} [{SceneLoaderPatches.SceneName}]" : $"{Chest.chestID} [{SceneLoaderPatches.SceneName}]";
-                if (ItemLookup.ItemList.ContainsKey(ItemId)) {
+                string ItemName = "Stick";
+                if (SaveFile.GetInt("archipelago") == 1 && ItemLookup.ItemList.ContainsKey(ItemId)) {
                     ArchipelagoItem APItem = ItemLookup.ItemList[ItemId];
+                    ItemName = APItem.ItemName;
                     if (!Archipelago.instance.IsTunicPlayer(APItem.Player) || !ItemLookup.Items.ContainsKey(APItem.ItemName)) {
                         Chest.transform.GetChild(1).GetComponent<SkinnedMeshRenderer>().materials = Chests["Normal"].GetComponent<MeshRenderer>().materials;
                         Chest.GetComponent<FMODUnity.StudioEventEmitter>().EventReference = Chests["Normal"].GetComponent<FMODUnity.StudioEventEmitter>().EventReference;
@@ -399,25 +401,30 @@ namespace TunicArchipelago {
                         ApplyAPChestTexture(Chest, APItem);
                         return;
                     }
-                    ItemData Item = ItemLookup.Items[APItem.ItemName];
-                    if (Item.Type == ItemTypes.FAIRY) {
-                        Chest.transform.GetChild(1).GetComponent<SkinnedMeshRenderer>().materials = Chests["Fairy"].GetComponent<MeshRenderer>().materials;
-                        Chest.GetComponent<FMODUnity.StudioEventEmitter>().EventReference = Chests["Fairy"].GetComponent<FMODUnity.StudioEventEmitter>().EventReference;
-                    } else if (Item.Type == ItemTypes.GOLDENTROPHY) {
-                        Chest.transform.GetChild(1).GetComponent<SkinnedMeshRenderer>().materials = Chests["GoldenTrophy"].GetComponent<MeshRenderer>().materials;
-                        Chest.GetComponent<FMODUnity.StudioEventEmitter>().EventReference = Chests["GoldenTrophy"].GetComponent<FMODUnity.StudioEventEmitter>().EventReference;
-                    } else if (Item.ItemNameForInventory == "Hyperdash") {
-                        Chest.transform.GetChild(1).GetComponent<SkinnedMeshRenderer>().materials = Chests["Hyperdash"].GetComponent<MeshRenderer>().materials;
-                        Chest.GetComponent<FMODUnity.StudioEventEmitter>().EventReference = Chests["Hyperdash"].GetComponent<FMODUnity.StudioEventEmitter>().EventReference;
-                    } else if (Item.ItemNameForInventory.Contains("Hexagon") && Item.Type != ItemTypes.HEXAGONQUEST) {
-                        Material[] Mats = new Material[] { Items[Item.ItemNameForInventory].GetComponent<MeshRenderer>().material, Items[Item.ItemNameForInventory].GetComponent<MeshRenderer>().material };
-                        Chest.transform.GetChild(1).GetComponent<SkinnedMeshRenderer>().materials = Mats;
-                        Chest.GetComponent<FMODUnity.StudioEventEmitter>().EventReference = Chests["Normal"].GetComponent<FMODUnity.StudioEventEmitter>().EventReference;
-                    } else {
-                        Chest.transform.GetChild(1).GetComponent<SkinnedMeshRenderer>().materials = Chests["Normal"].GetComponent<MeshRenderer>().materials;
-                        Chest.GetComponent<FMODUnity.StudioEventEmitter>().EventReference = Chests["Normal"].GetComponent<FMODUnity.StudioEventEmitter>().EventReference;
-                    }
+                } else if (SaveFile.GetInt("randomizer") == 1 && Locations.RandomizedLocations.ContainsKey(ItemId)) {
+                    Check check = Locations.RandomizedLocations[ItemId];
+                    ItemName = ItemLookup.GetItemDataFromCheck(check).Name;
                 }
+
+                ItemData Item = ItemLookup.Items[ItemName];
+                if (Item.Type == ItemTypes.FAIRY) {
+                    Chest.transform.GetChild(1).GetComponent<SkinnedMeshRenderer>().materials = Chests["Fairy"].GetComponent<MeshRenderer>().materials;
+                    Chest.GetComponent<FMODUnity.StudioEventEmitter>().EventReference = Chests["Fairy"].GetComponent<FMODUnity.StudioEventEmitter>().EventReference;
+                } else if (Item.Type == ItemTypes.GOLDENTROPHY) {
+                    Chest.transform.GetChild(1).GetComponent<SkinnedMeshRenderer>().materials = Chests["GoldenTrophy"].GetComponent<MeshRenderer>().materials;
+                    Chest.GetComponent<FMODUnity.StudioEventEmitter>().EventReference = Chests["GoldenTrophy"].GetComponent<FMODUnity.StudioEventEmitter>().EventReference;
+                } else if (Item.ItemNameForInventory == "Hyperdash") {
+                    Chest.transform.GetChild(1).GetComponent<SkinnedMeshRenderer>().materials = Chests["Hyperdash"].GetComponent<MeshRenderer>().materials;
+                    Chest.GetComponent<FMODUnity.StudioEventEmitter>().EventReference = Chests["Hyperdash"].GetComponent<FMODUnity.StudioEventEmitter>().EventReference;
+                } else if (Item.ItemNameForInventory.Contains("Hexagon") && Item.Type != ItemTypes.HEXAGONQUEST) {
+                    Material[] Mats = new Material[] { Items[Item.ItemNameForInventory].GetComponent<MeshRenderer>().material, Items[Item.ItemNameForInventory].GetComponent<MeshRenderer>().material };
+                    Chest.transform.GetChild(1).GetComponent<SkinnedMeshRenderer>().materials = Mats;
+                    Chest.GetComponent<FMODUnity.StudioEventEmitter>().EventReference = Chests["Normal"].GetComponent<FMODUnity.StudioEventEmitter>().EventReference;
+                } else {
+                    Chest.transform.GetChild(1).GetComponent<SkinnedMeshRenderer>().materials = Chests["Normal"].GetComponent<MeshRenderer>().materials;
+                    Chest.GetComponent<FMODUnity.StudioEventEmitter>().EventReference = Chests["Normal"].GetComponent<FMODUnity.StudioEventEmitter>().EventReference;
+                }
+                
             }
         }
 

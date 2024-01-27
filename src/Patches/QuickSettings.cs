@@ -33,7 +33,7 @@ namespace TunicArchipelago {
                 switch (TunicArchipelago.Settings.Mode) {
                     case RandomizerSettings.RandomizerType.SINGLEPLAYER:
                         GUI.Window(101, new Rect(20f, 150f, 430f, ShowHexQuestSliders && TunicArchipelago.Settings.GameMode == RandomizerSettings.GameModes.HEXAGONQUEST ? 610f : 550f), new Action<int>(SinglePlayerQuickSettingsWindow), "Quick Settings");
-                        ShowAPSettingsWindow = false; 
+                        ShowAPSettingsWindow = false;
                         editingPlayer = false;
                         editingHostname = false;
                         editingPort = false;
@@ -117,15 +117,17 @@ namespace TunicArchipelago {
             GUI.Label(new Rect(10f, 20f, 300f, 30f), "Randomizer Mode");
             y += 40f;
             bool ToggleSinglePlayer = GUI.Toggle(new Rect(10f, y, 130f, 30f), TunicArchipelago.Settings.Mode == RandomizerSettings.RandomizerType.SINGLEPLAYER, "Single Player");
-            if (ToggleSinglePlayer) {
+            if (ToggleSinglePlayer && TunicArchipelago.Settings.Mode == RandomizerSettings.RandomizerType.ARCHIPELAGO) {
                 TunicArchipelago.Settings.Mode = RandomizerSettings.RandomizerType.SINGLEPLAYER;
+                OptionsGUIPatches.SaveSettings();
             }
             bool ToggleArchipelago = GUI.Toggle(new Rect(150f, y, 150f, 30f), TunicArchipelago.Settings.Mode == RandomizerSettings.RandomizerType.ARCHIPELAGO, "Archipelago");
-            if (ToggleArchipelago) {
+            if (ToggleArchipelago && TunicArchipelago.Settings.Mode == RandomizerSettings.RandomizerType.SINGLEPLAYER) {
                 TunicArchipelago.Settings.Mode = RandomizerSettings.RandomizerType.ARCHIPELAGO;
+                OptionsGUIPatches.SaveSettings();
             }
             y += 40f;
-            GUI.Label(new Rect(10f, y, 500f, 30f), $"Player: {TunicArchipelago.Settings.ConnectionSettings.Player}");
+            GUI.Label(new Rect(10f, y, 500f, 30f), $"Player: {(TunicArchipelago.Settings.ConnectionSettings.Player)}");
             y += 40f;
             GUI.Label(new Rect(10f, y, 80f, 30f), $"Status:");
             if (Archipelago.instance.integration != null && Archipelago.instance.integration.connected) {
@@ -244,12 +246,14 @@ namespace TunicArchipelago {
             GUI.Label(new Rect(10f, 20f, 300f, 30f), "Randomizer Mode");
             y += 40f;
             bool ToggleSinglePlayer = GUI.Toggle(new Rect(10f, y, 130f, 30f), TunicArchipelago.Settings.Mode == RandomizerSettings.RandomizerType.SINGLEPLAYER, "Single Player");
-            if (ToggleSinglePlayer) {
+            if (ToggleSinglePlayer && TunicArchipelago.Settings.Mode == RandomizerSettings.RandomizerType.ARCHIPELAGO) {
                 TunicArchipelago.Settings.Mode = RandomizerSettings.RandomizerType.SINGLEPLAYER;
+                OptionsGUIPatches.SaveSettings();
             }
             bool ToggleArchipelago = GUI.Toggle(new Rect(150f, y, 150f, 30f), TunicArchipelago.Settings.Mode == RandomizerSettings.RandomizerType.ARCHIPELAGO, "Archipelago");
-            if (ToggleArchipelago) {
+            if (ToggleArchipelago && TunicArchipelago.Settings.Mode == RandomizerSettings.RandomizerType.SINGLEPLAYER) {
                 TunicArchipelago.Settings.Mode = RandomizerSettings.RandomizerType.ARCHIPELAGO;
+                OptionsGUIPatches.SaveSettings();
             }
             y += 40f;
             GUI.Label(new Rect(10f, y, 200f, 30f), "Game Mode");
@@ -271,12 +275,12 @@ namespace TunicArchipelago {
                 }
                 if (ShowHexQuestSliders) {
                     y += 30; 
-                    GUI.Label(new Rect(10f, y, 220f, 20f), $"<size=18>Hexagons Required:</size>"); 
-                    GUI.Label(new Rect(190f, y, 30f, 30f), $"<size=18>{TunicArchipelago.Settings.HexagonQuestGoal}</size>");
+                    GUI.Label(new Rect(10f, y, 220f, 20f), $"<size=18>Hexagons Required:</size>");
+                    GUI.Label(new Rect(190f, y, 30f, 30f), $"<size=18>{(TunicArchipelago.Settings.HexagonQuestGoal)}</size>");
                     TunicArchipelago.Settings.HexagonQuestGoal = (int)GUI.HorizontalSlider(new Rect(220f, y+15, 200f, 20f), TunicArchipelago.Settings.HexagonQuestGoal, 15, 50);
                     y += 30f;
                     GUI.Label(new Rect(10f, y, 220f, 30f), $"<size=18>Hexagons in Item Pool:</size>");
-                    GUI.Label(new Rect(190f, y, 30f, 30f), $"<size=18>{(int)Math.Round((100f + TunicArchipelago.Settings.HexagonQuestExtraPercentage) / 100f * TunicArchipelago.Settings.HexagonQuestGoal)}</size>");
+                    GUI.Label(new Rect(190f, y, 30f, 30f), $"<size=18>{((int)Math.Round((100f + TunicArchipelago.Settings.HexagonQuestExtraPercentage) / 100f * TunicArchipelago.Settings.HexagonQuestGoal))}</size>");
                     TunicArchipelago.Settings.HexagonQuestExtraPercentage = (int)GUI.HorizontalSlider(new Rect(220f, y+15, 200f, 30f), TunicArchipelago.Settings.HexagonQuestExtraPercentage, 0, 100);
 
                 }
@@ -341,7 +345,7 @@ namespace TunicArchipelago {
         private static void QuickAPSettings(int windowID) {
             GUI.skin.label.fontSize = 25;
             GUI.skin.button.fontSize = 17;
-            GUI.Label(new Rect(10f, 20f, 300f, 30f), $"Player: {TunicArchipelago.Settings.ConnectionSettings.Player}");
+            GUI.Label(new Rect(10f, 20f, 300f, 30f), $"Player: {(TunicArchipelago.Settings.ConnectionSettings.Player)}");
             bool EditPlayer = GUI.Button(new Rect(10f, 70f, 75f, 30f), editingPlayer ? "Save" : "Edit");
             if (EditPlayer) {
                 if (editingPlayer) {
@@ -363,7 +367,7 @@ namespace TunicArchipelago {
                 OptionsGUIPatches.SaveSettings();
             }
 
-            GUI.Label(new Rect(10f, 120f, 300f, 30f), $"Host: {TunicArchipelago.Settings.ConnectionSettings.Hostname}");
+            GUI.Label(new Rect(10f, 120f, 300f, 30f), $"Host: {(TunicArchipelago.Settings.ConnectionSettings.Hostname)}");
             bool setLocalhost = GUI.Toggle(new Rect(160f, 160f, 90f, 30f), TunicArchipelago.Settings.ConnectionSettings.Hostname == "localhost", "localhost");
             if (setLocalhost && TunicArchipelago.Settings.ConnectionSettings.Hostname != "localhost") {
                 TunicArchipelago.Settings.ConnectionSettings.Hostname = "localhost";
@@ -471,8 +475,8 @@ namespace TunicArchipelago {
         public static void CopyQuickSettings() {
             List<string> Settings = new List<string>() { CustomSeed.ToString(), Enum.GetName(typeof(RandomizerSettings.GameModes), TunicArchipelago.Settings.GameMode).ToLower() };
             if (TunicArchipelago.Settings.GameMode == RandomizerSettings.GameModes.HEXAGONQUEST) {
-                Settings.Add($"hexagon_quest_goal={TunicArchipelago.Settings.HexagonQuestGoal}=");
-                Settings.Add($"hexagon_quest_extras~{TunicArchipelago.Settings.HexagonQuestExtraPercentage}~");
+                Settings.Add($"hexagon_quest_goal={(TunicArchipelago.Settings.HexagonQuestGoal)}=");
+                Settings.Add($"hexagon_quest_extras~{(TunicArchipelago.Settings.HexagonQuestExtraPercentage)}~");
             }
             if (TunicArchipelago.Settings.KeysBehindBosses) {
                 Settings.Add("keys_behind_bosses");
@@ -570,11 +574,11 @@ namespace TunicArchipelago {
         public static bool FileManagement_LoadFileAndStart_PrefixPatch(FileManagementGUI __instance, string filename) {
             CloseAPSettingsWindow();
             SaveFile.LoadFromFile(filename);
-/*            if (SaveFile.GetInt("archipelago") == 0) {
-                Logger.LogInfo("Non-Archipelago file selected!");
-                GenericMessage.ShowMessage("<#FF0000>[death] \"<#FF0000>warning!\" <#FF0000>[death]\n\"Non-Archipelago file selected.\"\n\"Returning to menu.\"");
+            if (SaveFile.GetInt("archipelago") == 0 && SaveFile.GetInt("randomizer") == 0) {
+                Logger.LogInfo("Non-Randomizer file selected!");
+                GenericMessage.ShowMessage("<#FF0000>[death] \"<#FF0000>warning!\" <#FF0000>[death]\n\"Non-Randomizer file selected.\"\n\"Returning to menu.\"");
                 return false;
-            }*/
+            }
             if (SaveFile.GetString("archipelago player name") != "") {
                 if (SaveFile.GetString("archipelago player name") != TunicArchipelago.Settings.ConnectionSettings.Player || (Archipelago.instance.integration.connected && int.Parse(Archipelago.instance.integration.slotData["seed"].ToString()) != SaveFile.GetInt("seed"))) {
                     Logger.LogInfo("Save does not match connected slot! Connected to " + TunicArchipelago.Settings.ConnectionSettings.Player + " [seed " + Archipelago.instance.integration.slotData["seed"].ToString() + "] but slot name in save file is " + SaveFile.GetString("archipelago player name") + " [seed " + SaveFile.GetInt("seed") + "]");

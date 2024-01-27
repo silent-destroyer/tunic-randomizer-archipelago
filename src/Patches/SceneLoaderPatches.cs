@@ -31,7 +31,7 @@ namespace TunicArchipelago {
                 SaveFile.SetInt("chest open 19", SaveFile.GetInt("randomizer picked up 19 [Sword Cave]"));
             }
 
-            if (Archipelago.instance != null && Archipelago.instance.integration != null && Archipelago.instance.integration.connected) {
+            if (SaveFile.GetInt("archipelago") == 1 && Archipelago.instance != null && Archipelago.instance.integration != null && Archipelago.instance.integration.connected) {
                 foreach (long location in Archipelago.instance.integration.session.Locations.AllLocationsChecked) {
                     string LocationId = Archipelago.instance.integration.session.Locations.GetLocationNameFromId(location);
                     string GameObjectId = Locations.LocationDescriptionToId[LocationId];
@@ -283,7 +283,10 @@ namespace TunicArchipelago {
                 GameObject.Find("_Environment Special/Door (1)/door/key twist").GetComponent<MeshRenderer>().materials = ModelSwaps.Items["Key (House)"].GetComponent<MeshRenderer>().materials;
                 GameObject.Find("_Environment/_Decorations/Mailbox (1)/mailbox flag").AddComponent<MailboxFlag>();
 
-                if (SaveFile.GetInt("randomizer entrance rando enabled") == 1 || (Archipelago.instance.integration.slotData.ContainsKey("entrance_rando") && Archipelago.instance.integration.slotData["entrance_rando"].ToString() == "1" && SaveFile.GetInt("seed") == 0)) {
+                if (SaveFile.GetInt("randomizer entrance rando enabled") == 1 || (SaveFile.GetInt("seed") == 0 && 
+                    ((TunicArchipelago.Settings.EntranceRandoEnabled && TunicArchipelago.Settings.Mode == RandomizerSettings.RandomizerType.SINGLEPLAYER) || 
+                    (TunicArchipelago.Settings.Mode == RandomizerSettings.RandomizerType.ARCHIPELAGO && Archipelago.instance.integration.connected 
+                    && Archipelago.instance.integration.slotData.ContainsKey("entrance_rando") && Archipelago.instance.integration.slotData["entrance_rando"].ToString() == "1")))) {
                     GhostHints.SpawnTorchHintGhost();
                 }
 
@@ -347,7 +350,13 @@ namespace TunicArchipelago {
                 }
             }
 
-            if (Archipelago.instance != null && Archipelago.instance.integration != null && Archipelago.instance.integration.connected) {
+            if (SaveFile.GetInt("randomizer entrance rando enabled") == 1) {
+                TunicPortals.RandomizePortals(SaveFile.GetInt("seed"));
+                TunicPortals.ModifyPortals(loadingScene);
+                //MarkPortals();
+            }
+
+            /*if (Archipelago.instance != null && Archipelago.instance.integration != null && Archipelago.instance.integration.connected) {
                 if (TunicArchipelago.Settings.EnemyRandomizerEnabled && EnemyRandomizer.Enemies.Count > 0 && !EnemyRandomizer.ExcludedScenes.Contains(SceneName)) {
                     EnemyRandomizer.SpawnNewEnemies();
                 }
@@ -411,7 +420,7 @@ namespace TunicArchipelago {
                 }
 
                 Archipelago.instance.integration.UpdateDataStorageOnLoad();
-            }
+            }*/
 
             ItemTracker.SaveTrackerFile();
         }

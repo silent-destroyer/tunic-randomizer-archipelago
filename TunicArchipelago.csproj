@@ -167,7 +167,7 @@
     <Compile Include="src\Data\RandomizerSettings.cs" />
     <Compile Include="src\Data\SaveFlags.cs" />
     <Compile Include="src\Data\Translations.cs" />
-    <Compile Include="src\Data\VanillaCheck.cs" />
+    <Compile Include="src\Data\Check.cs" />
     <Compile Include="src\Patches\EnemyRandomizer.cs" />
     <Compile Include="src\Patches\FairyTargets.cs" />
     <Compile Include="src\Patches\GhostHints.cs" />

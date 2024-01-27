@@ -415,7 +415,7 @@ namespace TunicArchipelago {
 
         public static void SaveFile_GetNewSaveFileName_PostfixPatch(SaveFile __instance, ref string __result) {
 
-            __result = $"{__result.Split('.')[0]}-archipelago.tunic";
+            __result = $"{__result.Split('.')[0]}-{(SaveFile.GetInt("archipelago") == 1 ? "archipelago" : "randomizer")}.tunic";
         }
 
         public static void FileManagementGUI_rePopulateList_PostfixPatch(FileManagementGUI __instance) {
