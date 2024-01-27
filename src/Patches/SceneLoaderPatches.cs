@@ -309,6 +309,17 @@ namespace TunicArchipelago {
                 // Activate night bridge to allow access to shortcut ladder
                 GameObject.Find("_Setpieces Etc/NightBridge/").GetComponent<DayNightBridge>().dayOrNight = StateVariable.GetStateVariableByName("Is Night").BoolValue ? DayNightBridge.DayNight.NIGHT : DayNightBridge.DayNight.DAY;
 
+                if (SaveFile.GetInt("fuseClosed 1096") == 1) {
+                    if (GameObject.Find("_Setpieces Etc/plank_4u (planks on gate)/") != null) {
+                        GameObject.Find("_Setpieces Etc/plank_4u (planks on gate)/").SetActive(false);
+                    }
+                    if (GameObject.Find("_Setpieces Etc/Gated Wooden Double Door/") != null) {
+                        GameObject.Find("_Setpieces Etc/Gated Wooden Double Door/").GetComponent<ToggleGraveyardGate>().stateVar = StateVariable.GetStateVariableByName("true");
+                        GameObject.Find("_Setpieces Etc/Gated Wooden Double Door/").GetComponent<ToggleGraveyardGate>().isNightstateVar = StateVariable.GetStateVariableByName("true");
+                    }
+
+                }
+
                 if (TunicArchipelago.Settings.MoreSkulls) {
                     InteractionPatches.SpawnMoreSkulls();
                 }
