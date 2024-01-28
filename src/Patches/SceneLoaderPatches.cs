@@ -368,7 +368,7 @@ namespace TunicArchipelago {
                     TunicPortals.RandomizePortals(SaveFile.GetInt("seed"));
                 }
                 TunicPortals.ModifyPortals(loadingScene);
-                //MarkPortals();
+                TunicPortals.MarkPortals();
             }
 
             if (TunicArchipelago.Settings.EnemyRandomizerEnabled && EnemyRandomizer.Enemies.Count > 0 && !EnemyRandomizer.ExcludedScenes.Contains(SceneName)) {

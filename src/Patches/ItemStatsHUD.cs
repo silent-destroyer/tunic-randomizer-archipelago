@@ -374,8 +374,8 @@ namespace TunicArchipelago {
         public static void Update() {
             try {
                 if (Locations.VanillaLocations.Count > 0) {
-                    int ObtainedItemCount = Locations.VanillaLocations.Keys.Where(loc => Locations.CheckedLocations[loc] || (TunicArchipelago.Settings.CollectReflectsInWorld && SaveFile.GetInt($"randomizer {loc} was collected") == 1)).ToList().Count;
-                    int ObtainedItemCountInCurrentScene = Locations.VanillaLocations.Keys.Where(loc => Locations.VanillaLocations[loc].Location.SceneName == SceneLoaderPatches.SceneName && (Locations.CheckedLocations[loc] || (TunicArchipelago.Settings.CollectReflectsInWorld && SaveFile.GetInt($"randomizer {loc} was collected") == 1))).ToList().Count;
+                    int ObtainedItemCount = Locations.VanillaLocations.Keys.Where(loc => Locations.CheckedLocations[loc] || (SaveFlags.IsArchipelago() && TunicArchipelago.Settings.CollectReflectsInWorld && SaveFile.GetInt($"randomizer {loc} was collected") == 1)).ToList().Count;
+                    int ObtainedItemCountInCurrentScene = Locations.VanillaLocations.Keys.Where(loc => Locations.VanillaLocations[loc].Location.SceneName == SceneLoaderPatches.SceneName && (Locations.CheckedLocations[loc] || (SaveFlags.IsArchipelago() && TunicArchipelago.Settings.CollectReflectsInWorld && SaveFile.GetInt($"randomizer {loc} was collected") == 1))).ToList().Count;
                     int TotalItemCountInCurrentScene = Locations.VanillaLocations.Keys.Where(loc => Locations.VanillaLocations[loc].Location.SceneName == SceneLoaderPatches.SceneName).ToList().Count;
                     Pages.GetComponent<TextMeshProUGUI>().text = $"Pages:\t\t{TunicArchipelago.Tracker.ImportantItems["Pages"]}/28";
                     Pages.GetComponent<TextMeshProUGUI>().color = TunicArchipelago.Tracker.ImportantItems["Pages"] == 28 ? new Color(0.917f, 0.65f, .08f) : Color.white;

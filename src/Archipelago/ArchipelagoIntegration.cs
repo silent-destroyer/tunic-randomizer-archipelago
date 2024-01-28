@@ -68,7 +68,6 @@ namespace TunicArchipelago {
             if (SpeedrunData.gameComplete != 0 && !sentCompletion) {
                 sentCompletion = true;
                 SendCompletion();
-                SpeedrunFinishlineDisplayPatches.SetupCompletionStatsDisplay();
             }
 
         }

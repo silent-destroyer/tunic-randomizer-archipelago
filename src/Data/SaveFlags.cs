@@ -38,7 +38,7 @@ namespace TunicArchipelago {
         public const string RescuedLostFox = "randomizer sent lost fox home";
 
         public static bool IsArchipelago() {
-            return SaveFile.GetInt("archipelago") == 1 && (Archipelago.instance.integration != null && Archipelago.instance.integration.connected);
+            return SaveFile.GetInt("archipelago") == 1 && (Archipelago.instance != null && Archipelago.instance.integration != null && Archipelago.instance.integration.connected);
         }
 
         public static bool IsSinglePlayer() {

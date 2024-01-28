@@ -1066,5 +1066,20 @@ namespace TunicArchipelago
             }
         }
 
+        public static void MarkPortals() {
+            var Portals = Resources.FindObjectsOfTypeAll<ScenePortal>();
+
+            foreach (var portal in Portals) {
+                if (portal.FullID == PlayerCharacterSpawn.portalIDToSpawnAt) {
+                    foreach (KeyValuePair<string, PortalCombo> portalCombo in TunicPortals.RandomizedPortals) {
+                        if (portal.name == portalCombo.Value.Portal1.Name || portal.name == portalCombo.Value.Portal2.Name) {
+                            SaveFile.SetInt("randomizer entered portal " + portalCombo.Value.Portal1.SceneDestinationTag, 1);
+                            SaveFile.SetInt("randomizer entered portal " + portalCombo.Value.Portal2.SceneDestinationTag, 1);
+                        }
+                    }
+                }
+            }
+        }
+
     }
 }

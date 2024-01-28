@@ -74,9 +74,10 @@ namespace TunicArchipelago {
 
         public static GameObject CompletionRate;
         public static GameObject CompletionCanvas;
-        public static bool WasSpeedrunModeOn = false;
 
         public static bool ShowCompletionStatsAfterDelay = false;
+        public static bool GameCompleted = false;
+
         public static bool SpeedrunFinishlineDisplay_showFinishline_PrefixPatch(SpeedrunFinishlineDisplay __instance) {
 
             SpeedrunReportItem DathStone = ScriptableObject.CreateInstance<SpeedrunReportItem>();
@@ -198,18 +199,25 @@ namespace TunicArchipelago {
             CompletionCanvas.transform.position = new Vector3(0f, 0f, 300f);
             CompletionCanvas.SetActive(false);
 
-            int CheckCount = Locations.VanillaLocations.Keys.Where(Check => Locations.CheckedLocations[Check] || (TunicArchipelago.Settings.CollectReflectsInWorld && SaveFile.GetInt($"randomizer {Check} was collected") == 1)).Count();
-            int ChecksCollectedByOthers = Locations.VanillaLocations.Keys.Where(Check => !Locations.CheckedLocations[Check] && SaveFile.GetInt($"randomizer {Check} was collected") == 1).Count();
-            float CheckPercentage = ((float)CheckCount / ItemLookup.ItemList.Count) * 100.0f;
+            int CheckCount = 0;
+            int ChecksCollectedByOthers = 0;
+            float CheckPercentage = 0;
+            string Color = "<#FFFFFF>";
+
+
+            CheckCount = Locations.VanillaLocations.Keys.Where(Check => Locations.CheckedLocations[Check] || (IsArchipelago() && TunicArchipelago.Settings.CollectReflectsInWorld && SaveFile.GetInt($"randomizer {Check} was collected") == 1)).Count();
+            ChecksCollectedByOthers = IsArchipelago() ? Locations.VanillaLocations.Keys.Where(Check => !Locations.CheckedLocations[Check] && SaveFile.GetInt($"randomizer {Check} was collected") == 1).Count() : 0;
+            CheckPercentage = ((float)CheckCount / Locations.VanillaLocations.Count) * 100.0f;
+            Color = CheckCount == Locations.VanillaLocations.Count ? $"<#eaa614>" : "<#FFFFFF>";
+
             GameObject TotalCompletion = GameObject.Instantiate(CompletionRate.gameObject, GameObject.Find("_FinishlineDisplay(Clone)/").transform.GetChild(2));
             TotalCompletion.transform.position = new Vector3(-60f, -30f, 55f);
             TotalCompletion.transform.localScale = new Vector3(2.5f, 2.5f, 2.5f);
-            string Color = CheckCount == ItemLookup.ItemList.Count ? $"<#eaa614>" : "<#FFFFFF>";
 
-            TotalCompletion.GetComponent<TextMeshPro>().text = $"Overall Completion: {Color}{CheckCount}/{ItemLookup.ItemList.Count}" +
-                $"{(TunicArchipelago.Settings.CollectReflectsInWorld ? "*" : "")} " +
+            TotalCompletion.GetComponent<TextMeshPro>().text = $"Overall Completion: {Color}{CheckCount}/{Locations.VanillaLocations.Count}" +
+                $"{(SaveFlags.IsArchipelago() && TunicArchipelago.Settings.CollectReflectsInWorld ? "*" : "")} " +
                 $"({Math.Round(CheckPercentage, 2)}%) {((int)CheckPercentage == 69 ? "<size=40%>nice</size>" : "")}" +
-                $"{(TunicArchipelago.Settings.CollectReflectsInWorld ? $"\n\t<size=60%>*includes {ChecksCollectedByOthers} locations collected by others" : "")}";
+                $"{(SaveFlags.IsArchipelago() && TunicArchipelago.Settings.CollectReflectsInWorld ? $"\n\t<size=60%>*includes {ChecksCollectedByOthers} locations collected by others" : "")}";
 
             TotalCompletion.GetComponent<TextMeshPro>().fontSize = 100f;
             TotalCompletion.SetActive(true);
@@ -270,7 +278,7 @@ namespace TunicArchipelago {
                 float Percentage = 0;
                 foreach (string SubArea in Locations.MainAreasToSubAreas[Area]) {
                     TotalAreaChecks += Locations.VanillaLocations.Keys.Where(Check => Locations.VanillaLocations[Check].Location.SceneName == SubArea).Count();
-                    AreaChecksFound += Locations.VanillaLocations.Keys.Where(Check => Locations.VanillaLocations[Check].Location.SceneName == SubArea && (Locations.CheckedLocations[Check] || (TunicArchipelago.Settings.CollectReflectsInWorld && SaveFile.GetInt($"randomizer {Check} was collected") == 1))).Count();
+                    AreaChecksFound += Locations.VanillaLocations.Keys.Where(Check => Locations.VanillaLocations[Check].Location.SceneName == SubArea && (Locations.CheckedLocations[Check] || (SaveFlags.IsArchipelago() && TunicArchipelago.Settings.CollectReflectsInWorld && SaveFile.GetInt($"randomizer {Check} was collected") == 1))).Count();
                     TotalAreaTime += SaveFile.GetFloat($"randomizer play time {SubArea}");
                 }
                 if (TotalAreaChecks > 0) {
@@ -281,7 +289,10 @@ namespace TunicArchipelago {
                 AreaCount.GetComponent<TextMeshPro>().text = $"{(AreaChecksFound == TotalAreaChecks ? StatsScreenSecret[Area] : Area)}\n<size=80%>{TimeString}\n{Color}{AreaChecksFound} / {TotalAreaChecks} ({(int)Percentage}%)";
 
                 if (Area == "Swamp") {
-                    AreaCount.GetComponent<TextMeshPro>().text += "\n<size=100%><#FFFFFF>Press 1 to hide stats.\nPress R to release items.\nPress C to collect items.";
+                    AreaCount.GetComponent<TextMeshPro>().text += "\n<size=100%><#FFFFFF>Press 1 to hide stats.";
+                    if (IsArchipelago()) {
+                        AreaCount.GetComponent<TextMeshPro>().text += "\nPress R to release items.\nPress C to collect items.";
+                    }
                 }
                 if (Area == "Far Shore/Hero's Grave") {
                     AreaCount.GetComponent<TextMeshPro>().text = $"<size=90%>{AreaCount.GetComponent<TextMeshPro>().text}";
@@ -296,7 +307,7 @@ namespace TunicArchipelago {
                     foreach (Dictionary<string, int> requirements in Locations.VanillaLocations[Key].Location.RequiredItems) {
                         if (requirements.ContainsKey("21")) {
                             TotalChecks++;
-                            if (Locations.CheckedLocations[Key] || (TunicArchipelago.Settings.CollectReflectsInWorld && SaveFile.GetInt($"randomizer {Key} was collected") == 1)) {
+                            if (Locations.CheckedLocations[Key] || (SaveFlags.IsArchipelago() && TunicArchipelago.Settings.CollectReflectsInWorld && SaveFile.GetInt($"randomizer {Key} was collected") == 1)) {
                                 ChecksFound++;
                             }
                             continue;
@@ -395,11 +406,16 @@ namespace TunicArchipelago {
             if (CompletionCanvas != null) {
                 GameObject.Destroy(CompletionCanvas);
             }
-            if (Archipelago.instance != null && Archipelago.instance.integration != null) {
+
+
+            if (IsArchipelago()) {
                 Archipelago.instance.integration.sentCompletion = false;
                 Archipelago.instance.integration.sentCollect = false;
                 Archipelago.instance.integration.sentRelease = false;
             }
+
+            GameCompleted = false;
+            
             return true;
         }
 
@@ -407,11 +423,14 @@ namespace TunicArchipelago {
             if (CompletionCanvas != null) {
                 GameObject.Destroy(CompletionCanvas);
             }
-            if (Archipelago.instance != null && Archipelago.instance.integration != null) {
+            if (IsArchipelago()) {
                 Archipelago.instance.integration.sentCompletion = false;
                 Archipelago.instance.integration.sentCollect = false;
                 Archipelago.instance.integration.sentRelease = false;
             }
+
+            GameCompleted = false;
+            
             return true;
         }
 

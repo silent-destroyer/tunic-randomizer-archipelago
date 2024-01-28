@@ -58,7 +58,7 @@ namespace TunicArchipelago {
                 }
             }
 
-            if (Input.GetKeyDown(KeyCode.Alpha2) && SaveFile.GetInt("randomizer") == 1) {
+            if (Input.GetKeyDown(KeyCode.Alpha2) && IsSinglePlayer()) {
                 GenericPrompt.ShowPrompt($"\"Copy Current Game Settings?\"\n\"-----------------\"\n" +
                     $"\"Seed.................{SaveFile.GetInt("seed").ToString().PadLeft(12, '.')}\"\n" +
                     $"\"Game Mode............{SaveFile.GetString("randomizer game mode").PadLeft(12, '.')}\"\n" +
@@ -70,11 +70,11 @@ namespace TunicArchipelago {
                     (Il2CppSystem.Action)QuickSettings.CopyQuickSettingsInGame, null);
             }
 
-            if (Input.GetKeyDown(KeyCode.R)) {
+            if (Input.GetKeyDown(KeyCode.R) && IsArchipelago()) {
                 Archipelago.instance.Release();
             }
 
-            if (Input.GetKeyDown(KeyCode.C)) {
+            if (Input.GetKeyDown(KeyCode.C) && IsArchipelago()) {
                 Archipelago.instance.Collect();
             }
 
@@ -117,6 +117,10 @@ namespace TunicArchipelago {
                     SaveFile.SetInt(DiedToHeir, 1);
                     ResetDayNightTimer = -1.0f;
                 }
+            }
+            if (SpeedrunData.gameComplete != 0 && !SpeedrunFinishlineDisplayPatches.GameCompleted) {
+                SpeedrunFinishlineDisplayPatches.GameCompleted = true;
+                SpeedrunFinishlineDisplayPatches.SetupCompletionStatsDisplay();
             }
             if (SpeedrunFinishlineDisplayPatches.ShowCompletionStatsAfterDelay) {
                 CompletionTimer += Time.fixedUnscaledDeltaTime;
@@ -375,9 +379,7 @@ namespace TunicArchipelago {
                 if (SaveFile.GetString("archipelago player name") == "") {
                     SaveFile.SetString("archipelago player name", TunicArchipelago.Settings.ConnectionSettings.Player);
                 }
-                if (Locations.VanillaLocations.Count == 0) {
-                    Locations.CreateLocationLookups();
-                }
+
                 if (slotData.TryGetValue("hexagon_quest", out var hexagonQuest)) {
                     if (SaveFile.GetInt(HexagonQuestEnabled) == 0 && hexagonQuest.ToString() == "1") {
                         SaveFile.SetInt(HexagonQuestEnabled, 1);
