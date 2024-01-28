@@ -226,12 +226,12 @@ namespace TunicArchipelago {
                 PlayerCharacter_Start_ArchipelagoSetup();
             }
 
-            /*ItemTracker.PopulateSpoilerLog();
-            GhostHints.GenerateHints();
+            ItemTracker.PopulateSpoilerLog();
             Hints.PopulateHints();
+            /*GhostHints.GenerateHints();*/
             if (Hints.HeroGraveHints.Count != 0) {
                 Hints.SetupHeroGraveToggle();
-            }*/
+            }
 
             if (SaveFile.GetInt(AbilityShuffle) == 1 && SaveFile.GetInt(HolyCrossUnlocked) == 0) {
                 ItemPatches.ToggleHolyCrossObjects(false);
@@ -242,15 +242,13 @@ namespace TunicArchipelago {
                 SaveFile.SetInt("last page viewed", 0);
             }
 
-            //FairyTargets.CreateFairyTargets();
+            FairyTargets.CreateFairyTargets();
 
             /*            if (!SceneLoaderPatches.SpawnedGhosts) {
                             GhostHints.SpawnHintGhosts(SceneLoaderPatches.SceneName);
                         }
+            */
 
-                        if (!ModelSwaps.SwappedThisSceneAlready) {
-                            ModelSwaps.SwapItemsInScene();
-                        }*/
             if (!ModelSwaps.SwappedThisSceneAlready) {
                 ModelSwaps.SwapItemsInScene();
             }

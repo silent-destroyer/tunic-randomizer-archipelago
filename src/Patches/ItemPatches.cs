@@ -603,17 +603,15 @@ namespace TunicArchipelago {
                 Notifications.Show(NotificationTop, NotificationBottom);
             }
 
-/*            string slotLoc = $"{networkItem.Player}, {Archipelago.instance.GetLocationName(networkItem.Location)}";
+            string slotLoc = $"{Check.Location.LocationId} [{Check.Location.SceneName}]";
             if (Hints.HeroGraveHints.Values.Where(hint => hint.PathHintId == slotLoc || hint.RelicHintId == slotLoc).Any()) {
                 SaveFile.SetInt($"randomizer hint found {slotLoc}", 1);
             }
             if (Hints.HeroGraveHints.Values.Where(hint => SaveFile.GetInt($"randomizer hint found {hint.PathHintId}") == 1).Count() == 6) {
                 StateVariable.GetStateVariableByName("randomizer got all 6 grave items").BoolValue = true;
-            }*/
-
+            }
 
             TunicArchipelago.Tracker.SetCollectedItem(Item.Name, true);
-
 
             string CheckId = $"{Check.Location.LocationId} [{Check.Location.SceneName}]";
             Logger.LogInfo("Picked up item " + CheckId + " (" + Item.Name + ")");

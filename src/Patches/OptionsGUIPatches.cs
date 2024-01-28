@@ -28,11 +28,11 @@ namespace TunicArchipelago {
             OptionsGUI OptionsGUI = GameObject.FindObjectOfType<OptionsGUI>();
             OptionsGUI.setHeading("Randomizer");
             addPageButton("Logic Settings", LogicSettingsPage);
+            addPageButton("Archipelago Settings", ArchipelagoSettingsPage);
             addPageButton("Hint Settings", HintsSettingsPage);
             addPageButton("General Settings", GeneralSettingsPage);
             addPageButton("Enemy Randomizer Settings", EnemyRandomizerSettings);
             addPageButton("Fox Customization", CustomFoxSettingsPage);
-            addPageButton("Archipelago Settings", ArchipelagoSettingsPage);
         }
 
         public static void ArchipelagoSettingsPage() {

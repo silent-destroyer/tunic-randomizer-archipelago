@@ -175,30 +175,50 @@ namespace TunicArchipelago {
                 SpoilerLog[Key] = new List<string>();
             }
 
-            foreach (string Key in ItemLookup.ItemList.Keys) {
-                ArchipelagoItem Item = ItemLookup.ItemList[Key];
+            if (SaveFile.GetInt("archipelago") == 1) {
+                foreach (string Key in ItemLookup.ItemList.Keys) {
+                    ArchipelagoItem Item = ItemLookup.ItemList[Key];
 
-                string Spoiler = $"\t{((Locations.CheckedLocations[Key] || SaveFile.GetInt($"randomizer picked up {Key}") == 1 || (TunicArchipelago.Settings.CollectReflectsInWorld && SaveFile.GetInt($"randomizer {Key} was collected") == 1)) ? "x" : "-")} {Locations.LocationIdToDescription[Key]}: {Item.ItemName} ({Archipelago.instance.GetPlayerName(Item.Player)})";
+                    string Spoiler = $"\t{((Locations.CheckedLocations[Key] || SaveFile.GetInt($"randomizer picked up {Key}") == 1 || (TunicArchipelago.Settings.CollectReflectsInWorld && SaveFile.GetInt($"randomizer {Key} was collected") == 1)) ? "x" : "-")} {Locations.LocationIdToDescription[Key]}: {Item.ItemName} ({Archipelago.instance.GetPlayerName(Item.Player)})";
 
-                SpoilerLog[Locations.VanillaLocations[Key].Location.SceneName].Add(Spoiler);
+                    SpoilerLog[Locations.VanillaLocations[Key].Location.SceneName].Add(Spoiler);
+                }
             }
-
+            if (SaveFile.GetInt("randomizer") == 1) {
+                foreach(string Key in Locations.RandomizedLocations.Keys) {
+                    Check Check = Locations.RandomizedLocations[Key];
+                    ItemData Item = ItemLookup.GetItemDataFromCheck(Check);
+                    string Spoiler = $"\t{(Locations.CheckedLocations[Key] ? "x" : "-")} {Locations.LocationIdToDescription[Key]}: {Item.Name}";
+                    SpoilerLog[Locations.VanillaLocations[Key].Location.SceneName].Add(Spoiler);
+                }
+            }
             List<string> SpoilerLogLines = new List<string>() {
-                "Seed: " + SaveFile.GetString("seed"),
+                "Seed: " + seed,
                 "Lines that start with 'x' instead of '-' represent items that have been collected\n",
                 "Major Items"
             };
-
-            foreach (string MajorItem in ItemLookup.MajorItems) {
+            if (SaveFile.GetInt("archipelago") == 1) {
+                foreach (string MajorItem in ItemLookup.MajorItems) {
                 if(MajorItem == "Gold Questagon") { continue; }
-                if(Locations.MajorItemLocations.ContainsKey(MajorItem) && Locations.MajorItemLocations[MajorItem].Count > 0) {
-                    foreach (ArchipelagoHint apHint in Locations.MajorItemLocations[MajorItem]) {
+                    if(Locations.MajorItemLocations.ContainsKey(MajorItem) && Locations.MajorItemLocations[MajorItem].Count > 0) {
+                        foreach (ArchipelagoHint apHint in Locations.MajorItemLocations[MajorItem]) {
 
-                        bool HasItem = false;
-                        if (Archipelago.instance.integration.session.Locations.AllLocationsChecked.Contains(Archipelago.instance.integration.session.Locations.GetLocationIdFromName(Archipelago.instance.GetPlayerGame((int)apHint.Player), apHint.Location))) { 
-                            HasItem = true;
+                            bool HasItem = false;
+                            if (Archipelago.instance.integration.session.Locations.AllLocationsChecked.Contains(Archipelago.instance.integration.session.Locations.GetLocationIdFromName(Archipelago.instance.GetPlayerGame((int)apHint.Player), apHint.Location))) { 
+                                HasItem = true;
+                            }
+                            string Spoiler = $"\t{(HasItem ? "x" : "-")} {MajorItem}: {apHint.Location} ({Archipelago.instance.GetPlayerName((int)apHint.Player)}'s World)";
+                            SpoilerLogLines.Add(Spoiler);
                         }
-                        string Spoiler = $"\t{(HasItem ? "x" : "-")} {MajorItem}: {apHint.Location} ({Archipelago.instance.GetPlayerName((int)apHint.Player)}'s World)";
+                    }
+                }
+            }
+            if (SaveFile.GetInt("randomizer") == 1) {
+                foreach (string MajorItem in ItemLookup.LegacyMajorItems) {
+                    foreach (Check Check in ItemRandomizer.FindAllRandomizedItemsByName(MajorItem)) {
+                        ItemData ItemData = ItemLookup.GetItemDataFromCheck(Check);
+                        string Key = $"{Check.Location.LocationId} [{Check.Location.SceneName}]";
+                        string Spoiler = $"\t{(Locations.CheckedLocations[Key] ? "x" : "-")} {ItemData.Name}: {Locations.SceneNamesForSpoilerLog[Check.Location.SceneName]} - {Locations.LocationIdToDescription[Key]}";
                         SpoilerLogLines.Add(Spoiler);
                     }
                 }

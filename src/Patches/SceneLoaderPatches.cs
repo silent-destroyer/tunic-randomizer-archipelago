@@ -414,11 +414,11 @@ namespace TunicArchipelago {
                 }
             }
 
-            if (SaveFile.GetInt("archipelago") == 1 && (Archipelago.instance != null && Archipelago.instance.integration != null && Archipelago.instance.integration.connected)) {
+            if (Hints.HeroGraveHints.Count != 0) {
+                Hints.SetupHeroGraveToggle();
+            }
 
-                if (Hints.HeroGraveHints.Count != 0) {
-                    Hints.SetupHeroGraveToggle();
-                }
+            if (SaveFile.GetInt("archipelago") == 1 && (Archipelago.instance != null && Archipelago.instance.integration != null && Archipelago.instance.integration.connected)) {
 
                 try {
                     if (TunicArchipelago.Settings.GhostFoxHintsEnabled && GhostHints.HintGhosts.Count > 0 && SaveFile.GetInt("seed") != 0) {

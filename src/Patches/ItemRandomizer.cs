@@ -388,6 +388,39 @@ namespace TunicArchipelago {
             }
         }
 
+        public static Check FindRandomizedItemByName(string Name) {
+            foreach (Check Check in Locations.RandomizedLocations.Values) {
+                if (Check.Reward.Name == Name) {
+                    return Check;
+                }
+            }
+            return null;
+        }
+
+        public static List<Check> FindAllRandomizedItemsByName(string Name) {
+            List<Check> results = new List<Check>();
+
+            foreach (Check Check in Locations.RandomizedLocations.Values) {
+                if (Check.Reward.Name == Name) {
+                    results.Add(Check);
+                }
+            }
+
+            return results;
+        }
+
+        public static List<Check> FindAllRandomizedItemsByType(string type) {
+            List<Check> results = new List<Check>();
+
+            foreach (Check Check in Locations.RandomizedLocations.Values) {
+                if (Check.Reward.Type == type) {
+                    results.Add(Check);
+                }
+            }
+
+            return results;
+        }
+
         // Used for getting what sphere 1 is if you have ER on
         // Gives you items in Overworld or items in adjacent scenes
         // will need updating if/when we do a different starting spot

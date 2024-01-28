@@ -11,6 +11,7 @@ using BepInEx.Logging;
 using UnityEngine;
 using Archipelago.MultiClient.Net.Models;
 using Il2CppSystem;
+using UnityEngine.InputSystem;
 
 namespace TunicArchipelago {
     public class Hints {
@@ -109,114 +110,77 @@ namespace TunicArchipelago {
             string Prefix = "";
             List<char> Vowels = new List<char>() { 'A', 'E', 'I', 'O', 'U' };
 
-            int Player = Archipelago.instance.GetPlayerSlot();
-            List<string> MailboxItems = new List<string>() { "Stick", "Sword", "Sword Upgrade", "Magic Dagger", "Magic Wand", "Magic Orb", "Lantern", "Gun", "Scavenger Mask", "Pages 24-25 (Prayer)", "Pages 42-43 (Holy Cross)" };
-            Dictionary<string, ArchipelagoItem> SphereOnePlayer = new Dictionary<string, ArchipelagoItem>();
-            Dictionary<string, ArchipelagoItem> SphereOneOthers = new Dictionary<string, ArchipelagoItem>();
-            List<string> ERSphereOneItemsAndAreas = GetERSphereOne();
-            foreach (string itemkey in ItemLookup.ItemList.Keys) {
-                ArchipelagoItem item = ItemLookup.ItemList[itemkey];
-                // In ER, we need to check more info, since every item has a required item count
-                if (SaveFile.GetInt(EntranceRando) == 1) {
-                    if (Archipelago.instance.IsTunicPlayer(item.Player) && MailboxItems.Contains(item.ItemName)) {
-                        var requirements = Locations.VanillaLocations[itemkey].Location.RequiredItemsDoors[0].Keys;
-                        foreach (string req in requirements) {
-                            int checkCount = 0;
-                            if (ERSphereOneItemsAndAreas.Contains(req)) {
-                                checkCount++;
-                            } else { 
-                                continue;
-                            }
-                            if (checkCount == requirements.Count) {
-                                SphereOnePlayer.Add(itemkey, item);
-                            }
-                        }
-                    }
-                    else if (item.Player != Archipelago.instance.GetPlayerSlot() && item.Classification == ItemFlags.Advancement) {
-                        var requirements = Locations.VanillaLocations[itemkey].Location.RequiredItemsDoors[0].Keys;
-                        foreach (string req in requirements) {
-                            int checkCount = 0;
-                            if (ERSphereOneItemsAndAreas.Contains(req)) {
-                                checkCount++;
-                            } else {
-                                continue;
-                            }
-                            if (checkCount == requirements.Count)
-                            { SphereOneOthers.Add(itemkey, item); }
-                        }
-                    }
-                } else {
-                    if (Archipelago.instance.IsTunicPlayer(item.Player) && MailboxItems.Contains(item.ItemName) && Locations.VanillaLocations[itemkey].Location.RequiredItems.Count == 0) {
-                        SphereOnePlayer.Add(itemkey, item);
-                    }
-                    if (item.Player != Archipelago.instance.GetPlayerSlot() && item.Classification == ItemFlags.Advancement && Locations.VanillaLocations[itemkey].Location.RequiredItems.Count == 0) {
-                        SphereOneOthers.Add(itemkey, item);
-                    }
-                }
+            (bool, bool, bool, bool) SinglePlayerItemsHinted = (false, false, false, false);
+
+            if (SaveFile.GetInt("archipelago") == 1) {
+                CreateAPMailboxHint(random);
+            } else if (SaveFile.GetInt("randomizer") == 1) {
+                SinglePlayerItemsHinted = CreateSinglePlayerMailboxHint(random);
             }
-            ArchipelagoItem mailboxitem = null;
-            string key = "";
-            if (SphereOnePlayer.Count > 0) {
-                key = SphereOnePlayer.Keys.ToList()[random.Next(SphereOnePlayer.Count)];
-                mailboxitem = SphereOnePlayer[key];
-            } else if (SphereOneOthers.Count > 0) {
-                key = SphereOneOthers.Keys.ToList()[random.Next(SphereOneOthers.Count)];
-                mailboxitem = SphereOneOthers[key];
-            }
-            if (mailboxitem != null) {
-                Scene = Locations.SimplifiedSceneNames[Locations.VanillaLocations[key].Location.SceneName].ToUpper();
-                Prefix = Vowels.Contains(Scene[0]) ? "#E" : "#uh";
-                SaveFile.SetString("randomizer mailbox hint location", key);
-                Hint = $"lehjehnd sehz {Prefix} \"{Scene.ToUpper()}\"\nkuhntAnz wuhn uhv mehnE \"<#00FFFF>FIRST STEPS<#ffffff>\" ahn yor jurnE.";
-            } else {
-                SaveFile.SetString("randomizer mailbox hint location", "no first steps");
-                Hint = $"yor frehndz muhst furst hehlp yoo fInd yor wA...\ngoud luhk, rooin sEkur.";
-            }
-            HintMessages.Add("Mailbox", Hint);
-            ArchipelagoHint Hyperdash = Locations.MajorItemLocations["Hero's Laurels"][0];
+            
             Hint = $"lehjehnd sehz <#FF00FF>suhm%i^ ehkstruhordinArE<#FFFFFF>  [laurels] ";
-            if (Hyperdash.Player == Player) {
-                Scene = Hyperdash.Location == "Your Pocket" ? Hyperdash.Location.ToUpper() : Locations.SimplifiedSceneNames[Locations.VanillaLocations[Locations.LocationDescriptionToId[Hyperdash.Location]].Location.SceneName].ToUpper();
+            if (SaveFile.GetInt("archipelago") == 1) {
+                int Player = Archipelago.instance.GetPlayerSlot();
+                ArchipelagoHint Hyperdash = Locations.MajorItemLocations["Hero's Laurels"][0];
+                if (Hyperdash.Player == Player) {
+                    Scene = Hyperdash.Location == "Your Pocket" ? Hyperdash.Location.ToUpper() : Locations.SimplifiedSceneNames[Locations.VanillaLocations[Locations.LocationDescriptionToId[Hyperdash.Location]].Location.SceneName].ToUpper();
+                    Prefix = Vowels.Contains(Scene[0]) ? "#E" : "#uh";
+                    Hint += $"\nuhwAts yoo in {Prefix} \"{Scene}...\"";
+                } else if (Archipelago.instance.IsTunicPlayer((int)Hyperdash.Player)) {
+                    Scene = Locations.SimplifiedSceneNames[Locations.VanillaLocations[Locations.LocationDescriptionToId[Hyperdash.Location]].Location.SceneName].ToUpper();
+                    Hint += $"\nuhwAts yoo in \"{Archipelago.instance.GetPlayerName((int)Hyperdash.Player).ToUpper()}'S\"\n\"{Scene}...\"";
+                } else {
+                    Hint += $" uhwAts yoo aht\n{WordWrapString($"\"{Hyperdash.Location.Replace("_", " ").Replace(" ", "\" \"").ToUpper()}\"").Replace("\" \"", " ")}\nin\"{Archipelago.instance.GetPlayerName((int)Hyperdash.Player).ToUpper()}'S WORLD...\"";
+                }
+            } else if (SaveFile.GetInt("randomizer") == 1) {
+                Check LaurelsCheck = ItemRandomizer.FindRandomizedItemByName("Hyperdash");
+                Scene = Locations.SimplifiedSceneNames[LaurelsCheck.Location.SceneName];
                 Prefix = Vowels.Contains(Scene[0]) ? "#E" : "#uh";
                 Hint += $"\nuhwAts yoo in {Prefix} \"{Scene}...\"";
-            } else if (Archipelago.instance.IsTunicPlayer((int)Hyperdash.Player)) {
-                Scene = Locations.SimplifiedSceneNames[Locations.VanillaLocations[Locations.LocationDescriptionToId[Hyperdash.Location]].Location.SceneName].ToUpper();
-                Hint += $"\nuhwAts yoo in \"{Archipelago.instance.GetPlayerName((int)Hyperdash.Player).ToUpper()}'S\"\n\"{Scene}...\"";
-            } else {
-                Hint += $" uhwAts yoo aht\n{WordWrapString($"\"{Hyperdash.Location.Replace("_", " ").Replace(" ", "\" \"").ToUpper()}\"").Replace("\" \"", " ")}\nin\"{Archipelago.instance.GetPlayerName((int)Hyperdash.Player).ToUpper()}'S WORLD...\"";  
             }
             HintMessages.Add("Temple Statue", Hint);
 
             List<(string, string)> relicHints = CreateHeroRelicHints();
-            List<string> HintItems = new List<string>() { "Magic Wand", "Magic Orb", "Magic Dagger" };
+            List<string> HintItems = new List<string>() { SinglePlayerItemsHinted.Item1 ? "Lantern" : "Magic Wand", SinglePlayerItemsHinted.Item2 ? "Lantern" : "Magic Orb", "Magic Dagger" };
             if (SaveFile.GetInt(AbilityShuffle) == 1 && SaveFile.GetInt(HexagonQuestEnabled) == 0) {
-                HintItems.Add("Pages 24-25 (Prayer)");
-                HintItems.Add("Pages 42-43 (Holy Cross)");
+                HintItems.Add(SinglePlayerItemsHinted.Item3 ? "Lantern" : "Pages 24-25 (Prayer)");
+                HintItems.Add(SinglePlayerItemsHinted.Item4 ? "Lantern" : "Pages 42-43 (Holy Cross)");
                 HintItems.Remove("Magic Dagger");
             }
             List<string> HintGraves = new List<string>() { "East Forest Relic", "Fortress Relic", "West Garden Relic" };
             while (HintGraves.Count > 0) {
                 string HintItem = HintItems[random.Next(HintItems.Count)];
-                ArchipelagoHint ItemHint = Locations.MajorItemLocations[HintItem][0];
                 string HintGrave = HintGraves[random.Next(HintGraves.Count)];
+                string slotLocation = "";
                 (string, string) RelicHint = relicHints[random.Next(relicHints.Count)];
+                if (SaveFile.GetInt("archipelago") == 1) {
+                    ArchipelagoHint ItemHint = Locations.MajorItemLocations[HintItem][0];
+                    int Player = Archipelago.instance.GetPlayerSlot();
 
-                if (ItemHint.Player == Player) {
-                    Scene = ItemHint.Location == "Your Pocket" ? ItemHint.Location.ToUpper() : Locations.SimplifiedSceneNames[Locations.VanillaLocations[Locations.LocationDescriptionToId[ItemHint.Location]].Location.SceneName].ToUpper();
-                    if (HintItem == "Pages 24-25 (Prayer)" && Scene == "Fortress Relic") {
-                        continue;
+                    if (ItemHint.Player == Player) {
+                        Scene = ItemHint.Location == "Your Pocket" ? ItemHint.Location.ToUpper() : Locations.SimplifiedSceneNames[Locations.VanillaLocations[Locations.LocationDescriptionToId[ItemHint.Location]].Location.SceneName].ToUpper();
+                        if (HintItem == "Pages 24-25 (Prayer)" && Scene == "Fortress Relic") {
+                            continue;
+                        }
+                        Prefix = Vowels.Contains(Scene[0]) ? "#E" : "#uh";
+                        Hint = $"lehjehnd sehz {Prefix} \"{Scene}\"";
+                    } else if (Archipelago.instance.IsTunicPlayer((int)ItemHint.Player)) {
+                        Scene = Locations.SimplifiedSceneNames[Locations.VanillaLocations[Locations.LocationDescriptionToId[ItemHint.Location]].Location.SceneName].ToUpper();
+                        Hint = $"lehjehnd sehz \"{Archipelago.instance.GetPlayerName((int)ItemHint.Player).ToUpper()}'S\"\n\"{Scene}\"";
+                    } else {
+                        Hint = $"lehjehnd sehz \"{Archipelago.instance.GetPlayerName((int)ItemHint.Player).ToUpper()}'S WORLD\" aht\n{WordWrapString($"\"{ItemHint.Location.Replace("_", " ").Replace(" ", "\" \"").ToUpper()}\"").Replace("\" \"", " ")}";
                     }
+                    slotLocation = ItemHint.Location == "Your Pocket" ? $"0, Server" : $"{ItemHint.Player}, {ItemHint.Location}";
+                } else if (SaveFile.GetInt("randomizer") == 1) {
+                    ItemData Item = ItemLookup.Items[HintItem];
+                    Check ItemCheck = ItemRandomizer.FindRandomizedItemByName(Item.ItemNameForInventory);
+                    Scene = Locations.SimplifiedSceneNames[ItemCheck.Location.SceneName];
                     Prefix = Vowels.Contains(Scene[0]) ? "#E" : "#uh";
                     Hint = $"lehjehnd sehz {Prefix} \"{Scene}\"";
-                } else if (Archipelago.instance.IsTunicPlayer((int)ItemHint.Player)) {
-                    Scene = Locations.SimplifiedSceneNames[Locations.VanillaLocations[Locations.LocationDescriptionToId[ItemHint.Location]].Location.SceneName].ToUpper();
-                    Hint = $"lehjehnd sehz \"{Archipelago.instance.GetPlayerName((int)ItemHint.Player).ToUpper()}'S\"\n\"{Scene}\"";
-                } else {
-                    Hint = $"lehjehnd sehz \"{Archipelago.instance.GetPlayerName((int)ItemHint.Player).ToUpper()}'S WORLD\" aht\n{WordWrapString($"\"{ItemHint.Location.Replace("_", " ").Replace(" ", "\" \"").ToUpper()}\"").Replace("\" \"", " ")}";
+                    slotLocation = $"{ItemCheck.Location.LocationId} [{ItemCheck.Location.SceneName}]";
                 }
                 Hint += $"\niz lOkAtid awn #uh \"<#ffd700>PATH OF THE HERO<#ffffff>...\"";
 
-                string slotLocation = ItemHint.Location == "Your Pocket" ? $"0, Server" : $"{ItemHint.Player}, {ItemHint.Location}";
                 if (HintGrave == "East Forest Relic") {
                     HeroGraveHints.Add(HintGrave, new HeroGraveHint(slotLocation, Hint, RelicHint.Item1, RelicHint.Item2, "Sword Access", "_Setpieces/RelicPlinth (1)/", true));
                 } else if (HintGrave == "Fortress Relic") {
@@ -241,22 +205,33 @@ namespace TunicArchipelago {
             for (int i = 0; i < 3; i++) {
                 string Hexagon = Hexagons[random.Next(Hexagons.Count)];
                 string HexagonHintArea = HexagonHintGraves[random.Next(HexagonHintGraves.Count)];
+                string slotLocation = "";
                 (string, string) RelicHint = relicHints[random.Next(relicHints.Count)];
-                ArchipelagoHint HexHint = Hexagon == "Gold Questagon" ? Locations.MajorItemLocations[Hexagon][i] : Locations.MajorItemLocations[Hexagon][0];
 
-                if (HexHint.Player == Player) {
-                    Scene = HexHint.Location == "Your Pocket" ? HexHint.Location.ToUpper() : Locations.SimplifiedSceneNames[Locations.VanillaLocations[Locations.LocationDescriptionToId[HexHint.Location]].Location.SceneName].ToUpper();
+                if (SaveFile.GetInt("archipelago") == 1) {
+                    ArchipelagoHint HexHint = Hexagon == "Gold Questagon" ? Locations.MajorItemLocations[Hexagon][i] : Locations.MajorItemLocations[Hexagon][0];
+                    int Player = Archipelago.instance.GetPlayerSlot();
+                    if (HexHint.Player == Player) {
+                        Scene = HexHint.Location == "Your Pocket" ? HexHint.Location.ToUpper() : Locations.SimplifiedSceneNames[Locations.VanillaLocations[Locations.LocationDescriptionToId[HexHint.Location]].Location.SceneName].ToUpper();
+                        Prefix = Vowels.Contains(Scene[0]) ? "#E" : "#uh";
+                        Hint = $"#A sA {Prefix} \"{Scene.ToUpper()}\" iz \nwAr #uh {HexagonColors[Hexagon]}kwehstuhgawn [hexagram]<#FFFFFF> iz fownd\"...\"";
+                    } else if (Archipelago.instance.IsTunicPlayer((int)HexHint.Player)) {
+                        Scene = Locations.SimplifiedSceneNames[Locations.VanillaLocations[Locations.LocationDescriptionToId[HexHint.Location]].Location.SceneName].ToUpper();
+                        Prefix = Vowels.Contains(Scene[0]) ? "#E" : "#uh";
+                        Hint = $"#A sA \"{Archipelago.instance.GetPlayerName((int)HexHint.Player).ToUpper()}'S\"\n\"{Scene}\"\niz wAr #uh {HexagonColors[Hexagon]}kwehstuhgawn [hexagram]<#FFFFFF> iz fownd\"...\"";
+                    } else {
+                        Hint = $"#A sA #uh {HexagonColors[Hexagon]}kwehstuhgawn [hexagram]<#FFFFFF> iz fownd aht\n{WordWrapString($"\"{HexHint.Location.Replace("_", " ").Replace(" ", "\" \"").ToUpper()}\"").Replace("\" \"", " ")}\nin \"{Archipelago.instance.GetPlayerName((int)HexHint.Player).ToUpper()}'S WORLD...\"";
+                    }
+                    slotLocation = HexHint.Location == "Your Pocket" ? $"0, Server" : $"{HexHint.Player}, {HexHint.Location}";
+                } else if (SaveFile.GetInt("randomizer") == 1) {
+                    ItemData Hex = ItemLookup.Items[Hexagon];
+                    Check HexCheck = ItemRandomizer.FindRandomizedItemByName(Hex.ItemNameForInventory);
+                    Scene = Locations.SimplifiedSceneNames[HexCheck.Location.SceneName];
                     Prefix = Vowels.Contains(Scene[0]) ? "#E" : "#uh";
                     Hint = $"#A sA {Prefix} \"{Scene.ToUpper()}\" iz \nwAr #uh {HexagonColors[Hexagon]}kwehstuhgawn [hexagram]<#FFFFFF> iz fownd\"...\"";
-                } else if (Archipelago.instance.IsTunicPlayer((int)HexHint.Player)) {
-                    Scene = Locations.SimplifiedSceneNames[Locations.VanillaLocations[Locations.LocationDescriptionToId[HexHint.Location]].Location.SceneName].ToUpper();
-                    Prefix = Vowels.Contains(Scene[0]) ? "#E" : "#uh";
-                    Hint = $"#A sA \"{Archipelago.instance.GetPlayerName((int)HexHint.Player).ToUpper()}'S\"\n\"{Scene}\"\niz wAr #uh {HexagonColors[Hexagon]}kwehstuhgawn [hexagram]<#FFFFFF> iz fownd\"...\"";
-                } else {
-                    Hint = $"#A sA #uh {HexagonColors[Hexagon]}kwehstuhgawn [hexagram]<#FFFFFF> iz fownd aht\n{WordWrapString($"\"{HexHint.Location.Replace("_", " ").Replace(" ", "\" \"").ToUpper()}\"").Replace("\" \"", " ")}\nin \"{Archipelago.instance.GetPlayerName((int)HexHint.Player).ToUpper()}'S WORLD...\"";
+                    slotLocation = $"{HexCheck.Location.LocationId} [{HexCheck.Location.SceneName}]";
                 }
 
-                string slotLocation = HexHint.Location == "Your Pocket" ? $"0, Server" : $"{HexHint.Player}, {HexHint.Location}";
 
                 if (HexagonHintArea == "Swamp Relic") {
                     HeroGraveHints.Add(HexagonHintArea, new HeroGraveHint(slotLocation, Hint, RelicHint.Item1, RelicHint.Item2, "Swamp Redux 2", "_Setpieces Etc/RelicPlinth/", false));
@@ -332,28 +307,193 @@ namespace TunicArchipelago {
             string Scene = "";
             string Prefix = "";
             string RelicHint = "";
-            int Player = Archipelago.instance.GetPlayerSlot();
             foreach (ItemData Relic in Relics) {
-                ArchipelagoHint RelicItemHint = Locations.MajorItemLocations[Relic.Name][0];
                 string itemDisplayText = $"{TextBuilderPatches.ItemNameToAbbreviation[Relic.Name]}  {ItemLookup.BonusUpgrades[Relic.ItemNameForInventory].CustomPickupMessage.ToUpper()}";
 
-                if (RelicItemHint.Player == Player) {
-                    Scene = RelicItemHint.Location == "Your Pocket" ? RelicItemHint.Location.ToUpper() : Locations.SimplifiedSceneNames[Locations.VanillaLocations[Locations.LocationDescriptionToId[RelicItemHint.Location]].Location.SceneName].ToUpper();
+                if (SaveFile.GetInt("archipelago") == 1) {
+                    int Player = Archipelago.instance.GetPlayerSlot();
+                    ArchipelagoHint RelicItemHint = Locations.MajorItemLocations[Relic.Name][0];
 
+                    if (RelicItemHint.Player == Player) {
+                        Scene = RelicItemHint.Location == "Your Pocket" ? RelicItemHint.Location.ToUpper() : Locations.SimplifiedSceneNames[Locations.VanillaLocations[Locations.LocationDescriptionToId[RelicItemHint.Location]].Location.SceneName].ToUpper();
+
+                        Prefix = Vowels.Contains(Scene[0]) ? "#E" : "#uh";
+                        RelicHint = $"lehjehnd sehz #uh  {itemDisplayText}\nkahn bE fownd aht {Prefix} \"{Scene}.\"";
+                    } else if (Archipelago.instance.IsTunicPlayer((int)RelicItemHint.Player)) {
+                        Scene = Locations.SimplifiedSceneNames[Locations.VanillaLocations[Locations.LocationDescriptionToId[RelicItemHint.Location]].Location.SceneName].ToUpper();
+                        Prefix = Vowels.Contains(Scene[0]) ? "#E" : "#uh";
+                        RelicHint = $"lehjehnd sehz #uh  {itemDisplayText}\nkahn bE fownd aht {Prefix} \"{Scene}\"\nin \"{Archipelago.instance.GetPlayerName((int)RelicItemHint.Player).ToUpper()}'S WORLD.\"";
+                    } else {
+                        RelicHint = $"lehjehnd sehz #uh  {itemDisplayText}\nkahn bE fownd in \"{Archipelago.instance.GetPlayerName((int)RelicItemHint.Player).ToUpper()}'S WORLD\"\naht {WordWrapString($"\"{RelicItemHint.Location.Replace("_", " ").Replace(" ", "\" \"").ToUpper()}\"").Replace("\" \"", " ")}.";
+                    }
+                    string slotLocation = RelicItemHint.Player == Player && RelicItemHint.Location == "Your Pocket" ? "0, Server" : $"{RelicItemHint.Player}, {RelicItemHint.Location}";
+                    RelicHints.Add((slotLocation, RelicHint));
+                } else if (SaveFile.GetInt("randomizer") == 1) {
+                    Check RelicCheck = ItemRandomizer.FindRandomizedItemByName(Relic.ItemNameForInventory);
+                    Scene = Locations.SimplifiedSceneNames[RelicCheck.Location.SceneName];
                     Prefix = Vowels.Contains(Scene[0]) ? "#E" : "#uh";
+
                     RelicHint = $"lehjehnd sehz #uh  {itemDisplayText}\nkahn bE fownd aht {Prefix} \"{Scene}.\"";
-                } else if (Archipelago.instance.IsTunicPlayer((int)RelicItemHint.Player)) {
-                    Scene = Locations.SimplifiedSceneNames[Locations.VanillaLocations[Locations.LocationDescriptionToId[RelicItemHint.Location]].Location.SceneName].ToUpper();
-                    Prefix = Vowels.Contains(Scene[0]) ? "#E" : "#uh";
-                    RelicHint = $"lehjehnd sehz #uh  {itemDisplayText}\nkahn bE fownd aht {Prefix} \"{Scene}\"\nin \"{Archipelago.instance.GetPlayerName((int)RelicItemHint.Player).ToUpper()}'S WORLD.\"";
-                } else {
-                    RelicHint = $"lehjehnd sehz #uh  {itemDisplayText}\nkahn bE fownd in \"{Archipelago.instance.GetPlayerName((int)RelicItemHint.Player).ToUpper()}'S WORLD\"\naht {WordWrapString($"\"{RelicItemHint.Location.Replace("_", " ").Replace(" ", "\" \"").ToUpper()}\"").Replace("\" \"", " ")}.";
+                    RelicHints.Add(($"{RelicCheck.Location.LocationId} [{RelicCheck.Location.SceneName}]", RelicHint));
                 }
-                string slotLocation = RelicItemHint.Player == Player && RelicItemHint.Location == "Your Pocket" ? "0, Server" : $"{RelicItemHint.Player}, {RelicItemHint.Location}";
-                RelicHints.Add((slotLocation, RelicHint));
             }
 
             return RelicHints;
+        }
+
+        public static (bool, bool, bool, bool) CreateSinglePlayerMailboxHint(System.Random random) {
+            string Scene = "";
+            string Prefix = "";
+            string HintMessage = "";
+            List<string> MailboxItems = new List<string>() { "Stick", "Sword", "Sword Progression", "Stundagger", "Techbow", "Wand", "Lantern", "Shotgun", "Mask" };
+            if (SaveFile.GetInt("randomizer shuffled abilities") == 1 && SaveFile.GetString("randomizer game mode") != "HEXAGONQUEST") {
+                MailboxItems.Add("12");
+                MailboxItems.Add("21");
+            }
+            List<Check> mailboxHintables = new List<Check>();
+            foreach (string Item in MailboxItems) {
+                mailboxHintables.AddRange(ItemRandomizer.FindAllRandomizedItemsByName(Item));
+            }
+            Shuffle(mailboxHintables);
+            int n = 0;
+            Check HintItem = null;
+            while (HintItem == null && n < mailboxHintables.Count) {
+                if (mailboxHintables[n].Location.reachable(ItemRandomizer.SphereZero)) {
+                    HintItem = mailboxHintables[n];
+                }
+                n++;
+            }
+            if (HintItem == null) {
+                n = 0;
+                while (HintItem == null && n < mailboxHintables.Count) {
+                    if (mailboxHintables[n].Location.SceneName == "Trinket Well") {
+                        foreach (Check itemData in ItemRandomizer.FindAllRandomizedItemsByName("Trinket Coin")) {
+                            if (itemData.Location.reachable(ItemRandomizer.SphereZero)) {
+                                HintItem = itemData;
+                            }
+                        }
+                    } else if (mailboxHintables[n].Location.SceneName == "Waterfall") {
+                        foreach (Check itemData in ItemRandomizer.FindAllRandomizedItemsByType("Fairy")) {
+                            if (itemData.Location.reachable(ItemRandomizer.SphereZero)) {
+                                HintItem = itemData;
+                            }
+                        }
+                    } else if (mailboxHintables[n].Location.SceneName == "Overworld Interiors" && SaveFile.GetInt("randomizer entrance rando enabled") == 0) {
+                        Check itemData = ItemRandomizer.FindRandomizedItemByName("Key (House)");
+                        if (itemData.Location.reachable(ItemRandomizer.SphereZero)) {
+                            HintItem = itemData;
+                        }
+                    } else if (mailboxHintables[n].Location.LocationId == "71" || mailboxHintables[n].Location.LocationId == "73") {
+                        foreach (Check itemData in ItemRandomizer.FindAllRandomizedItemsByName("Key")) {
+                            if (itemData.Location.reachable(ItemRandomizer.SphereZero)) {
+                                HintItem = itemData;
+                            }
+                        }
+                    } else if (SaveFile.GetInt("randomizer entrance rando enabled") == 1 && mailboxHintables[n].Location.RequiredItemsDoors.Count == 1 && mailboxHintables[n].Location.RequiredItemsDoors[0].ContainsKey("Mask")
+                        || mailboxHintables[n].Location.RequiredItems.Count == 1 && mailboxHintables[n].Location.RequiredItems[0].ContainsKey("Mask")) {
+                        Check itemData = ItemRandomizer.FindRandomizedItemByName("Mask");
+                        if (itemData.Location.reachable(ItemRandomizer.SphereZero)) {
+                            HintItem = itemData;
+                        }
+                    }
+                    n++;
+                }
+            }
+            if (HintItem == null) {
+                HintMessage = "nO lehjehnd forsaw yor uhrIvuhl, rooin sEker.\nyoo hahv uh difikuhlt rOd uhhehd. \"GOOD LUCK\".";
+                //TrunicHint = HintMessage;
+            } else {
+                Scene = Locations.SimplifiedSceneNames[HintItem.Location.SceneName];
+                Prefix = Vowels.Contains(Scene[0]) ? "#E" : "#uh";
+                HintMessage = $"lehjehnd sehz {Prefix} \"{Scene.ToUpper()}\"\nkuhntAnz wuhn uhv mehnE \"<#00FFFF>FIRST STEPS<#ffffff>\" ahn yor jurnE.";
+                //TrunicHint = $"lehjehnd sehz {ScenePrefix} {Translations.Translate(Scene, false)}\nkuhntAnz wuhn uhv mehnE <#00FFFF>furst stehps<#ffffff> ahn yor jurnE.";
+
+                SaveFile.SetString("randomizer mailbox hint location", $"{HintItem.Location.LocationId} [{HintItem.Location.SceneName}]");
+
+            }
+            HintMessages.Add("Mailbox", HintMessage);
+            return HintItem == null ? (false, false, false, false) : (HintItem.Reward.Name == "Techbow", HintItem.Reward.Name == "Wand", HintItem.Reward.Name == "12", HintItem.Reward.Name == "21");
+        }
+
+        public static void CreateAPMailboxHint(System.Random random) {
+            string Scene = "";
+            string Prefix = "";
+            string Hint = "";
+            int Player = Archipelago.instance.GetPlayerSlot();
+            List<string> MailboxItems = new List<string>() { "Stick", "Sword", "Sword Upgrade", "Magic Dagger", "Magic Wand", "Magic Orb", "Lantern", "Gun", "Scavenger Mask", "Pages 24-25 (Prayer)", "Pages 42-43 (Holy Cross)" };
+            Dictionary<string, ArchipelagoItem> SphereOnePlayer = new Dictionary<string, ArchipelagoItem>();
+            Dictionary<string, ArchipelagoItem> SphereOneOthers = new Dictionary<string, ArchipelagoItem>();
+            List<string> ERSphereOneItemsAndAreas = GetERSphereOne();
+            foreach (string itemkey in ItemLookup.ItemList.Keys) {
+                ArchipelagoItem item = ItemLookup.ItemList[itemkey];
+                // In ER, we need to check more info, since every item has a required item count
+                if (SaveFile.GetInt(EntranceRando) == 1) {
+                    if (Archipelago.instance.IsTunicPlayer(item.Player) && MailboxItems.Contains(item.ItemName)) {
+                        var requirements = Locations.VanillaLocations[itemkey].Location.RequiredItemsDoors[0].Keys;
+                        foreach (string req in requirements) {
+                            int checkCount = 0;
+                            if (ERSphereOneItemsAndAreas.Contains(req)) {
+                                checkCount++;
+                            } else {
+                                continue;
+                            }
+                            if (checkCount == requirements.Count) {
+                                SphereOnePlayer.Add(itemkey, item);
+                            }
+                        }
+                    } else if (item.Player != Archipelago.instance.GetPlayerSlot() && item.Classification == ItemFlags.Advancement) {
+                        var requirements = Locations.VanillaLocations[itemkey].Location.RequiredItemsDoors[0].Keys;
+                        foreach (string req in requirements) {
+                            int checkCount = 0;
+                            if (ERSphereOneItemsAndAreas.Contains(req)) {
+                                checkCount++;
+                            } else {
+                                continue;
+                            }
+                            if (checkCount == requirements.Count) { SphereOneOthers.Add(itemkey, item); }
+                        }
+                    }
+                } else {
+                    if (Archipelago.instance.IsTunicPlayer(item.Player) && MailboxItems.Contains(item.ItemName) && Locations.VanillaLocations[itemkey].Location.RequiredItems.Count == 0) {
+                        SphereOnePlayer.Add(itemkey, item);
+                    }
+                    if (item.Player != Archipelago.instance.GetPlayerSlot() && item.Classification == ItemFlags.Advancement && Locations.VanillaLocations[itemkey].Location.RequiredItems.Count == 0) {
+                        SphereOneOthers.Add(itemkey, item);
+                    }
+                }
+            }
+            ArchipelagoItem mailboxitem = null;
+            string key = "";
+            if (SphereOnePlayer.Count > 0) {
+                key = SphereOnePlayer.Keys.ToList()[random.Next(SphereOnePlayer.Count)];
+                mailboxitem = SphereOnePlayer[key];
+            } else if (SphereOneOthers.Count > 0) {
+                key = SphereOneOthers.Keys.ToList()[random.Next(SphereOneOthers.Count)];
+                mailboxitem = SphereOneOthers[key];
+            }
+            if (mailboxitem != null) {
+                Scene = Locations.SimplifiedSceneNames[Locations.VanillaLocations[key].Location.SceneName].ToUpper();
+                Prefix = Vowels.Contains(Scene[0]) ? "#E" : "#uh";
+                SaveFile.SetString("randomizer mailbox hint location", key);
+                Hint = $"lehjehnd sehz {Prefix} \"{Scene.ToUpper()}\"\nkuhntAnz wuhn uhv mehnE \"<#00FFFF>FIRST STEPS<#ffffff>\" ahn yor jurnE.";
+            } else {
+                SaveFile.SetString("randomizer mailbox hint location", "no first steps");
+                Hint = $"yor frehndz muhst furst hehlp yoo fInd yor wA...\ngoud luhk, rooin sEkur.";
+            }
+            HintMessages.Add("Mailbox", Hint);
+        }
+
+        private static void Shuffle(List<Check> list) {
+            int n = list.Count;
+            int r;
+            while (n > 1) {
+                n--;
+                r = TunicArchipelago.Randomizer.Next(n + 1);
+
+                Check holder = list[r];
+                list[r] = list[n];
+                list[n] = holder;
+            }
         }
 
         public static string WordWrapString(string Hint) {
