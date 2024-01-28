@@ -26,7 +26,7 @@ namespace TunicArchipelago {
                     ItemStatsHUD.UpdateAbilitySection();
                 }
 
-                if (SaveFile.GetInt("archipelago") == 1 && TunicArchipelago.Settings.SendHintsToServer) {
+                if (IsArchipelago() && TunicArchipelago.Settings.SendHintsToServer) {
                     GhostHints.CheckForServerHint(__instance.name);
                 }
             }
