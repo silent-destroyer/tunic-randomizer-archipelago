@@ -667,6 +667,19 @@ namespace TunicArchipelago {
             return (FoolMessageTop, FoolMessageBottom);
         }
 
+        public static void CheckFoolTrapSetting(string RewardId) {
+            Reward Reward = Locations.RandomizedLocations[RewardId].Reward;
+            if (Reward.Type == "MONEY") {
+                if ((TunicArchipelago.Settings.FoolTrapIntensity == RandomizerSettings.FoolTrapOption.NORMAL && Reward.Amount < 20)
+                || (TunicArchipelago.Settings.FoolTrapIntensity == RandomizerSettings.FoolTrapOption.DOUBLE && Reward.Amount <= 20)
+                || (TunicArchipelago.Settings.FoolTrapIntensity == RandomizerSettings.FoolTrapOption.ONSLAUGHT && Reward.Amount <= 30)) {
+                    Reward.Name = "Fool";
+                    Reward.Type = "FOOL";
+                    Reward.Amount = 1;
+                }
+            }
+        }
+
         public static void ToggleHolyCrossObjects(bool isEnabled) {
             foreach (ToggleObjectBySpell SpellToggle in Resources.FindObjectsOfTypeAll<ToggleObjectBySpell>()) {
                 foreach (ToggleObjectBySpell Spell in SpellToggle.gameObject.GetComponents<ToggleObjectBySpell>()) {

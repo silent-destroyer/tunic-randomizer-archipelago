@@ -48,7 +48,7 @@ namespace TunicArchipelago {
                     GUI.Window(103, new Rect(460f, 150f, 350f, 490f), new Action<int>(ArchipelagoConfigEditorWindow), "Archipelago Config");
                 }
                 if (ShowAdvancedSinglePlayerOptions && TunicArchipelago.Settings.Mode == RandomizerSettings.RandomizerType.SINGLEPLAYER) {
-                    GUI.Window(105, new Rect(460f, 150f, 405f, 325f), new Action<int>(AdvancedLogicOptionsWindow), "Advanced Logic Options");
+                    GUI.Window(105, new Rect(460f, 150f, 405f, 405f), new Action<int>(AdvancedLogicOptionsWindow), "Advanced Logic Options");
                 }
                 GameObject.Find("elderfox_sword graphic").GetComponent<Renderer>().enabled = !ShowAdvancedSinglePlayerOptions && !ShowAPSettingsWindow;
             }
@@ -368,6 +368,25 @@ namespace TunicArchipelago {
             GUI.Label(new Rect(10f, y, 300f, 30f), $"Entrance Randomizer");
             y += 40f;
             TunicArchipelago.Settings.ERFixedShop = GUI.Toggle(new Rect(10f, y, 200f, 30f), TunicArchipelago.Settings.ERFixedShop, "Fewer Shop Entrances");
+            y += 40f;
+            GUI.Label(new Rect(10f, y, 300f, 30f), $"Fool Traps");
+            y += 40f;
+            bool NoFools = GUI.Toggle(new Rect(10f, y, 90f, 30f), TunicArchipelago.Settings.FoolTrapIntensity == RandomizerSettings.FoolTrapOption.NONE, "None");
+            if (NoFools) {
+                TunicArchipelago.Settings.FoolTrapIntensity = RandomizerSettings.FoolTrapOption.NONE;
+            }
+            bool NormalFools = GUI.Toggle(new Rect(110f, y, 90f, 30f), TunicArchipelago.Settings.FoolTrapIntensity == RandomizerSettings.FoolTrapOption.NORMAL, "<color=#4FF5D4>Normal</color>");
+            if (NormalFools) {
+                TunicArchipelago.Settings.FoolTrapIntensity = RandomizerSettings.FoolTrapOption.NORMAL;
+            }
+            bool DoubleFools = GUI.Toggle(new Rect(200f, y, 90f, 30f), TunicArchipelago.Settings.FoolTrapIntensity == RandomizerSettings.FoolTrapOption.DOUBLE, "<color=#E3D457>Double</color>");
+            if (DoubleFools) {
+                TunicArchipelago.Settings.FoolTrapIntensity = RandomizerSettings.FoolTrapOption.DOUBLE;
+            }
+            bool OnslaughtFools = GUI.Toggle(new Rect(290f, y, 100f, 30f), TunicArchipelago.Settings.FoolTrapIntensity == RandomizerSettings.FoolTrapOption.ONSLAUGHT, "<color=#FF3333>Onslaught</color>");
+            if (OnslaughtFools) {
+                TunicArchipelago.Settings.FoolTrapIntensity = RandomizerSettings.FoolTrapOption.ONSLAUGHT;
+            }
             y += 40f;
             GUI.Label(new Rect(10f, y, 300f, 30f), $"Hero's Laurels Location");
             y += 40f;

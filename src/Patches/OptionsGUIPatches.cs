@@ -10,6 +10,7 @@ using UnhollowerRuntimeLib;
 using BepInEx.Logging;
 using Newtonsoft.Json;
 using static TunicArchipelago.SaveFlags;
+using static TunicArchipelago.RandomizerSettings;
 
 namespace TunicArchipelago {
     public class OptionsGUIPatches {
@@ -44,9 +45,11 @@ namespace TunicArchipelago {
 
         public static void LogicSettingsPage() {
             OptionsGUI OptionsGUI = GameObject.FindObjectOfType<OptionsGUI>();
+            Il2CppStringArray GameModes = (Il2CppStringArray)new string[] { "<#FFA300>Randomizer", "<#ffd700>Hexagon Quest", "<#4FF5D4>Vanilla" };
+            Il2CppStringArray LaurelsLocations = (Il2CppStringArray)new string[] { "<#FFA300>Random", "<#ffd700>6 Coins", "<#ffd700>10 Coins", "<#ffd700>10 Fairies" };
+            Il2CppStringArray FoolTrapOptions = (Il2CppStringArray)new string[] { "<#FFFFFF>None", "<#4FF5D4>Normal", "<#E3D457>Double", "<#FF3333>Onslaught" };
+
             if (SceneLoaderPatches.SceneName == "TitleScreen") {
-                Il2CppStringArray GameModes = (Il2CppStringArray)new string[] { "<#FFA300>Randomizer", "<#ffd700>Hexagon Quest", "<#4FF5D4>Vanilla" };
-                Il2CppStringArray LaurelsLocations = (Il2CppStringArray)new string[] { "<#FFA300>Random", "<#ffd700>6 Coins", "<#ffd700>10 Coins", "<#ffd700>10 Fairies" };
                 OptionsGUI.addMultiSelect("Game Mode", GameModes, GetGameModeIndex(), (OptionsGUIMultiSelect.MultiSelectAction)ChangeGameMode).wrap = true;
                 OptionsGUI.addToggle("Keys Behind Bosses", "Off", "On", TunicArchipelago.Settings.KeysBehindBosses ? 1 : 0, (OptionsGUIMultiSelect.MultiSelectAction)ToggleKeysBehindBosses);
                 OptionsGUI.addToggle("Sword Progression", "Off", "On", TunicArchipelago.Settings.SwordProgressionEnabled ? 1 : 0, (OptionsGUIMultiSelect.MultiSelectAction)ToggleSwordProgression);
@@ -54,6 +57,7 @@ namespace TunicArchipelago {
                 OptionsGUI.addToggle("Shuffle Abilities", "Off", "On", TunicArchipelago.Settings.ShuffleAbilities ? 1 : 0, (OptionsGUIMultiSelect.MultiSelectAction)ToggleAbilityShuffling);
                 OptionsGUI.addToggle("Entrance Randomizer", "Off", "On", TunicArchipelago.Settings.EntranceRandoEnabled ? 1 : 0, (OptionsGUIMultiSelect.MultiSelectAction)ToggleEntranceRando);
                 OptionsGUI.addToggle("Fewer Shop Entrances", "Off", "On", TunicArchipelago.Settings.EntranceRandoEnabled ? 1 : 0, (OptionsGUIMultiSelect.MultiSelectAction)ToggleFixedShop);
+                OptionsGUI.addMultiSelect("Fool Traps", FoolTrapOptions, GetFoolTrapIndex(), (OptionsGUIMultiSelect.MultiSelectAction)ChangeFoolTrapFrequency).wrap = true;
                 OptionsGUI.addMultiSelect("Laurels Location", LaurelsLocations, GetLaurelsLocationIndex(), (OptionsGUIMultiSelect.MultiSelectAction)ChangeLaurelsLocation).wrap = true;
                 OptionsGUI.setHeading("Single Player Logic");
             } else {
@@ -73,6 +77,9 @@ namespace TunicArchipelago {
                 if (SaveFile.GetInt("randomizer entrance rando enabled") == 1 && TunicArchipelago.Settings.Mode == RandomizerSettings.RandomizerType.SINGLEPLAYER) {
                     OptionsGUI.addButton("Fewer Shop Entrances", SaveFile.GetInt("randomizer ER fixed shop") == 1 ? "<#00ff00>On" : "<#ff0000>Off", null);
                 }
+                if (SaveFile.GetInt("randomizer") == 1) {
+                    OptionsGUI.addMultiSelect("Fool Traps", FoolTrapOptions, GetFoolTrapIndex(), (OptionsGUIMultiSelect.MultiSelectAction)ChangeFoolTrapFrequency).wrap = true;
+                }
                 OptionsGUI.setHeading("Logic");
             }
         }
@@ -88,8 +95,6 @@ namespace TunicArchipelago {
         }
 
         public static void GeneralSettingsPage() {
-            Il2CppStringArray FoolTrapOptions = (Il2CppStringArray)new string[] { "<#FFFFFF>None", "<#4FF5D4>Normal", "<#E3D457>Double", "<#FF3333>Onslaught" };
-
             OptionsGUI OptionsGUI = GameObject.FindObjectOfType<OptionsGUI>();
             OptionsGUI.setHeading("General");
             OptionsGUI.addToggle("Easier Heir Fight", "Off", "On", TunicArchipelago.Settings.HeirAssistModeEnabled ? 1 : 0, (OptionsGUIMultiSelect.MultiSelectAction)ToggleHeirAssistMode);
@@ -195,6 +200,16 @@ namespace TunicArchipelago {
 
         public static void ToggleFixedShop(int index) {
             TunicArchipelago.Settings.ERFixedShop = !TunicArchipelago.Settings.ERFixedShop;
+            SaveSettings();
+        }
+
+        public static int GetFoolTrapIndex() {
+            return (int)TunicArchipelago.Settings.FoolTrapIntensity;
+        }
+
+        public static void ChangeFoolTrapFrequency(int index) {
+
+            TunicArchipelago.Settings.FoolTrapIntensity = (RandomizerSettings.FoolTrapOption)index;
             SaveSettings();
         }
 

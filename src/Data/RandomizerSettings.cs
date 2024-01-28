@@ -71,6 +71,11 @@ namespace TunicArchipelago {
             set;
         }
 
+        public FoolTrapOption FoolTrapIntensity {
+            get;
+            set;
+        }
+
         // Archipelago Settings
         public bool DeathLinkEnabled {
             get;
@@ -185,7 +190,6 @@ namespace TunicArchipelago {
             set;
         }
 
-
         // Fox Settings
         public bool RandomFoxColorsEnabled {
             get;
@@ -248,6 +252,7 @@ namespace TunicArchipelago {
             HexagonQuestGoal = 20;
             HexagonQuestExtraPercentage = 50;
             FixedLaurelsOption = FixedLaurelsType.ANYWHERE;
+            FoolTrapIntensity = FoolTrapOption.NORMAL;
 
             // Archipelago 
             DeathLinkEnabled = false;

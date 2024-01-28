@@ -251,7 +251,9 @@ namespace TunicArchipelago {
                         if (!ModelSwaps.SwappedThisSceneAlready) {
                             ModelSwaps.SwapItemsInScene();
                         }*/
-
+            if (!ModelSwaps.SwappedThisSceneAlready) {
+                ModelSwaps.SwapItemsInScene();
+            }
             // this is here for the first time you're loading in, assumes you're in Overworld
             if (SaveFile.GetInt("randomizer entrance rando enabled") == 1) {
                 TunicPortals.AltModifyPortals();
@@ -449,6 +451,7 @@ namespace TunicArchipelago {
 
                 Locations.PopulateMajorItemLocations(slotData);
 
+                Locations.RandomizedLocations.Clear();
                 Locations.CheckedLocations.Clear();
                 ItemLookup.ItemList.Clear();
                 List<long> LocationIDs = new List<long>();

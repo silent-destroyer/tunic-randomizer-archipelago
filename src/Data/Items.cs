@@ -1,4 +1,5 @@
 ﻿using Archipelago.MultiClient.Net.Enums;
+using BepInEx.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -282,10 +283,13 @@ namespace TunicArchipelago {
         };
 
         public static ItemData GetItemDataFromCheck(Check Check) {
+            TunicArchipelago.Logger.LogInfo(Check.Reward.Name + " " + Check.Reward.Amount);
             if (ItemLookup.FairyLookup.ContainsKey(Check.Reward.Name)) {
                 return Items["Fairy"];
             } else if (Check.Reward.Name == "Sword Progression") {
                 return Items["Sword Upgrade"];
+            } else if (Check.Reward.Name == "Fool Trap") {
+                return Items["Fool Trap"];
             } else {
                 string itemName = ItemLookup.Items.Values.Where(itemdata => itemdata.ItemNameForInventory == Check.Reward.Name && itemdata.QuantityToGive == Check.Reward.Amount).FirstOrDefault().Name;
                 return Items.ContainsKey(itemName) ? Items[itemName] : Items["Money x1"];
