@@ -44,9 +44,9 @@ namespace TunicArchipelago {
                     SaveFile.SetInt($"randomizer opened fairy chest {FairyId}", 1);
                 }
                 Logger.LogInfo("Checking Location: " + LocationId + " - " + Locations.LocationIdToDescription[LocationId]);
-                if (SaveFile.GetInt("archipelago") == 1) {
+                if (IsArchipelago()) {
                     Archipelago.instance.ActivateCheck(Locations.LocationIdToDescription[LocationId]);
-                } else if (SaveFile.GetInt("randomizer") == 1) {
+                } else if (IsSinglePlayer()) {
                     GiveItem(Locations.RandomizedLocations[LocationId]);
                 }
             }
@@ -106,9 +106,9 @@ namespace TunicArchipelago {
             }
 
             string LocationId = $"{__instance.itemToGive.name} [{SceneLoaderPatches.SceneName}]";
-            if (SaveFile.GetInt("archipelago") == 1) {
+            if (IsArchipelago()) {
                 Archipelago.instance.ActivateCheck(Locations.LocationIdToDescription[LocationId]);
-            } else if (SaveFile.GetInt("randomizer") == 1) {
+            } else if (IsSinglePlayer()) {
                 GiveItem(Locations.RandomizedLocations[LocationId]);
             }
 
@@ -118,9 +118,9 @@ namespace TunicArchipelago {
 
         public static bool HeroRelicPickup_onGetIt_PrefixPatch(HeroRelicPickup __instance) {
             string LocationId = $"{__instance.name} [{SceneLoaderPatches.SceneName}]";
-            if (SaveFile.GetInt("archipelago") == 1) {
+            if (IsArchipelago()) {
                 Archipelago.instance.ActivateCheck(Locations.LocationIdToDescription[LocationId]);
-            } else if (SaveFile.GetInt("randomizer") == 1) {
+            } else if (IsSinglePlayer()) {
                 GiveItem(Locations.RandomizedLocations[LocationId]);
             }
 
@@ -131,9 +131,9 @@ namespace TunicArchipelago {
 
         public static bool PagePickup_onGetIt_PrefixPatch(PagePickup __instance) {
             string LocationId = $"{__instance.pageName} [{SceneLoaderPatches.SceneName}]";
-            if (SaveFile.GetInt("archipelago") == 1) {
+            if (IsArchipelago()) {
                 Archipelago.instance.ActivateCheck(Locations.LocationIdToDescription[LocationId]);
-            } else if (SaveFile.GetInt("randomizer") == 1) {
+            } else if (IsSinglePlayer()) {
                 GiveItem(Locations.RandomizedLocations[LocationId]);
             }
 
@@ -147,11 +147,11 @@ namespace TunicArchipelago {
             if (Locations.LocationIdToDescription.ContainsKey(LocationId)) {
                 int Price = TunicArchipelago.Settings.CheaperShopItemsEnabled ? 300 : __instance.price;
                 string itemToDisplay = "";
-                if (SaveFile.GetInt("archipelago") == 1) {
+                if (IsArchipelago()) {
                     ArchipelagoItem ShopItem = ItemLookup.ItemList[LocationId];
                     itemToDisplay = Archipelago.instance.IsTunicPlayer(ShopItem.Player) && TextBuilderPatches.ItemNameToAbbreviation.ContainsKey(ShopItem.ItemName) ? TextBuilderPatches.ItemNameToAbbreviation[ShopItem.ItemName] : "[archipelago]";
                     __instance.confirmPurchaseFormattedLanguageLine.text = $"bI for {Price} [money]?\n    {itemToDisplay} " + GhostHints.WordWrapString($"\"{Archipelago.instance.GetPlayerName(ShopItem.Player).ToUpper().Replace(" ", "\" \"")}'S\" \"{ShopItem.ItemName.ToUpper().Replace($" ", $"\" \"")}\"");
-                } else if (SaveFile.GetInt("randomizer") == 1) {
+                } else if (IsSinglePlayer()) {
                     ItemData itemData = ItemLookup.GetItemDataFromCheck(Locations.RandomizedLocations[LocationId]);
                     itemToDisplay = TextBuilderPatches.ItemNameToAbbreviation.ContainsKey(itemData.Name) ? TextBuilderPatches.ItemNameToAbbreviation[itemData.Name] : "";
                     __instance.confirmPurchaseFormattedLanguageLine.text = $"bI for {Price} [money]?";
@@ -161,7 +161,7 @@ namespace TunicArchipelago {
                 }
 
                 string CheckName = Locations.LocationIdToDescription[LocationId];
-                if (SaveFile.GetInt("archipelago") == 1 && TunicArchipelago.Settings.SendHintsToServer && SaveFile.GetInt($"archipelago sent optional hint to server {CheckName}") == 0) {
+                if (IsArchipelago() && TunicArchipelago.Settings.SendHintsToServer && SaveFile.GetInt($"archipelago sent optional hint to server {CheckName}") == 0) {
                     Archipelago.instance.integration.session.Locations.ScoutLocationsAsync(true, Archipelago.instance.GetLocationId(CheckName));
                     SaveFile.SetInt($"archipelago sent optional hint to server {CheckName}", 1);
                 }
@@ -187,9 +187,9 @@ namespace TunicArchipelago {
                 GenericMessage.ShowMessage($"nawt Enuhf [money]...");
             } else {
                 Inventory.GetItemByName("MoneySmall").Quantity -= Price;
-                if (SaveFile.GetInt("archipelago") == 1) {
+                if (IsArchipelago()) {
                     Archipelago.instance.ActivateCheck(Locations.LocationIdToDescription[LocationId]);
-                } else if (SaveFile.GetInt("randomizer") == 1) {
+                } else if (IsSinglePlayer()) {
                     GiveItem(Locations.RandomizedLocations[LocationId]);
                 }
                 __instance.boughtStatevar.BoolValue = true;
@@ -206,9 +206,9 @@ namespace TunicArchipelago {
 
         public static bool TrinketWell_giveTrinketUpgrade_PrefixPatch(TrinketWell._giveTrinketUpgrade_d__14 __instance) {
             string LocationId = $"Well Reward ({StateVariable.GetStateVariableByName("Trinket Coins Tossed").IntValue} Coins) [Trinket Well]";
-            if (SaveFile.GetInt("archipelago") == 1 && Locations.LocationIdToDescription.ContainsKey(LocationId)) {
+            if (IsArchipelago() && Locations.LocationIdToDescription.ContainsKey(LocationId)) {
                 Archipelago.instance.ActivateCheck(Locations.LocationIdToDescription[LocationId]);
-            } else if (SaveFile.GetInt("randomizer") == 1) {
+            } else if (IsSinglePlayer()) {
                 GiveItem(Locations.RandomizedLocations[LocationId]);
             }
             return false;
@@ -656,9 +656,9 @@ namespace TunicArchipelago {
                 FoolMessageBottom = $"hahvi^ ahn Is tIm?";
             }
 
-            if (Player == -1 && SaveFile.GetInt("randomizer") == 1) {
+            if (Player == -1 && IsSinglePlayer()) {
 
-            } else if (SaveFile.GetInt("archipelago") == 1 && Player != Archipelago.instance.GetPlayerSlot()) {
+            } else if (IsArchipelago() && Player != Archipelago.instance.GetPlayerSlot()) {
                 FoolMessageTop = $"\"{Archipelago.instance.GetPlayerName(Player)}\" %i^ks {FoolMessageTop}";
             }
 
@@ -694,7 +694,7 @@ namespace TunicArchipelago {
         public static void ButtonAssignableItem_CheckFreeItemSpell_PostfixPatch(ButtonAssignableItem __instance, ref string s) {
             if (ItemLookup.BombCodes.ContainsKey(s) && StateVariable.GetStateVariableByName(ItemLookup.BombCodes[s]).BoolValue) {
                 if (SaveFile.GetInt($"randomizer used free bomb code {s}") == 0) {
-                    if (SaveFile.GetInt("archipelago") == 1) {
+                    if (IsArchipelago()) {
                         Archipelago.instance.UpdateDataStorage(ItemLookup.BombCodes[s], true);
                     }
                     SaveFile.SetInt($"randomizer used free bomb code {s}", 1);

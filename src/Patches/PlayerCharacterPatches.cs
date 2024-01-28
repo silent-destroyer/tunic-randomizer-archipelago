@@ -223,10 +223,10 @@ namespace TunicArchipelago {
                 SaveFile.SaveToDisk();
             }
 
-            if (SaveFile.GetInt("randomizer") == 1) {
+            if (IsSinglePlayer()) {
                 Archipelago.instance.Disconnect();
                 PlayerCharacter_Start_SinglePlayerSetup();
-            } else if (SaveFile.GetInt("archipelago") == 1) {
+            } else if (IsArchipelago()) {
                 PlayerCharacter_Start_ArchipelagoSetup();
             }
 

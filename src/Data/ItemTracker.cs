@@ -175,7 +175,7 @@ namespace TunicArchipelago {
                 SpoilerLog[Key] = new List<string>();
             }
 
-            if (SaveFile.GetInt("archipelago") == 1) {
+            if (IsArchipelago()) {
                 foreach (string Key in ItemLookup.ItemList.Keys) {
                     ArchipelagoItem Item = ItemLookup.ItemList[Key];
 
@@ -184,7 +184,7 @@ namespace TunicArchipelago {
                     SpoilerLog[Locations.VanillaLocations[Key].Location.SceneName].Add(Spoiler);
                 }
             }
-            if (SaveFile.GetInt("randomizer") == 1) {
+            if (IsSinglePlayer()) {
                 foreach(string Key in Locations.RandomizedLocations.Keys) {
                     Check Check = Locations.RandomizedLocations[Key];
                     ItemData Item = ItemLookup.GetItemDataFromCheck(Check);
@@ -197,7 +197,7 @@ namespace TunicArchipelago {
                 "Lines that start with 'x' instead of '-' represent items that have been collected\n",
                 "Major Items"
             };
-            if (SaveFile.GetInt("archipelago") == 1) {
+            if (IsArchipelago()) {
                 foreach (string MajorItem in ItemLookup.MajorItems) {
                 if(MajorItem == "Gold Questagon") { continue; }
                     if(Locations.MajorItemLocations.ContainsKey(MajorItem) && Locations.MajorItemLocations[MajorItem].Count > 0) {
@@ -213,7 +213,7 @@ namespace TunicArchipelago {
                     }
                 }
             }
-            if (SaveFile.GetInt("randomizer") == 1) {
+            if (IsSinglePlayer()) {
                 foreach (string MajorItem in ItemLookup.LegacyMajorItems) {
                     foreach (Check Check in ItemRandomizer.FindAllRandomizedItemsByName(MajorItem)) {
                         ItemData ItemData = ItemLookup.GetItemDataFromCheck(Check);

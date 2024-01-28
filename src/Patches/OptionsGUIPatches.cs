@@ -61,7 +61,7 @@ namespace TunicArchipelago {
                 OptionsGUI.addMultiSelect("Laurels Location", LaurelsLocations, GetLaurelsLocationIndex(), (OptionsGUIMultiSelect.MultiSelectAction)ChangeLaurelsLocation).wrap = true;
                 OptionsGUI.setHeading("Single Player Logic");
             } else {
-                if (SaveFile.GetInt("randomizer") == 1) {
+                if (IsSinglePlayer()) {
                     OptionsGUI.addButton("Game Mode", SaveFile.GetString("randomizer game mode"), null);
                     if (SaveFile.GetInt("randomizer hexagon quest enabled") == 1) {
                         OptionsGUI.addButton("Hexagon Quest Goal", SaveFile.GetInt("randomizer hexagon quest goal").ToString(), null);
@@ -74,10 +74,10 @@ namespace TunicArchipelago {
                 OptionsGUI.addButton("Started With Sword", SaveFile.GetInt("randomizer started with sword") == 1 ? "<#00ff00>Yes" : "<#ff0000>No", null);
                 OptionsGUI.addButton("Shuffled Abilities", SaveFile.GetInt("randomizer shuffled abilities") == 1 ? "<#00ff00>On" : "<#ff0000>Off", null);
                 OptionsGUI.addButton("Entrance Randomizer", SaveFile.GetInt("randomizer entrance rando enabled") == 1 ? "<#00ff00>On" : "<#ff0000>Off", null);
-                if (SaveFile.GetInt("randomizer entrance rando enabled") == 1 && TunicArchipelago.Settings.Mode == RandomizerSettings.RandomizerType.SINGLEPLAYER) {
+                if (SaveFile.GetInt("randomizer entrance rando enabled") == 1 && IsSinglePlayer()) {
                     OptionsGUI.addButton("Fewer Shop Entrances", SaveFile.GetInt("randomizer ER fixed shop") == 1 ? "<#00ff00>On" : "<#ff0000>Off", null);
                 }
-                if (SaveFile.GetInt("randomizer") == 1) {
+                if (IsSinglePlayer()) {
                     OptionsGUI.addMultiSelect("Fool Traps", FoolTrapOptions, GetFoolTrapIndex(), (OptionsGUIMultiSelect.MultiSelectAction)ChangeFoolTrapFrequency).wrap = true;
                 }
                 OptionsGUI.setHeading("Logic");

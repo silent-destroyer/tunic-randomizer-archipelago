@@ -31,7 +31,7 @@ namespace TunicArchipelago {
                 SaveFile.SetInt("chest open 19", SaveFile.GetInt("randomizer picked up 19 [Sword Cave]"));
             }
 
-            if (SaveFile.GetInt("archipelago") == 1 && Archipelago.instance != null && Archipelago.instance.integration != null && Archipelago.instance.integration.connected) {
+            if (IsArchipelago()) {
                 foreach (long location in Archipelago.instance.integration.session.Locations.AllLocationsChecked) {
                     string LocationId = Archipelago.instance.integration.session.Locations.GetLocationNameFromId(location);
                     string GameObjectId = Locations.LocationDescriptionToId[LocationId];
@@ -362,9 +362,9 @@ namespace TunicArchipelago {
             }
 
             if (SaveFile.GetInt("randomizer entrance rando enabled") == 1) {
-                if (SaveFile.GetInt("archipelago") == 1) {
+                if (IsArchipelago()) {
                     TunicPortals.CreatePortalPairs(((JObject)Archipelago.instance.GetPlayerSlotData()["Entrance Rando"]).ToObject<Dictionary<string, string>>());
-                } else if (SaveFile.GetInt("randomizer") == 1) {
+                } else if (IsSinglePlayer()) {
                     TunicPortals.RandomizePortals(SaveFile.GetInt("seed"));
                 }
                 TunicPortals.ModifyPortals(loadingScene);
@@ -428,7 +428,7 @@ namespace TunicArchipelago {
                 Logger.LogError(ex.Message + " " + ex.StackTrace);
             }
 
-            if (SaveFile.GetInt("archipelago") == 1 && (Archipelago.instance != null && Archipelago.instance.integration != null && Archipelago.instance.integration.connected)) {
+            if (IsArchipelago()) {
                 Archipelago.instance.integration.UpdateDataStorageOnLoad();
             }
 

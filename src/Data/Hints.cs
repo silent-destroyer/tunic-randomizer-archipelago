@@ -112,14 +112,14 @@ namespace TunicArchipelago {
 
             (bool, bool, bool, bool) SinglePlayerItemsHinted = (false, false, false, false);
 
-            if (SaveFile.GetInt("archipelago") == 1) {
+            if (IsArchipelago()) {
                 CreateAPMailboxHint(random);
-            } else if (SaveFile.GetInt("randomizer") == 1) {
+            } else if (IsSinglePlayer()) {
                 SinglePlayerItemsHinted = CreateSinglePlayerMailboxHint(random);
             }
             
             Hint = $"lehjehnd sehz <#FF00FF>suhm%i^ ehkstruhordinArE<#FFFFFF>  [laurels] ";
-            if (SaveFile.GetInt("archipelago") == 1) {
+            if (IsArchipelago()) {
                 int Player = Archipelago.instance.GetPlayerSlot();
                 ArchipelagoHint Hyperdash = Locations.MajorItemLocations["Hero's Laurels"][0];
                 if (Hyperdash.Player == Player) {
@@ -132,7 +132,7 @@ namespace TunicArchipelago {
                 } else {
                     Hint += $" uhwAts yoo aht\n{WordWrapString($"\"{Hyperdash.Location.Replace("_", " ").Replace(" ", "\" \"").ToUpper()}\"").Replace("\" \"", " ")}\nin\"{Archipelago.instance.GetPlayerName((int)Hyperdash.Player).ToUpper()}'S WORLD...\"";
                 }
-            } else if (SaveFile.GetInt("randomizer") == 1) {
+            } else if (IsSinglePlayer()) {
                 Check LaurelsCheck = ItemRandomizer.FindRandomizedItemByName("Hyperdash");
                 Scene = Locations.SimplifiedSceneNames[LaurelsCheck.Location.SceneName];
                 Prefix = Vowels.Contains(Scene[0]) ? "#E" : "#uh";
@@ -153,7 +153,7 @@ namespace TunicArchipelago {
                 string HintGrave = HintGraves[random.Next(HintGraves.Count)];
                 string slotLocation = "";
                 (string, string) RelicHint = relicHints[random.Next(relicHints.Count)];
-                if (SaveFile.GetInt("archipelago") == 1) {
+                if (IsArchipelago()) {
                     ArchipelagoHint ItemHint = Locations.MajorItemLocations[HintItem][0];
                     int Player = Archipelago.instance.GetPlayerSlot();
 
@@ -171,7 +171,7 @@ namespace TunicArchipelago {
                         Hint = $"lehjehnd sehz \"{Archipelago.instance.GetPlayerName((int)ItemHint.Player).ToUpper()}'S WORLD\" aht\n{WordWrapString($"\"{ItemHint.Location.Replace("_", " ").Replace(" ", "\" \"").ToUpper()}\"").Replace("\" \"", " ")}";
                     }
                     slotLocation = ItemHint.Location == "Your Pocket" ? $"0, Server" : $"{ItemHint.Player}, {ItemHint.Location}";
-                } else if (SaveFile.GetInt("randomizer") == 1) {
+                } else if (IsSinglePlayer()) {
                     ItemData Item = ItemLookup.Items[HintItem];
                     Check ItemCheck = ItemRandomizer.FindRandomizedItemByName(Item.ItemNameForInventory);
                     Scene = Locations.SimplifiedSceneNames[ItemCheck.Location.SceneName];
@@ -208,7 +208,7 @@ namespace TunicArchipelago {
                 string slotLocation = "";
                 (string, string) RelicHint = relicHints[random.Next(relicHints.Count)];
 
-                if (SaveFile.GetInt("archipelago") == 1) {
+                if (IsArchipelago()) {
                     ArchipelagoHint HexHint = Hexagon == "Gold Questagon" ? Locations.MajorItemLocations[Hexagon][i] : Locations.MajorItemLocations[Hexagon][0];
                     int Player = Archipelago.instance.GetPlayerSlot();
                     if (HexHint.Player == Player) {
@@ -223,7 +223,7 @@ namespace TunicArchipelago {
                         Hint = $"#A sA #uh {HexagonColors[Hexagon]}kwehstuhgawn [hexagram]<#FFFFFF> iz fownd aht\n{WordWrapString($"\"{HexHint.Location.Replace("_", " ").Replace(" ", "\" \"").ToUpper()}\"").Replace("\" \"", " ")}\nin \"{Archipelago.instance.GetPlayerName((int)HexHint.Player).ToUpper()}'S WORLD...\"";
                     }
                     slotLocation = HexHint.Location == "Your Pocket" ? $"0, Server" : $"{HexHint.Player}, {HexHint.Location}";
-                } else if (SaveFile.GetInt("randomizer") == 1) {
+                } else if (IsSinglePlayer()) {
                     ItemData Hex = ItemLookup.Items[Hexagon];
                     Check HexCheck = ItemRandomizer.FindRandomizedItemByName(Hex.ItemNameForInventory);
                     Scene = Locations.SimplifiedSceneNames[HexCheck.Location.SceneName];
@@ -310,7 +310,7 @@ namespace TunicArchipelago {
             foreach (ItemData Relic in Relics) {
                 string itemDisplayText = $"{TextBuilderPatches.ItemNameToAbbreviation[Relic.Name]}  {ItemLookup.BonusUpgrades[Relic.ItemNameForInventory].CustomPickupMessage.ToUpper()}";
 
-                if (SaveFile.GetInt("archipelago") == 1) {
+                if (IsArchipelago()) {
                     int Player = Archipelago.instance.GetPlayerSlot();
                     ArchipelagoHint RelicItemHint = Locations.MajorItemLocations[Relic.Name][0];
 
@@ -328,7 +328,7 @@ namespace TunicArchipelago {
                     }
                     string slotLocation = RelicItemHint.Player == Player && RelicItemHint.Location == "Your Pocket" ? "0, Server" : $"{RelicItemHint.Player}, {RelicItemHint.Location}";
                     RelicHints.Add((slotLocation, RelicHint));
-                } else if (SaveFile.GetInt("randomizer") == 1) {
+                } else if (IsSinglePlayer()) {
                     Check RelicCheck = ItemRandomizer.FindRandomizedItemByName(Relic.ItemNameForInventory);
                     Scene = Locations.SimplifiedSceneNames[RelicCheck.Location.SceneName];
                     Prefix = Vowels.Contains(Scene[0]) ? "#E" : "#uh";
