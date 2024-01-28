@@ -709,9 +709,8 @@ namespace TunicArchipelago {
         }
 
         public static bool Monster_Die_MoveNext_PrefixPatch(Monster._Die_d__77 __instance, ref bool __result) {
-            if (__instance.__4__this.GetComponent<BossAnnounceOnAggro>() != null) {
+            if (__instance.__4__this.GetComponent<BossAnnounceOnAggro>() != null && IsArchipelago()) {
                 if (SceneManager.GetActiveScene().name == "Forest Boss Room") {
-                    StateVariable.GetStateVariableByName("SV_Forest Boss Room_Skuladot redux Big").BoolValue = true;
                     Archipelago.instance.UpdateDataStorage("Defeated Guard Captain", true);
                 }
                 if (__instance.__4__this.GetComponent<Knightbot>() != null) {
@@ -727,6 +726,11 @@ namespace TunicArchipelago {
                     Archipelago.instance.UpdateDataStorage("Defeated Boss Scavenger", true);
                 }
             }
+
+            if (SceneLoaderPatches.SceneName == "Forest Boss Room" && __instance.__4__this.GetComponent<BossAnnounceOnAggro>() != null) {
+                StateVariable.GetStateVariableByName("SV_Forest Boss Room_Skuladot redux Big").BoolValue = true;
+            }
+
 
             if (__instance.__4__this.GetComponent<TunicKnightVoid>() != null) {
                 CoinSpawner.SpawnCoins(50, __instance.__4__this.transform.position);

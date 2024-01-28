@@ -474,7 +474,7 @@ namespace TunicArchipelago {
                         ItemData ItemData = ItemLookup.GetItemDataFromCheck(Check);
                         string ItemToDisplay = TextBuilderPatches.ItemNameToAbbreviation.ContainsKey(ItemData.Name) ? TextBuilderPatches.ItemNameToAbbreviation[ItemData.Name] : "";
 
-                        Hint = $"bI #uh wA, I saw A  {ItemToDisplay}  \"{Item.ToUpper().Replace(" ", "\" \"")}\" #uh lahst tIm I wuhs {ScenePrefix} \"{Scene.Replace(" ", "\" \"")}.\"";
+                        Hint = $"bI #uh wA, I saw A  {ItemToDisplay}  \"{Item.ToUpper().Replace(" ", "\" \"")}\" #uh lahst tIm I wuhs {ScenePrefix} \"{Scene.ToUpper().Replace(" ", "\" \"")}.\"";
 
                         //TrunicHint = $"bI #uh wA, I saw A {Translations.Translate(Hints.SimplifiedItemNames[Item.Reward.Name], false)} #uh\nlahst tIm I wuhs {ScenePrefix} {Translations.Translate(Scene, false)}.";
                         ItemHints.Add((WordWrapString(Hint), ItemData.Name, ""));

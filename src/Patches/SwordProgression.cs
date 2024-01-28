@@ -172,7 +172,7 @@ namespace TunicArchipelago {
         public static bool HitReceiver_ReceiveHit_PrefixPatch(HitReceiver __instance, ref HitType hitType, ref bool unblockable, ref bool isPlayerCharacterMelee) {
 
             if ((__instance.GetComponent<TuningForkBell>() != null || __instance.GetComponent<PowerSwitch>() != null) && isPlayerCharacterMelee) {
-                if (__instance.name == "tuning fork") {
+                if (__instance.name == "tuning fork" && IsArchipelago()) {
                     if (SceneManager.GetActiveScene().name == "Forest Belltower") {
                         Archipelago.instance.UpdateDataStorage("Rang East Bell", true);
                     }
