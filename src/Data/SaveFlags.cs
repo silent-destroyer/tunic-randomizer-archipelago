@@ -36,5 +36,13 @@ namespace TunicArchipelago {
         public const string EnemiesDefeatedCount = "randomizer enemies defeated";
         public const string DiedToHeir = "randomizer died to heir";
         public const string RescuedLostFox = "randomizer sent lost fox home";
+
+        public static bool IsArchipelago() {
+            return SaveFile.GetInt("archipelago") == 1 && (Archipelago.instance.integration != null && Archipelago.instance.integration.connected);
+        }
+
+        public static bool IsSinglePlayer() {
+            return SaveFile.GetInt("randomizer") == 1;
+        }
     }
 }

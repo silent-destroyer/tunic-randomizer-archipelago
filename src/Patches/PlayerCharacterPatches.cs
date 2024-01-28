@@ -227,8 +227,11 @@ namespace TunicArchipelago {
             }
 
             ItemTracker.PopulateSpoilerLog();
+
             Hints.PopulateHints();
-            /*GhostHints.GenerateHints();*/
+            
+            GhostHints.GenerateHints();
+            
             if (Hints.HeroGraveHints.Count != 0) {
                 Hints.SetupHeroGraveToggle();
             }
@@ -244,10 +247,10 @@ namespace TunicArchipelago {
 
             FairyTargets.CreateFairyTargets();
 
-            /*            if (!SceneLoaderPatches.SpawnedGhosts) {
-                            GhostHints.SpawnHintGhosts(SceneLoaderPatches.SceneName);
-                        }
-            */
+            if (!SceneLoaderPatches.SpawnedGhosts) {
+                GhostHints.SpawnHintGhosts(SceneLoaderPatches.SceneName);
+            }
+
 
             if (!ModelSwaps.SwappedThisSceneAlready) {
                 ModelSwaps.SwapItemsInScene();

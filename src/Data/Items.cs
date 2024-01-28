@@ -283,7 +283,6 @@ namespace TunicArchipelago {
         };
 
         public static ItemData GetItemDataFromCheck(Check Check) {
-            TunicArchipelago.Logger.LogInfo(Check.Reward.Name + " " + Check.Reward.Amount);
             if (ItemLookup.FairyLookup.ContainsKey(Check.Reward.Name)) {
                 return Items["Fairy"];
             } else if (Check.Reward.Name == "Sword Progression") {

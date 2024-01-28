@@ -68,7 +68,7 @@ namespace TunicArchipelago {
             { "Vault Key (Red) [Fortress Arena]", "SIEGE ENGINE" },
             { "Hexagon Green [Library Arena]", "LIBRARIAN" },
             { "Hexagon Blue [ziggurat2020_3]", "SCAVENGER BOSS" },
-            { "Hexagon Red [Fortress Arena]", "VAULT KEY" },
+            { "Hexagon Red [Fortress Arena]", "VAULT KEY PLINTH" },
             { "1007 [Waterfall]", "20 FAIRIES" },
             { "Well Reward (10 Coins) [Trinket Well]", "10 COIN TOSSES" },
             { "Well Reward (15 Coins) [Trinket Well]", "15 COIN TOSSES" },
@@ -92,6 +92,24 @@ namespace TunicArchipelago {
             "Hero Relic - HP",
             "Hero Relic - SP",
             "Hero Relic - MP",
+            "Dath Stone",
+        };
+
+        public static List<string> HintableItemNamesSinglePlayer = new List<string>() {
+            "Stick",
+            "Sword",
+            "Sword Progression",
+            "Shotgun",
+            "Shield",
+            "SlowmoItem",
+            "Mask",
+            "Key (House)",
+            "Relic - Hero Sword",
+            "Relic - Hero Pendant MP",
+            "Relic - Hero Water",
+            "Relic - Hero Pendant HP",
+            "Relic - Hero Crown",
+            "Relic - Hero Pendant SP",
             "Dath Stone",
         };
 
@@ -133,6 +151,19 @@ namespace TunicArchipelago {
             "Money x128",
             "Money x200",
             "Money x255",
+        };
+
+        public static List<string> BarrenItemNamesSinglePlayer = new List<string>() {
+            "Firecracker",
+            "Ice Bomb",
+            "Firebomb",
+            "Pepper",
+            "Ivy",
+            "Bait",
+            "money",
+            "Piggybank L1",
+            "Berry_MP",
+            "Berry_HP"
         };
 
         public static Dictionary<string, List<HintGhost>> GhostLocations = new Dictionary<string, List<HintGhost>>() {
@@ -383,16 +414,29 @@ namespace TunicArchipelago {
                 HintableLocations.Remove("final [Mountaintop]");
             }
             foreach (string Key in HintableLocations) {
-                ArchipelagoItem Item = ItemLookup.ItemList[Key];
                 string Location = HintableLocationIds[Key];
                 string LocationSuffix = Location[Location.Length - 1] == 'S' ? "R" : "iz";
-                string ItemPrefix = Item.ItemName.Contains("Money") ? "suhm" : Vowels.Contains(Item.ItemName.ToUpper()[0]) ? "ahn" : "uh";
-                string PlayerName = Archipelago.instance.GetPlayerName(Item.Player);
-                string ItemToDisplay = Archipelago.instance.IsTunicPlayer(Item.Player) && TextBuilderPatches.ItemNameToAbbreviation.ContainsKey(Item.ItemName) 
-                    ? TextBuilderPatches.ItemNameToAbbreviation[Item.ItemName] : "[archipelago]";
-                string Hint = $"bI #uh wA, I hurd #aht \"{HintableLocationIds[Key].Replace(" ", "\" \"")}\" {LocationSuffix} gRdi^  {ItemToDisplay}  \"{PlayerName.ToUpper().Replace(" ", "\" \"")}'S {Item.ItemName.ToUpper().Replace(" ", "\" \"").Replace("_", "\" \"")}.\"";
-                string ItemForHint = Archipelago.instance.IsTunicPlayer(Item.Player) ? Item.ItemName : "Archipelago Item";
-                LocationHints.Add((WordWrapString(Hint), ItemForHint, Locations.LocationIdToDescription[Key]));
+
+                if (SaveFlags.IsArchipelago()) {
+                    ArchipelagoItem Item = ItemLookup.ItemList[Key];
+                    string ItemPrefix = Item.ItemName.Contains("Money") ? "suhm" : Vowels.Contains(Item.ItemName.ToUpper()[0]) ? "ahn" : "uh";
+                    string PlayerName = Archipelago.instance.GetPlayerName(Item.Player);
+                    string ItemToDisplay = Archipelago.instance.IsTunicPlayer(Item.Player) && TextBuilderPatches.ItemNameToAbbreviation.ContainsKey(Item.ItemName)
+                        ? TextBuilderPatches.ItemNameToAbbreviation[Item.ItemName] : "[archipelago]";
+                    string Hint = $"bI #uh wA, I hurd #aht \"{HintableLocationIds[Key].Replace(" ", "\" \"")}\" {LocationSuffix} gRdi^  {ItemToDisplay}  \"{PlayerName.ToUpper().Replace(" ", "\" \"")}'S {Item.ItemName.ToUpper().Replace(" ", "\" \"").Replace("_", "\" \"")}.\"";
+                    string ItemForHint = Archipelago.instance.IsTunicPlayer(Item.Player) ? Item.ItemName : "Archipelago Item";
+                    LocationHints.Add((WordWrapString(Hint), ItemForHint, Locations.LocationIdToDescription[Key]));
+                } else if (IsSinglePlayer()) {
+                    Check Check = Locations.RandomizedLocations[Key];
+                    string ItemName = ItemLookup.GetItemDataFromCheck(Check).Name;
+                    string ItemPrefix = ItemName == "Money" ? "suhm" : Vowels.Contains(ItemName.ToUpper()[0]) ? "ahn" : "uh";
+                    string ItemToDisplay = TextBuilderPatches.ItemNameToAbbreviation.ContainsKey(ItemName)
+                        ? TextBuilderPatches.ItemNameToAbbreviation[ItemName] : "";
+                    string Hint = $"bI #uh wA, I hurd #aht \"{HintableLocationIds[Key].Replace(" ", "\" \"")}\" {LocationSuffix} gRdi^ {ItemPrefix}  {ItemToDisplay}  \"{ItemName.ToUpper().Replace(" ", "\" \"").Replace("_", "\" \"")}.\"";
+                    //string TrunicHint = $"bI #uh wA, I hurd #aht {Translations.Translate(HintableLocationIds[Key], false)}\n{LocationSuffix} gRdi^ {ItemPrefix} {Translations.Translate(ItemName, false)}.";
+
+                    LocationHints.Add((WordWrapString(Hint), ItemName, Locations.LocationIdToDescription[Key]));
+                }
             }
         }
 
@@ -402,21 +446,38 @@ namespace TunicArchipelago {
             string Hint = "";
 
             List<string> HintableItems = new List<string>(HintableItemNames);
+            List<string> HintableItemsSolo = new List<string>(HintableItemNamesSinglePlayer);
             if (SaveFile.GetInt(AbilityShuffle) == 1) {
                 HintableItems.Add("Pages 52-53 (Ice Rod)");
+                HintableItemsSolo.Add("26");
             }
             for (int i = 0; i < HintableItems.Count; i++) {
                 string Item = HintableItems[i];
+                if (SaveFlags.IsArchipelago()) {
+                    List<ArchipelagoHint> ItemLocations = Locations.MajorItemLocations[Item];
+                    foreach(ArchipelagoHint HintLocation in ItemLocations) {
+                        if (HintLocation.Player == Archipelago.instance.GetPlayerSlot()) {
+                            string Scene = HintLocation.Location == "Your Pocket" ? HintLocation.Location.ToUpper() : Locations.SimplifiedSceneNames[Locations.VanillaLocations[Locations.LocationDescriptionToId[HintLocation.Location]].Location.SceneName].ToUpper();
+                            string ScenePrefix = Scene == "Trinket Well" ? "%rOi^" : "aht #uh";
+                            string ItemToDisplay = TextBuilderPatches.ItemNameToAbbreviation.ContainsKey(HintLocation.Item) ? TextBuilderPatches.ItemNameToAbbreviation[HintLocation.Item] : "";
+                            Hint = $"bI #uh wA, I saw A  {ItemToDisplay}  \"{Item.ToUpper().Replace(" ", "\" \"")}\" #uh lahst tIm I wuhs {ScenePrefix} \"{Scene.Replace(" ", "\" \"")}.\"";
 
-                List<ArchipelagoHint> ItemLocations = Locations.MajorItemLocations[Item];
-                foreach(ArchipelagoHint HintLocation in ItemLocations) {
-                    if (HintLocation.Player == Archipelago.instance.GetPlayerSlot()) {
-                        string Scene = HintLocation.Location == "Your Pocket" ? HintLocation.Location.ToUpper() : Locations.SimplifiedSceneNames[Locations.VanillaLocations[Locations.LocationDescriptionToId[HintLocation.Location]].Location.SceneName].ToUpper();
-                        string ScenePrefix = Scene == "Trinket Well" ? "%rOi^" : "aht #uh";
-                        string ItemToDisplay = TextBuilderPatches.ItemNameToAbbreviation.ContainsKey(HintLocation.Item) ? TextBuilderPatches.ItemNameToAbbreviation[HintLocation.Item] : "";
+                            ItemHints.Add((WordWrapString(Hint), HintLocation.Item, ""));
+                        }
+                    }
+                } else if (SaveFlags.IsSinglePlayer()) {
+                    List<Check> Items = ItemRandomizer.FindAllRandomizedItemsByName(HintableItemsSolo[i]);
+                    foreach (Check Check in Items) {
+                        string ScenePrefix = Check.Location.SceneName == "Trinket Well" ? "%rOi^" : "aht #uh";
+                        string Scene = Locations.SimplifiedSceneNames[Check.Location.SceneName];
+                        string TrunicHint = $"";
+                        ItemData ItemData = ItemLookup.GetItemDataFromCheck(Check);
+                        string ItemToDisplay = TextBuilderPatches.ItemNameToAbbreviation.ContainsKey(ItemData.Name) ? TextBuilderPatches.ItemNameToAbbreviation[ItemData.Name] : "";
+
                         Hint = $"bI #uh wA, I saw A  {ItemToDisplay}  \"{Item.ToUpper().Replace(" ", "\" \"")}\" #uh lahst tIm I wuhs {ScenePrefix} \"{Scene.Replace(" ", "\" \"")}.\"";
 
-                        ItemHints.Add((WordWrapString(Hint), HintLocation.Item, ""));
+                        //TrunicHint = $"bI #uh wA, I saw A {Translations.Translate(Hints.SimplifiedItemNames[Item.Reward.Name], false)} #uh\nlahst tIm I wuhs {ScenePrefix} {Translations.Translate(Scene, false)}.";
+                        ItemHints.Add((WordWrapString(Hint), ItemData.Name, ""));
                     }
                 }
             }
@@ -466,14 +527,24 @@ namespace TunicArchipelago {
                 string Scene = Locations.SimplifiedSceneNames[Key];
                 int SceneItemCount = 0;
                 int MoneyInScene = 0;
-                foreach (string ItemKey in ItemLookup.ItemList.Keys.Where(item => Locations.VanillaLocations[item].Location.SceneName == Key).ToList()) {
-                    ArchipelagoItem Item = ItemLookup.ItemList[ItemKey];
-                    ItemsInScene.Add(Item.ItemName);
-                    APItemsInScene.Add(Item);
-                    if (Item.Player == Archipelago.instance.GetPlayerSlot() && ItemLookup.Items[Item.ItemName].Type == ItemTypes.MONEY) {
-                        MoneyInScene += ItemLookup.Items[Item.ItemName].QuantityToGive;
+                if (SaveFlags.IsArchipelago()) {
+                    foreach (string ItemKey in ItemLookup.ItemList.Keys.Where(item => Locations.VanillaLocations[item].Location.SceneName == Key).ToList()) {
+                        ArchipelagoItem Item = ItemLookup.ItemList[ItemKey];
+                        ItemsInScene.Add(Item.ItemName);
+                        APItemsInScene.Add(Item);
+                        if (Item.Player == Archipelago.instance.GetPlayerSlot() && ItemLookup.Items[Item.ItemName].Type == ItemTypes.MONEY) {
+                            MoneyInScene += ItemLookup.Items[Item.ItemName].QuantityToGive;
+                        }
+                        SceneItemCount++;
                     }
-                    SceneItemCount++;
+                } else if (SaveFlags.IsSinglePlayer()) {
+                    foreach (Check Item in Locations.RandomizedLocations.Values.Where(item => item.Location.SceneName == Key).ToList()) {
+                        ItemsInScene.Add(Item.Reward.Name);
+                        if (Item.Reward.Name == "money") {
+                            MoneyInScene += Item.Reward.Amount;
+                        }
+                        SceneItemCount++;
+                    }
                 }
 
                 if (SceneItemCount == 0) { 
@@ -494,10 +565,16 @@ namespace TunicArchipelago {
                             BarrenArea = false;
                             break;
                         }
-                        if (HintGhosts.Where(HintGhost => HintGhost.Value.SceneName == Key).ToList().Count > 0) {
+                    }
+                    foreach (string Item in ItemsInScene) { 
+                        if (!BarrenItemNamesSinglePlayer.Contains(Item)) {
                             BarrenArea = false;
                             break;
                         }
+                    }
+                    if (HintGhosts.Where(HintGhost => HintGhost.Value.SceneName == Key).ToList().Count > 0) {
+                        BarrenArea = false;
+                        break;
                     }
                     if(BarrenArea) {
                         string Hint = "";

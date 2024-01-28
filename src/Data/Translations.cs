@@ -191,7 +191,7 @@ namespace TunicArchipelago {
             {"SIEGE ENGINE", "sEj ehnhjuhn"},
             {"LIBRARIAN", "lIbrArEuhn"},
             {"SCAVENGER BOSS", "skahvuhnjur baws"},
-            {"VAULT KEY", "vawlt kE"},
+            {"VAULT KEY PLINTH", "vawlt kE plin%"},
             {"20 FAIRIES", "20 fArEz"},
             {"10 COIN TOSSES", "10 koin tawsiz"},
             {"15 COIN TOSSES", "15 koin tawsiz"},

@@ -418,18 +418,17 @@ namespace TunicArchipelago {
                 Hints.SetupHeroGraveToggle();
             }
 
-            if (SaveFile.GetInt("archipelago") == 1 && (Archipelago.instance != null && Archipelago.instance.integration != null && Archipelago.instance.integration.connected)) {
-
-                try {
-                    if (TunicArchipelago.Settings.GhostFoxHintsEnabled && GhostHints.HintGhosts.Count > 0 && SaveFile.GetInt("seed") != 0) {
-                        GhostHints.SpawnHintGhosts(SceneName);
-                        SpawnedGhosts = true;
-                    }
-                } catch (Exception ex) {
-                    Logger.LogError("An error occurred spawning hint ghost foxes:");
-                    Logger.LogError(ex.Message + " " + ex.StackTrace);
+            try {
+                if (TunicArchipelago.Settings.GhostFoxHintsEnabled && GhostHints.HintGhosts.Count > 0 && SaveFile.GetInt("seed") != 0) {
+                    GhostHints.SpawnHintGhosts(SceneName);
+                    SpawnedGhosts = true;
                 }
+            } catch (Exception ex) {
+                Logger.LogError("An error occurred spawning hint ghost foxes:");
+                Logger.LogError(ex.Message + " " + ex.StackTrace);
+            }
 
+            if (SaveFile.GetInt("archipelago") == 1 && (Archipelago.instance != null && Archipelago.instance.integration != null && Archipelago.instance.integration.connected)) {
                 Archipelago.instance.integration.UpdateDataStorageOnLoad();
             }
 

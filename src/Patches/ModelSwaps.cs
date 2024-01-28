@@ -693,10 +693,8 @@ namespace TunicArchipelago {
             } else {
                 ItemData Item = ItemLookup.Items["Stick"];
                 if (SaveFile.GetInt("archipelago") == 1 && APItem != null) {
-                    Logger.LogInfo(APItem.ItemName);
                     Item = ItemLookup.Items[APItem.ItemName];
                 } else if (SaveFile.GetInt("randomizer") == 1 && Check != null) {
-                    Logger.LogInfo(Check.Reward.Name + " " + Check.Reward.Amount);
                     Item = ItemLookup.GetItemDataFromCheck(Check);
                 }
 
