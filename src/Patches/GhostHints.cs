@@ -497,7 +497,7 @@ namespace TunicArchipelago {
         public static string WordWrapString(string Hint) {
             string formattedHint = "";
 
-            int length = 40;
+            int length = 45;
             int spritelength = 0;
             foreach (string split in Hint.Split(' ')) {
                 string split2 = split;
