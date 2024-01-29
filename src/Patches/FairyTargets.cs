@@ -69,7 +69,7 @@ namespace TunicArchipelago {
 
         public static void CreateEntranceTargets() {
             foreach (ScenePortal ScenePortal in Resources.FindObjectsOfTypeAll<ScenePortal>()) {
-                if (ScenePortal.isActiveAndEnabled) {
+                if (ScenePortal.isActiveAndEnabled && SaveFile.GetInt("randomizer entered portal " + ScenePortal.name) != 1) {
                     CreateFairyTarget($"entrance target {ScenePortal.destinationSceneName}", ScenePortal.transform.position);
                 }
             }
