@@ -40,7 +40,7 @@ namespace TunicArchipelago {
                         editingPassword = false;
                         break;
                     case RandomizerSettings.RandomizerType.ARCHIPELAGO:
-                        GUI.Window(101, new Rect(20f, 150f, 430f, 570f), new Action<int>(ArchipelagoQuickSettingsWindow), "Archipelago Settings");
+                        GUI.Window(101, new Rect(20f, 150f, 430f, 540f), new Action<int>(ArchipelagoQuickSettingsWindow), "Archipelago Settings");
                         break;
                 }
 
@@ -210,15 +210,13 @@ namespace TunicArchipelago {
                 GUI.Toggle(new Rect(10f, y, 195f, 30f), false, $"Entrance Randomizer");
             }
             y += 40f;
-            GUI.Label(new Rect(10f, y, 200f, 30f), $"Other Settings");
+            GUI.Label(new Rect(10f, y, 400f, 30f), "Other Settings <size=18>(more in options menu!)</size>");
             y += 40f;
             bool DeathLink = GUI.Toggle(new Rect(10f, y, 115f, 30f), TunicArchipelago.Settings.DeathLinkEnabled, "Death Link");
             TunicArchipelago.Settings.DeathLinkEnabled = DeathLink;
             bool EnemyRandomizer = GUI.Toggle(new Rect(150f, y, 180f, 30f), TunicArchipelago.Settings.EnemyRandomizerEnabled, "Enemy Randomizer");
             TunicArchipelago.Settings.EnemyRandomizerEnabled = EnemyRandomizer;
             GUI.skin.label.fontSize = 20;
-            y += 30f;
-            GUI.Label(new Rect(10f, y, 500f, 30f), $"More settings in options menu!");
         }
 
         private static void SinglePlayerQuickSettingsWindow(int windowID) {

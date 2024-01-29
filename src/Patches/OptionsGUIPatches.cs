@@ -102,8 +102,8 @@ namespace TunicArchipelago {
             OptionsGUI.addToggle("Cheaper Shop Items", "Off", "On", TunicArchipelago.Settings.CheaperShopItemsEnabled ? 1 : 0, (OptionsGUIMultiSelect.MultiSelectAction)ToggleCheaperShopItems);
             OptionsGUI.addToggle("Bonus Upgrades", "Off", "On", TunicArchipelago.Settings.BonusStatUpgradesEnabled ? 1 : 0, (OptionsGUIMultiSelect.MultiSelectAction)ToggleBonusStatUpgrades);
             OptionsGUI.addToggle("Disable Chest Interruption", "Off", "On", TunicArchipelago.Settings.DisableChestInterruption ? 1 : 0, (OptionsGUIMultiSelect.MultiSelectAction)ToggleChestInterruption);
-            OptionsGUI.addToggle("Skip Item Animations", "Off", "On", TunicArchipelago.Settings.SkipItemAnimations ? 1 : 0, (OptionsGUIMultiSelect.MultiSelectAction)ToggleSkipItemAnimations);
-            OptionsGUI.addToggle("Skip Upgrade Animation", "Off", "On", TunicArchipelago.Settings.FasterUpgrades ? 1 : 0, (OptionsGUIMultiSelect.MultiSelectAction)ToggleFasterUpgrades);
+            OptionsGUI.addToggle("Skip Item Popups", "Off", "On", TunicArchipelago.Settings.SkipItemAnimations ? 1 : 0, (OptionsGUIMultiSelect.MultiSelectAction)ToggleSkipItemAnimations);
+            OptionsGUI.addToggle("Skip Upgrade Animations", "Off", "On", TunicArchipelago.Settings.FasterUpgrades ? 1 : 0, (OptionsGUIMultiSelect.MultiSelectAction)ToggleFasterUpgrades);
             OptionsGUI.addToggle("???", "Off", "On", CameraController.Flip ? 1 : 0, (OptionsGUIMultiSelect.MultiSelectAction)ToggleWeirdMode);
             OptionsGUI.addToggle("More Skulls", "Off", "On", TunicArchipelago.Settings.MoreSkulls ? 1 : 0, (OptionsGUIMultiSelect.MultiSelectAction)ToggleMoreSkulls);
             OptionsGUI.addToggle("Arachnophobia Mode", "Off", "On", TunicArchipelago.Settings.ArachnophobiaMode ? 1 : 0, (OptionsGUIMultiSelect.MultiSelectAction)ToggleArachnophobiaMode);
