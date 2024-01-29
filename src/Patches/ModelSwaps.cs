@@ -1046,7 +1046,7 @@ namespace TunicArchipelago {
 
         public static void SetupHeroRelicPickup(HeroRelicPickup HeroRelicPickup) {
             string ItemId = $"{HeroRelicPickup.name} [{SceneLoaderPatches.SceneName}]";
-            if (ItemLookup.ItemList.ContainsKey(ItemId)) {
+            if (ItemLookup.ItemList.ContainsKey(ItemId) || Locations.RandomizedLocations.ContainsKey(ItemId)) {
 
                 ArchipelagoItem ApItem = null;
                 Check Check = null;

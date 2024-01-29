@@ -136,7 +136,7 @@ namespace TunicArchipelago {
                 Check LaurelsCheck = ItemRandomizer.FindRandomizedItemByName("Hyperdash");
                 Scene = Locations.SimplifiedSceneNames[LaurelsCheck.Location.SceneName];
                 Prefix = Vowels.Contains(Scene[0]) ? "#E" : "#uh";
-                Hint += $"\nuhwAts yoo in {Prefix} \"{Scene}...\"";
+                Hint += $"\nuhwAts yoo in {Prefix} \"{Scene.ToUpper()}...\"";
             }
             HintMessages.Add("Temple Statue", Hint);
 
@@ -176,7 +176,7 @@ namespace TunicArchipelago {
                     Check ItemCheck = ItemRandomizer.FindRandomizedItemByName(Item.ItemNameForInventory);
                     Scene = Locations.SimplifiedSceneNames[ItemCheck.Location.SceneName];
                     Prefix = Vowels.Contains(Scene[0]) ? "#E" : "#uh";
-                    Hint = $"lehjehnd sehz {Prefix} \"{Scene}\"";
+                    Hint = $"lehjehnd sehz {Prefix} \"{Scene.ToUpper()}\"";
                     slotLocation = $"{ItemCheck.Location.LocationId} [{ItemCheck.Location.SceneName}]";
                 }
                 Hint += $"\niz lOkAtid awn #uh \"<#ffd700>PATH OF THE HERO<#ffffff>...\"";
@@ -333,7 +333,7 @@ namespace TunicArchipelago {
                     Scene = Locations.SimplifiedSceneNames[RelicCheck.Location.SceneName];
                     Prefix = Vowels.Contains(Scene[0]) ? "#E" : "#uh";
 
-                    RelicHint = $"lehjehnd sehz #uh  {itemDisplayText}\nkahn bE fownd aht {Prefix} \"{Scene}.\"";
+                    RelicHint = $"lehjehnd sehz #uh  {itemDisplayText}\nkahn bE fownd aht {Prefix} \"{Scene.ToUpper()}.\"";
                     RelicHints.Add(($"{RelicCheck.Location.LocationId} [{RelicCheck.Location.SceneName}]", RelicHint));
                 }
             }
