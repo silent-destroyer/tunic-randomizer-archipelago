@@ -618,7 +618,7 @@ namespace TunicArchipelago {
 
             Locations.CheckedLocations[CheckId] = true;
             SaveFile.SetInt($"randomizer picked up {CheckId}", 1);
-            GameObject FairyTarget = CheckId.Contains("Trinket Well") ? GameObject.Find($"fairy target {Locations.LocationIdToDescription[CheckId]}") : GameObject.Find($"fairy target {CheckId}");
+            GameObject FairyTarget = GameObject.Find($"fairy target {CheckId}");
             if (FairyTarget != null) {
                 GameObject.Destroy(FairyTarget);
             }
