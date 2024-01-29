@@ -764,7 +764,7 @@ namespace TunicArchipelago {
                 return;
             }
 
-            if (Plinth != null && ItemLookup.ItemList.ContainsKey(ItemId)) {
+            if (Plinth != null && (ItemLookup.ItemList.ContainsKey(ItemId) || Locations.RandomizedLocations.ContainsKey(ItemId)) {
                 if (IsArchipelago()) {
                     ApItem = ItemLookup.ItemList[ItemId];
                     HexagonItem = ItemLookup.Items[ApItem.ItemName];
@@ -834,7 +834,7 @@ namespace TunicArchipelago {
                 GameObject.Destroy(Plinth);
                 return;
             }
-            if (Plinth != null && ItemLookup.ItemList.ContainsKey(ItemId)) {
+            if (Plinth != null && (ItemLookup.ItemList.ContainsKey(ItemId) || Locations.RandomizedLocations.ContainsKey(ItemId))) {
                 if (IsArchipelago()) {
                     int Player = Archipelago.instance.GetPlayerSlot();
                     ApItem = ItemLookup.ItemList[ItemId];
@@ -905,7 +905,7 @@ namespace TunicArchipelago {
                 GameObject.Destroy(VaultKey);
                 return;
             }
-            if (VaultKey != null && ItemLookup.ItemList.ContainsKey(ItemId)) {
+            if (VaultKey != null && (ItemLookup.ItemList.ContainsKey(ItemId) || Locations.RandomizedLocations.ContainsKey(ItemId))) {
                 if (IsArchipelago()) {
                     ApItem = ItemLookup.ItemList[ItemId];
                     VaultKeyItem = ItemLookup.Items[ApItem.ItemName];
