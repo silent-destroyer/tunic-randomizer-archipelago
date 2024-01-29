@@ -40,6 +40,7 @@ namespace TunicArchipelago {
 
         public static void PlayerCharacter_creature_Awake_PostfixPatch(PlayerCharacter __instance) {
             __instance.gameObject.AddComponent<WaveSpell>();
+            __instance.gameObject.AddComponent<EntranceSeekerSpell>();
         }
 
         public static void PlayerCharacter_Update_PostfixPatch(PlayerCharacter __instance) {
@@ -250,6 +251,8 @@ namespace TunicArchipelago {
             }
 
             FairyTargets.CreateFairyTargets();
+            FairyTargets.CreateEntranceTargets();
+            FairyTargets.FindFairyTargets();
 
             if (!SceneLoaderPatches.SpawnedGhosts) {
                 GhostHints.SpawnHintGhosts(SceneLoaderPatches.SceneName);

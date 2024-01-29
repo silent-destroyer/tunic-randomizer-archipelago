@@ -1002,24 +1002,27 @@ namespace TunicArchipelago
                             portal.destinationSceneName = portal2.Scene;
                             portal.id = "";
                             portal.optionalIDToSpawnAt = "";
+                            portal.name = portal2.Name;
                         } else {
                             portal.destinationSceneName = portal2.Scene;
                             portal.id = comboTag;
                             portal.optionalIDToSpawnAt = comboTag + comboTag + comboTag + comboTag; // quadrupling since doubling and tripling can have overlaps
+                            portal.name = portal2.Name;
                         }
                         break;
                     }
-
 
                     if (portal2.Scene == loadingScene.name && portal2.Tag == portal.id && portal2.Destination == portal.destinationSceneName) {
                         if (portal1.Scene == "Shop") {
                             portal.destinationSceneName = portal1.Scene;
                             portal.id = "";
                             portal.optionalIDToSpawnAt = "";
+                            portal.name = portal1.Name;
                         } else {
                             portal.destinationSceneName = portal1.Scene;
                             portal.id = comboTag + comboTag + comboTag + comboTag;
                             portal.optionalIDToSpawnAt = comboTag; // quadrupling since doubling and tripling can have overlaps
+                            portal.name = portal2.Name;
                         }
                         break;
                     }
@@ -1073,8 +1076,8 @@ namespace TunicArchipelago
                 if (portal.FullID == PlayerCharacterSpawn.portalIDToSpawnAt) {
                     foreach (KeyValuePair<string, PortalCombo> portalCombo in TunicPortals.RandomizedPortals) {
                         if (portal.name == portalCombo.Value.Portal1.Name || portal.name == portalCombo.Value.Portal2.Name) {
-                            SaveFile.SetInt("randomizer entered portal " + portalCombo.Value.Portal1.SceneDestinationTag, 1);
-                            SaveFile.SetInt("randomizer entered portal " + portalCombo.Value.Portal2.SceneDestinationTag, 1);
+                            SaveFile.SetInt("randomizer entered portal " + portal.name, 1);
+                            SaveFile.SetInt("randomizer entered portal " + portal.name, 1);
                         }
                     }
                 }
