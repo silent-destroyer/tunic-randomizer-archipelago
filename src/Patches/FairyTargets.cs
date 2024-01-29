@@ -15,7 +15,7 @@ namespace TunicArchipelago {
                 GameObject.Destroy(FairyTarget);
             }
             if (ItemLookup.ItemList.Count > 0) {
-                List<string> ItemIdsInScene = Locations.VanillaLocations.Keys.Where(ItemId => Locations.VanillaLocations[ItemId].Location.SceneName == SceneManager.GetActiveScene().name 
+                List<string> ItemIdsInScene = Locations.VanillaLocations.Keys.Where(ItemId => Locations.VanillaLocations[ItemId].Location.SceneName == SceneLoaderPatches.SceneName
                 && SaveFile.GetInt($"randomizer picked up {ItemId}") == 0 && 
                 (SaveFlags.IsArchipelago() && TunicArchipelago.Settings.CollectReflectsInWorld ? SaveFile.GetInt($"randomizer {ItemId} was collected") == 0 : true)).ToList();
 

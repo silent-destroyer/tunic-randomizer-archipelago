@@ -764,7 +764,7 @@ namespace TunicArchipelago {
                 return;
             }
 
-            if (Plinth != null && (ItemLookup.ItemList.ContainsKey(ItemId) || Locations.RandomizedLocations.ContainsKey(ItemId)) {
+            if (Plinth != null && (ItemLookup.ItemList.ContainsKey(ItemId) || Locations.RandomizedLocations.ContainsKey(ItemId))) {
                 if (IsArchipelago()) {
                     ApItem = ItemLookup.ItemList[ItemId];
                     HexagonItem = ItemLookup.Items[ApItem.ItemName];
