@@ -61,6 +61,11 @@ namespace TunicArchipelago {
             if (WaveSpell != null) {
                 WaveSpell.CheckInput(inputs, length);
             }
+
+            EntranceSeekerSpell EntranceSeekerSpell = __instance.TryCast<EntranceSeekerSpell>();
+            if (EntranceSeekerSpell != null) {
+                EntranceSeekerSpell.CheckInput(inputs, length);
+            }
         }
     }
 }

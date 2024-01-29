@@ -433,6 +433,10 @@ namespace TunicArchipelago {
             }
 
             ItemTracker.SaveTrackerFile();
+
+            FairyTargets.CreateFairyTargets();
+            FairyTargets.CreateEntranceTargets();
+            FairyTargets.FindFairyTargets();
         }
 
         public static void SetupOldHouseRelicToggles() {

@@ -1,14 +1,19 @@
-﻿using System;
+﻿using BepInEx.Logging;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using UnhollowerBaseLib;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 namespace TunicArchipelago {
     public class FairyTargets {
+        private static ManualLogSource Logger = TunicArchipelago.Logger;
+        public static Il2CppSystem.Collections.Generic.List<FairyTarget> EntranceTargets = new Il2CppSystem.Collections.Generic.List<FairyTarget> { };
+        public static Il2CppSystem.Collections.Generic.List<FairyTarget> AltFairyTargets = new Il2CppSystem.Collections.Generic.List<FairyTarget> { };
 
         public static void CreateFairyTargets() {
             foreach (FairyTarget FairyTarget in Resources.FindObjectsOfTypeAll<FairyTarget>()) {
@@ -61,6 +66,14 @@ namespace TunicArchipelago {
                 }
             }
         }
+        
+        public static void CreateEntranceTargets() {
+            foreach (ScenePortal ScenePortal in Resources.FindObjectsOfTypeAll<ScenePortal>()) {
+                if (ScenePortal.isActiveAndEnabled) {
+                    CreateFairyTarget($"entrance target {ScenePortal.destinationSceneName}", ScenePortal.transform.position);
+                }
+            }
+        }
 
         private static void CreateFairyTarget(string Name, Vector3 Position) {
             GameObject FairyTarget = new GameObject(Name);
@@ -70,11 +83,58 @@ namespace TunicArchipelago {
             FairyTarget.transform.position = Position;
         }
 
+        public static void FindFairyTargets() {
+            AltFairyTargets.Clear();
+            EntranceTargets.Clear();
+            foreach (FairyTarget fairyTarget in Resources.FindObjectsOfTypeAll<FairyTarget>()) {
+                if (fairyTarget.isActiveAndEnabled) {
+                    if (fairyTarget.name.StartsWith("entrance")) {
+                        EntranceTargets.Add(fairyTarget);
+                    } else {
+                        AltFairyTargets.Add(fairyTarget);
+                    }
+                }
+            }
+            FairyTarget.registered = AltFairyTargets;
+        }
+
         private static Vector3 StringToVector3(string Position) {
             Position = Position.Replace("(", "").Replace(")", "");
             string[] coords = Position.Split(',');
             Vector3 vector = new Vector3(float.Parse(coords[0], CultureInfo.InvariantCulture), float.Parse(coords[1], CultureInfo.InvariantCulture), float.Parse(coords[2], CultureInfo.InvariantCulture));
             return vector;
+        }
+
+    }
+
+    public class EntranceSeekerSpell : FairySpell {
+        private static ManualLogSource Logger = TunicArchipelago.Logger;
+        public static List<DPAD> CustomInputs = new List<DPAD>() { };
+        
+        public EntranceSeekerSpell(IntPtr ptr) : base(ptr) { }
+
+        private void Awake() {
+            base.inputsToCast = new UnhollowerBaseLib.Il2CppStructArray<DPAD>(1L);
+
+            CustomInputs = new List<DPAD>() { DPAD.RIGHT, DPAD.DOWN, DPAD.RIGHT, DPAD.UP, DPAD.LEFT, DPAD.UP };
+        }
+
+        public override bool CheckInput(Il2CppStructArray<DPAD> inputs, int length) {
+            if (length == CustomInputs.Count) {
+                for (int i = 0; i < length; i++) {
+                    if (inputs[i] != CustomInputs[i]) {
+                        return false;
+                    }
+                }
+                DoSpell();
+            }
+            return false;
+        }
+
+        public void DoSpell() {
+            FairyTarget.registered = FairyTargets.EntranceTargets;
+            PlayerCharacter.instance.GetComponent<FairySpell>().SpellEffect();
+            FairyTarget.registered = FairyTargets.AltFairyTargets;
         }
 
     }
