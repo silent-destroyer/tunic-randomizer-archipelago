@@ -20,8 +20,8 @@ namespace TunicArchipelago {
                 GameObject.Destroy(FairyTarget);
             }
             if (ItemLookup.ItemList.Count > 0) {
-                List<string> ItemIdsInScene = Locations.VanillaLocations.Keys.Where(ItemId => Locations.VanillaLocations[ItemId].Location.SceneName == SceneManager.GetActiveScene().name 
-                && SaveFile.GetInt($"randomizer picked up {ItemId}") == 0 && 
+                List<string> ItemIdsInScene = Locations.VanillaLocations.Keys.Where(ItemId => Locations.VanillaLocations[ItemId].Location.SceneName == SceneManager.GetActiveScene().name
+                && SaveFile.GetInt($"randomizer picked up {ItemId}") == 0 &&
                 (SaveFlags.IsArchipelago() && TunicArchipelago.Settings.CollectReflectsInWorld ? SaveFile.GetInt($"randomizer {ItemId} was collected") == 0 : true)).ToList();
 
                 if (ItemIdsInScene.Count > 0) {
@@ -35,7 +35,7 @@ namespace TunicArchipelago {
                     if (GameObject.FindObjectOfType<TrinketWell>() != null) {
                         int CoinCount = Inventory.GetItemByName("Trinket Coin").Quantity + TunicArchipelago.Tracker.ImportantItems["Coins Tossed"];
                         Dictionary<int, int> CoinLevels = new Dictionary<int, int>() { { 0, 3 }, { 1, 6 }, { 2, 10 }, { 3, 15 }, { 4, 20 } };
-                        int CoinsNeededForNextReward = CoinLevels[Locations.VanillaLocations.Keys.Where(ItemId => Locations.VanillaLocations[ItemId].Location.SceneName == "Trinket Well" && 
+                        int CoinsNeededForNextReward = CoinLevels[Locations.VanillaLocations.Keys.Where(ItemId => Locations.VanillaLocations[ItemId].Location.SceneName == "Trinket Well" &&
                         (SaveFile.GetInt($"randomizer picked up {ItemId}") == 1 || (SaveFlags.IsArchipelago() && TunicArchipelago.Settings.CollectReflectsInWorld && SaveFile.GetInt($"randomizer {ItemId} was collected") == 1))).ToList().Count];
 
                         if ((Inventory.GetItemByName("Trinket Coin").Quantity + TunicArchipelago.Tracker.ImportantItems["Coins Tossed"]) > CoinsNeededForNextReward) {
@@ -55,7 +55,7 @@ namespace TunicArchipelago {
                 FairyTarget.enabled = false;
             }
 
-            foreach (string ItemId in Locations.VanillaLocations.Keys.Where(itemId => Locations.VanillaLocations[itemId].Location.SceneName != SceneLoaderPatches.SceneName && (SaveFile.GetInt($"randomizer picked up {itemId}") == 0 && 
+            foreach (string ItemId in Locations.VanillaLocations.Keys.Where(itemId => Locations.VanillaLocations[itemId].Location.SceneName != SceneLoaderPatches.SceneName && (SaveFile.GetInt($"randomizer picked up {itemId}") == 0 &&
             (SaveFlags.IsArchipelago() && TunicArchipelago.Settings.CollectReflectsInWorld ? SaveFile.GetInt($"randomizer {itemId} was collected") == 0 : true)))) {
                 ScenesWithItems.Add(Locations.VanillaLocations[ItemId].Location.SceneName);
             }
@@ -66,7 +66,7 @@ namespace TunicArchipelago {
                 }
             }
         }
-        
+
         public static void CreateEntranceTargets() {
             foreach (ScenePortal ScenePortal in Resources.FindObjectsOfTypeAll<ScenePortal>()) {
                 if (ScenePortal.isActiveAndEnabled) {
@@ -87,10 +87,14 @@ namespace TunicArchipelago {
             AltFairyTargets.Clear();
             EntranceTargets.Clear();
             foreach (FairyTarget fairyTarget in Resources.FindObjectsOfTypeAll<FairyTarget>()) {
+                Logger.LogInfo("Fairy target found is " +  fairyTarget.name);
                 if (fairyTarget.isActiveAndEnabled) {
+                    Logger.LogInfo("enabled fairy target is " + fairyTarget.name);
                     if (fairyTarget.name.StartsWith("entrance")) {
+                        Logger.LogInfo("Entrance target is " + fairyTarget.name);
                         EntranceTargets.Add(fairyTarget);
                     } else {
+                        Logger.LogInfo("Fairy target is " + fairyTarget.name);
                         AltFairyTargets.Add(fairyTarget);
                     }
                 }
