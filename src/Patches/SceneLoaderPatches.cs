@@ -393,7 +393,6 @@ namespace TunicArchipelago {
             }
             try {
                 FairyTargets.CreateFairyTargets();
-                FairyTargets.CreateEntranceTargets();
             } catch (Exception ex) {
                 Logger.LogError("An error occurred creating new fairy seeker spell targets:");
                 Logger.LogError(ex.Message + " " + ex.StackTrace);

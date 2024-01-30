@@ -250,7 +250,12 @@ namespace TunicArchipelago {
                 SaveFile.SetInt("last page viewed", 0);
             }
 
-            FairyTargets.CreateFairyTargets();
+            try {
+                FairyTargets.CreateFairyTargets();
+            } catch (Exception ex) {
+                Logger.LogError("An error occurred creating new fairy seeker spell targets:");
+                Logger.LogError(ex.Message + " " + ex.StackTrace);
+            }
 
             if (!SceneLoaderPatches.SpawnedGhosts) {
                 GhostHints.SpawnHintGhosts(SceneLoaderPatches.SceneName);
