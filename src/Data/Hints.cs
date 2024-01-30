@@ -422,6 +422,7 @@ namespace TunicArchipelago {
             int Player = Archipelago.instance.GetPlayerSlot();
             List<string> MailboxItems = new List<string>() { "Stick", "Sword", "Sword Upgrade", "Magic Dagger", "Magic Wand", "Magic Orb", "Lantern", "Gun", "Scavenger Mask", "Pages 24-25 (Prayer)", "Pages 42-43 (Holy Cross)" };
             Dictionary<string, ArchipelagoItem> SphereOnePlayer = new Dictionary<string, ArchipelagoItem>();
+            Dictionary<string, ArchipelagoItem> SphereOneOthersTunic = new Dictionary<string, ArchipelagoItem>();
             Dictionary<string, ArchipelagoItem> SphereOneOthers = new Dictionary<string, ArchipelagoItem>();
             List<string> ERSphereOneItemsAndAreas = GetERSphereOne();
             foreach (string itemkey in ItemLookup.ItemList.Keys) {
@@ -438,7 +439,11 @@ namespace TunicArchipelago {
                                 continue;
                             }
                             if (checkCount == requirements.Count) {
-                                SphereOnePlayer.Add(itemkey, item);
+                                if (item.Player == Archipelago.instance.GetPlayerSlot()) {
+                                    SphereOnePlayer.Add(itemkey, item);
+                                } else {
+                                    SphereOneOthersTunic.Add(itemkey, item);
+                                }
                             }
                         }
                     } else if (item.Player != Archipelago.instance.GetPlayerSlot() && item.Classification == ItemFlags.Advancement) {
@@ -450,12 +455,18 @@ namespace TunicArchipelago {
                             } else {
                                 continue;
                             }
-                            if (checkCount == requirements.Count) { SphereOneOthers.Add(itemkey, item); }
+                            if (checkCount == requirements.Count) { 
+                                SphereOneOthers.Add(itemkey, item); 
+                            }
                         }
                     }
                 } else {
                     if (Archipelago.instance.IsTunicPlayer(item.Player) && MailboxItems.Contains(item.ItemName) && Locations.VanillaLocations[itemkey].Location.RequiredItems.Count == 0) {
-                        SphereOnePlayer.Add(itemkey, item);
+                        if (item.Player == Archipelago.instance.GetPlayerSlot()) {
+                            SphereOnePlayer.Add(itemkey, item);
+                        } else {
+                            SphereOneOthersTunic.Add(itemkey, item);
+                        }
                     }
                     if (item.Player != Archipelago.instance.GetPlayerSlot() && item.Classification == ItemFlags.Advancement && Locations.VanillaLocations[itemkey].Location.RequiredItems.Count == 0) {
                         SphereOneOthers.Add(itemkey, item);
@@ -467,6 +478,9 @@ namespace TunicArchipelago {
             if (SphereOnePlayer.Count > 0) {
                 key = SphereOnePlayer.Keys.ToList()[random.Next(SphereOnePlayer.Count)];
                 mailboxitem = SphereOnePlayer[key];
+            } else if (SphereOneOthersTunic.Count > 0) {
+                key = SphereOneOthersTunic.Keys.ToList()[random.Next(SphereOneOthersTunic.Count)];
+                mailboxitem = SphereOneOthersTunic[key];
             } else if (SphereOneOthers.Count > 0) {
                 key = SphereOneOthers.Keys.ToList()[random.Next(SphereOneOthers.Count)];
                 mailboxitem = SphereOneOthers[key];

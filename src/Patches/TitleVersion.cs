@@ -16,7 +16,7 @@ namespace TunicArchipelago {
 
         public static bool Loaded = false;
         public static GameObject VersionString;
-        public static bool DevBuild = false;
+        public static bool DevBuild = true;
         public static bool UpdateAvailable = false;
         public static string UpdateVersion = "";
         public static void Initialize() {
