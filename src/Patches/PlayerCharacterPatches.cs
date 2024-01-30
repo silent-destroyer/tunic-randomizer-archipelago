@@ -231,7 +231,9 @@ namespace TunicArchipelago {
                 PlayerCharacter_Start_ArchipelagoSetup();
             }
 
-            ItemTracker.PopulateSpoilerLog();
+            if (TunicArchipelago.Settings.CreateSpoilerLog) {
+                ItemTracker.PopulateSpoilerLog();
+            }
 
             Hints.PopulateHints();
             

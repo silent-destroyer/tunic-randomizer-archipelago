@@ -18,7 +18,7 @@ namespace TunicArchipelago {
             set;
         }
 
-        public int Port {
+        public string Port {
             get;
             set;
         }
@@ -31,7 +31,7 @@ namespace TunicArchipelago {
         public ConnectionSettings() {
             Player = "Player";
             Hostname = "localhost";
-            Port = 38281;
+            Port = "38281";
             Password = "";
         }
     }

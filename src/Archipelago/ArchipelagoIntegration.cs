@@ -84,7 +84,11 @@ namespace TunicArchipelago {
                 return;
             }
             if (session == null) {
-                session = ArchipelagoSessionFactory.CreateSession(TunicArchipelago.Settings.ConnectionSettings.Hostname, TunicArchipelago.Settings.ConnectionSettings.Port);
+                try {
+                    session = ArchipelagoSessionFactory.CreateSession(TunicArchipelago.Settings.ConnectionSettings.Hostname, int.Parse(TunicArchipelago.Settings.ConnectionSettings.Port));
+                } catch (Exception e) {
+                    Logger.LogInfo("Failed to create archipelago session!");
+                }
             }
             incomingItemHandler = IncomingItemHandler();
             outgoingItemHandler = OutgoingItemHandler();

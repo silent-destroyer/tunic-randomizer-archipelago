@@ -339,6 +339,7 @@ namespace TunicArchipelago {
                 }
 
                 ItemPresentation.PresentItem(GoldenTrophy);
+                NotificationBottom = TunicArchipelago.Settings.BonusStatUpgradesEnabled ? ItemLookup.BonusUpgrades[Item.ItemNameForInventory].CustomPickupMessage : $"kawngrahJoulA$uhnz!";
             }
 
             if (Item.Type == ItemTypes.RELIC) {
@@ -539,6 +540,7 @@ namespace TunicArchipelago {
                 }
 
                 ItemPresentation.PresentItem(GoldenTrophy);
+                NotificationBottom = TunicArchipelago.Settings.BonusStatUpgradesEnabled ? ItemLookup.BonusUpgrades[Item.ItemNameForInventory].CustomPickupMessage : $"kawngrahJoulA$uhnz!";
             }
 
             if (Item.Type == ItemTypes.RELIC) {

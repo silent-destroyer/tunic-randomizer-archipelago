@@ -12,7 +12,6 @@ namespace TunicArchipelago {
     public class ItemRandomizer {
         private static ManualLogSource Logger = TunicArchipelago.Logger;
 
-        public static bool CreateSpoilerLog = true;
         public static Dictionary<string, int> SphereZero = new Dictionary<string, int>();
 
         public static void PopulateSphereZero() {

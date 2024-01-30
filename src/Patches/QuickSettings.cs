@@ -1,6 +1,7 @@
 ﻿using BepInEx.Logging;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.Eventing.Reader;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -25,7 +26,7 @@ namespace TunicArchipelago {
         private static bool editingPassword = false;
         private static bool showPort = false;
         private static bool showPassword = false;
-
+        
         private void OnGUI() {
             if (SceneManager.GetActiveScene().name == "TitleScreen" && GameObject.FindObjectOfType<TitleScreen>() != null) {
                 GUI.skin.font = PaletteEditor.OdinRounded == null ? GUI.skin.font : PaletteEditor.OdinRounded;
@@ -55,7 +56,7 @@ namespace TunicArchipelago {
         }
 
         private void Update() {
-            if (ShowAPSettingsWindow && SceneManager.GetActiveScene().name == "TitleScreen") {
+            if (TunicArchipelago.Settings.Mode == RandomizerSettings.RandomizerType.ARCHIPELAGO && ShowAPSettingsWindow && SceneManager.GetActiveScene().name == "TitleScreen") {
                 if (Input.anyKeyDown && !Input.GetKeyDown(KeyCode.Return) && !Input.GetKeyDown(KeyCode.Tab) && !Input.GetKeyDown(KeyCode.Backspace)) {
 
                     if (editingPort && Input.inputString != "" && int.TryParse(Input.inputString, out int num)) {
@@ -77,13 +78,8 @@ namespace TunicArchipelago {
                 if (editingHostname) {
                     TunicArchipelago.Settings.ConnectionSettings.Hostname = stringToEdit;
                 }
-
                 if (editingPort) {
-                    if (int.TryParse(stringToEdit, out int num)) {
-                        TunicArchipelago.Settings.ConnectionSettings.Port = num;
-                    } else if (stringToEdit == "") {
-                        TunicArchipelago.Settings.ConnectionSettings.Port = 0;
-                    }
+                    TunicArchipelago.Settings.ConnectionSettings.Port = stringToEdit;
                 }
                 if (editingPassword) {
                     TunicArchipelago.Settings.ConnectionSettings.Password = stringToEdit;
@@ -169,7 +165,6 @@ namespace TunicArchipelago {
                     CloseAPSettingsWindow();
                     Archipelago.instance.Connect();
                 } else {
-                    Archipelago.instance.Disconnect();
                     ShowAPSettingsWindow = true;
                 }
             }
@@ -257,35 +252,6 @@ namespace TunicArchipelago {
                 TunicArchipelago.Settings.Mode = RandomizerSettings.RandomizerType.ARCHIPELAGO;
                 OptionsGUIPatches.SaveSettings();
             }
-/*            GUI.Label(new Rect(10f, y, 200f, 30f), "Game Mode");
-            y += 40f;
-            bool ToggleRandomizer = GUI.Toggle(new Rect(10f, y, 125f, 30f), TunicArchipelago.Settings.GameMode == RandomizerSettings.GameModes.RANDOMIZER, "Randomizer");
-            if (ToggleRandomizer) {
-                TunicArchipelago.Settings.GameMode = RandomizerSettings.GameModes.RANDOMIZER;
-            }
-            bool ToggleHexagonQuest = GUI.Toggle(new Rect(140f, y, 150f, 30f), TunicArchipelago.Settings.GameMode == RandomizerSettings.GameModes.HEXAGONQUEST, "Hexagon Quest");
-           
-            if (ToggleHexagonQuest) {
-                TunicArchipelago.Settings.GameMode = RandomizerSettings.GameModes.HEXAGONQUEST;
-                GUI.skin.button.fontSize = 16;
-                y += 2.5f;
-                bool ConfigureHexQuest = GUI.Button(new Rect(300f, y, 100f, 25f), ShowHexQuestSliders ? "Hide" : "Configure");
-                y -= 2.5f;
-                if (ConfigureHexQuest) {
-                    ShowHexQuestSliders = !ShowHexQuestSliders;
-                }
-                if (ShowHexQuestSliders) {
-                    y += 30; 
-                    GUI.Label(new Rect(10f, y, 220f, 20f), $"<size=18>Hexagons Required:</size>");
-                    GUI.Label(new Rect(190f, y, 30f, 30f), $"<size=18>{(TunicArchipelago.Settings.HexagonQuestGoal)}</size>");
-                    TunicArchipelago.Settings.HexagonQuestGoal = (int)GUI.HorizontalSlider(new Rect(220f, y+15, 200f, 20f), TunicArchipelago.Settings.HexagonQuestGoal, 15, 50);
-                    y += 30f;
-                    GUI.Label(new Rect(10f, y, 220f, 30f), $"<size=18>Hexagons in Item Pool:</size>");
-                    GUI.Label(new Rect(190f, y, 30f, 30f), $"<size=18>{((int)Math.Round((100f + TunicArchipelago.Settings.HexagonQuestExtraPercentage) / 100f * TunicArchipelago.Settings.HexagonQuestGoal))}</size>");
-                    TunicArchipelago.Settings.HexagonQuestExtraPercentage = (int)GUI.HorizontalSlider(new Rect(220f, y+15, 200f, 30f), TunicArchipelago.Settings.HexagonQuestExtraPercentage, 0, 100);
-
-                }
-            }*/
 
             GUI.skin.toggle.fontSize = 20;
             y += 40f;
@@ -498,7 +464,9 @@ namespace TunicArchipelago {
             bool PastePort = GUI.Button(new Rect(100f, 300f, 75f, 30f), "Paste");
             if (PastePort) {
                 try {
-                    TunicArchipelago.Settings.ConnectionSettings.Port = int.Parse(GUIUtility.systemCopyBuffer);
+                    if (int.TryParse(GUIUtility.systemCopyBuffer, out int num)) {
+                        TunicArchipelago.Settings.ConnectionSettings.Port = GUIUtility.systemCopyBuffer;
+                    }
                     editingPort = false;
                     OptionsGUIPatches.SaveSettings();
                 } catch (Exception e) {
@@ -507,7 +475,7 @@ namespace TunicArchipelago {
             }
             bool ClearPort = GUI.Button(new Rect(190f, 300f, 75f, 30f), "Clear");
             if (ClearPort) {
-                TunicArchipelago.Settings.ConnectionSettings.Port = 0;
+                TunicArchipelago.Settings.ConnectionSettings.Port = "";
                 OptionsGUIPatches.SaveSettings();
             }
 
