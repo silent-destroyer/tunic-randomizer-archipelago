@@ -338,23 +338,6 @@ namespace TunicArchipelago {
                 }
             }
 
-            if (IsSinglePlayer()) {
-                foreach (string key in Locations.RandomizedLocations.Keys.ToList()) { 
-                    Check check = Locations.RandomizedLocations[key];
-                    if (check.Reward.Type == "MONEY") {
-                        if ((TunicArchipelago.Settings.FoolTrapIntensity == RandomizerSettings.FoolTrapOption.NORMAL && check.Reward.Amount < 20)
-                        || (TunicArchipelago.Settings.FoolTrapIntensity == RandomizerSettings.FoolTrapOption.DOUBLE && check.Reward.Amount <= 20)
-                        || (TunicArchipelago.Settings.FoolTrapIntensity == RandomizerSettings.FoolTrapOption.ONSLAUGHT && check.Reward.Amount <= 30)) {
-                            check.Reward.Name = "Fool Trap";
-                            check.Reward.Type = "FOOL";
-                        } else {
-                            check.Reward.Name = "money";
-                            check.Reward.Type = "MONEY";
-                        }
-                    }
-                }
-            }
-
             if (IsArchipelago()) {
                 CheckCollectedItemFlags();
             }

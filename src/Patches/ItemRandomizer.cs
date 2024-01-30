@@ -338,6 +338,18 @@ namespace TunicArchipelago {
                 }
             }
 
+            foreach (string key in Locations.RandomizedLocations.Keys.ToList()) {
+                Check check = Locations.RandomizedLocations[key];
+                if (check.Reward.Type == "MONEY") {
+                    if ((TunicArchipelago.Settings.FoolTrapIntensity == RandomizerSettings.FoolTrapOption.NORMAL && check.Reward.Amount < 20)
+                    || (TunicArchipelago.Settings.FoolTrapIntensity == RandomizerSettings.FoolTrapOption.DOUBLE && check.Reward.Amount <= 20)
+                    || (TunicArchipelago.Settings.FoolTrapIntensity == RandomizerSettings.FoolTrapOption.ONSLAUGHT && check.Reward.Amount <= 30)) {
+                        check.Reward.Name = "Fool Trap";
+                        check.Reward.Type = "FOOL";
+                    }
+                }
+            }
+
             foreach (string Key in Locations.RandomizedLocations.Keys) {
                 int ItemPickedUp = SaveFile.GetInt($"randomizer picked up {Key}");
                 Locations.CheckedLocations.Add(Key, ItemPickedUp == 1 ? true : false);
