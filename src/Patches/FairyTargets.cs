@@ -11,17 +11,22 @@ using UnityEngine.SceneManagement;
 
 namespace TunicArchipelago {
     public class FairyTargets {
-        private static ManualLogSource Logger = TunicArchipelago.Logger;
         public static Il2CppSystem.Collections.Generic.List<FairyTarget> EntranceTargets = new Il2CppSystem.Collections.Generic.List<FairyTarget> { };
-        public static Il2CppSystem.Collections.Generic.List<FairyTarget> AltFairyTargets = new Il2CppSystem.Collections.Generic.List<FairyTarget> { };
+        public static Il2CppSystem.Collections.Generic.List<FairyTarget> ItemTargets = new Il2CppSystem.Collections.Generic.List<FairyTarget> { };
 
         public static void CreateFairyTargets() {
+
+            ItemTargets.Clear();
+            EntranceTargets.Clear();
+
             foreach (FairyTarget FairyTarget in Resources.FindObjectsOfTypeAll<FairyTarget>()) {
                 GameObject.Destroy(FairyTarget);
+            }
 
             if (ItemLookup.ItemList.Count > 0 || Locations.RandomizedLocations.Count > 0) {
-                List<string> ItemIdsInScene = Locations.VanillaLocations.Keys.Where(ItemId => Locations.VanillaLocations[ItemId].Location.SceneName == SceneManager.GetActiveScene().name 
-                && SaveFile.GetInt($"randomizer picked up {ItemId}") == 0 && 
+
+                List<string> ItemIdsInScene = Locations.VanillaLocations.Keys.Where(ItemId => Locations.VanillaLocations[ItemId].Location.SceneName == SceneManager.GetActiveScene().name
+                && SaveFile.GetInt($"randomizer picked up {ItemId}") == 0 &&
                 ((SaveFlags.IsArchipelago() && TunicArchipelago.Settings.CollectReflectsInWorld) ? SaveFile.GetInt($"randomizer {ItemId} was collected") == 0 : true)).ToList();
 
                 if (ItemIdsInScene.Count > 0) {
@@ -29,27 +34,31 @@ namespace TunicArchipelago {
                         Location Location = Locations.VanillaLocations[ItemId].Location;
 
                         if (GameObject.Find($"fairy target {ItemId}") == null) {
-                            CreateFairyTarget($"fairy target {ItemId}", StringToVector3(Location.Position));
+                            ItemTargets.Add(CreateFairyTarget($"fairy target {ItemId}", StringToVector3(Location.Position)));
                         }
                     }
                     if (GameObject.FindObjectOfType<TrinketWell>() != null) {
                         int CoinCount = Inventory.GetItemByName("Trinket Coin").Quantity + TunicArchipelago.Tracker.ImportantItems["Coins Tossed"];
                         List<int> CoinLevels = new List<int>() { 3, 6, 10, 15, 20 };
                         int CoinsNeededForNextReward = 3;
-                        for(int i = 0; i < CoinLevels.Count-1; i++) {
+                        for (int i = 0; i < CoinLevels.Count - 1; i++) {
                             if (SaveFile.GetInt($"randomizer picked up Well Reward ({CoinLevels[i]} Coins) [Trinket Well]") == 1) {
-                                CoinsNeededForNextReward = CoinLevels[i+1];
+                                CoinsNeededForNextReward = CoinLevels[i + 1];
                             }
                         }
 
                         if ((Inventory.GetItemByName("Trinket Coin").Quantity + TunicArchipelago.Tracker.ImportantItems["Coins Tossed"]) >= CoinsNeededForNextReward) {
-                            CreateFairyTarget($"fairy target Well Reward ({CoinsNeededForNextReward} Coins) [Trinket Well]", GameObject.FindObjectOfType<TrinketWell>().transform.position);
+                            ItemTargets.Add(CreateFairyTarget($"fairy target Well Reward ({CoinsNeededForNextReward} Coins) [Trinket Well]", GameObject.FindObjectOfType<TrinketWell>().transform.position));
                         }
                     }
                 } else {
                     CreateLoadZoneTargets();
                 }
             }
+
+            CreateEntranceTargets();
+
+            FairyTarget.registered = ItemTargets;
         }
 
         public static void CreateLoadZoneTargets() {
@@ -66,7 +75,7 @@ namespace TunicArchipelago {
 
             foreach (ScenePortal ScenePortal in Resources.FindObjectsOfTypeAll<ScenePortal>()) {
                 if (ScenesWithItems.Contains(ScenePortal.destinationSceneName)) {
-                    CreateFairyTarget($"fairy target {ScenePortal.destinationSceneName}", ScenePortal.transform.position);
+                    ItemTargets.Add(CreateFairyTarget($"fairy target {ScenePortal.destinationSceneName}", ScenePortal.transform.position));
                 }
             }
         }
@@ -74,36 +83,18 @@ namespace TunicArchipelago {
         public static void CreateEntranceTargets() {
             foreach (ScenePortal ScenePortal in Resources.FindObjectsOfTypeAll<ScenePortal>()) {
                 if (ScenePortal.isActiveAndEnabled && SaveFile.GetInt("randomizer entered portal " + ScenePortal.name) != 1) {
-                    CreateFairyTarget($"entrance target {ScenePortal.destinationSceneName}", ScenePortal.transform.position);
+                    EntranceTargets.Add(CreateFairyTarget($"entrance target {ScenePortal.destinationSceneName}", ScenePortal.transform.position));
                 }
             }
         }
 
-        private static void CreateFairyTarget(string Name, Vector3 Position) {
+        private static FairyTarget CreateFairyTarget(string Name, Vector3 Position) {
             GameObject FairyTarget = new GameObject(Name);
             FairyTarget.SetActive(true);
             FairyTarget.AddComponent<FairyTarget>();
             FairyTarget.GetComponent<FairyTarget>().stateVariable = StateVariable.GetStateVariableByName("false");
             FairyTarget.transform.position = Position;
-        }
-
-        public static void FindFairyTargets() {
-            AltFairyTargets.Clear();
-            EntranceTargets.Clear();
-            foreach (FairyTarget fairyTarget in Resources.FindObjectsOfTypeAll<FairyTarget>()) {
-                Logger.LogInfo("Fairy target found is " +  fairyTarget.name);
-                if (fairyTarget.isActiveAndEnabled) {
-                    Logger.LogInfo("enabled fairy target is " + fairyTarget.name);
-                    if (fairyTarget.name.StartsWith("entrance")) {
-                        Logger.LogInfo("Entrance target is " + fairyTarget.name);
-                        EntranceTargets.Add(fairyTarget);
-                    } else {
-                        Logger.LogInfo("Fairy target is " + fairyTarget.name);
-                        AltFairyTargets.Add(fairyTarget);
-                    }
-                }
-            }
-            FairyTarget.registered = AltFairyTargets;
+            return FairyTarget.GetComponent<FairyTarget>();
         }
 
         private static Vector3 StringToVector3(string Position) {
@@ -116,7 +107,6 @@ namespace TunicArchipelago {
     }
 
     public class EntranceSeekerSpell : FairySpell {
-        private static ManualLogSource Logger = TunicArchipelago.Logger;
         public static List<DPAD> CustomInputs = new List<DPAD>() { };
         
         public EntranceSeekerSpell(IntPtr ptr) : base(ptr) { }
@@ -140,10 +130,11 @@ namespace TunicArchipelago {
         }
 
         public void DoSpell() {
-            FairyTarget.registered = FairyTargets.EntranceTargets;
-            PlayerCharacter.instance.GetComponent<FairySpell>().SpellEffect();
-            FairyTarget.registered = FairyTargets.AltFairyTargets;
+            if (SaveFile.GetInt(SaveFlags.EntranceRando) == 1) {
+                FairyTarget.registered = FairyTargets.EntranceTargets;
+                PlayerCharacter.instance.GetComponent<FairySpell>().SpellEffect();
+                FairyTarget.registered = FairyTargets.ItemTargets;
+            }
         }
-
     }
 }

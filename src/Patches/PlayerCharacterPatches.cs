@@ -251,8 +251,6 @@ namespace TunicArchipelago {
             }
 
             FairyTargets.CreateFairyTargets();
-            FairyTargets.CreateEntranceTargets();
-            FairyTargets.FindFairyTargets();
 
             if (!SceneLoaderPatches.SpawnedGhosts) {
                 GhostHints.SpawnHintGhosts(SceneLoaderPatches.SceneName);

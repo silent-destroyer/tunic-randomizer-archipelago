@@ -436,6 +436,11 @@ namespace TunicArchipelago {
                 editingPlayer = false;
                 OptionsGUIPatches.SaveSettings();
             }
+            bool ClearPlayer = GUI.Button(new Rect(190f, 70f, 75f, 30f), "Clear");
+            if (ClearPlayer) {
+                TunicArchipelago.Settings.ConnectionSettings.Player = "";
+                OptionsGUIPatches.SaveSettings();
+            }
 
             GUI.Label(new Rect(10f, 120f, 300f, 30f), $"Host: {(TunicArchipelago.Settings.ConnectionSettings.Hostname)}");
             bool setLocalhost = GUI.Toggle(new Rect(160f, 160f, 90f, 30f), TunicArchipelago.Settings.ConnectionSettings.Hostname == "localhost", "localhost");
@@ -468,6 +473,11 @@ namespace TunicArchipelago {
                 editingHostname = false;
                 OptionsGUIPatches.SaveSettings();
             }
+            bool ClearHost = GUI.Button(new Rect(190f, 200f, 75f, 30f), "Clear");
+            if (ClearHost) {
+                TunicArchipelago.Settings.ConnectionSettings.Hostname = "";
+                OptionsGUIPatches.SaveSettings();
+            }
 
             GUI.Label(new Rect(10f, 250f, 300f, 30f), $"Port: {(editingPort ? (showPort ? stringToEdit : new string('*', stringToEdit.Length)) : (showPort ? TunicArchipelago.Settings.ConnectionSettings.Port.ToString() : new string('*', TunicArchipelago.Settings.ConnectionSettings.Port.ToString().Length)))}");
             showPort = GUI.Toggle(new Rect(270f, 260f, 75f, 30f), showPort, "Show");
@@ -494,6 +504,11 @@ namespace TunicArchipelago {
                 } catch (Exception e) {
                     Logger.LogError("invalid input pasted for port number!");
                 }
+            }
+            bool ClearPort = GUI.Button(new Rect(190f, 300f, 75f, 30f), "Clear");
+            if (ClearPort) {
+                TunicArchipelago.Settings.ConnectionSettings.Port = 0;
+                OptionsGUIPatches.SaveSettings();
             }
 
             GUI.Label(new Rect(10f, 350f, 300f, 30f), $"Password: {(showPassword ? TunicArchipelago.Settings.ConnectionSettings.Password : new string('*', TunicArchipelago.Settings.ConnectionSettings.Password.Length))}");
