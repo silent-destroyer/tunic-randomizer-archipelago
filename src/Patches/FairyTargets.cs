@@ -56,7 +56,9 @@ namespace TunicArchipelago {
                 }
             }
 
-            CreateEntranceTargets();
+            if (SaveFile.GetInt(SaveFlags.EntranceRando) == 1) {
+                CreateEntranceTargets();
+            }
 
             FairyTarget.registered = ItemTargets;
         }
