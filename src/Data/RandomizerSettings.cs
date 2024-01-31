@@ -66,6 +66,16 @@ namespace TunicArchipelago {
             set;
         }
 
+        public bool Lanternless {
+            get;
+            set;
+        }
+
+        public bool Maskless {
+            get;
+            set;
+        }
+
         public FixedLaurelsType FixedLaurelsOption {
             get;
             set;
@@ -253,6 +263,8 @@ namespace TunicArchipelago {
             HexagonQuestExtraPercentage = 50;
             FixedLaurelsOption = FixedLaurelsType.ANYWHERE;
             FoolTrapIntensity = FoolTrapOption.NORMAL;
+            Lanternless = false;
+            Maskless = false;
 
             // Archipelago 
             DeathLinkEnabled = false;

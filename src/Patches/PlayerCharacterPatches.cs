@@ -340,6 +340,13 @@ namespace TunicArchipelago {
                     SaveFile.SetInt("randomizer started with sword", 1);
                 }
 
+                if (TunicArchipelago.Settings.Maskless) {
+                    SaveFile.SetInt(MasklessLogic, 1);
+                }
+                if (TunicArchipelago.Settings.Lanternless) {
+                    SaveFile.SetInt(LanternlessLogic, 1);
+                }
+
                 SaveFile.SetInt("randomizer laurels location", (int)TunicArchipelago.Settings.FixedLaurelsOption);
 
                 if (TunicArchipelago.Settings.EntranceRandoEnabled) {

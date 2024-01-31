@@ -31,6 +31,10 @@ namespace TunicArchipelago {
         // Entrance Rando Flag
         public const string EntranceRando = "randomizer entrance rando enabled";
 
+        // Other Logic Flags
+        public const string MasklessLogic = "randomizer maskless logic enabled";
+        public const string LanternlessLogic = "randomizer lanternless logic enabled";
+
         // Special Flags
         public const string PlayerDeathCount = "randomizer death count";
         public const string EnemiesDefeatedCount = "randomizer enemies defeated";

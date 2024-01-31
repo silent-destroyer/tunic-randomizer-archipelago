@@ -59,6 +59,9 @@ namespace TunicArchipelago {
                 OptionsGUI.addToggle("Entrance Randomizer: Fewer Shops", "Off", "On", TunicArchipelago.Settings.EntranceRandoEnabled ? 1 : 0, (OptionsGUIMultiSelect.MultiSelectAction)ToggleFixedShop);
                 OptionsGUI.addMultiSelect("Fool Traps", FoolTrapOptions, GetFoolTrapIndex(), (OptionsGUIMultiSelect.MultiSelectAction)ChangeFoolTrapFrequency).wrap = true;
                 OptionsGUI.addMultiSelect("Laurels Location", LaurelsLocations, GetLaurelsLocationIndex(), (OptionsGUIMultiSelect.MultiSelectAction)ChangeLaurelsLocation).wrap = true;
+                OptionsGUI.addToggle("Lanternless Logic", "Off", "On", TunicArchipelago.Settings.Lanternless ? 1 : 0, (OptionsGUIMultiSelect.MultiSelectAction)ToggleLanternless);
+                OptionsGUI.addToggle("Maskless Logic", "Off", "On", TunicArchipelago.Settings.Maskless ? 1 : 0, (OptionsGUIMultiSelect.MultiSelectAction)ToggleMaskless);
+
                 OptionsGUI.setHeading("Single Player Logic");
             } else {
                 if (IsSinglePlayer()) {
@@ -78,6 +81,8 @@ namespace TunicArchipelago {
                     OptionsGUI.addButton("Entrance Randomizer: Fewer Shops", SaveFile.GetInt("randomizer ER fixed shop") == 1 ? "<#00ff00>On" : "<#ff0000>Off", null);
                 }
                 if (IsSinglePlayer()) {
+                    OptionsGUI.addButton("Lanternless Logic", SaveFile.GetInt(LanternlessLogic) == 1 ? "<#00ff00>On" : "<#ff0000>Off", null);
+                    OptionsGUI.addButton("Maskless Logic", SaveFile.GetInt(MasklessLogic) == 1 ? "<#00ff00>On" : "<#ff0000>Off", null);
                     OptionsGUI.addMultiSelect("Fool Traps", FoolTrapOptions, GetFoolTrapIndex(), (OptionsGUIMultiSelect.MultiSelectAction)ChangeFoolTrapFrequency).wrap = true;
                 }
                 OptionsGUI.setHeading("Logic");
@@ -200,6 +205,16 @@ namespace TunicArchipelago {
 
         public static void ToggleFixedShop(int index) {
             TunicArchipelago.Settings.ERFixedShop = !TunicArchipelago.Settings.ERFixedShop;
+            SaveSettings();
+        }
+
+        public static void ToggleLanternless(int index) {
+            TunicArchipelago.Settings.Lanternless = !TunicArchipelago.Settings.Lanternless;
+            SaveSettings();
+        }
+
+        public static void ToggleMaskless(int index) {
+            TunicArchipelago.Settings.Maskless = !TunicArchipelago.Settings.Maskless;
             SaveSettings();
         }
 
