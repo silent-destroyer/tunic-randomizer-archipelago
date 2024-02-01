@@ -256,32 +256,38 @@ namespace TunicArchipelago {
             GUI.skin.toggle.fontSize = 20;
             y += 40f;
             GUI.Label(new Rect(10f, y, 200f, 30f), "Logic Settings");
+            TunicArchipelago.Settings.MysterySeed = GUI.Toggle(new Rect(240f, y, 200f, 30f), TunicArchipelago.Settings.MysterySeed, "Mystery Seed");
             y += 45f; 
-            bool ToggleHexagonQuest = GUI.Toggle(new Rect(10f, y, 175f, 30f), TunicArchipelago.Settings.GameMode == RandomizerSettings.GameModes.HEXAGONQUEST, "Hexagon Quest");
-            if (ToggleHexagonQuest) {
-                TunicArchipelago.Settings.GameMode = RandomizerSettings.GameModes.HEXAGONQUEST;
-            } else if (!ToggleHexagonQuest && TunicArchipelago.Settings.GameMode == RandomizerSettings.GameModes.HEXAGONQUEST) {
-                TunicArchipelago.Settings.GameMode = RandomizerSettings.GameModes.RANDOMIZER;
-            }
-            TunicArchipelago.Settings.SwordProgressionEnabled = GUI.Toggle(new Rect(240f, y, 180f, 30f), TunicArchipelago.Settings.SwordProgressionEnabled, "Sword Progression");
-            y += 40f; 
-            TunicArchipelago.Settings.KeysBehindBosses = GUI.Toggle(new Rect(10f, y, 200f, 30f), TunicArchipelago.Settings.KeysBehindBosses, "Keys Behind Bosses");
-            TunicArchipelago.Settings.ShuffleAbilities  = GUI.Toggle(new Rect(240f, y, 175f, 30f), TunicArchipelago.Settings.ShuffleAbilities, "Shuffle Abilities");
-            y += 40f;
-            TunicArchipelago.Settings.EntranceRandoEnabled = GUI.Toggle(new Rect(10f, y, 200f, 30f), TunicArchipelago.Settings.EntranceRandoEnabled, "Entrance Randomizer");
-            TunicArchipelago.Settings.StartWithSwordEnabled = GUI.Toggle(new Rect(240f, y, 175f, 30f), TunicArchipelago.Settings.StartWithSwordEnabled, "Start With Sword");
+            if (TunicArchipelago.Settings.MysterySeed) {
+                GUI.Label(new Rect(10f, y, 400f, 30f), "Mystery Seed Enabled!\nSettings will be chosen randomly on New Game.");
+                y += 160f;
+            } else {
+                bool ToggleHexagonQuest = GUI.Toggle(new Rect(10f, y, 175f, 30f), TunicArchipelago.Settings.GameMode == RandomizerSettings.GameModes.HEXAGONQUEST, "Hexagon Quest");
+                if (ToggleHexagonQuest) {
+                    TunicArchipelago.Settings.GameMode = RandomizerSettings.GameModes.HEXAGONQUEST;
+                } else if (!ToggleHexagonQuest && TunicArchipelago.Settings.GameMode == RandomizerSettings.GameModes.HEXAGONQUEST) {
+                    TunicArchipelago.Settings.GameMode = RandomizerSettings.GameModes.RANDOMIZER;
+                }
+                TunicArchipelago.Settings.SwordProgressionEnabled = GUI.Toggle(new Rect(240f, y, 180f, 30f), TunicArchipelago.Settings.SwordProgressionEnabled, "Sword Progression");
+                y += 40f; 
+                TunicArchipelago.Settings.KeysBehindBosses = GUI.Toggle(new Rect(10f, y, 200f, 30f), TunicArchipelago.Settings.KeysBehindBosses, "Keys Behind Bosses");
+                TunicArchipelago.Settings.ShuffleAbilities  = GUI.Toggle(new Rect(240f, y, 175f, 30f), TunicArchipelago.Settings.ShuffleAbilities, "Shuffle Abilities");
+                y += 40f;
+                TunicArchipelago.Settings.EntranceRandoEnabled = GUI.Toggle(new Rect(10f, y, 200f, 30f), TunicArchipelago.Settings.EntranceRandoEnabled, "Entrance Randomizer");
+                TunicArchipelago.Settings.StartWithSwordEnabled = GUI.Toggle(new Rect(240f, y, 175f, 30f), TunicArchipelago.Settings.StartWithSwordEnabled, "Start With Sword");
 
-            y += 40f;
-            GUI.skin.button.fontSize = 20;
-            bool ShowAdvancedOptions = GUI.Button(new Rect(10f, y, 410f, 30f), $"{(ShowAdvancedSinglePlayerOptions ? "Hide" : "Show")} Advanced Options");
-            if (ShowAdvancedOptions) {
-                ShowAdvancedSinglePlayerOptions = !ShowAdvancedSinglePlayerOptions;
+                y += 40f;
+                GUI.skin.button.fontSize = 20;
+                bool ShowAdvancedOptions = GUI.Button(new Rect(10f, y, 410f, 30f), $"{(ShowAdvancedSinglePlayerOptions ? "Hide" : "Show")} Advanced Options");
+                if (ShowAdvancedOptions) {
+                    ShowAdvancedSinglePlayerOptions = !ShowAdvancedSinglePlayerOptions;
+                }
+                y += 40f;
+
             }
-            y += 40f;
             GUI.Label(new Rect(10f, y, 400f, 30f), "Other Settings <size=18>(more in options menu!)</size>");
             y += 40f;
-            bool ToggleEnemyRandomizer = GUI.Toggle(new Rect(10f, y, 200f, 30f), TunicArchipelago.Settings.EnemyRandomizerEnabled, "Enemy Randomizer");
-            TunicArchipelago.Settings.EnemyRandomizerEnabled = ToggleEnemyRandomizer;
+            TunicArchipelago.Settings.EnemyRandomizerEnabled = GUI.Toggle(new Rect(10f, y, 200f, 30f), TunicArchipelago.Settings.EnemyRandomizerEnabled, "Enemy Randomizer");
             GUI.skin.button.fontSize = 20;
             y += 40f;
             GUI.Label(new Rect(10f, y, 300f, 30f), $"Custom Seed: {(CustomSeed == 0 ? "Not Set" : CustomSeed.ToString())}");
@@ -531,6 +537,10 @@ namespace TunicArchipelago {
         }
 
         public static void CopyQuickSettings() {
+            if (TunicArchipelago.Settings.MysterySeed) {
+                GUIUtility.systemCopyBuffer = $"{CustomSeed},mystery_seed";
+                return;
+            }
             List<string> Settings = new List<string>() { CustomSeed.ToString(), Enum.GetName(typeof(RandomizerSettings.GameModes), TunicArchipelago.Settings.GameMode).ToLower() };
             if (TunicArchipelago.Settings.GameMode == RandomizerSettings.GameModes.HEXAGONQUEST) {
                 Settings.Add($"hexagon_quest_goal={(TunicArchipelago.Settings.HexagonQuestGoal)}=");
@@ -558,9 +568,12 @@ namespace TunicArchipelago {
         }
 
         public static void CopyQuickSettingsInGame() {
+            if (SaveFile.GetInt("randomizer mystery seed") == 1) {
+                GUIUtility.systemCopyBuffer = $"{SaveFile.GetInt("seed")},mystery_seed";
+                return;
+            }
             List<string> Settings = new List<string>() { SaveFile.GetInt("seed").ToString(), SaveFile.GetString("randomizer game mode").ToLower() };
             if (SaveFile.GetInt("randomizer hexagon quest enabled") == 1) {
-
                 Settings.Add($"hexagon_quest_goal={SaveFile.GetInt("randomizer hexagon quest goal")}=");
                 Settings.Add($"hexagon_quest_extras~{SaveFile.GetInt("randomizer hexagon quest extras")}~");
             }
@@ -592,6 +605,10 @@ namespace TunicArchipelago {
                 string[] SplitSettings = SettingsString.Split(',');
                 CustomSeed = int.Parse(SplitSettings[0], CultureInfo.InvariantCulture);
                 RandomizerSettings.GameModes NewGameMode;
+                if (SettingsString.Contains("mystery_seed")) {
+                    TunicArchipelago.Settings.MysterySeed = true;
+                    return;
+                }
                 if (Enum.TryParse<RandomizerSettings.GameModes>(SplitSettings[1].ToUpper(), true, out NewGameMode)) {
                     TunicArchipelago.Settings.GameMode = NewGameMode;
                 } else {

@@ -346,7 +346,7 @@ namespace TunicArchipelago {
             string Prefix = "";
             string HintMessage = "";
             List<string> MailboxItems = new List<string>() { "Stick", "Sword", "Sword Progression", "Stundagger", "Techbow", "Wand", "Lantern", "Shotgun", "Mask" };
-            if (SaveFile.GetInt("randomizer shuffled abilities") == 1 && SaveFile.GetString("randomizer game mode") != "HEXAGONQUEST") {
+            if (SaveFile.GetInt("randomizer shuffled abilities") == 1 && SaveFile.GetInt(HexagonQuestEnabled) != 1) {
                 MailboxItems.Add("12");
                 MailboxItems.Add("21");
             }

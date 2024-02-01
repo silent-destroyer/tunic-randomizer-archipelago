@@ -86,6 +86,11 @@ namespace TunicArchipelago {
             set;
         }
 
+        public bool MysterySeed {
+            get;
+            set;
+        }
+
         // Archipelago Settings
         public bool DeathLinkEnabled {
             get;
@@ -265,6 +270,7 @@ namespace TunicArchipelago {
             FoolTrapIntensity = FoolTrapOption.NORMAL;
             Lanternless = false;
             Maskless = false;
+            MysterySeed = false;
 
             // Archipelago 
             DeathLinkEnabled = false;

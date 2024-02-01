@@ -311,54 +311,61 @@ namespace TunicArchipelago {
                 Logger.LogInfo($"Starting new single player file with seed: " + seed);
                 SaveFile.SetInt("seed", seed);
                 SaveFile.SetInt("randomizer", 1);
-                SaveFile.SetString("randomizer game mode", Enum.GetName(typeof(RandomizerSettings.GameModes), TunicArchipelago.Settings.GameMode));
-                if (TunicArchipelago.Settings.GameMode == RandomizerSettings.GameModes.HEXAGONQUEST) {
-                    SaveFile.SetInt(HexagonQuestEnabled, 1);
-                    SaveFile.SetInt("randomizer hexagon quest goal", TunicArchipelago.Settings.HexagonQuestGoal);
-                    SaveFile.SetInt("randomizer hexagon quest extras", TunicArchipelago.Settings.HexagonQuestExtraPercentage);
 
-                    for (int i = 0; i < 28; i++) {
-                        SaveFile.SetInt($"randomizer obtained page {i}", 1);
+                if (TunicArchipelago.Settings.MysterySeed) {
+                    SaveFile.SetInt("randomizer mystery seed", 1);
+                    GenerateMysterySettings();
+                } else {
+                    SaveFile.SetString("randomizer game mode", Enum.GetName(typeof(RandomizerSettings.GameModes), TunicArchipelago.Settings.GameMode));
+                    if (TunicArchipelago.Settings.GameMode == RandomizerSettings.GameModes.HEXAGONQUEST) {
+                        SaveFile.SetInt(HexagonQuestEnabled, 1);
+                        SaveFile.SetInt("randomizer hexagon quest goal", TunicArchipelago.Settings.HexagonQuestGoal);
+                        SaveFile.SetInt("randomizer hexagon quest extras", TunicArchipelago.Settings.HexagonQuestExtraPercentage);
+
+                        for (int i = 0; i < 28; i++) {
+                            SaveFile.SetInt($"randomizer obtained page {i}", 1);
+                        }
+
+                        StateVariable.GetStateVariableByName("Placed Hexagon 1 Red").BoolValue = true;
+                        StateVariable.GetStateVariableByName("Placed Hexagon 2 Green").BoolValue = true;
+                        StateVariable.GetStateVariableByName("Placed Hexagon 3 Blue").BoolValue = true;
+                        StateVariable.GetStateVariableByName("Placed Hexagons ALL").BoolValue = true;
+                        StateVariable.GetStateVariableByName("Has Been Betrayed").BoolValue = true;
+                        StateVariable.GetStateVariableByName("Has Died To God").BoolValue = true;
+                    }
+                    if (TunicArchipelago.Settings.SwordProgressionEnabled) {
+                        SaveFile.SetInt("randomizer sword progression enabled", 1);
+                        SaveFile.SetInt("randomizer sword progression level", 0);
+                    }
+                    if (TunicArchipelago.Settings.KeysBehindBosses) {
+                        SaveFile.SetInt("randomizer keys behind bosses", 1);
+                    }
+                    if (TunicArchipelago.Settings.StartWithSwordEnabled) {
+                        Inventory.GetItemByName("Sword").Quantity = 1;
+                        SaveFile.SetInt("randomizer started with sword", 1);
                     }
 
-                    StateVariable.GetStateVariableByName("Placed Hexagon 1 Red").BoolValue = true;
-                    StateVariable.GetStateVariableByName("Placed Hexagon 2 Green").BoolValue = true;
-                    StateVariable.GetStateVariableByName("Placed Hexagon 3 Blue").BoolValue = true;
-                    StateVariable.GetStateVariableByName("Placed Hexagons ALL").BoolValue = true;
-                    StateVariable.GetStateVariableByName("Has Been Betrayed").BoolValue = true;
-                    StateVariable.GetStateVariableByName("Has Died To God").BoolValue = true;
-                }
-                if (TunicArchipelago.Settings.SwordProgressionEnabled) {
-                    SaveFile.SetInt("randomizer sword progression enabled", 1);
-                    SaveFile.SetInt("randomizer sword progression level", 0);
-                }
-                if (TunicArchipelago.Settings.KeysBehindBosses) {
-                    SaveFile.SetInt("randomizer keys behind bosses", 1);
-                }
-                if (TunicArchipelago.Settings.StartWithSwordEnabled) {
-                    Inventory.GetItemByName("Sword").Quantity = 1;
-                    SaveFile.SetInt("randomizer started with sword", 1);
+                    if (TunicArchipelago.Settings.Maskless) {
+                        SaveFile.SetInt(MasklessLogic, 1);
+                    }
+                    if (TunicArchipelago.Settings.Lanternless) {
+                        SaveFile.SetInt(LanternlessLogic, 1);
+                    }
+
+                    SaveFile.SetInt("randomizer laurels location", (int)TunicArchipelago.Settings.FixedLaurelsOption);
+
+                    if (TunicArchipelago.Settings.EntranceRandoEnabled) {
+                        Inventory.GetItemByName("Torch").Quantity = 1;
+                        SaveFile.SetInt("randomizer entrance rando enabled", 1);
+                    }
+                    if (TunicArchipelago.Settings.ERFixedShop) {
+                        SaveFile.SetInt("randomizer ER fixed shop", 1);
+                    }
+                    if (TunicArchipelago.Settings.ShuffleAbilities) {
+                        SaveFile.SetInt("randomizer shuffled abilities", 1);
+                    }
                 }
 
-                if (TunicArchipelago.Settings.Maskless) {
-                    SaveFile.SetInt(MasklessLogic, 1);
-                }
-                if (TunicArchipelago.Settings.Lanternless) {
-                    SaveFile.SetInt(LanternlessLogic, 1);
-                }
-
-                SaveFile.SetInt("randomizer laurels location", (int)TunicArchipelago.Settings.FixedLaurelsOption);
-
-                if (TunicArchipelago.Settings.EntranceRandoEnabled) {
-                    Inventory.GetItemByName("Torch").Quantity = 1;
-                    SaveFile.SetInt("randomizer entrance rando enabled", 1);
-                }
-                if (TunicArchipelago.Settings.ERFixedShop) {
-                    SaveFile.SetInt("randomizer ER fixed shop", 1);
-                }
-                if (TunicArchipelago.Settings.ShuffleAbilities) {
-                    SaveFile.SetInt("randomizer shuffled abilities", 1);
-                }
                 foreach (string Scene in Locations.AllScenes) {
                     SaveFile.SetFloat($"randomizer play time {Scene}", 0.0f);
                 }
@@ -373,7 +380,6 @@ namespace TunicArchipelago {
             Logger.LogInfo("Loading single player seed: " + seed);
             ItemRandomizer.PopulateSphereZero();
             ItemRandomizer.RandomizeAndPlaceItems();
-
         }
 
         private static void PlayerCharacter_Start_ArchipelagoSetup() {
@@ -496,6 +502,59 @@ namespace TunicArchipelago {
                     Archipelago.instance.integration.UpdateDataStorageOnLoad();
                 }
 
+            }
+        }
+
+        public static void GenerateMysterySettings() { 
+            System.Random random = new System.Random(SaveFile.GetInt("seed"));
+
+            SaveFile.SetString("randomizer game mode", ((RandomizerSettings.GameModes)random.Next(2)).ToString());
+            if (SaveFile.GetString("randomizer game mode") == "HEXAGONQUEST") {
+                SaveFile.SetInt(HexagonQuestEnabled, 1);
+                SaveFile.SetInt("randomizer hexagon quest goal", random.Next(15, 51));
+                SaveFile.SetInt("randomizer hexagon quest extras", random.Next(101));
+
+                for (int i = 0; i < 28; i++) {
+                    SaveFile.SetInt($"randomizer obtained page {i}", 1);
+                }
+
+                StateVariable.GetStateVariableByName("Placed Hexagon 1 Red").BoolValue = true;
+                StateVariable.GetStateVariableByName("Placed Hexagon 2 Green").BoolValue = true;
+                StateVariable.GetStateVariableByName("Placed Hexagon 3 Blue").BoolValue = true;
+                StateVariable.GetStateVariableByName("Placed Hexagons ALL").BoolValue = true;
+                StateVariable.GetStateVariableByName("Has Been Betrayed").BoolValue = true;
+                StateVariable.GetStateVariableByName("Has Died To God").BoolValue = true;
+            }
+            if (random.Next(2) == 1) {
+                SaveFile.SetInt("randomizer sword progression enabled", 1);
+                SaveFile.SetInt("randomizer sword progression level", 0);
+            }
+            if (random.Next(2) == 1) {
+                SaveFile.SetInt("randomizer keys behind bosses", 1);
+            }
+            if (random.Next(2) == 1) {
+                Inventory.GetItemByName("Sword").Quantity = 1;
+                SaveFile.SetInt("randomizer started with sword", 1);
+            }
+
+            if (random.Next(2) == 1) {
+                SaveFile.SetInt(MasklessLogic, 1);
+            }
+            if (random.Next(2) == 1) {
+                SaveFile.SetInt(LanternlessLogic, 1);
+            }
+
+            SaveFile.SetInt("randomizer laurels location", random.Next(4));
+
+            if (random.Next(2) == 1) {
+                Inventory.GetItemByName("Torch").Quantity = 1;
+                SaveFile.SetInt("randomizer entrance rando enabled", 1);
+            }
+            if (random.Next(2) == 1) {
+                SaveFile.SetInt("randomizer ER fixed shop", 1);
+            }
+            if (random.Next(2) == 1) {
+                SaveFile.SetInt("randomizer shuffled abilities", 1);
             }
         }
 
