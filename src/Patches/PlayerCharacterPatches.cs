@@ -60,7 +60,13 @@ namespace TunicArchipelago {
             }
 
             if (Input.GetKeyDown(KeyCode.Alpha2) && IsSinglePlayer()) {
-                GenericPrompt.ShowPrompt($"\"Copy Current Game Settings?\"\n\"-----------------\"\n" +
+                if (SaveFile.GetInt("randomizer mystery seed") == 1) {
+                    GenericPrompt.ShowPrompt($"\"Copy Current Game Settings?\"\n\"-----------------\"\n" +
+                    $"\"Seed.................{SaveFile.GetInt("seed").ToString().PadLeft(12, '.')}\"\n" +
+                    $"\"Mystery Seed.........{"<#00ff00>On".PadLeft(21, '.')}\"",
+                    (Il2CppSystem.Action)QuickSettings.CopyQuickSettingsInGame, null);
+                } else {
+                    GenericPrompt.ShowPrompt($"\"Copy Current Game Settings?\"\n\"-----------------\"\n" +
                     $"\"Seed.................{SaveFile.GetInt("seed").ToString().PadLeft(12, '.')}\"\n" +
                     $"\"Game Mode............{SaveFile.GetString("randomizer game mode").PadLeft(12, '.')}\"\n" +
                     $"\"Keys Behind Bosses...{(SaveFile.GetInt("randomizer keys behind bosses") == 0 ? "<#ff0000>Off" : "<#00ff00>On").PadLeft(21, '.')}\"\n" +
@@ -69,6 +75,7 @@ namespace TunicArchipelago {
                     $"\"Shuffled Abilities...{(SaveFile.GetInt("randomizer shuffled abilities") == 0 ? "<#ff0000>Off" : "<#00ff00>On").PadLeft(21, '.')}\"\n" +
                     $"\"Entrance Randomizer..{(SaveFile.GetInt("randomizer entrance rando enabled") == 0 ? "<#ff0000>Off" : "<#00ff00>On").PadLeft(21, '.')}\"",
                     (Il2CppSystem.Action)QuickSettings.CopyQuickSettingsInGame, null);
+                }
             }
 
             if (Input.GetKeyDown(KeyCode.R) && IsArchipelago()) {
@@ -207,10 +214,6 @@ namespace TunicArchipelago {
 
             LoadSwords = true;
 
-            ItemStatsHUD.UpdateAbilitySection();
-
-            OptionsGUIPatches.SaveSettings();
-
             ItemPresentationPatches.SwitchDathStonePresentation();
 
             int seed = SaveFile.GetInt("seed");
@@ -265,6 +268,9 @@ namespace TunicArchipelago {
                 GhostHints.SpawnHintGhosts(SceneLoaderPatches.SceneName);
             }
 
+            ItemStatsHUD.UpdateAbilitySection();
+
+            OptionsGUIPatches.SaveSettings();
 
             if (!ModelSwaps.SwappedThisSceneAlready) {
                 ModelSwaps.SwapItemsInScene();

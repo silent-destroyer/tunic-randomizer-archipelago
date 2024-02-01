@@ -139,7 +139,6 @@ namespace TunicArchipelago {
                 Hint += $"\nuhwAts yoo in {Prefix} \"{Scene.ToUpper()}...\"";
             }
             HintMessages.Add("Temple Statue", Hint);
-
             List<(string, string)> relicHints = CreateHeroRelicHints();
             List<string> HintItems = new List<string>() { SinglePlayerItemsHinted.Item1 ? "Lantern" : "Magic Wand", SinglePlayerItemsHinted.Item2 ? "Lantern" : "Magic Orb", "Magic Dagger" };
             if (SaveFile.GetInt(AbilityShuffle) == 1 && SaveFile.GetInt(HexagonQuestEnabled) == 0) {

@@ -49,6 +49,9 @@ namespace TunicArchipelago {
             Il2CppStringArray LaurelsLocations = (Il2CppStringArray)new string[] { "<#FFA300>Random", "<#ffd700>6 Coins", "<#ffd700>10 Coins", "<#ffd700>10 Fairies" };
             Il2CppStringArray FoolTrapOptions = (Il2CppStringArray)new string[] { "<#FFFFFF>None", "<#4FF5D4>Normal", "<#E3D457>Double", "<#FF3333>Onslaught" };
 
+            OptionsGUI.setHeading("Logic");
+
+
             if (SceneLoaderPatches.SceneName == "TitleScreen") {
                 OptionsGUI.addMultiSelect("Game Mode", GameModes, GetGameModeIndex(), (OptionsGUIMultiSelect.MultiSelectAction)ChangeGameMode).wrap = true;
                 OptionsGUI.addToggle("Keys Behind Bosses", "Off", "On", TunicArchipelago.Settings.KeysBehindBosses ? 1 : 0, (OptionsGUIMultiSelect.MultiSelectAction)ToggleKeysBehindBosses);
@@ -61,10 +64,15 @@ namespace TunicArchipelago {
                 OptionsGUI.addMultiSelect("Laurels Location", LaurelsLocations, GetLaurelsLocationIndex(), (OptionsGUIMultiSelect.MultiSelectAction)ChangeLaurelsLocation).wrap = true;
                 OptionsGUI.addToggle("Lanternless Logic", "Off", "On", TunicArchipelago.Settings.Lanternless ? 1 : 0, (OptionsGUIMultiSelect.MultiSelectAction)ToggleLanternless);
                 OptionsGUI.addToggle("Maskless Logic", "Off", "On", TunicArchipelago.Settings.Maskless ? 1 : 0, (OptionsGUIMultiSelect.MultiSelectAction)ToggleMaskless);
+                OptionsGUI.addToggle("Mystery Seed", "Off", "On", TunicArchipelago.Settings.MysterySeed ? 1 : 0, (OptionsGUIMultiSelect.MultiSelectAction)ToggleMysterySeed);
 
                 OptionsGUI.setHeading("Single Player Logic");
             } else {
                 if (IsSinglePlayer()) {
+                    if (SaveFile.GetInt("randomizer mystery seed") == 1) {
+                        OptionsGUI.addButton("Mystery Seed", "<#00ff00>On", null);
+                        return;
+                    }
                     OptionsGUI.addButton("Game Mode", SaveFile.GetString("randomizer game mode"), null);
                     if (SaveFile.GetInt("randomizer hexagon quest enabled") == 1) {
                         OptionsGUI.addButton("Hexagon Quest Goal", SaveFile.GetInt("randomizer hexagon quest goal").ToString(), null);
@@ -85,7 +93,6 @@ namespace TunicArchipelago {
                     OptionsGUI.addButton("Maskless Logic", SaveFile.GetInt(MasklessLogic) == 1 ? "<#00ff00>On" : "<#ff0000>Off", null);
                     OptionsGUI.addMultiSelect("Fool Traps", FoolTrapOptions, GetFoolTrapIndex(), (OptionsGUIMultiSelect.MultiSelectAction)ChangeFoolTrapFrequency).wrap = true;
                 }
-                OptionsGUI.setHeading("Logic");
             }
         }
 
@@ -215,6 +222,11 @@ namespace TunicArchipelago {
 
         public static void ToggleMaskless(int index) {
             TunicArchipelago.Settings.Maskless = !TunicArchipelago.Settings.Maskless;
+            SaveSettings();
+        }
+
+        public static void ToggleMysterySeed(int index) {
+            TunicArchipelago.Settings.MysterySeed = !TunicArchipelago.Settings.MysterySeed;
             SaveSettings();
         }
 

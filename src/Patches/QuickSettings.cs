@@ -33,7 +33,7 @@ namespace TunicArchipelago {
                 Cursor.visible = true;
                 switch (TunicArchipelago.Settings.Mode) {
                     case RandomizerSettings.RandomizerType.SINGLEPLAYER:
-                        GUI.Window(101, new Rect(20f, 150f, 430f, 510f), new Action<int>(SinglePlayerQuickSettingsWindow), "Single Player Settings");
+                        GUI.Window(101, new Rect(20f, 150f, 430f, TunicArchipelago.Settings.MysterySeed ? 430f : 510f), new Action<int>(SinglePlayerQuickSettingsWindow), "Single Player Settings");
                         ShowAPSettingsWindow = false;
                         editingPlayer = false;
                         editingHostname = false;
@@ -48,7 +48,7 @@ namespace TunicArchipelago {
                 if (ShowAPSettingsWindow && TunicArchipelago.Settings.Mode == RandomizerSettings.RandomizerType.ARCHIPELAGO) {
                     GUI.Window(103, new Rect(460f, 150f, 350f, 490f), new Action<int>(ArchipelagoConfigEditorWindow), "Archipelago Config");
                 }
-                if (ShowAdvancedSinglePlayerOptions && TunicArchipelago.Settings.Mode == RandomizerSettings.RandomizerType.SINGLEPLAYER) {
+                if (ShowAdvancedSinglePlayerOptions && TunicArchipelago.Settings.Mode == RandomizerSettings.RandomizerType.SINGLEPLAYER && !TunicArchipelago.Settings.MysterySeed) {
                     GUI.Window(105, new Rect(460f, 150f, 405f, 485f), new Action<int>(AdvancedLogicOptionsWindow), "Advanced Logic Options");
                 }
                 GameObject.Find("elderfox_sword graphic").GetComponent<Renderer>().enabled = !ShowAdvancedSinglePlayerOptions && !ShowAPSettingsWindow;
@@ -256,11 +256,14 @@ namespace TunicArchipelago {
             GUI.skin.toggle.fontSize = 20;
             y += 40f;
             GUI.Label(new Rect(10f, y, 200f, 30f), "Logic Settings");
-            TunicArchipelago.Settings.MysterySeed = GUI.Toggle(new Rect(240f, y, 200f, 30f), TunicArchipelago.Settings.MysterySeed, "Mystery Seed");
+            TunicArchipelago.Settings.MysterySeed = GUI.Toggle(new Rect(240f, y+5, 200f, 30f), TunicArchipelago.Settings.MysterySeed, "Mystery Seed");
             y += 45f; 
             if (TunicArchipelago.Settings.MysterySeed) {
-                GUI.Label(new Rect(10f, y, 400f, 30f), "Mystery Seed Enabled!\nSettings will be chosen randomly on New Game.");
-                y += 160f;
+                GUI.Label(new Rect(10f, y, 400f, 30f), "Mystery Seed Enabled!");
+                GUI.skin.label.fontSize = 20;
+                y += 40f;
+                GUI.Label(new Rect(10f, y, 400f, 30f), "Settings will be chosen randomly on New Game.");
+                y += 40f;
             } else {
                 bool ToggleHexagonQuest = GUI.Toggle(new Rect(10f, y, 175f, 30f), TunicArchipelago.Settings.GameMode == RandomizerSettings.GameModes.HEXAGONQUEST, "Hexagon Quest");
                 if (ToggleHexagonQuest) {

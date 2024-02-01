@@ -29,7 +29,7 @@ namespace TunicArchipelago {
         }
 
         public ConnectionSettings() {
-            Player = "Player";
+            Player = "Ruin Seeker";
             Hostname = "localhost";
             Port = "38281";
             Password = "";

@@ -331,7 +331,7 @@ namespace TunicArchipelago {
                 }
             }
 
-            if (TunicArchipelago.Settings.FixedLaurelsOption != 0) {
+            if (SaveFile.GetInt("randomizer laurels location") != 0) {
                 string DictionaryId = $"{Laurels.Location.LocationId} [{Laurels.Location.SceneName}]";
                 Locations.RandomizedLocations.Add(DictionaryId, Laurels);
             }
