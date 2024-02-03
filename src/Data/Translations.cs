@@ -17,6 +17,10 @@ namespace TunicArchipelago {
             return (TunicArchipelago.Settings.UseTrunicTranslations && EnglishToTrunic.ContainsKey(Input)) ? EnglishToTrunic[Input] : Input;
         }
 
+        public static string TranslateDefaultQuotes(string Input) {
+            return (TunicArchipelago.Settings.UseTrunicTranslations && EnglishToTrunic.ContainsKey(Input)) ? EnglishToTrunic[Input] : $"\"{Input}\"";
+        }
+
         public static Dictionary<string, string> EnglishToTrunic = new Dictionary<string, string>() {
             {"Firecracker", "fIurkrahkur"},
             {"Fire Bomb", "fIur bawm"},
@@ -38,6 +42,7 @@ namespace TunicArchipelago {
             {"Hero's Laurels", "hErOz loruhlz"},
             {"Lantern", "lahnturn"},
             {"Shotgun", "$awtguhn"},
+            {"Gun", "guhn"},
             {"Shield", "$Eld"},
             {"Dath Stone", "dah% stOn"},
             {"Hourglass", "owurglahs"},
@@ -185,8 +190,9 @@ namespace TunicArchipelago {
             {"Glyph Tower", "glif towur"},
             {"The Heir", "#uh Ar"},
             {"Purgatory", "purguhtorE"},
+            {"Your Pocket", "yor pawkit"},
             {"FOUR SKULLS", "for skuhlz"},
-            {"FOREST SLIME", "foruhst slIm"},
+            {"EAST FOREST SLIME", "Est foruhst slIm"},
             {"CATHEDRAL GAUNTLET", "kuh%Edruhl gawntluht"},
             {"SIEGE ENGINE", "sEj ehnhjuhn"},
             {"LIBRARIAN", "lIbrArEuhn"},
@@ -196,7 +202,7 @@ namespace TunicArchipelago {
             {"10 COIN TOSSES", "10 koin tawsiz"},
             {"15 COIN TOSSES", "15 koin tawsiz"},
             {"PILES OF LEAVES", "pIlz uhv lEvs"},
-            {"GARDEN TREE", "gRdin trE"},
+            {"WEST GARDEN TREE", "wehst gRdin trE"},
             {"TOP OF THE MOUNTAIN", "tawp uhv #uh mowntin"},
             {"BONUS CUSTOMIZATION Unlocked", "bOnuhs kuhstuhmizA$uhn uhnlawkd"},
             {"PRAYER Unlocked", "prAr uhnlawkd"},
@@ -264,12 +270,12 @@ namespace TunicArchipelago {
             {$"kawngrahJoulA$uhnz! \"(<#f03c67>+1 HP<#FFFFFF>)\"", $"kawngrahJoulA$uhnz! (<#f03c67>[arrow_up]1 Aj pE<#FFFFFF>)"},
             {$"kawngrahJoulA$uhnz! \"(<#8ddc6e>+1 SP<#FFFFFF>)\"", $"kawngrahJoulA$uhnz! (<#8ddc6e>[arrow_up]1 ehs pE<#FFFFFF>)"},
             {$"kawngrahJoulA$uhnz! \"(<#2a8fed>+1 MP<#FFFFFF>)\"", $"kawngrahJoulA$uhnz! (<#2a8fed>[arrow_up]1 ehm pE<#FFFFFF>)"},
-            {$"Hero Relic - <#e99d4c>ATT", $"hErO rehlik \"-\" <#e99d4c>uhtahk"},
-            {$"Hero Relic - <#5de7cf>DEF", $"hErO rehlik \"-\" <#5de7cf>difehns"},
-            {$"Hero Relic - <#ca7be4>POTION", $"hErO rehlik \"-\" <#ca7be4>pO$uhn"},
-            {$"Hero Relic - <#f03c67>HP", $"hErO rehlik \"-\" <#f03c67>Aj pE"},
-            {$"Hero Relic - <#8ddc6e>SP", $"hErO rehlik \"-\" <#8ddc6e>ehs pE"},
-            {$"Hero Relic - <#2a8fed>MP", $"hErO rehlik \"-\" <#2a8fed>ehm pE"},
+            {$"\"Hero Relic - <#e99d4c>ATT\"", $"hErO rehlik \"-\" <#e99d4c>uhtahk"},
+            {$"\"Hero Relic - <#5de7cf>DEF\"", $"hErO rehlik \"-\" <#5de7cf>difehns"},
+            {$"\"Hero Relic - <#ca7be4>POTION\"", $"hErO rehlik \"-\" <#ca7be4>pO$uhn"},
+            {$"\"Hero Relic - <#f03c67>HP\"", $"hErO rehlik \"-\" <#f03c67>Aj pE"},
+            {$"\"Hero Relic - <#8ddc6e>SP\"", $"hErO rehlik \"-\" <#8ddc6e>ehs pE"},
+            {$"\"Hero Relic - <#2a8fed>MP\"", $"hErO rehlik \"-\" <#2a8fed>ehm pE"},
         };
     }
 }

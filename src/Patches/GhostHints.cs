@@ -4,6 +4,7 @@ using System.Linq;
 using UnityEngine;
 using BepInEx.Logging;
 using static TunicArchipelago.SaveFlags;
+using static TunicArchipelago.GhostHints;
 
 namespace TunicArchipelago {
 
@@ -28,6 +29,7 @@ namespace TunicArchipelago {
             public Quaternion Rotation;
             public NPC.NPCAnimState AnimState;
             public string Dialogue;
+            public string TrunicDialogue;
             public string Hint;
             public string HintedItem;
             public string OptionalCheckID;
@@ -41,6 +43,19 @@ namespace TunicArchipelago {
                 Position = position;
                 Rotation = rotation;
                 Dialogue = dialogue;
+                TrunicDialogue = dialogue;
+                AnimState = animState;
+                Hint = "";
+                HintedItem = "";
+                OptionalCheckID = "";
+            }
+            public HintGhost(string name, string sceneName, Vector3 position, Quaternion rotation, NPC.NPCAnimState animState, string dialogue, string trunicDialogue) {
+                Name = name;
+                SceneName = sceneName;
+                Position = position;
+                Rotation = rotation;
+                Dialogue = dialogue;
+                TrunicDialogue = trunicDialogue;
                 AnimState = animState;
                 Hint = "";
                 HintedItem = "";
@@ -52,7 +67,7 @@ namespace TunicArchipelago {
 
         public static GameObject GhostFox;
 
-        public static List<char> Vowels = new List<char>() { 'A', 'E', 'I', 'O', 'U' };
+        public static List<char> Vowels = new List<char>() { 'A', 'E', 'I', 'O', 'U', 'a', 'e', 'i', 'o', 'u' };
         public static List<(string, string, string)> LocationHints = new List<(string, string, string)>();
         public static List<(string, string, string)> ItemHints = new List<(string, string, string)>();
         public static List<(string, string, string)> BarrenAndTreasureHints = new List<(string, string, string)>();
@@ -175,10 +190,10 @@ namespace TunicArchipelago {
                 new HintGhost("Hint Ghost Far Shore 2", "Transit", new Vector3(-18.6177f, 8.0314f, -81.6153f), new Quaternion(0f, 0.7071068f, 0f, -0.7071068f), NPC.NPCAnimState.SIT, "I stoud awn #aht skwAr ahnd ehndid uhp hEr suhmhow.\nwAr igzahktlE R wE?" ) }
             },
             { "Ruined Passage", new List<HintGhost>() {
-                new HintGhost("Hint Ghost Ruins Passage", "Ruins Passage", new Vector3(184.1698f, 17.3268f, 40.54981f), new Quaternion(0f, 0.9659258f, 0f, 0.2588191f), NPC.NPCAnimState.TIRED, $"nahp tIm! haw haw haw... geht it?") }
+                new HintGhost("Hint Ghost Ruins Passage", "Ruins Passage", new Vector3(184.1698f, 17.3268f, 40.54981f), new Quaternion(0f, 0.9659258f, 0f, 0.2588191f), NPC.NPCAnimState.TIRED, $"nahp tIm! z z z z z z z. . .") }
             },
             { "Windmill", new List<HintGhost>() {
-                new HintGhost("Hint Ghost Windmill", "Windmill", new Vector3(-58.33329f, 54.0833f, -27.8653f), new Quaternion(0f, 0.7071068f, 0f, -0.7071068f), NPC.NPCAnimState.SIT, $"viziti^ #uh \"SHOPKEEPER?\" doo nawt bE uhlRmd, #A R\nA frehnd.") }
+                new HintGhost("Hint Ghost Windmill", "Windmill", new Vector3(-58.33329f, 54.0833f, -27.8653f), new Quaternion(0f, 0.7071068f, 0f, -0.7071068f), NPC.NPCAnimState.SIT, $"viziti^ #uh \"SHOPKEEPER?\" doo nawt bE uhlRmd, #A R\nA frehnd.", $"viziti^ #uh $awpkEpur? doo nawt bE uhlRmd, #A R A frehnd.") }
             },
             { "Old House Back", new List<HintGhost>() {
                 new HintGhost("Hint Ghost Overworld Interiors 1", "Overworld Interiors", new Vector3(11.0359f, 29.0833f, -7.3707f), new Quaternion(0f, 0.8660254f, 0f, -0.5000001f), NPC.NPCAnimState.PRAY, $"nuh%i^ wurks! mAbE #Arz suhm trik too #is dor...") }
@@ -188,7 +203,7 @@ namespace TunicArchipelago {
                 new HintGhost("Hint Ghost Overworld Interiors 3", "Overworld Interiors", new Vector3(12.0368f, 21.1446f, -72.81052f), new Quaternion(0f, 0.8660254f, 0f, -0.5000001f), NPC.NPCAnimState.SIT, $"wuht R #Ez pehduhstuhlz for? doo yoo nO?") }
             },
             { "Overworld Above Ruins", new List<HintGhost>() {
-               new HintGhost("Hint Ghost Overworld Above Ruins 1", "Overworld Redux", new Vector3(28.53184f, 36.0833f, -108.3734f), new Quaternion(0f, 0.7071068f, 0f, -0.7071068f), NPC.NPCAnimState.IDLE, $"I wuhz hIdi^ fruhm #uh \"SLIMES,\" buht yoo dOnt louk\nlIk wuhn uhv #ehm."),
+               new HintGhost("Hint Ghost Overworld Above Ruins 1", "Overworld Redux", new Vector3(28.53184f, 36.0833f, -108.3734f), new Quaternion(0f, 0.7071068f, 0f, -0.7071068f), NPC.NPCAnimState.IDLE, $"I wuhz hIdi^ fruhm #uh \"SLIMES,\" buht yoo dOnt louk\nlIk wuhn uhv #ehm.", $"I wuhz hIdi^ fruhm #uh slImz, buht yoo dOnt louk\nlIk wuhn uhv #ehm."),
                new HintGhost("Hint Ghost Overworld Above Ruins 2", "Overworld Redux", new Vector3(22.3667f, 27.9833f, -126.3728f), new Quaternion(0f, 0.7071068f, 0f, -0.7071068f), NPC.NPCAnimState.SIT, $"wAr did I lEv #aht kE..."),
                new HintGhost("Hint Ghost Overworld Above Ruins 3", "Overworld Redux", new Vector3(51.20462f, 28.00694f, -129.722f), new Quaternion(0f, 1f, 0f, -4.371139E-08f), NPC.NPCAnimState.SIT, $"I %awt #aht Jehst wuhz ehmptE. how suhspi$is.") }
             },
@@ -197,15 +212,15 @@ namespace TunicArchipelago {
                new HintGhost("Hint Ghost Early Overworld Spawns 2", "Overworld Redux", new Vector3(-34.0649f, 37.9833f, -59.2506f), new Quaternion(0f, 0.7071068f, 0f, -0.7071068f), NPC.NPCAnimState.GAZE, $"sO mehnE roodli^z. Im stAi^ uhp hEr.") }
             },
             { "Inside Temple", new List<HintGhost>() {
-                new HintGhost("Hint Ghost Inside Temple 1", "Temple", new Vector3(7.067f, -0.224f, 59.9285f), new Quaternion(0f, 1f, 0f, -4.371139E-08f), NPC.NPCAnimState.IDLE, $"yur naht uh \"RUIN SEEKER,\" R yoo? mAbE yoo $oud gO\nsuhmwAr ehls."),
-                new HintGhost("Hint Ghost Inside Temple 2", "Temple", new Vector3(0.9350182f, 4.076f, 133.7965f), new Quaternion(0f, 0.8660254f, 0f, 0.5f), NPC.NPCAnimState.GAZE_UP, $"yur guhnuh frE \"THE HEIR?\" iznt #aht... bahd?") }
+                new HintGhost("Hint Ghost Inside Temple 1", "Temple", new Vector3(7.067f, -0.224f, 59.9285f), new Quaternion(0f, 1f, 0f, -4.371139E-08f), NPC.NPCAnimState.IDLE, $"yur naht uh \"RUIN SEEKER,\" R yoo? mAbE yoo $oud gO\nsuhmwAr ehls.", $"yur naht uh rooin sEkur, R yoo? mAbE yoo $oud gO suhmwAr ehls."),
+                new HintGhost("Hint Ghost Inside Temple 2", "Temple", new Vector3(0.9350182f, 4.076f, 133.7965f), new Quaternion(0f, 0.8660254f, 0f, 0.5f), NPC.NPCAnimState.GAZE_UP, $"yur guhnuh frE \"THE HEIR?\" iznt #aht... bahd?", $"yur guhnuh frE #uh Ar? iznt #aht... bahd?") }
             },
             { "Ruined Shop", new List<HintGhost>() {
                 new HintGhost("Hint Ghost Ruined Shop 1", "Ruined Shop", new Vector3(16.5333f, 8.983299f, -45.60382f), new Quaternion(0f, 0.7071068f, 0f, -0.7071068f), NPC.NPCAnimState.SIT, $"hehlO. wuht iz yor nAm?---...tuhnk? wuht A strAnj nAm."),
                 new HintGhost("Hint Ghost Ruined Shop 2", "Ruined Shop", new Vector3(9.8111f, 8.0833f, -37.52119f), new Quaternion(0f, 0.9659258f, 0f, 0.2588191f), NPC.NPCAnimState.IDLE, $"wehl, if yur nawt bIi^ ehnE%i^..." ) }
             },
             { "West Filigree", new List<HintGhost>() {
-                new HintGhost("Hint Ghost West Filigree", "Town_FiligreeRoom", new Vector3(-79.4348f, 22.0379f, -59.8104f), new Quaternion(0f, 1f, 0f, -4.371139E-08f), NPC.NPCAnimState.PRAY, $"wow, yoo hahv #uh powur uhv #uh \"Holy Cross!\"") }
+                new HintGhost("Hint Ghost West Filigree", "Town_FiligreeRoom", new Vector3(-79.4348f, 22.0379f, -59.8104f), new Quaternion(0f, 1f, 0f, -4.371139E-08f), NPC.NPCAnimState.PRAY, $"wow, yoo hahv #uh powur uhv #uh \"Holy Cross!\"", $"wow, yoo hahv #uh powur uhv #uh hOlE kraws!") }
             },
             { "East Filigree", new List<HintGhost>() {
                 new HintGhost("Hint Ghost East Filigree", "EastFiligreeCache", new Vector3(14.3719f, 0.0167f, -8.8614f), new Quaternion(0f, 0.7071068f, 0f, -0.7071068f), NPC.NPCAnimState.SIT, $"wAt, how did yoo Opehn #aht dOr?") }
@@ -237,7 +252,7 @@ namespace TunicArchipelago {
                 new HintGhost("Hint Ghost Furnace", "Furnace", new Vector3(-131.9886f, 12.0833f, -51.0197f), new Quaternion(0f, 0f, 0f, 1f), NPC.NPCAnimState.GAZE_UP, $"#Ez powur sorsehz... I dOnt truhst #ehm.") }
             },
             { "Golden Obelisk", new List<HintGhost>() {
-                new HintGhost("Hint Ghost Golden Obelisk", "Overworld Redux", new Vector3(-94.5973f, 70.0937f, 36.38749f), new Quaternion(0f, 0f, 0f, 1f), NPC.NPCAnimState.FISHING, $"pEpuhl yoost too wur$ip #is. it rehprEzehnts #uh\n\"Holy Cross.\"") }
+                new HintGhost("Hint Ghost Golden Obelisk", "Overworld Redux", new Vector3(-94.5973f, 70.0937f, 36.38749f), new Quaternion(0f, 0f, 0f, 1f), NPC.NPCAnimState.FISHING, $"pEpuhl yoost too wur$ip #is. it rehprEzehnts #uh\n\"Holy Cross.\"", $"pEpuhl yoost too wur$ip #is. it rehprEzehnts #uh\nhOlE kraws.") }
             },
             { "Overworld Before Garden", new List<HintGhost>(){
                 new HintGhost("Hint Ghost Overworld Before Garden", "Overworld Redux", new Vector3(-146.1464f, 11.6929f, -67.55009f), new Quaternion(0f, 0.3007058f, 0f, 0.9537169f), NPC.NPCAnimState.IDLE, "A vi$is baws blawks #uh wA too #uh behl uhp #Ar.\nbE kArfuhl, it wil kil yoo.") }
@@ -313,7 +328,7 @@ namespace TunicArchipelago {
                     NewGhostFox.transform.position = HintGhost.Position;
                     NewGhostFox.transform.rotation = HintGhost.Rotation;
                     LanguageLine HintText = ScriptableObject.CreateInstance<LanguageLine>();
-                    HintText.text = $"{HintGhost.Dialogue}---{HintGhost.Hint}";
+                    HintText.text = $"{(TunicArchipelago.Settings.UseTrunicTranslations ? HintGhost.TrunicDialogue : HintGhost.Dialogue)}---{HintGhost.Hint}";
                     NewGhostFox.GetComponent<NPC>().script = HintText;
 
                     if (PaletteEditor.CelShadingEnabled && PaletteEditor.ToonFox != null) {
@@ -421,9 +436,13 @@ namespace TunicArchipelago {
                     ArchipelagoItem Item = ItemLookup.ItemList[Key];
                     string ItemPrefix = Item.ItemName.Contains("Money") ? "suhm" : Vowels.Contains(Item.ItemName.ToUpper()[0]) ? "ahn" : "uh";
                     string PlayerName = Archipelago.instance.GetPlayerName(Item.Player);
-                    string ItemToDisplay = Archipelago.instance.IsTunicPlayer(Item.Player) && TextBuilderPatches.ItemNameToAbbreviation.ContainsKey(Item.ItemName)
+                    bool IsTunicItem = Archipelago.instance.IsTunicPlayer(Item.Player);
+                    string ItemToDisplay = IsTunicItem && TextBuilderPatches.ItemNameToAbbreviation.ContainsKey(Item.ItemName)
                         ? TextBuilderPatches.ItemNameToAbbreviation[Item.ItemName] : "[archipelago]";
                     string Hint = $"bI #uh wA, I hurd #aht \"{HintableLocationIds[Key].Replace(" ", "\" \"")}\" {LocationSuffix} gRdi^  {ItemToDisplay}  \"{PlayerName.ToUpper().Replace(" ", "\" \"")}'S {Item.ItemName.ToUpper().Replace(" ", "\" \"").Replace("_", "\" \"")}.\"";
+                    if (TunicArchipelago.Settings.UseTrunicTranslations) {
+                        Hint = $"bI #uh wA, I hurd #aht {Translations.Translate(HintableLocationIds[Key], false)} {LocationSuffix} gRdi^ \"{PlayerName.ToUpper().Replace(" ", "\" \"")}'S\" {(IsTunicItem ? Translations.Translate(ItemLookup.SimplifiedItemNames[ItemLookup.Items[Item.ItemName].ItemNameForInventory], false) + "." : $"\"{Item.ItemName.ToUpper().Replace(" ", "\" \"").Replace("_", "\" \"")}.\"")}";
+                    }
                     string ItemForHint = Archipelago.instance.IsTunicPlayer(Item.Player) ? Item.ItemName : "Archipelago Item";
                     LocationHints.Add((WordWrapString(Hint), ItemForHint, Locations.LocationIdToDescription[Key]));
                 } else if (IsSinglePlayer()) {
@@ -433,7 +452,9 @@ namespace TunicArchipelago {
                     string ItemToDisplay = TextBuilderPatches.ItemNameToAbbreviation.ContainsKey(ItemName)
                         ? TextBuilderPatches.ItemNameToAbbreviation[ItemName] : "";
                     string Hint = $"bI #uh wA, I hurd #aht \"{HintableLocationIds[Key].Replace(" ", "\" \"")}\" {LocationSuffix} gRdi^ {ItemPrefix}  {ItemToDisplay}  \"{ItemName.ToUpper().Replace(" ", "\" \"").Replace("_", "\" \"")}.\"";
-                    //string TrunicHint = $"bI #uh wA, I hurd #aht {Translations.Translate(HintableLocationIds[Key], false)}\n{LocationSuffix} gRdi^ {ItemPrefix} {Translations.Translate(ItemName, false)}.";
+                    if (TunicArchipelago.Settings.UseTrunicTranslations) {
+                        Hint = $"bI #uh wA, I hurd #aht {Translations.Translate(HintableLocationIds[Key], false)} {LocationSuffix} gRdi^ {ItemPrefix} {Translations.Translate(ItemLookup.SimplifiedItemNames[Check.Reward.Name], false)}.";
+                    }
 
                     LocationHints.Add((WordWrapString(Hint), ItemName, Locations.LocationIdToDescription[Key]));
                 }
@@ -457,11 +478,13 @@ namespace TunicArchipelago {
                     List<ArchipelagoHint> ItemLocations = Locations.MajorItemLocations[Item];
                     foreach(ArchipelagoHint HintLocation in ItemLocations) {
                         if (HintLocation.Player == Archipelago.instance.GetPlayerSlot()) {
-                            string Scene = HintLocation.Location == "Your Pocket" ? HintLocation.Location.ToUpper() : Locations.SimplifiedSceneNames[Locations.VanillaLocations[Locations.LocationDescriptionToId[HintLocation.Location]].Location.SceneName].ToUpper();
+                            string Scene = HintLocation.Location == "Your Pocket" ? HintLocation.Location : Locations.SimplifiedSceneNames[Locations.VanillaLocations[Locations.LocationDescriptionToId[HintLocation.Location]].Location.SceneName];
                             string ScenePrefix = Scene == "Trinket Well" ? "%rOi^" : "aht #uh";
                             string ItemToDisplay = TextBuilderPatches.ItemNameToAbbreviation.ContainsKey(HintLocation.Item) ? TextBuilderPatches.ItemNameToAbbreviation[HintLocation.Item] : "";
-                            Hint = $"bI #uh wA, I saw A  {ItemToDisplay}  \"{Item.ToUpper().Replace(" ", "\" \"")}\" #uh lahst tIm I wuhs {ScenePrefix} \"{Scene.Replace(" ", "\" \"")}.\"";
-
+                            Hint = $"bI #uh wA, I saw A  {ItemToDisplay}  \"{Item.ToUpper().Replace(" ", "\" \"")}\" #uh lahst tIm I wuhs {ScenePrefix} \"{Scene.ToUpper().Replace(" ", "\" \"")}.\"";
+                            if (TunicArchipelago.Settings.UseTrunicTranslations) {
+                                Hint = $"bI #uh wA, I saw A {Translations.Translate(Item, false)} #uh lahst tIm I wuhs {ScenePrefix} {Translations.Translate(Scene, false)}.";
+                            }
                             ItemHints.Add((WordWrapString(Hint), HintLocation.Item, ""));
                         }
                     }
@@ -475,8 +498,9 @@ namespace TunicArchipelago {
                         string ItemToDisplay = TextBuilderPatches.ItemNameToAbbreviation.ContainsKey(ItemData.Name) ? TextBuilderPatches.ItemNameToAbbreviation[ItemData.Name] : "";
 
                         Hint = $"bI #uh wA, I saw A  {ItemToDisplay}  \"{Item.ToUpper().Replace(" ", "\" \"")}\" #uh lahst tIm I wuhs {ScenePrefix} \"{Scene.ToUpper().Replace(" ", "\" \"")}.\"";
-
-                        //TrunicHint = $"bI #uh wA, I saw A {Translations.Translate(Hints.SimplifiedItemNames[Item.Reward.Name], false)} #uh\nlahst tIm I wuhs {ScenePrefix} {Translations.Translate(Scene, false)}.";
+                        if (TunicArchipelago.Settings.UseTrunicTranslations) {
+                            Hint = $"bI #uh wA, I saw A {Translations.Translate(ItemLookup.SimplifiedItemNames[Check.Reward.Name], false)} #uh lahst tIm I wuhs {ScenePrefix} {Translations.Translate(Scene, false)}.";
+                        }
                         ItemHints.Add((WordWrapString(Hint), ItemData.Name, ""));
                     }
                 }
@@ -485,6 +509,11 @@ namespace TunicArchipelago {
                 string prayerHint = $"bI #uh wA, I hurd #aht [goldhex] \"{SaveFile.GetInt(HexagonQuestPrayer)} GOLD QUESTAGONS\"\nwil grahnt yoo #uh powur uhv \"PRAYER.\"";
                 string holyCrossHint = $"bI #uh wA, I hurd #aht [goldhex] \"{SaveFile.GetInt(HexagonQuestHolyCross)} GOLD QUESTAGONS\"\nwil grahnt yoo #uh powur uhv #uh \"HOLY CROSS.\"";
                 string iceRodHint = $"bI #uh wA, I hurd #aht [goldhex] \"{SaveFile.GetInt(HexagonQuestIceRod)} GOLD QUESTAGONS\"\nwil grahnt yoo #uh #uh powur uhv #uh \"ICE ROD.\"";
+                if (TunicArchipelago.Settings.UseTrunicTranslations) {
+                    prayerHint = $"bI #uh wA, I hurd #aht [goldhex] \"{SaveFile.GetInt(HexagonQuestPrayer)}\" gOld kwehstuhgawn\nwil grahnt yoo #uh powur uhv prAr.";
+                    holyCrossHint = $"bI #uh wA, I hurd #aht [goldhex] \"{SaveFile.GetInt(HexagonQuestHolyCross)}\" gOld kwehstuhgawn\nwil grahnt yoo #uh powur uhv #uh hOlE kraws.";
+                    iceRodHint = $"bI #uh wA, I hurd #aht [goldhex] \"{SaveFile.GetInt(HexagonQuestIceRod)}\" gOld kwehstuhgawn\nwil grahnt yoo #uh #uh powur uhv #uh Is rawd.";
+                }
                 ItemHints.Add((prayerHint, "", ""));
                 ItemHints.Add((holyCrossHint, "", ""));
                 ItemHints.Add((iceRodHint, "", ""));
@@ -497,7 +526,7 @@ namespace TunicArchipelago {
         public static string WordWrapString(string Hint) {
             string formattedHint = "";
 
-            int length = 45;
+            int length = 40;
             int spritelength = 0;
             foreach (string split in Hint.Split(' ')) {
                 string split2 = split;
@@ -553,7 +582,11 @@ namespace TunicArchipelago {
 
                 if (MoneyInScene >= 200 && SceneItemCount < 10) {
                     string ScenePrefix = Vowels.Contains(Scene[0]) ? "#E" : "#uh";
-                    BarrenAndTreasureHints.Add(($"ahn EzE plAs too fInd A [realmoney] \"LOT OF MONEY\" iz {ScenePrefix}\n\"{Scene.ToUpper()}.\"", "", ""));
+                    string Hint = $"ahn EzE plAs too fInd A [realmoney] \"LOT OF MONEY\" iz {ScenePrefix}\n\"{Scene.ToUpper()}.\"";
+                    if (TunicArchipelago.Settings.UseTrunicTranslations) {
+                        Hint = $"ahn EzE plAs too fInd A lawt uhv muhnE iz\n{ScenePrefix} {Translations.Translate(Scene, false)}.";
+                    }
+                    BarrenAndTreasureHints.Add((Hint, "", ""));
                 } else {
                     bool BarrenArea = true;
                     foreach(ArchipelagoItem Item in APItemsInScene) {
@@ -583,6 +616,9 @@ namespace TunicArchipelago {
                             Hint = $"if I wur yoo, I woud uhvoid \"{String.Join(" ", SceneSplit.Take(SceneSplit.Length - 1)).ToUpper()}\"\n\"{SceneSplit[SceneSplit.Length - 1].ToUpper()}.\" #aht plAs iz \"NOT IMPORTANT.\"";
                         } else {
                             Hint = $"if I wur yoo, I woud uhvoid \"{Scene.ToUpper()}.\"\n#aht plAs iz \"NOT IMPORTANT.\"";
+                        }
+                        if (TunicArchipelago.Settings.UseTrunicTranslations) {
+                            Hint = $"if I wur yoo, I woud uhvoid {Translations.Translate(Scene, false)}.\n#aht plAs iz nawt importahnt.";
                         }
                         BarrenAndTreasureHints.Add((Hint, "", ""));
                     }

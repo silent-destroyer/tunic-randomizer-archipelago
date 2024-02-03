@@ -11,6 +11,7 @@ using BepInEx.Logging;
 using Newtonsoft.Json;
 using static TunicArchipelago.SaveFlags;
 using static TunicArchipelago.RandomizerSettings;
+using UnityEngine.SceneManagement;
 
 namespace TunicArchipelago {
     public class OptionsGUIPatches {
@@ -102,7 +103,8 @@ namespace TunicArchipelago {
             OptionsGUI.addToggle("Ghost Fox Hints", "Off", "On", TunicArchipelago.Settings.GhostFoxHintsEnabled ? 1 : 0, (OptionsGUIMultiSelect.MultiSelectAction)ToggleGhostFoxHints);
             OptionsGUI.addToggle("Freestanding Items Match Contents", "Off", "On", TunicArchipelago.Settings.ShowItemsEnabled ? 1 : 0, (OptionsGUIMultiSelect.MultiSelectAction)ToggleShowItems);
             OptionsGUI.addToggle("Chests Match Contents", "Off", "On", TunicArchipelago.Settings.ChestsMatchContentsEnabled ? 1 : 0, (OptionsGUIMultiSelect.MultiSelectAction)ToggleChestsMatchContents);
-            OptionsGUI.addButton("Open Local Spoiler Log", (Action)OpenLocalSpoilerLog);
+            OptionsGUI.addToggle("Display Hints in Trunic", "Off", "On", TunicArchipelago.Settings.UseTrunicTranslations ? 1 : 0, (OptionsGUIMultiSelect.MultiSelectAction)ToggleTrunicHints);
+            OptionsGUI.addButton("Open Spoiler Log", (Action)OpenLocalSpoilerLog);
             OptionsGUI.setHeading("Hints");
         }
 
@@ -259,11 +261,6 @@ namespace TunicArchipelago {
             SaveSettings();
         }
 
-        public static void ToggleSkipItemAnimations(int index) { 
-            TunicArchipelago.Settings.SkipItemAnimations = !TunicArchipelago.Settings.SkipItemAnimations; 
-            SaveSettings();
-        }
-
         public static void ToggleSendHintsToServer(int index) {
             TunicArchipelago.Settings.SendHintsToServer = !TunicArchipelago.Settings.SendHintsToServer;
             SaveSettings();
@@ -322,6 +319,16 @@ namespace TunicArchipelago {
             SaveSettings();
         }
 
+        public static void ToggleTrunicHints(int index) {
+            TunicArchipelago.Settings.UseTrunicTranslations = !TunicArchipelago.Settings.UseTrunicTranslations;
+            if (SceneManager.GetActiveScene().name != "TitleScreen") {
+                Hints.PopulateHints();
+                GhostHints.GenerateHints();
+                Hints.SetupHeroGraveToggle();
+            }
+            SaveSettings();
+        }
+
         // Gameplay
 
         public static void ToggleHeirAssistMode(int index) {
@@ -348,6 +355,12 @@ namespace TunicArchipelago {
             TunicArchipelago.Settings.DisableChestInterruption = !TunicArchipelago.Settings.DisableChestInterruption;
             SaveSettings();
         }
+
+        public static void ToggleSkipItemAnimations(int index) {
+            TunicArchipelago.Settings.SkipItemAnimations = !TunicArchipelago.Settings.SkipItemAnimations;
+            SaveSettings();
+        }
+
 
         public static void ToggleFasterUpgrades(int index) {
             TunicArchipelago.Settings.FasterUpgrades = !TunicArchipelago.Settings.FasterUpgrades;

@@ -21,6 +21,11 @@ namespace TunicArchipelago {
                     }
                 }
 
+                if (GhostHints.HintGhosts.ContainsKey(__instance.name)) { 
+                    GhostHints.HintGhost hintGhost = GhostHints.HintGhosts[__instance.name];
+                    __instance.GetComponent<NPC>().script.text = $"{(TunicArchipelago.Settings.UseTrunicTranslations ? hintGhost.TrunicDialogue : hintGhost.Dialogue)}---{hintGhost.Hint}";
+                }
+
                 if (GhostHints.HintGhosts.ContainsKey(__instance.name) && GhostHints.HexQuestHintLookup.ContainsKey(GhostHints.HintGhosts[__instance.name].Hint)) {
                     SaveFile.SetInt($"randomizer hex quest read {GhostHints.HexQuestHintLookup[GhostHints.HintGhosts[__instance.name].Hint]} hint", 1);
                     ItemStatsHUD.UpdateAbilitySection();
