@@ -612,6 +612,10 @@ namespace TunicArchipelago {
                         }
                     }
 
+                    if (NewEnemy.GetComponent<Administrator>() != null && NewEnemy.name.ToLower().Contains("servant")) {
+                        NewEnemy.GetComponent<BoxCollider>().extents /= 2;
+                    }
+
                     NewEnemy.name += $" {i}";
                     EnemiesInCurrentScene.Add(NewEnemy.name, NewEnemy.transform.position.ToString());
 
