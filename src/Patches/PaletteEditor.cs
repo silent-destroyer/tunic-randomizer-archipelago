@@ -418,7 +418,7 @@ namespace TunicArchipelago {
                 GameObject CapePresentation = Resources.FindObjectsOfTypeAll<ItemPresentationGraphic>().Where(ipg => ipg.name == "cape").First().gameObject;
                 CapePresentation.GetComponent<MeshFilter>().mesh = player.transform.GetChild(2).GetComponent<SkinnedMeshRenderer>().sharedMesh;
                 CapePresentation.GetComponent<MeshRenderer>().materials = player.transform.GetChild(1).GetComponent<CreatureMaterialManager>().originalMaterials;
-
+                ChangeCapeColor(new Color(0.9882353f, 0.4431373f, 0.945098f));
             }
         }
 
