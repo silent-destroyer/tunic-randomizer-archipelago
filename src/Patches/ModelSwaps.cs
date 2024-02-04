@@ -510,7 +510,9 @@ namespace TunicArchipelago {
                 if (ItemLookup.ItemList.ContainsKey(ItemId) || Locations.RandomizedLocations.ContainsKey(ItemId)) { 
                     if (IsArchipelago()) {
                         ApItem = ItemLookup.ItemList[ItemId];
-                        ItemData = ItemLookup.Items[ApItem.ItemName];
+                        if (Archipelago.instance.IsTunicPlayer(ApItem.Player)) {
+                            ItemData = ItemLookup.Items[ApItem.ItemName];
+                        }
                     }
                     if (IsSinglePlayer()) {
                         Check = Locations.RandomizedLocations[ItemId];
@@ -532,14 +534,14 @@ namespace TunicArchipelago {
 
                     TransformData TransformData;
 
-                    if (ItemPositions.SpecificItemPlacement.ContainsKey(ItemPickup.itemToGive.name) && ItemData != null) {
+                    if (ItemPositions.SpecificItemPlacement.ContainsKey(ItemPickup.itemToGive.name)) {
                         if (ItemPickup.itemToGive.name == "Stundagger" && SceneLoaderPatches.SceneName == "archipelagos_house") {
                             GameObject.Find("lanterndagger/").transform.localRotation = new Quaternion(0, 0, 0, 1);
                         }
                         if (ItemPickup.itemToGive.name == "Key" || ItemPickup.itemToGive.name == "Key (House)") {
                             NewItem.transform.parent.localRotation = SceneLoaderPatches.SceneName == "Overworld Redux" ? new Quaternion(0f, 0f, 0f, 0f) : new Quaternion(0f, 0.7071f, 0f, 0.7071f);
                         }
-                        if (IsArchipelago() && (ApItem != null && !Archipelago.instance.IsTunicPlayer(ApItem.Player) || !ItemLookup.Items.ContainsKey(ApItem.ItemName))) {
+                        if (IsArchipelago() && ItemData == null && (ApItem != null && !Archipelago.instance.IsTunicPlayer(ApItem.Player) || !ItemLookup.Items.ContainsKey(ApItem.ItemName))) {
                             TransformData = ItemPositions.SpecificItemPlacement[ItemPickup.itemToGive.name]["Other World"];
                         } else {
                             if (ItemData.ItemNameForInventory.Contains("Trinket - ") || ItemData.ItemNameForInventory == "Mask") {
@@ -596,9 +598,11 @@ namespace TunicArchipelago {
                     if (IsArchipelago()) {
                         int Player = Archipelago.instance.GetPlayerSlot();
                         ApItem = ItemLookup.ItemList[ItemId];
-                        Item = ItemLookup.Items[ApItem.ItemName];
-                        if (ApItem.Player == Player && ItemLookup.Items.ContainsKey(ApItem.ItemName) && ItemLookup.Items[ApItem.ItemName].Type == ItemTypes.PAGE) {
-                            return;
+                        if (Archipelago.instance.IsTunicPlayer(ApItem.Player)) {
+                            Item = ItemLookup.Items[ApItem.ItemName];
+                            if (ItemLookup.Items.ContainsKey(ApItem.ItemName) && ItemLookup.Items[ApItem.ItemName].Type == ItemTypes.PAGE) {
+                                return;
+                            }
                         }
                     }
                     if (IsSinglePlayer()) {
@@ -623,7 +627,7 @@ namespace TunicArchipelago {
 
                     Page.transform.localRotation = Quaternion.Euler(0, 0, 0);
                     TransformData TransformData;
-                    if (IsArchipelago() && (ApItem != null && !Archipelago.instance.IsTunicPlayer(ApItem.Player) || !ItemLookup.Items.ContainsKey(ApItem.ItemName))) {
+                    if (IsArchipelago() && Item == null && (ApItem != null && !Archipelago.instance.IsTunicPlayer(ApItem.Player) || !ItemLookup.Items.ContainsKey(ApItem.ItemName))) {
                         TransformData = ItemPositions.Techbow["Other World"];
                         PagePickup.transform.GetChild(2).GetComponent<Rotate>().eulerAnglesPerSecond = new Vector3(0f, 45f, 0f);
                     } else {
@@ -775,7 +779,7 @@ namespace TunicArchipelago {
                 GameObject NewItem = SetupItemBase(Plinth.transform, ApItem, Check);
 
                 TransformData TransformData;
-                if (IsArchipelago() && (ApItem != null && !Archipelago.instance.IsTunicPlayer(ApItem.Player) || !ItemLookup.Items.ContainsKey(ApItem.ItemName))) {
+                if (IsArchipelago() && HexagonItem == null && (ApItem != null && !Archipelago.instance.IsTunicPlayer(ApItem.Player) || !ItemLookup.Items.ContainsKey(ApItem.ItemName))) {
                     TransformData = ItemPositions.HexagonRed["Other World"];
                 } else {
                     if (HexagonItem.Type == ItemTypes.TRINKET) {
@@ -821,9 +825,11 @@ namespace TunicArchipelago {
                 if (IsArchipelago()) {
                     int Player = Archipelago.instance.GetPlayerSlot();
                     ApItem = ItemLookup.ItemList[ItemId];
-                    HexagonItem = ItemLookup.Items[ApItem.ItemName];
-                    if (Archipelago.instance.IsTunicPlayer(ApItem.Player) && HexagonItem.ItemNameForInventory == "Hexagon Blue") {
-                        return;
+                    if (Archipelago.instance.IsTunicPlayer(ApItem.Player)) {
+                        HexagonItem = ItemLookup.Items[ApItem.ItemName];
+                        if (HexagonItem.ItemNameForInventory == "Hexagon Blue") {
+                            return;
+                        }
                     }
                 }
                 if (IsSinglePlayer()) {
@@ -846,7 +852,7 @@ namespace TunicArchipelago {
                 GameObject NewItem = SetupItemBase(Plinth.transform, ApItem, Check);
 
                 TransformData TransformData;
-                if (IsArchipelago() && (ApItem != null && !Archipelago.instance.IsTunicPlayer(ApItem.Player) || !ItemLookup.Items.ContainsKey(ApItem.ItemName))) {
+                if (IsArchipelago() && HexagonItem == null && (ApItem != null && !Archipelago.instance.IsTunicPlayer(ApItem.Player) || !ItemLookup.Items.ContainsKey(ApItem.ItemName))) {
                     TransformData = ItemPositions.HexagonRed["Other World"];
                 } else {
                     if (HexagonItem.Type == ItemTypes.TRINKET) {
@@ -891,10 +897,11 @@ namespace TunicArchipelago {
             if (VaultKey != null && (ItemLookup.ItemList.ContainsKey(ItemId) || Locations.RandomizedLocations.ContainsKey(ItemId))) {
                 if (IsArchipelago()) {
                     ApItem = ItemLookup.ItemList[ItemId];
-                    VaultKeyItem = ItemLookup.Items[ApItem.ItemName];
-                    int Player = Archipelago.instance.GetPlayerSlot();
-                    if (Archipelago.instance.IsTunicPlayer(ApItem.Player) && VaultKeyItem.ItemNameForInventory == "Vault Key (Red)") {
-                        return;
+                    if (Archipelago.instance.IsTunicPlayer(ApItem.Player)) {
+                        VaultKeyItem = ItemLookup.Items[ApItem.ItemName];
+                        if (VaultKeyItem.ItemNameForInventory == "Vault Key (Red)") {
+                            return;
+                        }
                     }
                 }
                 if (IsSinglePlayer()) {
@@ -916,7 +923,7 @@ namespace TunicArchipelago {
                 GameObject NewItem = SetupItemBase(VaultKey.transform, ApItem, Check);
 
                 TransformData TransformData;
-                if (IsArchipelago() && (ApItem != null && !Archipelago.instance.IsTunicPlayer(ApItem.Player) || !ItemLookup.Items.ContainsKey(ApItem.ItemName))) {
+                if (IsArchipelago() && VaultKeyItem == null && (ApItem != null && !Archipelago.instance.IsTunicPlayer(ApItem.Player) || !ItemLookup.Items.ContainsKey(ApItem.ItemName))) {
                     TransformData = ItemPositions.VaultKeyRed["Other World"];
                 } else {
                     if (VaultKeyItem.Type == ItemTypes.TRINKET) {
@@ -970,7 +977,9 @@ namespace TunicArchipelago {
                     }
                     if (IsArchipelago()) {
                         ApItem = ItemLookup.ItemList[ShopItemIDs[i]];
-                        Item = ItemLookup.Items[ApItem.ItemName];
+                        if (Archipelago.instance.IsTunicPlayer(ApItem.Player)) {
+                            Item = ItemLookup.Items[ApItem.ItemName];
+                        }
                     }
                     if (IsSinglePlayer()) {
                         Check = Locations.RandomizedLocations[ShopItemIDs[i]];
@@ -980,7 +989,7 @@ namespace TunicArchipelago {
                     NewItem = SetupItemBase(ItemHolder.transform, ApItem, Check);
 
                     TransformData TransformData;
-                    if (IsArchipelago() && (ApItem != null && !Archipelago.instance.IsTunicPlayer(ApItem.Player) || !ItemLookup.Items.ContainsKey(ApItem.ItemName))) {
+                    if (IsArchipelago() && Item == null && (ApItem != null && !Archipelago.instance.IsTunicPlayer(ApItem.Player) || !ItemLookup.Items.ContainsKey(ApItem.ItemName))) {
                         TransformData = ItemPositions.Shop["Other World"];
                     } else {
                         if (Item.Type == ItemTypes.TRINKET) {
@@ -1044,7 +1053,9 @@ namespace TunicArchipelago {
                 }
                 if (IsArchipelago()) {
                     ApItem = ItemLookup.ItemList[ItemId];
-                    Item = ItemLookup.Items[ApItem.ItemName];
+                    if (Archipelago.instance.IsTunicPlayer(ApItem.Player)) {
+                        Item = ItemLookup.Items[ApItem.ItemName];
+                    }
                 }
                 if (IsSinglePlayer()) {
                     Check = Locations.RandomizedLocations[ItemId];
@@ -1052,7 +1063,7 @@ namespace TunicArchipelago {
                 }
                 GameObject NewItem = SetupItemBase(HeroRelicPickup.transform, ApItem, Check);
 
-                if (IsArchipelago() && (ApItem != null && !Archipelago.instance.IsTunicPlayer(ApItem.Player) || !ItemLookup.Items.ContainsKey(ApItem.ItemName))) {
+                if (IsArchipelago() && Item == null && (ApItem != null && !Archipelago.instance.IsTunicPlayer(ApItem.Player) || !ItemLookup.Items.ContainsKey(ApItem.ItemName))) {
                     if (NewItem.GetComponent<Rotate>() == null) {
                         NewItem.AddComponent<Rotate>().eulerAnglesPerSecond = new Vector3(0f, 45f, 0f);
                     }
