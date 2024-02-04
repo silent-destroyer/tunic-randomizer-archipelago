@@ -250,7 +250,7 @@ namespace TunicArchipelago {
             } else if (SceneName == "Overworld Interiors") {
                 GameObject.Find("Trophy Stuff").transform.GetChild(4).gameObject.SetActive(true);
 
-                GameObject.Destroy(GameObject.Find("_Special/Bed Toggle Trigger/"));
+                GameObject.FindObjectOfType<BedToggle>().canBeUsed = StateVariable.GetStateVariableByName("false");
                 if ((StateVariable.GetStateVariableByName("Has Been Betrayed").BoolValue || StateVariable.GetStateVariableByName("Has Died To God").BoolValue) && SaveFile.GetInt(HexagonQuestEnabled) == 0) {
                     InteractionPatches.SetupDayNightHourglass();
                 }
