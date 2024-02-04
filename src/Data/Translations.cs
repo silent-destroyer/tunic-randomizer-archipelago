@@ -265,7 +265,7 @@ namespace TunicArchipelago {
             {"\"Centipede\"", "sehntipEd"},
             {"\"Shadowreaper\"", "$ahdOrEpur"},
             {"\"Phrend\" (void)", "frehnd (void)"},
-            {"\"Rudeling\" (void)", "roodli (void)"},
+            {"\"Rudeling\" (void)", "roodli^ (void)"},
             {"\"Frog...?\" (smawl) [frog]", "frawg...? (smawl) [frog]"},
             {"\"Frog...?\" (spEr) [frog]", "frawg...? (spEr) [frog]"},
             {"\"Fairy...?\"", "fArE...?"},
