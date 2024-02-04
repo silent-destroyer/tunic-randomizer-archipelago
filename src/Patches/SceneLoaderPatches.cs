@@ -148,6 +148,7 @@ namespace TunicArchipelago {
             }
             if (loadingScene.name == "Library Arena" && ModelSwaps.SecondSword == null) {
                 ModelSwaps.InitializeSecondSword();
+                EnemyRandomizer.InitializeEnemies("Library Arena");
                 SceneLoader.LoadScene("Spirit Arena");
                 return;
             }

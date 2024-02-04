@@ -431,14 +431,18 @@ namespace TunicArchipelago {
 
         public static void ToggleCustomTexture(int index) {
             TunicArchipelago.Settings.UseCustomTexture = !TunicArchipelago.Settings.UseCustomTexture;
-            if (TunicArchipelago.Settings.UseCustomTexture) {
-                PaletteEditor.LoadCustomTexture();
-            } else {
-                if (TunicArchipelago.Settings.RandomFoxColorsEnabled) {
-                    PaletteEditor.RandomizeFoxColors();
+            try {
+                if (TunicArchipelago.Settings.UseCustomTexture) {
+                    PaletteEditor.LoadCustomTexture();
                 } else {
-                    PaletteEditor.RevertFoxColors();
+                    if (TunicArchipelago.Settings.RandomFoxColorsEnabled) {
+                        PaletteEditor.RandomizeFoxColors();
+                    } else {
+                        PaletteEditor.RevertFoxColors();
+                    }
                 }
+            } catch (Exception e) {
+
             }
         }
 

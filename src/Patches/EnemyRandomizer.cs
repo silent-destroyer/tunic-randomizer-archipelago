@@ -145,6 +145,15 @@ namespace TunicArchipelago {
                 "Cathedral Arena",
                 new List<string>() {
                     "tech knight ghost",
+                    "Frog Small_Ghost",
+                    "Frog Spear_Ghost",
+                    "Fairyprobe Archipelagos (Ghost)",
+                    "bomezome_easy_ghost",
+                    "bomezome_easy_ghost (tweaked)",
+                    "Wizard_Support_Ghost",
+                    "Skuladot redux_ghost",
+                    "Skuladot redux_shield_ghost",
+                    "Skuladot redux Big_ghost",
                 }
             },
             {
@@ -185,6 +194,13 @@ namespace TunicArchipelago {
                 }
             },
             {
+                "Library Arena",
+                new List<string> () {
+                    "Bat_librarian add",
+                    "Skuladot redux_librarian add"
+                }
+            },
+            {
                 "Posterity",
                 new List<string> () {
                     "Phage",
@@ -220,6 +236,12 @@ namespace TunicArchipelago {
                     "Hedgehog Trap",
                     "administrator_servant",
                     "Phage",
+                    "Bat void",
+                    "Skuladot redux void",
+                    "Fairyprobe Archipelagos (Ghost)",
+                    "bomezome_easy_ghost",
+                    "Skuladot redux_ghost",
+                    "Skuladot redux_shield_ghost",
                 }
             },
             {
@@ -242,6 +264,8 @@ namespace TunicArchipelago {
                     "Frog Spear",
                     "Frog",
                     "Frog Small",
+                    "Frog Small_Ghost",
+                    "Frog Spear_Ghost",
                     "Spider Big",
                     "Wizard_Sword",
                     "Wizard_Support",
@@ -250,6 +274,9 @@ namespace TunicArchipelago {
                     "Fox enemy",
                     "Centipede",
                     "Ghost Knight",
+                    "bomezome_easy_ghost (tweaked)",
+                    "Wizard_Support_Ghost",
+                    "Skuladot redux Big_ghost",
                 }
             },
             {
@@ -324,6 +351,17 @@ namespace TunicArchipelago {
             { "Voidtouched", $"\"Voidtouched\"" },
             { "Centipede", $"\"Centipede\"" },
             { "Shadowreaper", $"\"Shadowreaper\"" },
+            { "Bat void", $"\"Phrend\" (void)" },
+            { "Skuladot redux void", $"\"Rudeling\" (void)" },
+            { "Frog Small_Ghost", $"\"Frog...?\" (smawl) [frog]" },
+            { "Frog Spear_Ghost", $"\"Frog...?\" (spEr) [frog]" },
+            { "Fairyprobe Archipelagos (Ghost)", $"\"Fairy...?\"" },
+            { "bomezome_easy_ghost", $"\"Fleemer...?\"" },
+            { "bomezome_easy_ghost (tweaked)", $"\"Fleemer...?\" (lRj)" },
+            { "Wizard_Support_Ghost", $"\"Custodian...?\" (suhport)" },
+            { "Skuladot redux_ghost", $"\"Rudeling...?\"" },
+            { "Skuladot redux_shield_ghost", $"\"Rudeling...?\" ($Eld)" },
+            { "Skuladot redux Big_ghost", $"\"Guard Captain...?\"" },
         };
 
         public static void CreateAreaSeeds() {
@@ -342,6 +380,8 @@ namespace TunicArchipelago {
                 { "Hedgehog Trap (1)", "Hedgehog Trap" },
                 { "Centipede from egg (Varient)", "Centipede" },
                 { "Spinnerbot (3)", "Spinnerbot Corrupted" },
+                { "Bat_librarian add", "Bat void" },
+                { "Skuladot redux_librarian add", "Skuladot redux void" },
             };
             foreach (string LocationEnemy in LocationEnemies[SceneName]) {
                 string EnemyName = LocationEnemy;
@@ -390,6 +430,10 @@ namespace TunicArchipelago {
                     Enemies["Crabbo"].GetComponent<Crabbo>().averageAttackCooldown = 1.25f;
                     Enemies["Crabbo"].SetActive(false);
                     GameObject.DontDestroyOnLoad(Enemies["Crabbo"]);
+                }
+
+                if (EnemyName == "Bat void") {
+                    Enemies[EnemyName].GetComponent<Bat>().monsterAggroDistance = 4;
                 }
 
                 Enemies[EnemyName].name = EnemyName + " Prefab";
@@ -493,7 +537,7 @@ namespace TunicArchipelago {
                         Enemy.name = Enemy.name.Replace("Spinnerbot", "Spinnerbot Corrupted");
                     }
                     if (TunicArchipelago.Settings.ExtraEnemiesEnabled) {
-                        if (Enemy.transform.parent != null && Enemy.transform.parent.name.Contains("NG+")) {
+                        if (Enemy.transform.parent != null && (Enemy.transform.parent.name.Contains("NG+") || Enemy.transform.parent.name.ToLower().Contains("night"))) {
                             Enemy.transform.parent.gameObject.SetActive(true);
                         }
                     }
@@ -570,7 +614,7 @@ namespace TunicArchipelago {
                         TopLine.text = $"\"Enemy\"";
                         foreach (string Key in ProperEnemyNames.Keys) {
                             if (NewEnemy.name.Replace(" Prefab", "").Replace("(Clone)", "") == Key) {
-                                TopLine.text = ProperEnemyNames[Key];
+                                TopLine.text = Translations.TranslateDefaultNoQuotes(ProperEnemyNames[Key]);
                                 if (NewEnemy.name.Contains("crocodoo")) {
                                     BottomLine.text = $"#uh wuhn ahnd OnlE";
                                 } else if (EnemyRankings["Average"].Contains(Key)) {
