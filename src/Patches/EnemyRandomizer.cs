@@ -34,9 +34,18 @@ namespace TunicArchipelago {
         };
 
         public static List<string> ExcludedScenes = new List<string>() {
+            "PatrolCave",
             "Library Arena",
             "Fortress Arena",
-            "Spirit Arena"
+            "Spirit Arena",
+        };
+
+        public static List<string> DoNotPlaceCoffeeTableHere = new List<string>() {
+            "Cathedral Redux Fox enemy zombie (13)",
+            "Fortress Basement Spider Small (3)",
+            "Fortress Basement Spider Small (5)",
+            "Sewer Bat (7)", "Sewer Bat (8)", "Sewer Bat (9)",
+            "Sewer Bat (10)", "Sewer Bat (11)", "Sewer Bat (12)",
         };
 
         public static Dictionary<string, List<string>> LocationEnemies = new Dictionary<string, List<string>>() {
@@ -440,6 +449,12 @@ namespace TunicArchipelago {
             if (CurrentScene == "Forest Boss Room" && GameObject.Find("Skuladot redux") != null) {
                 Monsters.Add(GameObject.Find("Skuladot redux"));
             }
+            if (CurrentScene == "Fortress Basement") {
+                Monsters.AddRange(Resources.FindObjectsOfTypeAll<GameObject>().Where(slorm => slorm.GetComponent<Spinnerbot>() != null && slorm.gameObject.scene.name == CurrentScene && slorm.name == "Spinnerbot Baby").ToList());
+            }
+            if (CurrentScene == "frog cave main") {
+                Monsters.Add(GameObject.Find("Wizard_Support"));
+            }
             if (TunicArchipelago.Settings.ExtraEnemiesEnabled && CurrentScene == "Monastery") {
                 Resources.FindObjectsOfTypeAll<Voidtouched>().ToList()[0].gameObject.transform.parent = null;
             }
@@ -481,6 +496,9 @@ namespace TunicArchipelago {
                         if (Enemy.transform.parent != null && Enemy.transform.parent.name.Contains("NG+")) {
                             Enemy.transform.parent.gameObject.SetActive(true);
                         }
+                    }
+                    if (DoNotPlaceCoffeeTableHere.Contains($"{CurrentScene} {Enemy.name}")) {
+                        EnemyKeys.Remove("administrator_servant");
                     }
                     string NewEnemyName = "";
                     if (TunicArchipelago.Settings.EnemyDifficulty == RandomizerSettings.EnemyRandomizationType.RANDOM) {
