@@ -754,9 +754,11 @@ namespace TunicArchipelago {
             if (Plinth != null && (ItemLookup.ItemList.ContainsKey(ItemId) || Locations.RandomizedLocations.ContainsKey(ItemId))) {
                 if (IsArchipelago()) {
                     ApItem = ItemLookup.ItemList[ItemId];
-                    HexagonItem = ItemLookup.Items[ApItem.ItemName];
-                    if (Archipelago.instance.IsTunicPlayer(ApItem.Player) && HexagonItem.ItemNameForInventory == "Hexagon Red") {
-                        return;
+                    if (Archipelago.instance.IsTunicPlayer(ApItem.Player)) {
+                        HexagonItem = ItemLookup.Items[ApItem.ItemName];
+                        if (HexagonItem.ItemNameForInventory == "Hexagon Red") {
+                            return;
+                        }
                     }
                 }
                 if(IsSinglePlayer()) {
