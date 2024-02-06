@@ -567,6 +567,24 @@ namespace TunicArchipelago {
             if (TunicArchipelago.Settings.ERFixedShop) {
                 Settings.Add("er_fixed_shop");
             }
+            Settings.Add($"fool_traps${(int)TunicArchipelago.Settings.FoolTrapIntensity}$");
+            Settings.Add($"laurels_location#{(int)TunicArchipelago.Settings.FixedLaurelsOption}#");
+            if (TunicArchipelago.Settings.Lanternless) {
+                Settings.Add("lanternless");
+            }
+            if (TunicArchipelago.Settings.Maskless) {
+                Settings.Add("maskless");
+            }
+
+            // Enemy Rando 
+            if (TunicArchipelago.Settings.EnemyRandomizerEnabled) {
+                Settings.Add("enemy_randomizer");
+                if (TunicArchipelago.Settings.ExtraEnemiesEnabled) {
+                    Settings.Add("extra_enemies");
+                }
+                Settings.Add($"enemy_generation!{(int)TunicArchipelago.Settings.EnemyDifficulty}!{(int)TunicArchipelago.Settings.EnemyGeneration}!");
+            }
+
             GUIUtility.systemCopyBuffer = string.Join(",", Settings.ToArray());
         }
 
@@ -598,6 +616,24 @@ namespace TunicArchipelago {
             if (SaveFile.GetInt("randomizer ER fixed shop") == 1) {
                 Settings.Add("er_fixed_shop");
             }
+            Settings.Add($"fool_traps${(int)TunicArchipelago.Settings.FoolTrapIntensity}$");
+            Settings.Add($"laurels_location#{SaveFile.GetInt("randomizer laurels location")}#");
+            if (SaveFile.GetInt(SaveFlags.LanternlessLogic) == 1) {
+                Settings.Add("lanternless");
+            }
+            if (SaveFile.GetInt(SaveFlags.MasklessLogic) == 1) {
+                Settings.Add("maskless");
+            }
+
+            // Enemy Rando 
+            if (TunicArchipelago.Settings.EnemyRandomizerEnabled) {
+                Settings.Add("enemy_randomizer");
+                if (TunicArchipelago.Settings.ExtraEnemiesEnabled) {
+                    Settings.Add("extra_enemies");
+                }
+                Settings.Add($"enemy_generation!{(int)TunicArchipelago.Settings.EnemyDifficulty}!{(int)TunicArchipelago.Settings.EnemyGeneration}!");
+            }
+
             GUIUtility.systemCopyBuffer = string.Join(",", Settings.ToArray());
         }
 
@@ -631,12 +667,45 @@ namespace TunicArchipelago {
                         TunicArchipelago.Settings.HexagonQuestExtraPercentage = 50;
                     }
                 }
+                if (SettingsString.Split('$').Count() > 1) {
+                    try {
+                        TunicArchipelago.Settings.FoolTrapIntensity = (RandomizerSettings.FoolTrapOption)int.Parse(SettingsString.Split('$')[1]);
+                    } catch (Exception e) {
+                        TunicArchipelago.Settings.FoolTrapIntensity = RandomizerSettings.FoolTrapOption.NORMAL;
+                    }
+                }
+                if (SettingsString.Split('#').Count() > 1) {
+                    try {
+                        TunicArchipelago.Settings.FixedLaurelsOption = (RandomizerSettings.FixedLaurelsType)int.Parse(SettingsString.Split('#')[1]);
+                    } catch(Exception e) {
+                        TunicArchipelago.Settings.FixedLaurelsOption = RandomizerSettings.FixedLaurelsType.ANYWHERE;
+                    }
+                }
                 TunicArchipelago.Settings.KeysBehindBosses = SettingsString.Contains("keys_behind_bosses");
                 TunicArchipelago.Settings.SwordProgressionEnabled = SettingsString.Contains("sword_progression");
                 TunicArchipelago.Settings.StartWithSwordEnabled = SettingsString.Contains("start_with_sword");
                 TunicArchipelago.Settings.ShuffleAbilities = SettingsString.Contains("shuffle_abilities");
                 TunicArchipelago.Settings.EntranceRandoEnabled = SettingsString.Contains("entrance_randomizer");
                 TunicArchipelago.Settings.ERFixedShop = SettingsString.Contains("er_fixed_shop");
+                TunicArchipelago.Settings.Lanternless = SettingsString.Contains("lanternless");
+                TunicArchipelago.Settings.Maskless = SettingsString.Contains("maskless");
+
+                if (SettingsString.Contains("enemy_randomizer")) {
+                    TunicArchipelago.Settings.EnemyRandomizerEnabled = true;
+                    TunicArchipelago.Settings.ExtraEnemiesEnabled = SettingsString.Contains("extra_enemies");
+                    if (SettingsString.Split('!').Count() > 1) {
+                        try {
+                            TunicArchipelago.Settings.EnemyDifficulty = (RandomizerSettings.EnemyRandomizationType)int.Parse(SettingsString.Split('!')[2]);
+                            TunicArchipelago.Settings.EnemyGeneration = (RandomizerSettings.EnemyGenerationType)int.Parse(SettingsString.Split('!')[1]); 
+
+                        } catch (Exception e) {
+                            TunicArchipelago.Settings.EnemyDifficulty = RandomizerSettings.EnemyRandomizationType.BALANCED;
+                            TunicArchipelago.Settings.EnemyGeneration = RandomizerSettings.EnemyGenerationType.SEEDED;
+                        }
+                    }
+                }
+
+                OptionsGUIPatches.SaveSettings();
             } catch (Exception e) {
                 Logger.LogError("Error parsing quick settings string!");
             }
