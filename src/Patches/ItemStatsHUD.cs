@@ -235,7 +235,7 @@ namespace TunicArchipelago {
                     icon.SetActive(false);
                 }
 
-                List<string> abilities = new List<string>() { "Prayer", "Holy Cross", "Ice Rod" };
+                List<string> abilities = new List<string>() { "Prayer", "Holy Cross", "Icebolt" };
                 TMP_FontAsset odin = Resources.FindObjectsOfTypeAll<TMP_FontAsset>().Where(Font => Font.name == "Latin Rounded").ToList()[0];
                 Material fontMaterial = ModelSwaps.FindMaterial("Latin Rounded - Quantity Outline");
                 for (int i = 0; i < 3; i++) {
@@ -294,7 +294,7 @@ namespace TunicArchipelago {
 
             bool HasPrayer = SaveFile.GetInt(PrayerUnlocked) == 1;
             bool HasHolyCross = SaveFile.GetInt(HolyCrossUnlocked) == 1;
-            bool HasIceRod = SaveFile.GetInt(IceRodUnlocked) == 1;
+            bool HasIceRod = SaveFile.GetInt(IceBoltUnlocked) == 1;
             Color Full = new Color(1, 1, 1, 1);
             Color Faded = new Color(1, 1, 1, 0.5f);
             bool isHexQuest = SaveFile.GetInt(HexagonQuestEnabled) == 1;
@@ -303,7 +303,7 @@ namespace TunicArchipelago {
                 SortedDictionary<int, string> HexUnlocks = new SortedDictionary<int, string>() {
                     { SaveFile.GetInt(HexagonQuestPrayer), "Prayer" },
                     { SaveFile.GetInt(HexagonQuestHolyCross), "Holy Cross" },
-                    { SaveFile.GetInt(HexagonQuestIceRod), "Ice Rod" },
+                    { SaveFile.GetInt(HexagonQuestIcebolt), "Icebolt" },
                 };
 
                 int GoldHexes = Inventory.GetItemByName("Hexagon Gold").Quantity;
@@ -345,7 +345,7 @@ namespace TunicArchipelago {
             } else {
                 AbilityShuffle.transform.GetChild(13).GetComponent<TextMeshProUGUI>().text = "Prayer";
                 AbilityShuffle.transform.GetChild(14).GetComponent<TextMeshProUGUI>().text = "Holy Cross";
-                AbilityShuffle.transform.GetChild(15).GetComponent<TextMeshProUGUI>().text = "Ice Rod";
+                AbilityShuffle.transform.GetChild(15).GetComponent<TextMeshProUGUI>().text = "Icebolt";
 
                 AbilityShuffle.transform.GetChild(13).GetComponent<TextMeshProUGUI>().color = HasPrayer ? Full : Faded;
                 AbilityShuffle.transform.GetChild(14).GetComponent<TextMeshProUGUI>().color = HasHolyCross ? Full : Faded;

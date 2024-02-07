@@ -41,9 +41,9 @@ namespace TunicArchipelago {
             {"Flask Shard", 0},
             {"Flask Container", 0},
             {"Pages", 0},
-            {"Prayer Page", 0},
-            {"Holy Cross Page", 0},
-            {"Ice Rod Page", 0},
+            {"Prayer", 0},
+            {"Holy Cross", 0},
+            {"Icebolt", 0},
             {"Fairies", 0},
             {"Golden Trophies", 0},
             {"Dath Stone", 0},
@@ -124,9 +124,9 @@ namespace TunicArchipelago {
             if (Item.Type == ItemTypes.PAGE) {
                 ImportantItems["Pages"]++;
 
-                if (Item.Name == "Pages 24-25 (Prayer)") { ImportantItems["Prayer Page"]++; }
-                if (Item.Name == "Pages 42-43 (Holy Cross)") { ImportantItems["Holy Cross Page"]++; }
-                if (Item.Name == "Pages 52-53 (Ice Rod)") { ImportantItems["Ice Rod Page"]++; }
+                if (Item.Name == "Pages 24-25 (Prayer)") { ImportantItems["Prayer"]++; }
+                if (Item.Name == "Pages 42-43 (Holy Cross)") { ImportantItems["Holy Cross"]++; }
+                if (Item.Name == "Pages 52-53 (Icebolt)") { ImportantItems["Icebolt"]++; }
             }
             
             if (Item.Type == ItemTypes.GOLDENTROPHY) {
@@ -135,6 +135,12 @@ namespace TunicArchipelago {
                 if (ImportantItems["Golden Trophies"] >= 12) {
                     Inventory.GetItemByName("Spear").Quantity = 1;
                 }
+            }
+
+            if (Item.Type == ItemTypes.HEXAGONQUEST && SaveFile.GetInt(AbilityShuffle) == 1) {
+                if (Inventory.GetItemByName("Gold Hexagon").Quantity == SaveFile.GetInt(HexagonQuestPrayer)) { ImportantItems["Prayer"]++; }
+                if (Inventory.GetItemByName("Gold Hexagon").Quantity == SaveFile.GetInt(HexagonQuestHolyCross)) { ImportantItems["Holy Cross"]++; }
+                if (Inventory.GetItemByName("Gold Hexagon").Quantity == SaveFile.GetInt(HexagonQuestIcebolt)) { ImportantItems["Icebolt"]++; }
             }
             
             if (Item.Type == ItemTypes.SWORDUPGRADE) {
@@ -229,7 +235,7 @@ namespace TunicArchipelago {
             if (SaveFile.GetInt(HexagonQuestEnabled) == 1 && SaveFile.GetInt(AbilityShuffle) == 1) {
                 SpoilerLogLines.Add($"\t{(SaveFile.GetInt(PrayerUnlocked) == 1 ? "x" : "-")} Prayer: {SaveFile.GetInt(HexagonQuestPrayer)} Gold Questagons");
                 SpoilerLogLines.Add($"\t{(SaveFile.GetInt(HolyCrossUnlocked) == 1 ? "x" : "-")} Holy Cross: {SaveFile.GetInt(HexagonQuestHolyCross)} Gold Questagons");
-                SpoilerLogLines.Add($"\t{(SaveFile.GetInt(IceRodUnlocked) == 1 ? "x" : "-")} Ice Rod: {SaveFile.GetInt(HexagonQuestIceRod)} Gold Questagons");
+                SpoilerLogLines.Add($"\t{(SaveFile.GetInt(IceBoltUnlocked) == 1 ? "x" : "-")} Icebolt: {SaveFile.GetInt(HexagonQuestIcebolt)} Gold Questagons");
             }
             
             foreach (string Key in SpoilerLog.Keys) {

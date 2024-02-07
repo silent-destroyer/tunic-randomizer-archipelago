@@ -157,7 +157,7 @@ namespace TunicArchipelago {
                 if(SaveFile.GetInt(PrayerUnlocked) == 0) {
                     __instance.prayerBeginTimer = 0;
                 }
-                if(SaveFile.GetInt(IceRodUnlocked) == 0) {
+                if(SaveFile.GetInt(IceBoltUnlocked) == 0) {
                     TechbowItemBehaviour.kIceShotWindow = 0;
                 }
             }
@@ -443,13 +443,13 @@ namespace TunicArchipelago {
                         if (SaveFile.GetInt(HexagonQuestEnabled) == 1) {
                             SaveFile.SetInt(HexagonQuestPrayer, int.Parse(slotData["Hexagon Quest Prayer"].ToString(), CultureInfo.InvariantCulture));
                             SaveFile.SetInt(HexagonQuestHolyCross, int.Parse(slotData["Hexagon Quest Holy Cross"].ToString(), CultureInfo.InvariantCulture));
-                            SaveFile.SetInt(HexagonQuestIceRod, int.Parse(slotData["Hexagon Quest Ice Rod"].ToString(), CultureInfo.InvariantCulture));
+                            SaveFile.SetInt(HexagonQuestIcebolt, int.Parse(slotData["Hexagon Quest Icebolt"].ToString(), CultureInfo.InvariantCulture));
                         }
                     }
                     if (abilityShuffling.ToString() == "0") {
                         SaveFile.SetInt(PrayerUnlocked, 1);
                         SaveFile.SetInt(HolyCrossUnlocked, 1);
-                        SaveFile.SetInt(IceRodUnlocked, 1);
+                        SaveFile.SetInt(IceBoltUnlocked, 1);
                     }
                 }
                 if (slotData.TryGetValue("sword_progression", out var swordProgression)) {

@@ -278,7 +278,7 @@ namespace TunicArchipelago {
             { "Pages 46-47", new ItemData("Pages 46-47", "useful", "23", ItemTypes.PAGE, 1) },
             { "Pages 48-49", new ItemData("Pages 48-49", "useful", "24", ItemTypes.PAGE, 1) },
             { "Pages 50-51", new ItemData("Pages 50-51", "useful", "25", ItemTypes.PAGE, 1) },
-            { "Pages 52-53 (Ice Rod)", new ItemData("Pages 52-53 (Ice Rod)", "progression", "26", ItemTypes.PAGE, 1) },
+            { "Pages 52-53 (Icebolt)", new ItemData("Pages 52-53 (Icebolt)", "progression", "26", ItemTypes.PAGE, 1) },
             { "Pages 54-55", new ItemData("Pages 54-55", "useful", "27", ItemTypes.PAGE, 1) },
         };
 
@@ -353,7 +353,7 @@ namespace TunicArchipelago {
 
         public static List<string> MajorItems = new List<string>() { "Stick", "Sword", "Sword Upgrade", "Magic Dagger", "Magic Wand", "Magic Orb", "Hero's Laurels", "Lantern", "Shield", "Gun", "Scavenger Mask",
                 "Old House Key", "Fortress Vault Key", "Dath Stone", "Hourglass", "Hero Relic - ATT", "Hero Relic - DEF", "Hero Relic - POTION", "Hero Relic - HP", "Hero Relic - SP",
-                "Hero Relic - MP", "Red Questagon", "Green Questagon", "Blue Questagon", "Gold Questagon", "Pages 24-25 (Prayer)", "Pages 42-43 (Holy Cross)", "Pages 52-53 (Ice Rod)"
+                "Hero Relic - MP", "Red Questagon", "Green Questagon", "Blue Questagon", "Gold Questagon", "Pages 24-25 (Prayer)", "Pages 42-43 (Holy Cross)", "Pages 52-53 (Icebolt)"
         };
 
         public static List<string> LegacyMajorItems = new List<string>() { "Sword", "Sword Progression", "Stundagger", "Techbow", "Wand", "Hyperdash", "Lantern", "Shield", "Shotgun", "Mask",
@@ -363,7 +363,7 @@ namespace TunicArchipelago {
 
         public static string PrayerUnlockedLine = $"\"PRAYER Unlocked.\" Jahnuhl yor wizduhm, rooin sEkur.";
         public static string HolyCrossUnlockedLine = $"\"HOLY CROSS Unlocked.\" sEk wuht iz rItfuhlE yorz.";
-        public static string IceRodUnlockedLine = $"\"ICE ROD Unlocked.\" #A wOnt nO wuht hit #ehm";
+        public static string IceboltUnlockedLine = $"\"ICEBOLT Unlocked.\" #A wOnt nO wuht hit #ehm";
 
         public static Dictionary<string, string> SimplifiedItemNames = new Dictionary<string, string>() {
             {"Firecracker", "Firecracker"},
@@ -488,7 +488,7 @@ namespace TunicArchipelago {
             {"23", "Pages 46-47"},
             {"24", "Pages 48-49"},
             {"25", "Pages 50-51"},
-            {"26", "Pages 52-53 (Ice Rod)"},
+            {"26", "Pages 52-53 (Icebolt)"},
             {"27", "Pages 54-55"},
         };
 

@@ -40,7 +40,7 @@ namespace TunicArchipelago {
                 } else {
                     ProgressionNames.Add("12"); // Prayer
                     ProgressionNames.Add("21"); // Holy Cross
-                    ProgressionNames.Add("26"); // Ice Rod
+                    ProgressionNames.Add("26"); // Icebolt
                 }
             }
 
@@ -57,7 +57,7 @@ namespace TunicArchipelago {
             int HexagonsToAdd = (int)Math.Round((100f + TunicArchipelago.Settings.HexagonQuestExtraPercentage) / 100f * TunicArchipelago.Settings.HexagonQuestGoal);
             if (SaveFile.GetInt(SaveFlags.HexagonQuestEnabled) == 1 && SaveFile.GetInt("randomizer shuffled abilities") == 1) {
                 int HexGoal = SaveFile.GetInt("randomizer hexagon quest goal");
-                List<string> abilities = new List<string>() { "prayer", "holy cross", "ice rod" }.OrderBy(r => TunicArchipelago.Randomizer.Next()).ToList();
+                List<string> abilities = new List<string>() { "prayer", "holy cross", "icebolt" }.OrderBy(r => TunicArchipelago.Randomizer.Next()).ToList();
                 List<int> ability_unlocks = new List<int>() { (int)(HexGoal / 4f), (int)((HexGoal / 4f) * 2), (int)((HexGoal / 4f) * 3) }.OrderBy(r => TunicArchipelago.Randomizer.Next()).ToList();
                 for (int i = 0; i < 3; i++) {
                     int index = TunicArchipelago.Randomizer.Next(abilities.Count);
@@ -139,7 +139,7 @@ namespace TunicArchipelago {
                                     }
                                     if (Item.Location.RequiredItems[i].ContainsKey("26")) {
                                         Item.Location.RequiredItems[i].Remove("26");
-                                        Item.Location.RequiredItems[i].Add("Hexagon Gold", SaveFile.GetInt($"randomizer hexagon quest ice rod requirement"));
+                                        Item.Location.RequiredItems[i].Add("Hexagon Gold", SaveFile.GetInt($"randomizer hexagon quest icebolt requirement"));
                                     }
                                 }
                             }
@@ -161,7 +161,7 @@ namespace TunicArchipelago {
                                     }
                                     if (Item.Location.RequiredItemsDoors[i].ContainsKey("26")) {
                                         Item.Location.RequiredItemsDoors[i].Remove("26");
-                                        Item.Location.RequiredItemsDoors[i].Add("Hexagon Gold", SaveFile.GetInt($"randomizer hexagon quest ice rod requirement"));
+                                        Item.Location.RequiredItemsDoors[i].Add("Hexagon Gold", SaveFile.GetInt($"randomizer hexagon quest icebolt requirement"));
                                     }
                                 }
                             }

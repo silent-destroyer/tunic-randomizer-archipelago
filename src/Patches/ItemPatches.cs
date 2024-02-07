@@ -304,7 +304,7 @@ namespace TunicArchipelago {
                     Dictionary<string, (string, string, string)> pagesForAbilities = new Dictionary<string, (string, string, string)>() {
                         { "12", (PrayerUnlocked, PrayerUnlockedTime, ItemLookup.PrayerUnlockedLine) },
                         { "21", (HolyCrossUnlocked, HolyCrossUnlockedTime, ItemLookup.HolyCrossUnlockedLine) },
-                        { "26", (IceRodUnlocked, IceRodUnlockedTime, ItemLookup.IceRodUnlockedLine) },
+                        { "26", (IceBoltUnlocked, IceboltUnlockedTime, ItemLookup.IceboltUnlockedLine) },
                     };
                     if (pagesForAbilities.ContainsKey(Item.ItemNameForInventory)) {
                         SaveFile.SetInt(pagesForAbilities[Item.ItemNameForInventory].Item1, 1);
@@ -370,7 +370,7 @@ namespace TunicArchipelago {
                     Dictionary<int, (string, string, string)> hexesForAbilities = new Dictionary<int, (string, string, string)>() {
                         { SaveFile.GetInt(HexagonQuestPrayer), (PrayerUnlocked, PrayerUnlockedTime, ItemLookup.PrayerUnlockedLine) },
                         { SaveFile.GetInt(HexagonQuestHolyCross), (HolyCrossUnlocked, HolyCrossUnlockedTime, ItemLookup.HolyCrossUnlockedLine) },
-                        { SaveFile.GetInt(HexagonQuestIceRod), (IceRodUnlocked, IceRodUnlockedTime, ItemLookup.IceRodUnlockedLine) },
+                        { SaveFile.GetInt(HexagonQuestIcebolt), (IceBoltUnlocked, IceboltUnlockedTime, ItemLookup.IceboltUnlockedLine) },
                     };
                     if (hexesForAbilities.ContainsKey(GoldHexes)) {
                         SaveFile.SetInt(hexesForAbilities[GoldHexes].Item1, 1);
@@ -505,7 +505,7 @@ namespace TunicArchipelago {
                     Dictionary<string, (string, string, string)> pagesForAbilities = new Dictionary<string, (string, string, string)>() {
                         { "12", (PrayerUnlocked, PrayerUnlockedTime, ItemLookup.PrayerUnlockedLine) },
                         { "21", (HolyCrossUnlocked, HolyCrossUnlockedTime, ItemLookup.HolyCrossUnlockedLine) },
-                        { "26", (IceRodUnlocked, IceRodUnlockedTime, ItemLookup.IceRodUnlockedLine) },
+                        { "26", (IceBoltUnlocked, IceboltUnlockedTime, ItemLookup.IceboltUnlockedLine) },
                     };
                     if (pagesForAbilities.ContainsKey(Item.ItemNameForInventory)) {
                         SaveFile.SetInt(pagesForAbilities[Item.ItemNameForInventory].Item1, 1);
@@ -571,7 +571,7 @@ namespace TunicArchipelago {
                     Dictionary<int, (string, string, string)> hexesForAbilities = new Dictionary<int, (string, string, string)>() {
                         { SaveFile.GetInt(HexagonQuestPrayer), (PrayerUnlocked, PrayerUnlockedTime, ItemLookup.PrayerUnlockedLine) },
                         { SaveFile.GetInt(HexagonQuestHolyCross), (HolyCrossUnlocked, HolyCrossUnlockedTime, ItemLookup.HolyCrossUnlockedLine) },
-                        { SaveFile.GetInt(HexagonQuestIceRod), (IceRodUnlocked, IceRodUnlockedTime, ItemLookup.IceRodUnlockedLine) },
+                        { SaveFile.GetInt(HexagonQuestIcebolt), (IceBoltUnlocked, IceboltUnlockedTime, ItemLookup.IceboltUnlockedLine) },
                     };
                     if (hexesForAbilities.ContainsKey(GoldHexes)) {
                         SaveFile.SetInt(hexesForAbilities[GoldHexes].Item1, 1);

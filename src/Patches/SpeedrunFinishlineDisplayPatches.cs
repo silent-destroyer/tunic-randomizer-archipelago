@@ -363,7 +363,7 @@ namespace TunicArchipelago {
                 float GrappleTime = SaveFile.GetFloat("randomizer Magic Orb 1 time");
                 float HyperdashTime = SaveFile.GetFloat("randomizer Hero's Laurels 1 time");
                 Text += $"Sword:\t{FormatTime(SwordTime, true)}\n" +
-                        $"Grapple:\t{FormatTime(GrappleTime, true)}\t" +
+                        $"Magic Orb:\t{FormatTime(GrappleTime, true)}\t" +
                         $"Laurels:\t{FormatTime(HyperdashTime, true)}\n";
                 int Total = 6;
                 if (SaveFile.GetInt(AbilityShuffle) == 1) {
