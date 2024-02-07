@@ -34,6 +34,7 @@ namespace TunicArchipelago {
             addPageButton("General Settings", GeneralSettingsPage);
             addPageButton("Enemy Randomizer Settings", EnemyRandomizerSettings);
             addPageButton("Fox Customization", CustomFoxSettingsPage);
+            addPageButton("Race Settings", RaceSettingsPage);
         }
 
         public static void ArchipelagoSettingsPage() {
@@ -103,7 +104,8 @@ namespace TunicArchipelago {
             OptionsGUI.addToggle("Ghost Fox Hints", "Off", "On", TunicArchipelago.Settings.GhostFoxHintsEnabled ? 1 : 0, (OptionsGUIMultiSelect.MultiSelectAction)ToggleGhostFoxHints);
             OptionsGUI.addToggle("Freestanding Items Match Contents", "Off", "On", TunicArchipelago.Settings.ShowItemsEnabled ? 1 : 0, (OptionsGUIMultiSelect.MultiSelectAction)ToggleShowItems);
             OptionsGUI.addToggle("Chests Match Contents", "Off", "On", TunicArchipelago.Settings.ChestsMatchContentsEnabled ? 1 : 0, (OptionsGUIMultiSelect.MultiSelectAction)ToggleChestsMatchContents);
-            OptionsGUI.addToggle("Display Hints in Trunic", "Off", "On", TunicArchipelago.Settings.UseTrunicTranslations ? 1 : 0, (OptionsGUIMultiSelect.MultiSelectAction)ToggleTrunicHints);
+            OptionsGUI.addToggle("Display Hints in Trunic", "Off", "On", TunicArchipelago.Settings.UseTrunicTranslations ? 1 : 0, (OptionsGUIMultiSelect.MultiSelectAction)ToggleTrunicHints); 
+            OptionsGUI.addToggle("Spoiler Log", "Off", "On", TunicArchipelago.Settings.CreateSpoilerLog ? 1 : 0, (OptionsGUIMultiSelect.MultiSelectAction)ToggleSpoilerLog);
             OptionsGUI.addButton("Open Spoiler Log", (Action)OpenLocalSpoilerLog);
             OptionsGUI.setHeading("Hints");
         }
@@ -151,6 +153,14 @@ namespace TunicArchipelago {
 
             }
             OptionsGUI.addButton("Reset to Defaults", (Action)ResetToDefaults);
+        }
+
+        public static void RaceSettingsPage() {
+            OptionsGUI OptionsGUI = GameObject.FindObjectOfType<OptionsGUI>();
+            OptionsGUI.setHeading("Race Time");
+            OptionsGUI.addToggle("Race Mode (Enables Race Options)", "Off", "On", TunicArchipelago.Settings.RaceMode ? 1 : 0, (OptionsGUIMultiSelect.MultiSelectAction)ToggleRaceMode);
+            OptionsGUI.addToggle("Disable Icebolt in Heir Fight", "Off", "On", TunicArchipelago.Settings.DisableIceboltInHeirFight ? 1 : 0, (OptionsGUIMultiSelect.MultiSelectAction)ToggleDisableHeirIcebolt);
+            OptionsGUI.addToggle("Disable Distant West Bell Shot", "Off", "On", TunicArchipelago.Settings.DisableDistantBellShots ? 1 : 0, (OptionsGUIMultiSelect.MultiSelectAction)ToggleDisableDistantDong);
         }
 
         public static void addPageButton(string pageName, Action pageMethod) {
@@ -329,6 +339,11 @@ namespace TunicArchipelago {
             SaveSettings();
         }
 
+        public static void ToggleSpoilerLog(int index) {
+            TunicArchipelago.Settings.CreateSpoilerLog = !TunicArchipelago.Settings.CreateSpoilerLog;
+            SaveSettings();
+        }
+
         // Gameplay
 
         public static void ToggleHeirAssistMode(int index) {
@@ -470,6 +485,22 @@ namespace TunicArchipelago {
 
         public static void ResetToDefaults() {
             PaletteEditor.RevertFoxColors();
+        }
+
+        // Race Settings
+        public static void ToggleRaceMode(int index) {
+            TunicArchipelago.Settings.RaceMode = !TunicArchipelago.Settings.RaceMode;
+            SaveSettings();
+        }
+
+        public static void ToggleDisableHeirIcebolt(int index) {
+            TunicArchipelago.Settings.DisableIceboltInHeirFight = !TunicArchipelago.Settings.DisableIceboltInHeirFight;
+            SaveSettings();
+        }
+
+        public static void ToggleDisableDistantDong(int index) {
+            TunicArchipelago.Settings.DisableDistantBellShots = !TunicArchipelago.Settings.DisableDistantBellShots;
+            SaveSettings();
         }
 
         public static void SaveFile_GetNewSaveFileName_PostfixPatch(SaveFile __instance, ref string __result) {

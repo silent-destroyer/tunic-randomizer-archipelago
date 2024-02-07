@@ -100,13 +100,18 @@ namespace TunicArchipelago {
 
             GUI.skin.toggle.fontSize = 15; 
             GUI.skin.button.fontSize = 15;
-            bool ToggleSpoilerLog = GUI.Toggle(new Rect(TunicArchipelago.Settings.CreateSpoilerLog ? 280f : 330f, y, 90f, 30f), TunicArchipelago.Settings.CreateSpoilerLog, "Spoiler Log");
-            TunicArchipelago.Settings.CreateSpoilerLog = ToggleSpoilerLog;
-            if (ToggleSpoilerLog) {
-                bool OpenSpoilerLog = GUI.Button(new Rect(370f, y, 50f, 25f), "Open");
-                if (OpenSpoilerLog) {
-                    if (File.Exists(TunicArchipelago.SpoilerLogPath)) {
-                        System.Diagnostics.Process.Start(TunicArchipelago.SpoilerLogPath);
+            if (TunicArchipelago.Settings.RaceMode) {
+                TunicArchipelago.Settings.RaceMode = GUI.Toggle(new Rect(330f, y, 90f, 30f), TunicArchipelago.Settings.RaceMode, "Race Mode");
+            } else {
+                bool ToggleSpoilerLog = GUI.Toggle(new Rect(TunicArchipelago.Settings.CreateSpoilerLog ? 280f : 330f, y, 90f, 30f), TunicArchipelago.Settings.CreateSpoilerLog, "Spoiler Log");
+                TunicArchipelago.Settings.CreateSpoilerLog = ToggleSpoilerLog;
+                if (ToggleSpoilerLog) {
+                    GUI.skin.button.fontSize = 15;
+                    bool OpenSpoilerLog = GUI.Button(new Rect(370f, y, 50f, 25f), "Open");
+                    if (OpenSpoilerLog) {
+                        if (File.Exists(TunicArchipelago.SpoilerLogPath)) {
+                            System.Diagnostics.Process.Start(TunicArchipelago.SpoilerLogPath);
+                        }
                     }
                 }
             }
@@ -226,14 +231,18 @@ namespace TunicArchipelago {
             float y = 20f;
 
             GUI.skin.toggle.fontSize = 15;
-            bool ToggleSpoilerLog = GUI.Toggle(new Rect(TunicArchipelago.Settings.CreateSpoilerLog ? 280f : 330f, y, 90f, 30f), TunicArchipelago.Settings.CreateSpoilerLog, "Spoiler Log");
-            TunicArchipelago.Settings.CreateSpoilerLog = ToggleSpoilerLog;
-            if (ToggleSpoilerLog) {
-                GUI.skin.button.fontSize = 15;
-                bool OpenSpoilerLog = GUI.Button(new Rect(370f, y, 50f, 25f), "Open");
-                if (OpenSpoilerLog) {
-                    if (File.Exists(TunicArchipelago.SpoilerLogPath)) {
-                        System.Diagnostics.Process.Start(TunicArchipelago.SpoilerLogPath);
+            if (TunicArchipelago.Settings.RaceMode) {
+                TunicArchipelago.Settings.RaceMode = GUI.Toggle(new Rect(330f, y, 90f, 30f), TunicArchipelago.Settings.RaceMode, "Race Mode");
+            } else {
+                bool ToggleSpoilerLog = GUI.Toggle(new Rect(TunicArchipelago.Settings.CreateSpoilerLog ? 280f : 330f, y, 90f, 30f), TunicArchipelago.Settings.CreateSpoilerLog, "Spoiler Log");
+                TunicArchipelago.Settings.CreateSpoilerLog = ToggleSpoilerLog;
+                if (ToggleSpoilerLog) {
+                    GUI.skin.button.fontSize = 15;
+                    bool OpenSpoilerLog = GUI.Button(new Rect(370f, y, 50f, 25f), "Open");
+                    if (OpenSpoilerLog) {
+                        if (File.Exists(TunicArchipelago.SpoilerLogPath)) {
+                            System.Diagnostics.Process.Start(TunicArchipelago.SpoilerLogPath);
+                        }
                     }
                 }
             }
@@ -585,6 +594,17 @@ namespace TunicArchipelago {
                 Settings.Add($"enemy_generation!{(int)TunicArchipelago.Settings.EnemyDifficulty}!{(int)TunicArchipelago.Settings.EnemyGeneration}!");
             }
 
+            // Race Settings
+            if (TunicArchipelago.Settings.RaceMode) {
+                Settings.Add("race_mode");
+                if (TunicArchipelago.Settings.DisableIceboltInHeirFight) {
+                    Settings.Add("no_heir_icebolt");
+                }
+                if (TunicArchipelago.Settings.DisableDistantBellShots) {
+                    Settings.Add("no_distant_bell_shot");
+                }
+            }
+
             GUIUtility.systemCopyBuffer = string.Join(",", Settings.ToArray());
         }
 
@@ -632,6 +652,17 @@ namespace TunicArchipelago {
                     Settings.Add("extra_enemies");
                 }
                 Settings.Add($"enemy_generation!{(int)TunicArchipelago.Settings.EnemyDifficulty}!{(int)TunicArchipelago.Settings.EnemyGeneration}!");
+            }
+
+            // Race Settings
+            if (TunicArchipelago.Settings.RaceMode) {
+                Settings.Add("race_mode");
+                if (TunicArchipelago.Settings.DisableIceboltInHeirFight) {
+                    Settings.Add("no_heir_icebolt");
+                }
+                if (TunicArchipelago.Settings.DisableDistantBellShots) {
+                    Settings.Add("no_distant_bell_shot");
+                }
             }
 
             GUIUtility.systemCopyBuffer = string.Join(",", Settings.ToArray());
@@ -703,6 +734,12 @@ namespace TunicArchipelago {
                             TunicArchipelago.Settings.EnemyGeneration = RandomizerSettings.EnemyGenerationType.SEEDED;
                         }
                     }
+                }
+
+                if (SettingsString.Contains("race_mode")) {
+                    TunicArchipelago.Settings.RaceMode = true;
+                    TunicArchipelago.Settings.DisableIceboltInHeirFight = SettingsString.Contains("no_heir_icebolt");
+                    TunicArchipelago.Settings.DisableDistantBellShots = SettingsString.Contains("no_distant_bell_shot");
                 }
 
                 OptionsGUIPatches.SaveSettings();

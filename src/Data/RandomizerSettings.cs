@@ -10,7 +10,7 @@ namespace TunicArchipelago {
 
         public ConnectionSettings ConnectionSettings { get; set; }
 
-        public enum RandomizerType { 
+        public enum RandomizerType {
             SINGLEPLAYER,
             ARCHIPELAGO
         }
@@ -205,6 +205,22 @@ namespace TunicArchipelago {
             set;
         }
 
+        // Race Mode Settings
+        public bool RaceMode {
+            get;
+            set;
+        }
+
+        public bool DisableIceboltInHeirFight {
+            get;
+            set;
+        }
+
+        public bool DisableDistantBellShots {
+            get;
+            set;
+        }
+
         // Fox Settings
         public bool RandomFoxColorsEnabled {
             get;
@@ -301,6 +317,11 @@ namespace TunicArchipelago {
             EnemyDifficulty = EnemyRandomizationType.BALANCED;
             EnemyGeneration = EnemyGenerationType.SEEDED;
             ExtraEnemiesEnabled = false;
+
+            // Race Settings
+            RaceMode = false;
+            DisableIceboltInHeirFight = false;
+            DisableDistantBellShots = false;
 
             // Fox Customization
             RandomFoxColorsEnabled = true;

@@ -162,6 +162,10 @@ namespace TunicArchipelago {
                 }
             }
 
+            if (TunicArchipelago.Settings.RaceMode && TunicArchipelago.Settings.DisableIceboltInHeirFight && SceneManager.GetActiveScene().name == "Spirit Arena") {
+                TechbowItemBehaviour.kIceShotWindow = 0;
+            }
+
             if (PaletteEditor.FoxCape != null) {
                 PaletteEditor.FoxCape.GetComponent<CreatureMaterialManager>().UseSpecialGhostMat = __instance.transform.GetChild(1).GetComponent<CreatureMaterialManager>().UseSpecialGhostMat;
             }
@@ -234,7 +238,7 @@ namespace TunicArchipelago {
                 PlayerCharacter_Start_ArchipelagoSetup();
             }
 
-            if (TunicArchipelago.Settings.CreateSpoilerLog) {
+            if (TunicArchipelago.Settings.CreateSpoilerLog && !TunicArchipelago.Settings.RaceMode) {
                 ItemTracker.PopulateSpoilerLog();
             }
 

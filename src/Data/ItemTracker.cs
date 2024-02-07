@@ -168,6 +168,8 @@ namespace TunicArchipelago {
         }
 
         public static void PopulateSpoilerLog() {
+            if (TunicArchipelago.Settings.RaceMode) { return; }
+
             int seed = SaveFile.GetInt("seed");
             Dictionary<string, List<string>> SpoilerLog = new Dictionary<string, List<string>>();
             foreach (string Key in Locations.SceneNamesForSpoilerLog.Keys)
