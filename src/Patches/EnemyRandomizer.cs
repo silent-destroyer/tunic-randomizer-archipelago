@@ -540,6 +540,15 @@ namespace TunicArchipelago {
                         if (Enemy.transform.parent != null && (Enemy.transform.parent.name.Contains("NG+") || Enemy.transform.parent.name.ToLower().Contains("night"))) {
                             Enemy.transform.parent.gameObject.SetActive(true);
                         }
+
+                        if (CurrentScene == "Monastery") {
+                            if (GameObject.Find("_NIGHT/Corruption Blocker/") != null) {
+                                GameObject.Find("_NIGHT/Corruption Blocker/").SetActive(false);
+                            }
+                            if (GameObject.Find("_NIGHT/Corruption Blocker (retreat door)/") != null) {
+                                GameObject.Find("_NIGHT/Corruption Blocker (retreat door)/").SetActive(false);
+                            }
+                        }
                     }
                     if (DoNotPlaceCoffeeTableHere.Contains($"{CurrentScene} {Enemy.name}")) {
                         EnemyKeys.Remove("administrator_servant");
