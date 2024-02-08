@@ -294,7 +294,7 @@ namespace TunicArchipelago {
 
             bool HasPrayer = SaveFile.GetInt(PrayerUnlocked) == 1;
             bool HasHolyCross = SaveFile.GetInt(HolyCrossUnlocked) == 1;
-            bool HasIceRod = SaveFile.GetInt(IceBoltUnlocked) == 1;
+            bool HasIcebolt = SaveFile.GetInt(IceBoltUnlocked) == 1;
             Color Full = new Color(1, 1, 1, 1);
             Color Faded = new Color(1, 1, 1, 0.5f);
             bool isHexQuest = SaveFile.GetInt(HexagonQuestEnabled) == 1;
@@ -349,7 +349,7 @@ namespace TunicArchipelago {
 
                 AbilityShuffle.transform.GetChild(13).GetComponent<TextMeshProUGUI>().color = HasPrayer ? Full : Faded;
                 AbilityShuffle.transform.GetChild(14).GetComponent<TextMeshProUGUI>().color = HasHolyCross ? Full : Faded;
-                AbilityShuffle.transform.GetChild(15).GetComponent<TextMeshProUGUI>().color = HasIceRod ? Full : Faded;
+                AbilityShuffle.transform.GetChild(15).GetComponent<TextMeshProUGUI>().color = HasIcebolt ? Full : Faded;
 
                 AbilityShuffle.transform.GetChild(16).GetComponent<TextMeshProUGUI>().text = "24-25";
                 AbilityShuffle.transform.GetChild(17).GetComponent<TextMeshProUGUI>().text = "42-43";
@@ -362,11 +362,11 @@ namespace TunicArchipelago {
 
                 AbilityShuffle.transform.GetChild(16).GetComponent<TextMeshProUGUI>().color = HasPrayer ? Full : Faded;
                 AbilityShuffle.transform.GetChild(17).GetComponent<TextMeshProUGUI>().color = HasHolyCross ? Full : Faded;
-                AbilityShuffle.transform.GetChild(18).GetComponent<TextMeshProUGUI>().color = HasIceRod ? Full : Faded;
+                AbilityShuffle.transform.GetChild(18).GetComponent<TextMeshProUGUI>().color = HasIcebolt ? Full : Faded;
 
                 AbilityShuffle.transform.GetChild(7).GetComponent<Image>().color = HasPrayer ? Full : Faded;
                 AbilityShuffle.transform.GetChild(8).GetComponent<Image>().color = HasHolyCross ? Full : Faded;
-                AbilityShuffle.transform.GetChild(9).GetComponent<Image>().color = HasIceRod ? Full : Faded;
+                AbilityShuffle.transform.GetChild(9).GetComponent<Image>().color = HasIcebolt ? Full : Faded;
             }
 
         }

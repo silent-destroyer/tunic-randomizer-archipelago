@@ -627,6 +627,10 @@ namespace TunicArchipelago {
             if (Locations.VanillaLocations.Keys.Where(key => Locations.VanillaLocations[key].Location.SceneName == SceneLoaderPatches.SceneName && !Locations.CheckedLocations[key]).ToList().Count == 0) {
                 FairyTargets.CreateLoadZoneTargets();
             }
+
+            if (TunicArchipelago.Settings.CreateSpoilerLog && !TunicArchipelago.Settings.RaceMode) {
+                ItemTracker.PopulateSpoilerLog();
+            }
         }
 
         private static (string, string) ApplyFoolEffect(int Player) {
