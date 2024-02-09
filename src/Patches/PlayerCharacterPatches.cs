@@ -535,10 +535,10 @@ namespace TunicArchipelago {
                 StateVariable.GetStateVariableByName("Has Been Betrayed").BoolValue = true;
                 StateVariable.GetStateVariableByName("Has Died To God").BoolValue = true;
             }
-            if (random.Next(2) == 1) {
-                SaveFile.SetInt("randomizer sword progression enabled", 1);
-                SaveFile.SetInt("randomizer sword progression level", 0);
-            }
+
+            SaveFile.SetInt("randomizer sword progression enabled", 1);
+            SaveFile.SetInt("randomizer sword progression level", 0);
+
             if (random.Next(2) == 1) {
                 SaveFile.SetInt("randomizer keys behind bosses", 1);
             }
@@ -547,18 +547,20 @@ namespace TunicArchipelago {
                 SaveFile.SetInt("randomizer started with sword", 1);
             }
 
-            if (random.Next(2) == 1) {
+            if (random.NextDouble() < 0.25) {
                 SaveFile.SetInt(MasklessLogic, 1);
             }
-            if (random.Next(2) == 1) {
+            if (random.NextDouble() < 0.25) {
                 SaveFile.SetInt(LanternlessLogic, 1);
             }
 
-            SaveFile.SetInt("randomizer laurels location", random.Next(4));
+            TunicArchipelago.Settings.FoolTrapIntensity = (RandomizerSettings.FoolTrapOption)random.Next(4);
+
+            SaveFile.SetInt("randomizer laurels location", random.NextDouble() < 0.75 ? 0 : random.Next(1, 4));
 
             if (random.Next(2) == 1) {
-                Inventory.GetItemByName("Torch").Quantity = 1;
                 SaveFile.SetInt("randomizer entrance rando enabled", 1);
+                Inventory.GetItemByName("Torch").Quantity = 1;
             }
             if (random.Next(2) == 1) {
                 SaveFile.SetInt("randomizer ER fixed shop", 1);
