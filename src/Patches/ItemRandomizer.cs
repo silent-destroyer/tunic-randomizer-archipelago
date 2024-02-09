@@ -54,7 +54,7 @@ namespace TunicArchipelago {
             Dictionary<string, int> SphereZeroInventory = new Dictionary<string, int>(SphereZero);
             Dictionary<string, Check> ProgressionLocations = new Dictionary<string, Check> { };
             int GoldHexagonsAdded = 0;
-            int HexagonsToAdd = (int)Math.Round((100f + TunicArchipelago.Settings.HexagonQuestExtraPercentage) / 100f * TunicArchipelago.Settings.HexagonQuestGoal);
+            int HexagonsToAdd = (int)Math.Round((100f + SaveFile.GetInt("randomizer hexagon quest extras")) / 100f * SaveFile.GetInt("randomizer hexagon quest goal"));
             if (SaveFile.GetInt(SaveFlags.HexagonQuestEnabled) == 1 && SaveFile.GetInt("randomizer shuffled abilities") == 1) {
                 int HexGoal = SaveFile.GetInt("randomizer hexagon quest goal");
                 List<string> abilities = new List<string>() { "prayer", "holy cross", "icebolt" }.OrderBy(r => TunicArchipelago.Randomizer.Next()).ToList();
