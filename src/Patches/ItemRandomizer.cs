@@ -28,7 +28,8 @@ namespace TunicArchipelago {
 
         public static void RandomizeAndPlaceItems() {
             Logger.LogInfo("randomize and place items starting");
-            Logger.LogInfo("laurels option is " + SaveFile.GetInt("randomizer laurels location"));
+
+            System.Random random = new System.Random(SaveFile.GetInt("seed"));
             Locations.RandomizedLocations.Clear();
             Locations.CheckedLocations.Clear();
 
@@ -57,17 +58,17 @@ namespace TunicArchipelago {
             int HexagonsToAdd = (int)Math.Round((100f + SaveFile.GetInt("randomizer hexagon quest extras")) / 100f * SaveFile.GetInt("randomizer hexagon quest goal"));
             if (SaveFile.GetInt(SaveFlags.HexagonQuestEnabled) == 1 && SaveFile.GetInt("randomizer shuffled abilities") == 1) {
                 int HexGoal = SaveFile.GetInt("randomizer hexagon quest goal");
-                List<string> abilities = new List<string>() { "prayer", "holy cross", "icebolt" }.OrderBy(r => TunicArchipelago.Randomizer.Next()).ToList();
-                List<int> ability_unlocks = new List<int>() { (int)(HexGoal / 4f), (int)((HexGoal / 4f) * 2), (int)((HexGoal / 4f) * 3) }.OrderBy(r => TunicArchipelago.Randomizer.Next()).ToList();
+                List<string> abilities = new List<string>() { "prayer", "holy cross", "icebolt" }.OrderBy(r => random.Next()).ToList();
+                List<int> ability_unlocks = new List<int>() { (int)(HexGoal / 4f), (int)((HexGoal / 4f) * 2), (int)((HexGoal / 4f) * 3) }.OrderBy(r => random.Next()).ToList();
                 for (int i = 0; i < 3; i++) {
-                    int index = TunicArchipelago.Randomizer.Next(abilities.Count);
-                    int index2 = TunicArchipelago.Randomizer.Next(ability_unlocks.Count);
+                    int index = random.Next(abilities.Count);
+                    int index2 = random.Next(ability_unlocks.Count);
                     SaveFile.SetInt($"randomizer hexagon quest {abilities[index]} requirement", ability_unlocks[index2]);
                     abilities.RemoveAt(index);
                     ability_unlocks.RemoveAt(index2);
                 }
             }
-            Shuffle(InitialItems);
+            Shuffle(InitialItems, random);
             foreach (Check Item in InitialItems) {
 
                 if (SaveFile.GetInt(SaveFlags.MasklessLogic) == 1 || SaveFile.GetInt(SaveFlags.LanternlessLogic) == 1) {
@@ -109,10 +110,10 @@ namespace TunicArchipelago {
                     }
                     if (SaveFile.GetInt(SaveFlags.HexagonQuestEnabled) == 1) {
                         if (Item.Reward.Type == "PAGE" || Item.Reward.Name.Contains("Hexagon")) {
-                            string FillerItem = ItemLookup.FillerItems.Keys.ToList()[TunicArchipelago.Randomizer.Next(ItemLookup.FillerItems.Count)];
+                            string FillerItem = ItemLookup.FillerItems.Keys.ToList()[random.Next(ItemLookup.FillerItems.Count)];
                             Item.Reward.Name = FillerItem;
                             Item.Reward.Type = FillerItem == "money" ? "MONEY" : "INVENTORY";
-                            Item.Reward.Amount = ItemLookup.FillerItems[FillerItem][TunicArchipelago.Randomizer.Next(ItemLookup.FillerItems[FillerItem].Count)];
+                            Item.Reward.Amount = ItemLookup.FillerItems[FillerItem][random.Next(ItemLookup.FillerItems[FillerItem].Count)];
                         }
                         if (ItemLookup.FillerItems.ContainsKey(Item.Reward.Name) && ItemLookup.FillerItems[Item.Reward.Name].Contains(Item.Reward.Amount) && GoldHexagonsAdded < HexagonsToAdd) {
                             Item.Reward.Name = "Hexagon Gold";
@@ -198,7 +199,7 @@ namespace TunicArchipelago {
             bool laurelsPlaced = false;
 
             // put progression items in locations
-            foreach (Reward item in ProgressionRewards.OrderBy(r => TunicArchipelago.Randomizer.Next())) {
+            foreach (Reward item in ProgressionRewards.OrderBy(r => random.Next())) {
 
                 // pick an item
                 string itemName = ItemLookup.FairyLookup.Keys.Contains(item.Name) ? "Fairy" : item.Name;
@@ -270,7 +271,7 @@ namespace TunicArchipelago {
 
                 // pick a location
                 int l;
-                l = TunicArchipelago.Randomizer.Next(InitialLocations.Count);
+                l = random.Next(InitialLocations.Count);
 
                 // empty combined inventory, refill it with whatever is currently in scene inventory and placed inventory
                 CombinedInventory.Clear();
@@ -289,7 +290,7 @@ namespace TunicArchipelago {
                 while (!InitialLocations[l].reachable(CombinedInventory)) {
                     //Logger.LogInfo(InitialLocations[l].SceneName + " " + InitialLocations[l].LocationId);
                     //Logger.LogInfo("the above location failed");
-                    l = TunicArchipelago.Randomizer.Next(InitialLocations.Count);
+                    l = random.Next(InitialLocations.Count);
                 }
 
                 // prepare matched list of progression items and locations
@@ -307,7 +308,7 @@ namespace TunicArchipelago {
             }
 
             // shuffle remaining rewards and locations
-            Shuffle(InitialRewards, InitialLocations);
+            Shuffle(InitialRewards, InitialLocations, random);
 
             for (int i = 0; i < InitialRewards.Count; i++) {
                 string DictionaryId = $"{InitialLocations[i].LocationId} [{InitialLocations[i].SceneName}]";
@@ -380,14 +381,14 @@ namespace TunicArchipelago {
             }
         }
 
-        private static void Shuffle(List<Reward> Rewards, List<Location> Locations) {
+        private static void Shuffle(List<Reward> Rewards, List<Location> Locations, System.Random random) {
             int n = Rewards.Count;
             int r;
             int l;
             while (n > 1) {
                 n--;
-                r = TunicArchipelago.Randomizer.Next(n + 1);
-                l = TunicArchipelago.Randomizer.Next(n + 1);
+                r = random.Next(n + 1);
+                l = random.Next(n + 1);
 
                 Reward Reward = Rewards[r];
                 Rewards[r] = Rewards[n];
@@ -399,12 +400,12 @@ namespace TunicArchipelago {
             }
         }
 
-        private static void Shuffle(List<Check> list) {
+        private static void Shuffle(List<Check> list, System.Random random) {
             int n = list.Count;
             int r;
             while (n > 1) {
                 n--;
-                r = TunicArchipelago.Randomizer.Next(n + 1);
+                r = random.Next(n + 1);
 
                 Check holder = list[r];
                 list[r] = list[n];

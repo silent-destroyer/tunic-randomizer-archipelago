@@ -39,6 +39,7 @@ namespace TunicArchipelago {
         public static float ResetDayNightTimer = -1.0f;
 
         public static void PlayerCharacter_creature_Awake_PostfixPatch(PlayerCharacter __instance) {
+
             __instance.gameObject.AddComponent<WaveSpell>();
             __instance.gameObject.AddComponent<EntranceSeekerSpell>();
         }
@@ -386,7 +387,6 @@ namespace TunicArchipelago {
             }
             TunicArchipelago.Tracker = new ItemTracker();
             TunicArchipelago.Tracker.Seed = seed;
-            TunicArchipelago.Randomizer = new System.Random(seed);
             Logger.LogInfo("Loading single player seed: " + seed);
             ItemRandomizer.PopulateSphereZero();
             ItemRandomizer.RandomizeAndPlaceItems();

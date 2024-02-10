@@ -354,7 +354,7 @@ namespace TunicArchipelago {
             foreach (string Item in MailboxItems) {
                 mailboxHintables.AddRange(ItemRandomizer.FindAllRandomizedItemsByName(Item));
             }
-            Shuffle(mailboxHintables);
+            Shuffle(mailboxHintables, random);
             int n = 0;
             Check HintItem = null;
             while (HintItem == null && n < mailboxHintables.Count) {
@@ -501,12 +501,12 @@ namespace TunicArchipelago {
             HintMessages.Add("Mailbox", Hint);
         }
 
-        private static void Shuffle(List<Check> list) {
+        private static void Shuffle(List<Check> list, System.Random random) {
             int n = list.Count;
             int r;
             while (n > 1) {
                 n--;
-                r = TunicArchipelago.Randomizer.Next(n + 1);
+                r = random.Next(n + 1);
 
                 Check holder = list[r];
                 list[r] = list[n];
