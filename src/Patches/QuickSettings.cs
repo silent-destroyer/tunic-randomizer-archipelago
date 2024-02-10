@@ -372,9 +372,9 @@ namespace TunicArchipelago {
             y += 40f;
             GUI.Label(new Rect(10f, y, 300f, 30f), $"Hero's Laurels Location");
             y += 40f;
-            bool RandomLaurels = GUI.Toggle(new Rect(10f, y, 90f, 30f), TunicArchipelago.Settings.FixedLaurelsOption == RandomizerSettings.FixedLaurelsType.ANYWHERE, "Random");
+            bool RandomLaurels = GUI.Toggle(new Rect(10f, y, 90f, 30f), TunicArchipelago.Settings.FixedLaurelsOption == RandomizerSettings.FixedLaurelsType.RANDOM, "Random");
             if (RandomLaurels) {
-                TunicArchipelago.Settings.FixedLaurelsOption = RandomizerSettings.FixedLaurelsType.ANYWHERE;
+                TunicArchipelago.Settings.FixedLaurelsOption = RandomizerSettings.FixedLaurelsType.RANDOM;
             }
             bool SixCoinsLaurels = GUI.Toggle(new Rect(110f, y, 90f, 30f), TunicArchipelago.Settings.FixedLaurelsOption == RandomizerSettings.FixedLaurelsType.SIXCOINS, "6 Coins");
             if (SixCoinsLaurels) {
@@ -709,7 +709,7 @@ namespace TunicArchipelago {
                     try {
                         TunicArchipelago.Settings.FixedLaurelsOption = (RandomizerSettings.FixedLaurelsType)int.Parse(SettingsString.Split('#')[1]);
                     } catch(Exception e) {
-                        TunicArchipelago.Settings.FixedLaurelsOption = RandomizerSettings.FixedLaurelsType.ANYWHERE;
+                        TunicArchipelago.Settings.FixedLaurelsOption = RandomizerSettings.FixedLaurelsType.RANDOM;
                     }
                 }
                 TunicArchipelago.Settings.KeysBehindBosses = SettingsString.Contains("keys_behind_bosses");

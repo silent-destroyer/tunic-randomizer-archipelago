@@ -261,7 +261,7 @@ namespace TunicArchipelago {
         }
 
         public enum FixedLaurelsType {
-            ANYWHERE,
+            RANDOM,
             SIXCOINS,
             TENCOINS,
             TENFAIRIES,
@@ -282,7 +282,7 @@ namespace TunicArchipelago {
             ERFixedShop = false;
             HexagonQuestGoal = 20;
             HexagonQuestExtraPercentage = 50;
-            FixedLaurelsOption = FixedLaurelsType.ANYWHERE;
+            FixedLaurelsOption = FixedLaurelsType.RANDOM;
             FoolTrapIntensity = FoolTrapOption.NORMAL;
             Lanternless = false;
             Maskless = false;
