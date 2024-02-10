@@ -16,6 +16,8 @@ namespace TunicArchipelago {
         public static float TimeOfLastSceneTransition = 0.0f;
         public static bool SpawnedGhosts = false;
 
+        public static GameObject SpiritArenaTeleporterPrefab;
+
         public static bool SceneLoader_OnSceneLoaded_PrefixPatch(Scene loadingScene, LoadSceneMode mode, SceneLoader __instance) {
             // ladder storage fix
             if (PlayerCharacter.instance != null)
@@ -142,6 +144,10 @@ namespace TunicArchipelago {
             if (loadingScene.name == "Spirit Arena" && ModelSwaps.ThirdSword == null) {
                 ModelSwaps.InitializeThirdSword();
                 ItemPresentationPatches.SetupCustomSwordItemPresentations();
+                SpiritArenaTeleporterPrefab = GameObject.Instantiate(GameObject.Find("Teleporter"));
+                GameObject.DontDestroyOnLoad(SpiritArenaTeleporterPrefab);
+                SpiritArenaTeleporterPrefab.transform.position = new Vector3(-30000f, -30000f, -30000f);
+                SpiritArenaTeleporterPrefab.SetActive(false);
                 ModelSwaps.SetupStarburstEffect();
                 SceneLoader.LoadScene("Transit");
                 return;
@@ -193,7 +199,8 @@ namespace TunicArchipelago {
             if (SceneName == "Overworld Redux" && (StateVariable.GetStateVariableByName("Has Been Betrayed").BoolValue &&
                 StateVariable.GetStateVariableByName("Has Died To God").BoolValue) && SaveFile.GetInt(DiedToHeir) != 1 && SaveFile.GetInt(HexagonQuestEnabled) == 0) {
                 PlayerCharacterPatches.ResetDayNightTimer = 0.0f;
-                Logger.LogInfo("Resetting time of day to daytime!");
+                Logger.LogInfo("Resetting time of day to daytime!"); 
+                SpawnHeirFastTravel("Spirit Arena", new Vector3(2.0801f, 43.5833f, -54.0065f));
             }
 
             PlayerCharacterPatches.StungByBee = false;
@@ -247,6 +254,8 @@ namespace TunicArchipelago {
                     Resources.FindObjectsOfTypeAll<Foxgod>().ToList()[0].gameObject.transform.GetChild(0).GetComponent<CreatureMaterialManager>().originalMaterials = ModelSwaps.Items["GoldenTrophy_2"].GetComponent<MeshRenderer>().materials;
                     Resources.FindObjectsOfTypeAll<Foxgod>().ToList()[0].gameObject.transform.GetChild(1).GetComponent<CreatureMaterialManager>().originalMaterials = ModelSwaps.Items["GoldenTrophy_2"].GetComponent<MeshRenderer>().materials;
                 }
+
+                SpawnHeirFastTravel("Overworld Redux", new Vector3(-30000f, -30000f, -30000f));
             } else if (SceneName == "Overworld Interiors") {
                 GameObject.Find("Trophy Stuff").transform.GetChild(4).gameObject.SetActive(true);
 
@@ -299,6 +308,9 @@ namespace TunicArchipelago {
                         }
                     }
                 }
+                if (SaveFile.GetInt(DiedToHeir) == 1) {
+                    SpawnHeirFastTravel("Spirit Arena", new Vector3(2.0801f, 43.5833f, -54.0065f));
+                }
             } else if (SceneName == "Swamp Redux 2") {
                 GhostHints.SpawnCathedralDoorGhost();
 
@@ -350,8 +362,6 @@ namespace TunicArchipelago {
             } else if (SceneName == "Maze Room") {
                 foreach (Chest chest in Resources.FindObjectsOfTypeAll<Chest>().Where(chest => chest.name == "Chest: Fairy")) {
                     chest.transform.GetChild(4).gameObject.SetActive(false);
-                    chest.transform.GetChild(7).gameObject.SetActive(false);
-                    chest.transform.parent.GetChild(2).gameObject.SetActive(false);
                 }
             } else if(SceneName == "frog cave main") { 
                 SetupFrogDomainSecret();
@@ -438,6 +448,21 @@ namespace TunicArchipelago {
             }
 
             ItemTracker.SaveTrackerFile();
+        }
+
+        private static void SpawnHeirFastTravel(string SceneName, Vector3 position) {
+            GameObject gameObject = GameObject.Instantiate<GameObject>(SpiritArenaTeleporterPrefab, position, SpiritArenaTeleporterPrefab.transform.rotation);
+            ScenePortal scenePortal = gameObject.transform.GetComponentInChildren<ScenePortal>();
+            scenePortal.id = "heirfasttravel_spawnid";
+            scenePortal.destinationSceneName = SceneName;
+            if (SceneManager.GetActiveScene().name == "Spirit Arena") {
+                scenePortal.spawnTransform = GameObject.Find("Teleporter").transform.GetChild(0).GetChild(0).GetChild(0);
+                gameObject.transform.GetChild(0).GetChild(1).gameObject.SetActive(false);
+            } else {
+                scenePortal.spawnTransform = gameObject.transform.GetChild(0).GetChild(0).GetChild(0);
+            }
+            scenePortal.optionalIDToSpawnAt = "";
+            gameObject.SetActive(true);
         }
 
         public static void SetupOldHouseRelicToggles() {

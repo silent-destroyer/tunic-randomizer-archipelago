@@ -67,6 +67,7 @@ namespace TunicArchipelago {
             }
 
             foreach (ScenePortal ScenePortal in Resources.FindObjectsOfTypeAll<ScenePortal>()) {
+                if (ScenePortal.id.Contains("heirfasttravel")) { continue; }
                 if (ScenesWithItems.Contains(ScenePortal.destinationSceneName)) {
                     CreateFairyTarget($"fairy target {ScenePortal.destinationSceneName}", ScenePortal.transform.position);
                 }
@@ -75,6 +76,7 @@ namespace TunicArchipelago {
 
         public static void CreateEntranceTargets() {
             foreach (ScenePortal ScenePortal in Resources.FindObjectsOfTypeAll<ScenePortal>()) {
+                if (ScenePortal.id.Contains("heirfasttravel")) { continue; }
                 if (ScenePortal.isActiveAndEnabled && SaveFile.GetInt("randomizer entered portal " + ScenePortal.name) != 1) {
                     CreateFairyTarget($"entrance target {ScenePortal.destinationSceneName}", ScenePortal.transform.position);
                 }
