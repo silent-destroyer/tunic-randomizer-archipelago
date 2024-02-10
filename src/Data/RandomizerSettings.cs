@@ -221,6 +221,16 @@ namespace TunicArchipelago {
             set;
         }
 
+        public bool DisableIceGrappling {
+            get;
+            set;
+        }
+
+        public bool DisableLadderStorage {
+            get;
+            set;
+        }
+
         // Fox Settings
         public bool RandomFoxColorsEnabled {
             get;
@@ -322,6 +332,8 @@ namespace TunicArchipelago {
             RaceMode = false;
             DisableIceboltInHeirFight = false;
             DisableDistantBellShots = false;
+            DisableIceGrappling = false;
+            DisableLadderStorage = false;
 
             // Fox Customization
             RandomFoxColorsEnabled = true;

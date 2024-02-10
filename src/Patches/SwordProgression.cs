@@ -172,7 +172,7 @@ namespace TunicArchipelago {
         public static bool HitReceiver_ReceiveHit_PrefixPatch(HitReceiver __instance, ref HitType hitType, ref bool unblockable, ref bool isPlayerCharacterMelee) {
 
             // Disables hitting the west bell from long range for race purposes
-            if (__instance.GetComponent<TuningForkBell>() != null && SceneManager.GetActiveScene().name == "Overworld Redux" 
+            if (__instance.GetComponent<TuningForkBell>() != null && __instance.name == "tuning fork" && SceneManager.GetActiveScene().name == "Overworld Redux" 
                 && hitType == HitType.TECHBOW && TunicArchipelago.Settings.RaceMode && TunicArchipelago.Settings.DisableDistantBellShots) { 
                 if (PlayerCharacter.instance.transform.position.x > __instance.transform.position.x + 5
                     || PlayerCharacter.instance.transform.position.z > __instance.transform.position.z + 5) {

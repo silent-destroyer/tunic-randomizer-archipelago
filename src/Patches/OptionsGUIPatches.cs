@@ -34,7 +34,7 @@ namespace TunicArchipelago {
             addPageButton("General Settings", GeneralSettingsPage);
             addPageButton("Enemy Randomizer Settings", EnemyRandomizerSettings);
             addPageButton("Fox Customization", CustomFoxSettingsPage);
-            addPageButton("Race Settings", RaceSettingsPage);
+            addPageButton("Race Mode Settings", RaceSettingsPage);
         }
 
         public static void ArchipelagoSettingsPage() {
@@ -161,6 +161,9 @@ namespace TunicArchipelago {
             OptionsGUI.addToggle("Race Mode (Enables Race Options)", "Off", "On", TunicArchipelago.Settings.RaceMode ? 1 : 0, (OptionsGUIMultiSelect.MultiSelectAction)ToggleRaceMode);
             OptionsGUI.addToggle("Disable Icebolt in Heir Fight", "Off", "On", TunicArchipelago.Settings.DisableIceboltInHeirFight ? 1 : 0, (OptionsGUIMultiSelect.MultiSelectAction)ToggleDisableHeirIcebolt);
             OptionsGUI.addToggle("Disable Distant West Bell Shot", "Off", "On", TunicArchipelago.Settings.DisableDistantBellShots ? 1 : 0, (OptionsGUIMultiSelect.MultiSelectAction)ToggleDisableDistantDong);
+            OptionsGUI.addToggle("Disable Ice Grappling Enemies", "Off", "On", TunicArchipelago.Settings.DisableIceGrappling ? 1 : 0, (OptionsGUIMultiSelect.MultiSelectAction)ToggleDisableIceGrapples);
+            OptionsGUI.addToggle("Disable Ladder Storage", "Off", "On", TunicArchipelago.Settings.DisableLadderStorage ? 1 : 0, (OptionsGUIMultiSelect.MultiSelectAction)ToggleDisableLadderStorage);
+
         }
 
         public static void addPageButton(string pageName, Action pageMethod) {
@@ -170,7 +173,7 @@ namespace TunicArchipelago {
                 pushPageAction.Invoke(pageMethod);
             });
         }
-
+        
         public static void pushPage(Action pageMethod) {
             OptionsGUI OptionsGUI = GameObject.FindObjectOfType<OptionsGUI>();
             OptionsGUI.pushPage(DelegateSupport.ConvertDelegate<OptionsGUI.PageMethod>(pageMethod));
@@ -500,6 +503,16 @@ namespace TunicArchipelago {
 
         public static void ToggleDisableDistantDong(int index) {
             TunicArchipelago.Settings.DisableDistantBellShots = !TunicArchipelago.Settings.DisableDistantBellShots;
+            SaveSettings();
+        }
+
+        public static void ToggleDisableIceGrapples(int index) {
+            TunicArchipelago.Settings.DisableIceGrappling = !TunicArchipelago.Settings.DisableIceGrappling;
+            SaveSettings();
+        }
+
+        public static void ToggleDisableLadderStorage(int index) {
+            TunicArchipelago.Settings.DisableLadderStorage = !TunicArchipelago.Settings.DisableLadderStorage;
             SaveSettings();
         }
 

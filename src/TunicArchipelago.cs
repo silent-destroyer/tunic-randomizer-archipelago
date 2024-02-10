@@ -201,6 +201,8 @@ namespace TunicArchipelago {
             Harmony.Patch(AccessTools.Method(typeof(FileManagementGUI), "LoadFileAndStart"), new HarmonyMethod(AccessTools.Method(typeof(QuickSettings), "FileManagement_LoadFileAndStart_PrefixPatch")));
 
             Harmony.Patch(AccessTools.Method(typeof(SpecialSwampTrigger), "OnTriggerEnter"), new HarmonyMethod(AccessTools.Method(typeof(InteractionPatches), "SpecialSwampTrigger_OnTriggerEnter_PrefixPatch")));
+
+            Harmony.Patch(AccessTools.Method(typeof(ForcewandItemBehaviour._throwBeamCoroutine_d__32), "MoveNext"), new HarmonyMethod(AccessTools.Method(typeof(CustomItemBehaviors), "ForcewandItemBehaviour__throwBeamCoroutine_d__32_MoveNext_PrefixPatch")));
         }
     }
 }

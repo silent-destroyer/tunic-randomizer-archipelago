@@ -163,8 +163,17 @@ namespace TunicArchipelago {
                 }
             }
 
-            if (TunicArchipelago.Settings.RaceMode && TunicArchipelago.Settings.DisableIceboltInHeirFight && SceneManager.GetActiveScene().name == "Spirit Arena") {
-                TechbowItemBehaviour.kIceShotWindow = 0;
+            if (TunicArchipelago.Settings.RaceMode) {
+                // Disables icebolt in heir arena
+                if (TunicArchipelago.Settings.DisableIceboltInHeirFight && SceneManager.GetActiveScene().name == "Spirit Arena") {
+                    TechbowItemBehaviour.kIceShotWindow = 0;
+                }
+                // Prevents ladder storage from being used
+                if (TunicArchipelago.Settings.DisableLadderStorage && __instance.currentLadder != null && __instance.cachedAnimator.GetBool("sprint")) {
+                    __instance.cachedAnimator.SetBool("climbing", false);
+                    __instance.currentLadder = null;
+                    __instance.Flinch(true);
+                }
             }
 
             if (PaletteEditor.FoxCape != null) {
