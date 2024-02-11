@@ -21,6 +21,31 @@ namespace TunicArchipelago {
             };
         }
 
+        public bool CanReach(Dictionary<string, int> inventory) {
+            if (inventory.ContainsKey(this.Portal1.Region) || inventory.ContainsKey(this.Portal2.Region)) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+
+        public Dictionary<string, int> AddComboRegions(Dictionary<string, int> inventory) {
+            // if both regions are in here already, just skip it
+            if (inventory.ContainsKey(this.Portal1.Region) && inventory.ContainsKey(this.Portal2.Region)) {
+                return inventory;
+            }
+            // if you can reach this portal combo, add whichever region you don't have yet
+            if (this.CanReach(inventory)) {
+                if (!inventory.ContainsKey(this.Portal1.Region)) {
+                    inventory.Add(this.Portal1.Region, 1);
+                }
+                if (!inventory.ContainsKey(this.Portal2.Region)) {
+                    inventory.Add(this.Portal2.Region, 1);
+                }
+            }
+            return inventory;
+        }
+
         // the idea is to do something like, we check if we can get any rewards from this portal combo based on what we have
         // if we have the region a portal is in, we add that portal to the rewards list (if it meets the requirements)
         public List<string> ComboRewards(Dictionary<string, int> inventory) {

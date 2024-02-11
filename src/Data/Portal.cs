@@ -16,7 +16,6 @@ namespace TunicArchipelago {
         public bool PrayerPortal { get; set; } = false;
         public bool OneWay { get; set; } = false;
         public bool IgnoreScene { get; set; } = false;
-        public string SceneDestination { get; set; }
         public string SceneDestinationTag { get; set; }
 
         public bool SpecialReqs {
@@ -29,7 +28,7 @@ namespace TunicArchipelago {
             Destination = destination;
             Scene = scene;
             Region = region;
-            SceneDestination = (Scene + ", " + Destination);
+            SceneDestinationTag = (Scene + ", " + Destination);
         }
         //public Portal(string destination, string tag, string name, string scene) {
         //    Destination = destination;
@@ -317,6 +316,14 @@ namespace TunicArchipelago {
                 return false;
             }
             return false;
+        }
+
+        public bool CanReach(Dictionary<string, int> inventory) {
+            if (inventory.ContainsKey(this.Region)) {
+                return true;
+            } else {
+                return false;
+            }
         }
 
         // separate function to say "this is what you get if you have access to this portal"
