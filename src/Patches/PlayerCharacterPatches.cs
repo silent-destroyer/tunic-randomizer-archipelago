@@ -169,7 +169,7 @@ namespace TunicArchipelago {
                     TechbowItemBehaviour.kIceShotWindow = 0;
                 }
                 // Prevents ladder storage from being used
-                if (TunicArchipelago.Settings.DisableLadderStorage && __instance.currentLadder != null && __instance.cachedAnimator.GetBool("sprint")) {
+                if (TunicArchipelago.Settings.DisableLadderStorage && __instance.currentLadder != null && (__instance.cachedAnimator.GetBool("sprint") || __instance.cachedAnimator.GetBool("swing sword") || __instance.cachedAnimator.GetBool("swing stick"))) {
                     __instance.cachedAnimator.SetBool("climbing", false);
                     __instance.currentLadder = null;
                     __instance.Flinch(true);

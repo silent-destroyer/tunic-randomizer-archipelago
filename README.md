@@ -1,5 +1,7 @@
-# Tunic Randomizer
-PLEASE READ! The Tunic Archipelago mod has been combined with the single-player randomizer into a single mod, and has moved to the original Tunic Randomizer repository which can be found [here](https://github.com/silent-destroyer/tunic-randomizer). As a result, this repository will no longer be updated, and all future updates for the Tunic Archipelago integration will be released there.
+# Tunic Randomizer Archipelago Client
+
+# PLEASE READ!
+The Tunic Archipelago mod has been combined with the single-player randomizer into a single mod, and has moved to the [original Tunic Randomizer repository](https://github.com/silent-destroyer/tunic-randomizer). As a result, this repository will no longer be updated, and all future updates for the Tunic Archipelago integration will be released there.
 
 This randomizer features item, entrance, and enemy randomization, as well as a variety of additional settings and features to help customize the experience, such as hints, custom items, and custom fox colors!
 
@@ -169,7 +171,7 @@ With the exception of the Logic settings (which are determined in your Archipela
   - When enabled, will always apply the saved custom texture to the fox. The custom texture can be found under AppData in the same folder as the Spoiler log and Item Tracker file.
 ### Race Mode Settings
 - Race Mode
-  - An option to help facilitate ranomizer races more easily. Disables the spoiler log, and enables the options below to be turned on or off.
+  - An option to help facilitate ranomizer races more easily. Disables the spoiler log, and enables the options below to be used.
 - Disable Icebolt in The Heir Fight
   - Disables use of the icebolt technique when fighting The Heir.
 - Disable Long-Distance Bell Shots
