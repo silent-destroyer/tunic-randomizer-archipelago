@@ -16,6 +16,7 @@ namespace TunicArchipelago {
         public bool PrayerPortal { get; set; } = false;
         public bool OneWay { get; set; } = false;
         public bool IgnoreScene { get; set; } = false;
+        public string SceneDestination { get; set; }
         public string SceneDestinationTag { get; set; }
 
         public bool SpecialReqs {
@@ -23,13 +24,20 @@ namespace TunicArchipelago {
             set;
         } = false;
 
-        public Portal(string destination, string tag, string name, string scene) {
-            Destination = destination;
-            Tag = tag;
+        public Portal(string name, string destination, string scene, string region) {
             Name = name;
+            Destination = destination;
             Scene = scene;
-            SceneDestinationTag = (Scene + ", " + Destination + "_" + Tag);
+            Region = region;
+            SceneDestination = (Scene + ", " + Destination);
         }
+        //public Portal(string destination, string tag, string name, string scene) {
+        //    Destination = destination;
+        //    Tag = tag;
+        //    Name = name;
+        //    Scene = scene;
+        //    SceneDestinationTag = (Scene + ", " + Destination + "_" + Tag);
+        //}
         public Portal(string destination, string tag, string name, string scene, string region, bool deadEnd = false, bool prayerPortal = false, bool oneWay = false, bool ignoreScene = false, bool specialReqs = false) {
             Destination = destination;
             Tag = tag;
