@@ -3686,34 +3686,44 @@ namespace TunicArchipelago {
             // for each origin region
             foreach (KeyValuePair<string, Dictionary<string, List<List<string>>>> traversal_group in TraversalReqs) {
                 string origin = traversal_group.Key;
+                if (!inventory.ContainsKey(origin)) {
+                    continue;
+                }
+                //Logger.LogInfo("checking traversal for " + origin);
                 // for each destination in an origin's group
                 foreach (KeyValuePair<string, List<List<string>>> destination_group in traversal_group.Value) {
                     string destination = destination_group.Key;
-                    // if we don't have the origin region, skip it
-                    if (!inventory.ContainsKey(origin)) {
-                        continue;
-                    }
+                    //Logger.LogInfo("checking traversal to " + destination);
                     // if we can already reach this region, skip it
                     if (inventory.ContainsKey(destination)) {
+                        //Logger.LogInfo("we already have it");
                         continue;
                     }
                     // met is whether you meet any of the requirement lists for a destination
                     bool met = false;
+                    if (destination_group.Value.Count == 0) {
+                        //Logger.LogInfo("no requirement groups, met is true");
+                        met = true;
+                    }
                     // check through each list of requirements
                     foreach (List<string> reqs in destination_group.Value) {
                         if (reqs.Count == 0) {
                             // if a group is empty, you can just walk there
                             met = true;
+                            //Logger.LogInfo("group is empty, so met is true");
                         } else {
                             // check if we have the items in our inventory to traverse this path
                             int met_count = 0;
                             foreach (string req in reqs) {
+                                //Logger.LogInfo("req is " + req);
                                 if (inventory.ContainsKey(req)) {
                                     met_count++;
+                                    //Logger.LogInfo("we met this requirement");
                                 }
                             }
                             // if you have all the requirements, you can traverse this path
                             if (met_count == reqs.Count) {
+                                //Logger.LogInfo("met is true");
                                 met = true;
                             }
                         }
@@ -3723,7 +3733,10 @@ namespace TunicArchipelago {
                         }
                     }
                     if (met == true) {
+                        //Logger.LogInfo("adding " + destination + " to inventory");
                         inventory.Add(destination, 1);
+                    } else {
+                        //Logger.LogInfo("did not add " + destination + ", we did not meet the requirements");
                     }
                 }
             }
@@ -3825,7 +3838,7 @@ namespace TunicArchipelago {
             string start_region = "Overworld";
 
             Dictionary<string, int> MaxItems = new Dictionary<string, int> {
-                { "Stick", 1 }, { "Sword", 1 }, { "Wand", 1 }, { "Stundagger", 1 }, { "Techbow", 1 }, { "Hyperdash", 1 }, { "Mask", 1 }, { "Lantern", 1 }, { "12", 1 }, { "24", 1 }, { "27", 1 }, { "Key", 2 }, 
+                { "Stick", 1 }, { "Sword", 1 }, { "Wand", 1 }, { "Stundagger", 1 }, { "Techbow", 1 }, { "Hyperdash", 1 }, { "Mask", 1 }, { "Lantern", 1 }, { "12", 1 }, { "21", 1 }, { "26", 1 }, { "Key", 2 }, 
             };
 
             Dictionary<string, int> FullInventory = new Dictionary<string, int>();
@@ -3854,8 +3867,8 @@ namespace TunicArchipelago {
             // create a portal combo for every region in the threePlusRegions list, so that every region can now be accessed (ignoring rules for now)
             int comboNumber = 0;
             while (FullInventory.Count < total_nondeadend_count + MaxItems.Count) {
-                Logger.LogInfo("full inventory size is " + FullInventory.Count.ToString());
-                Logger.LogInfo("comparison size is " + (total_nondeadend_count + MaxItems.Count).ToString());
+                //Logger.LogInfo("full inventory size is " + FullInventory.Count.ToString());
+                //Logger.LogInfo("comparison size is " + (total_nondeadend_count + MaxItems.Count).ToString());
                 ShuffleList(twoPlusPortals, seed);
                 Portal portal1 = null;
                 Portal portal2 = null;
@@ -3890,8 +3903,6 @@ namespace TunicArchipelago {
                 }
                 FullInventory = UpdateReachableRegions(FullInventory);
                 comboNumber++;
-                Logger.LogInfo("full inventory size is " + FullInventory.Count.ToString());
-                Logger.LogInfo("comparison size is " + (total_nondeadend_count + MaxItems.Count).ToString());
             }
 
             // since the dead ends only have one exit, we just append them 1 to 1 to a random portal in the two plus list
@@ -3923,34 +3934,27 @@ namespace TunicArchipelago {
                 // manually making a portal for the shop, because it has some special properties
                 Portal shopPortal = new Portal(name: "Shop Portal", destination: "Previous Region", scene: "Shop", region: "Shop");
                 // check that a shop has not already been added to this region, since two shops in the same region causes problems
-                Logger.LogInfo("number of portals left in two plus is " + twoPlusPortals.Count.ToString());
-                Logger.LogInfo("portal to attempt to pair is " + twoPlusPortals[regionNumber].Name);
                 if (!shopRegionList.Contains(twoPlusPortals[regionNumber].Scene)) {
                     comboNumber++;
                     shopRegionList.Add(twoPlusPortals[regionNumber].Scene);
-                    Logger.LogInfo("adding scene " + twoPlusPortals[regionNumber].Scene + " to shop scene list");
+                    //Logger.LogInfo("adding scene " + twoPlusPortals[regionNumber].Scene + " to shop scene list");
                     RandomizedPortals.Add(comboNumber.ToString(), new PortalCombo(twoPlusPortals[regionNumber], shopPortal));
                     twoPlusPortals.RemoveAt(regionNumber);
                     shopCount--;
                 } else {
                     regionNumber++;
                 }
-                Logger.LogInfo("shop count is " + shopCount.ToString());
-                Logger.LogInfo("regionNumber is " + regionNumber.ToString());
                 if (regionNumber == twoPlusPortals.Count - 1) {
                     Logger.LogInfo("too many shops, not enough regions, add more shops");
                 }
             }
-            Logger.LogInfo("test 1");
             // now we have every region accessible
             // the twoPlusPortals list still has items left in it, so now we pair them off
             while (twoPlusPortals.Count > 1) {
-                Logger.LogInfo("test 2");
                 // I don't think the LockBeforeKey check can lead to an infinite loop?
                 if (LockBeforeKey(twoPlusPortals[0]) == true || LockBeforeKey(twoPlusPortals[1]) == true) {
                     ShuffleList(twoPlusPortals, seed);
                 } else {
-                    Logger.LogInfo("test 3");
                     comboNumber++;
                     RandomizedPortals.Add(comboNumber.ToString(), new PortalCombo(twoPlusPortals[0], twoPlusPortals[1]));
                     twoPlusPortals.RemoveAt(1); // I could do removeat0 twice, but I don't like how that looks
@@ -3961,8 +3965,6 @@ namespace TunicArchipelago {
                 // if this triggers, there's an odd number of portals total
                 Logger.LogInfo("one extra dead end remaining alone, rip. It's " + twoPlusPortals[0].Name);
             }
-            Logger.LogInfo("successfully made it to the end of RandomizePortals");
-
             // todo: figure out why the quarry portal isn't working right
             //Portal betaQuarryPortal = new Portal(destination: "Darkwoods", tag: "", name: "Beta Quarry", scene: "Quarry", region: "Quarry", requiredItems: new Dictionary<string, int>(), givesAccess: new List<string>(), deadEnd: true, prayerPortal: false, oneWay: false, ignoreScene: false);
             //Portal zigSkipPortal = new Portal(destination: "ziggurat2020_3", tag: "zig2_skip", name: "Zig Skip", scene: "ziggurat2020_1", region: "Zig 1", requiredItems: new Dictionary<string, int>(), givesAccess: new List<string>(), deadEnd: true, prayerPortal: false, oneWay: false, ignoreScene: false);

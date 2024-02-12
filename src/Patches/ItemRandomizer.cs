@@ -281,10 +281,6 @@ namespace TunicArchipelago {
                     }
                 }
             }
-            Logger.LogInfo("test message");
-            foreach (string itemm in SphereZero.Keys) {
-                Logger.LogInfo("item is " + itemm);
-            }
 
             // shuffle remaining rewards and locations
             Shuffle(InitialRewards, InitialLocations, random);
