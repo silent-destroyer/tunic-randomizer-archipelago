@@ -126,6 +126,8 @@ With the exception of the Logic settings (which are determined in your Archipela
 - Freestanding Items and Chests Match Contents
   - All freestanding items (Item Pickups, Page Pickups, Shop Items, Hero's Grave Relics, etc.) will have their model swapped to appear as the item they are randomized as.
   - Chest textures will be swapped to indicate what item is in them. Currently, the items with different chest textures are Fairies, Golden Trophies, the three Hexagons, and the Hero's Laurels.
+- Display Hints in Trunic
+  - For the experienced Ruin Seekers out there, this option removes most English words from custom dialogue, hints, or other text produced by the randomizer, leaving it up to your own knowledge to figure out what is where.
 ### General
 - Easier Heir Fight
   - Attacks deal additional damage to The Heir based on the total number of checks found.
@@ -133,7 +135,7 @@ With the exception of the Logic settings (which are determined in your Archipela
   - Reduces the cost of the four randomized Shop items to 300 bits each.
 - Bonus Upgrades
   - Makes the Golden Trophy items give free Level Ups for certain stats, allowing you to get up to +8 in every stat in a single playthrough when combined with the regular stat upgrades and the +2 Attack levels from Sword Progression.
-  - Note: Bonus upgrades will not be retroactively awarded if this setting is turned on after obtaining Golden Trophies with it disabled. The +2 Attack Levels from Sword Progression are always awarded and not affected by this setting.
+  - Note: Bonus upgrades will not be retroactively awarded if this setting is turned on after obtaining Golden Trophies with it disabled. The +2 Attack Levels from Sword Progression are always awarded and are not affected by this setting.
 - Disable Chest Interruption
   - Enemies will not be able to interrupt you while opening chests if this option is turned on.
 - Skip Item Popups
