@@ -8,11 +8,11 @@ namespace TunicArchipelago {
         private static ManualLogSource Logger = TunicArchipelago.Logger;
         public static Dictionary<string, PortalCombo> RandomizedPortals = new Dictionary<string, PortalCombo>();
 
-        public class NewPortal {
+        public class TunicPortal {
             public string Name;
             public string Destination;
 
-            public NewPortal(string name, string destination) {
+            public TunicPortal(string name, string destination) {
                 Name = name;
                 Destination = destination;
             }
@@ -28,1232 +28,1232 @@ namespace TunicArchipelago {
             }
         }
 
-        public static Dictionary<string, Dictionary<string, List<NewPortal>>> RegionPortalsList = new Dictionary<string, Dictionary<string, List<NewPortal>>> {
+        public static Dictionary<string, Dictionary<string, List<TunicPortal>>> RegionPortalsList = new Dictionary<string, Dictionary<string, List<TunicPortal>>> {
             {
                 "Overworld Redux",
-                new Dictionary<string, List<NewPortal>> {
+                new Dictionary<string, List<TunicPortal>> {
                     {
                         "Overworld",
-                        new List<NewPortal> {
-                            new NewPortal("Stick House Entrance", "Sword Cave_"),
-                            new NewPortal("Windmill Entrance", "Windmill_"),
-                            new NewPortal("Well Ladder Entrance", "Sewer_entrance"),
-                            new NewPortal("Old House Waterfall Entrance", "Overworld Interiors_under_checkpoint"),
-                            new NewPortal("Entrance to Furnace under Windmill", "Furnace_gyro_upper_east"),
-                            new NewPortal("Entrance to Furnace from Beach", "Furnace_gyro_lower"),
-                            new NewPortal("Caustic Light Cave Entrance", "Overworld Cave_"),
-                            new NewPortal("Swamp Lower Entrance", "Swamp Redux 2_conduit"),
-                            new NewPortal("Ruined Passage Not-Door Entrance", "Ruins Passage_east"),
-                            new NewPortal("Atoll Upper Entrance", "Atoll Redux_upper"),
-                            new NewPortal("Atoll Lower Entrance", "Atoll Redux_lower"),
-                            new NewPortal("Maze Cave Entrance", "Maze Room_"),
-                            new NewPortal("Temple Rafters Entrance", "Temple_rafters"),
-                            new NewPortal("Ruined Shop Entrance", "Ruined Shop_"),
-                            new NewPortal("Patrol Cave Entrance", "PatrolCave_"),
-                            new NewPortal("Hourglass Cave Entrance", "Town Basement_beach"),
-                            new NewPortal("Changing Room Entrance", "Changing Room_"),
-                            new NewPortal("Cube Cave Entrance", "CubeRoom_"),
-                            new NewPortal("Stairs from Overworld to Mountain", "Mountain_"),
-                            new NewPortal("Overworld to Fortress", "Fortress Courtyard_"),
-                            new NewPortal("Overworld to Quarry Connector", "Darkwoods Tunnel_"),
-                            new NewPortal("Dark Tomb Main Entrance", "Crypt Redux_"),
-                            new NewPortal("Overworld to Forest Belltower", "Forest Belltower_"),
-                            new NewPortal("Secret Gathering Place Entrance", "Waterfall_"),
+                        new List<TunicPortal> {
+                            new TunicPortal("Stick House Entrance", "Sword Cave_"),
+                            new TunicPortal("Windmill Entrance", "Windmill_"),
+                            new TunicPortal("Well Ladder Entrance", "Sewer_entrance"),
+                            new TunicPortal("Old House Waterfall Entrance", "Overworld Interiors_under_checkpoint"),
+                            new TunicPortal("Entrance to Furnace under Windmill", "Furnace_gyro_upper_east"),
+                            new TunicPortal("Entrance to Furnace from Beach", "Furnace_gyro_lower"),
+                            new TunicPortal("Caustic Light Cave Entrance", "Overworld Cave_"),
+                            new TunicPortal("Swamp Lower Entrance", "Swamp Redux 2_conduit"),
+                            new TunicPortal("Ruined Passage Not-Door Entrance", "Ruins Passage_east"),
+                            new TunicPortal("Atoll Upper Entrance", "Atoll Redux_upper"),
+                            new TunicPortal("Atoll Lower Entrance", "Atoll Redux_lower"),
+                            new TunicPortal("Maze Cave Entrance", "Maze Room_"),
+                            new TunicPortal("Temple Rafters Entrance", "Temple_rafters"),
+                            new TunicPortal("Ruined Shop Entrance", "Ruined Shop_"),
+                            new TunicPortal("Patrol Cave Entrance", "PatrolCave_"),
+                            new TunicPortal("Hourglass Cave Entrance", "Town Basement_beach"),
+                            new TunicPortal("Changing Room Entrance", "Changing Room_"),
+                            new TunicPortal("Cube Cave Entrance", "CubeRoom_"),
+                            new TunicPortal("Stairs from Overworld to Mountain", "Mountain_"),
+                            new TunicPortal("Overworld to Fortress", "Fortress Courtyard_"),
+                            new TunicPortal("Overworld to Quarry Connector", "Darkwoods Tunnel_"),
+                            new TunicPortal("Dark Tomb Main Entrance", "Crypt Redux_"),
+                            new TunicPortal("Overworld to Forest Belltower", "Forest Belltower_"),
+                            new TunicPortal("Secret Gathering Place Entrance", "Waterfall_"),
                         }
                     },
                     {
                         "Overworld Well to Furnace Rail",
-                        new List<NewPortal> {
-                            new NewPortal("Entrance to Well from Well Rail", "Sewer_west_aqueduct"),
-                            new NewPortal("Entrance to Furnace from Well Rail", "Furnace_gyro_upper_north"),
+                        new List<TunicPortal> {
+                            new TunicPortal("Entrance to Well from Well Rail", "Sewer_west_aqueduct"),
+                            new TunicPortal("Entrance to Furnace from Well Rail", "Furnace_gyro_upper_north"),
                         }
                     },
                     {
                         "Overworld Old House Door",
-                        new List<NewPortal> {
-                            new NewPortal("Old House Door Entrance", "Overworld Interiors_house"),
+                        new List<TunicPortal> {
+                            new TunicPortal("Old House Door Entrance", "Overworld Interiors_house"),
                         }
                     },
                     {
                         "Overworld to West Garden from Furnace",
-                        new List<NewPortal> {
-                            new NewPortal("Entrance to Furnace near West Garden", "Furnace_gyro_west"),
-                            new NewPortal("West Garden Entrance from Furnace", "Archipelagos Redux_lower"),
+                        new List<TunicPortal> {
+                            new TunicPortal("Entrance to Furnace near West Garden", "Furnace_gyro_west"),
+                            new TunicPortal("West Garden Entrance from Furnace", "Archipelagos Redux_lower"),
                         }
                     },
                     {
                         "Overworld Swamp Upper Entry",
-                        new List<NewPortal> {
-                            new NewPortal("Swamp Upper Entrance", "Swamp Redux 2_wall"),
+                        new List<TunicPortal> {
+                            new TunicPortal("Swamp Upper Entrance", "Swamp Redux 2_wall"),
                         }
                     },
                     {
                         "Overworld Ruined Passage Door",
-                        new List<NewPortal> {
-                            new NewPortal("Ruined Passage Door Entrance", "Ruins Passage_west"),
+                        new List<TunicPortal> {
+                            new TunicPortal("Ruined Passage Door Entrance", "Ruins Passage_west"),
                         }
                     },
                     {
                         "Overworld Special Shop Entry",
-                        new List<NewPortal> {
-                            new NewPortal("Special Shop Entrance", "ShopSpecial_"),
+                        new List<TunicPortal> {
+                            new TunicPortal("Special Shop Entrance", "ShopSpecial_"),
                         }
                     },
                     {
                         "Overworld Belltower",
-                        new List<NewPortal> {
-                            new NewPortal("West Garden Entrance near Belltower", "Archipelagos Redux_upper"),
+                        new List<TunicPortal> {
+                            new TunicPortal("West Garden Entrance near Belltower", "Archipelagos Redux_upper"),
                         }
                     },
                     {
                         "Overworld West Garden Laurels Entry",
-                        new List<NewPortal> {
-                            new NewPortal("West Garden Laurels Entrance", "Archipelagos Redux_lowest"),
+                        new List<TunicPortal> {
+                            new TunicPortal("West Garden Laurels Entrance", "Archipelagos Redux_lowest"),
                         }
                     },
                     {
                         "Overworld Temple Door",
-                        new List<NewPortal> {
-                            new NewPortal("Temple Door Entrance", "Temple_main"),
+                        new List<TunicPortal> {
+                            new TunicPortal("Temple Door Entrance", "Temple_main"),
                         }
                     },
                     {
                         "Overworld Fountain Cross Door",
-                        new List<NewPortal> {
-                            new NewPortal("Fountain HC Door Entrance", "Town_FiligreeRoom_"),
+                        new List<TunicPortal> {
+                            new TunicPortal("Fountain HC Door Entrance", "Town_FiligreeRoom_"),
                         }
                     },
                     {
                         "Overworld Southeast Cross Door",
-                        new List<NewPortal> {
-                            new NewPortal("Southeast HC Door Entrance", "EastFiligreeCache_"),
+                        new List<TunicPortal> {
+                            new TunicPortal("Southeast HC Door Entrance", "EastFiligreeCache_"),
                         }
                     },
                     {
                         "Overworld Town Portal",
-                        new List<NewPortal> {
-                            new NewPortal("Town to Far Shore", "Transit_teleporter_town"),
+                        new List<TunicPortal> {
+                            new TunicPortal("Town to Far Shore", "Transit_teleporter_town"),
                         }
                     },
                     {
                         "Overworld Spawn Portal",
-                        new List<NewPortal> {
-                            new NewPortal("Spawn to Far Shore", "Transit_teleporter_starting island"),
+                        new List<TunicPortal> {
+                            new TunicPortal("Spawn to Far Shore", "Transit_teleporter_starting island"),
                         }
                     },
                 }
             },
             {
                 "Waterfall",
-                new Dictionary<string, List<NewPortal>> {
+                new Dictionary<string, List<TunicPortal>> {
                     {
                         "Secret Gathering Place",
-                        new List<NewPortal> {
-                            new NewPortal("Secret Gathering Place Exit", "Overworld Redux_"),
+                        new List<TunicPortal> {
+                            new TunicPortal("Secret Gathering Place Exit", "Overworld Redux_"),
                         }
                     },
                 }
             },
             {
                 "Windmill",
-                new Dictionary<string, List<NewPortal>> {
+                new Dictionary<string, List<TunicPortal>> {
                     {
                         "Windmill",
-                        new List<NewPortal> {
-                            new NewPortal("Windmill Exit", "Overworld Redux_"),
-                            new NewPortal("Windmill Shop", "Shop_"),
+                        new List<TunicPortal> {
+                            new TunicPortal("Windmill Exit", "Overworld Redux_"),
+                            new TunicPortal("Windmill Shop", "Shop_"),
                         }
                     },
                 }
             },
             {
                 "Overworld Interiors",
-                new Dictionary<string, List<NewPortal>> {
+                new Dictionary<string, List<TunicPortal>> {
                     {
                         "Old House Front",
-                        new List<NewPortal> {
-                            new NewPortal("Old House Door Exit", "Overworld Redux_house"),
-                            new NewPortal("Old House to Glyph Tower", "g_elements_"),
+                        new List<TunicPortal> {
+                            new TunicPortal("Old House Door Exit", "Overworld Redux_house"),
+                            new TunicPortal("Old House to Glyph Tower", "g_elements_"),
                         }
                     },
                     {
                         "Old House Back",
-                        new List<NewPortal> {
-                            new NewPortal("Old House Waterfall Exit", "Overworld Redux_under_checkpoint"),
+                        new List<TunicPortal> {
+                            new TunicPortal("Old House Waterfall Exit", "Overworld Redux_under_checkpoint"),
                         }
                     },
                 }
             },
             {
                 "g_elements",
-                new Dictionary<string, List<NewPortal>> {
+                new Dictionary<string, List<TunicPortal>> {
                     {
                         "Relic Tower",
-                        new List<NewPortal> {
-                            new NewPortal("Glyph Tower Exit", "Overworld Interiors_"),
+                        new List<TunicPortal> {
+                            new TunicPortal("Glyph Tower Exit", "Overworld Interiors_"),
                         }
                     },
                 }
             },
             {
                 "Changing Room",
-                new Dictionary<string, List<NewPortal>> {
+                new Dictionary<string, List<TunicPortal>> {
                     {
                         "Changing Room",
-                        new List<NewPortal> {
-                            new NewPortal("Changing Room Exit", "Overworld Redux_"),
+                        new List<TunicPortal> {
+                            new TunicPortal("Changing Room Exit", "Overworld Redux_"),
                         }
                     },
                 }
             },
             {
                 "Town_FiligreeRoom",
-                new Dictionary<string, List<NewPortal>> {
+                new Dictionary<string, List<TunicPortal>> {
                     {
                         "Fountain Cross Room",
-                        new List<NewPortal> {
-                            new NewPortal("Fountain HC Room Exit", "Overworld Redux_"),
+                        new List<TunicPortal> {
+                            new TunicPortal("Fountain HC Room Exit", "Overworld Redux_"),
                         }
                     },
                 }
             },
             {
                 "CubeRoom",
-                new Dictionary<string, List<NewPortal>> {
+                new Dictionary<string, List<TunicPortal>> {
                     {
                         "Cube Cave",
-                        new List<NewPortal> {
-                            new NewPortal("Cube Cave Exit", "Overworld Redux_"),
+                        new List<TunicPortal> {
+                            new TunicPortal("Cube Cave Exit", "Overworld Redux_"),
                         }
                     },
                 }
             },
             {
                 "PatrolCave",
-                new Dictionary<string, List<NewPortal>> {
+                new Dictionary<string, List<TunicPortal>> {
                     {
                         "Patrol Cave",
-                        new List<NewPortal> {
-                            new NewPortal("Guard Patrol Cave Exit", "Overworld Redux_"),
+                        new List<TunicPortal> {
+                            new TunicPortal("Guard Patrol Cave Exit", "Overworld Redux_"),
                         }
                     },
                 }
             },
             {
                 "Ruined Shop",
-                new Dictionary<string, List<NewPortal>> {
+                new Dictionary<string, List<TunicPortal>> {
                     {
                         "Ruined Shop",
-                        new List<NewPortal> {
-                            new NewPortal("Ruined Shop Exit", "Overworld Redux_"),
+                        new List<TunicPortal> {
+                            new TunicPortal("Ruined Shop Exit", "Overworld Redux_"),
                         }
                     },
                 }
             },
             {
                 "Furnace",
-                new Dictionary<string, List<NewPortal>> {
+                new Dictionary<string, List<TunicPortal>> {
                     {
                         "Furnace Fuse",
-                        new List<NewPortal> {
-                            new NewPortal("Furnace Exit towards Well", "Overworld Redux_gyro_upper_north"),
+                        new List<TunicPortal> {
+                            new TunicPortal("Furnace Exit towards Well", "Overworld Redux_gyro_upper_north"),
                         }
                     },
                     {
                         "Furnace Walking Path",
-                        new List<NewPortal> {
-                            new NewPortal("Furnace Exit to Dark Tomb", "Crypt Redux_"),
-                            new NewPortal("Furnace Exit towards West Garden", "Overworld Redux_gyro_west"),
+                        new List<TunicPortal> {
+                            new TunicPortal("Furnace Exit to Dark Tomb", "Crypt Redux_"),
+                            new TunicPortal("Furnace Exit towards West Garden", "Overworld Redux_gyro_west"),
                         }
                     },
                     {
                         "Furnace Ladder Area",
-                        new List<NewPortal> {
-                            new NewPortal("Furnace Exit to Beach", "Overworld Redux_gyro_lower"),
-                            new NewPortal("Furnace Exit under Windmill", "Overworld Redux_gyro_upper_east"),
+                        new List<TunicPortal> {
+                            new TunicPortal("Furnace Exit to Beach", "Overworld Redux_gyro_lower"),
+                            new TunicPortal("Furnace Exit under Windmill", "Overworld Redux_gyro_upper_east"),
                         }
                     },
                 }
             },
             {
                 "Sword Cave",
-                new Dictionary<string, List<NewPortal>> {
+                new Dictionary<string, List<TunicPortal>> {
                     {
                         "Stick House",
-                        new List<NewPortal> {
-                            new NewPortal("Stick House Exit", "Overworld Redux_"),
+                        new List<TunicPortal> {
+                            new TunicPortal("Stick House Exit", "Overworld Redux_"),
                         }
                     },
                 }
             },
             {
                 "Ruins Passage",
-                new Dictionary<string, List<NewPortal>> {
+                new Dictionary<string, List<TunicPortal>> {
                     {
                         "Ruined Passage",
-                        new List<NewPortal> {
-                            new NewPortal("Ruined Passage Not-Door Exit", "Overworld Redux_east"),
-                            new NewPortal("Ruined Passage Door Exit", "Overworld Redux_west"),
+                        new List<TunicPortal> {
+                            new TunicPortal("Ruined Passage Not-Door Exit", "Overworld Redux_east"),
+                            new TunicPortal("Ruined Passage Door Exit", "Overworld Redux_west"),
                         }
                     },
                 }
             },
             {
                 "EastFiligreeCache",
-                new Dictionary<string, List<NewPortal>> {
+                new Dictionary<string, List<TunicPortal>> {
                     {
                         "Southeast Cross Room",
-                        new List<NewPortal> {
-                            new NewPortal("Southeast HC Room Exit", "Overworld Redux_"),
+                        new List<TunicPortal> {
+                            new TunicPortal("Southeast HC Room Exit", "Overworld Redux_"),
                         }
                     },
                 }
             },
             {
                 "Overworld Cave",
-                new Dictionary<string, List<NewPortal>> {
+                new Dictionary<string, List<TunicPortal>> {
                     {
                         "Caustic Light Cave",
-                        new List<NewPortal> {
-                            new NewPortal("Caustic Light Cave Exit", "Overworld Redux_"),
+                        new List<TunicPortal> {
+                            new TunicPortal("Caustic Light Cave Exit", "Overworld Redux_"),
                         }
                     },
                 }
             },
             {
                 "Maze Room",
-                new Dictionary<string, List<NewPortal>> {
+                new Dictionary<string, List<TunicPortal>> {
                     {
                         "Maze Cave",
-                        new List<NewPortal> {
-                            new NewPortal("Maze Cave Exit", "Overworld Redux_"),
+                        new List<TunicPortal> {
+                            new TunicPortal("Maze Cave Exit", "Overworld Redux_"),
                         }
                     },
                 }
             },
             {
                 "Town Basement",
-                new Dictionary<string, List<NewPortal>> {
+                new Dictionary<string, List<TunicPortal>> {
                     {
                         "Hourglass Cave",
-                        new List<NewPortal> {
-                            new NewPortal("Hourglass Cave Exit", "Overworld Redux_beach"),
+                        new List<TunicPortal> {
+                            new TunicPortal("Hourglass Cave Exit", "Overworld Redux_beach"),
                         }
                     },
                 }
             },
             {
                 "ShopSpecial",
-                new Dictionary<string, List<NewPortal>> {
+                new Dictionary<string, List<TunicPortal>> {
                     {
                         "Special Shop",
-                        new List<NewPortal> {
-                            new NewPortal("Special Shop Exit", "Overworld Redux_"),
+                        new List<TunicPortal> {
+                            new TunicPortal("Special Shop Exit", "Overworld Redux_"),
                         }
                     },
                 }
             },
             {
                 "Temple",
-                new Dictionary<string, List<NewPortal>> {
+                new Dictionary<string, List<TunicPortal>> {
                     {
                         "Sealed Temple Rafters",
-                        new List<NewPortal> {
-                            new NewPortal("Temple Rafters Exit", "Overworld Redux_rafters"),
+                        new List<TunicPortal> {
+                            new TunicPortal("Temple Rafters Exit", "Overworld Redux_rafters"),
                         }
                     },
                     {
                         "Sealed Temple",
-                        new List<NewPortal> {
-                            new NewPortal("Temple Door Exit", "Overworld Redux_main"),
+                        new List<TunicPortal> {
+                            new TunicPortal("Temple Door Exit", "Overworld Redux_main"),
                         }
                     },
                 }
             },
             {
                 "Sewer",
-                new Dictionary<string, List<NewPortal>> {
+                new Dictionary<string, List<TunicPortal>> {
                     {
                         "Beneath the Well Front",
-                        new List<NewPortal> {
-                            new NewPortal("Well Ladder Exit", "Overworld Redux_entrance"),
+                        new List<TunicPortal> {
+                            new TunicPortal("Well Ladder Exit", "Overworld Redux_entrance"),
                         }
                     },
                     {
                         "Beneath the Well Back",
-                        new List<NewPortal> {
-                            new NewPortal("Well to Well Boss", "Sewer_Boss_"),
-                            new NewPortal("Well Exit towards Furnace", "Overworld Redux_west_aqueduct"),
+                        new List<TunicPortal> {
+                            new TunicPortal("Well to Well Boss", "Sewer_Boss_"),
+                            new TunicPortal("Well Exit towards Furnace", "Overworld Redux_west_aqueduct"),
                         }
                     },
                 }
             },
             {
                 "Sewer_Boss",
-                new Dictionary<string, List<NewPortal>> {
+                new Dictionary<string, List<TunicPortal>> {
                     {
                         "Well Boss",
-                        new List<NewPortal> {
-                            new NewPortal("Well Boss to Well", "Sewer_"),
+                        new List<TunicPortal> {
+                            new TunicPortal("Well Boss to Well", "Sewer_"),
                         }
                     },
                     {
                         "Dark Tomb Checkpoint",
-                        new List<NewPortal> {
-                            new NewPortal("Checkpoint to Dark Tomb", "Crypt Redux_"),
+                        new List<TunicPortal> {
+                            new TunicPortal("Checkpoint to Dark Tomb", "Crypt Redux_"),
                         }
                     },
                 }
             },
             {
                 "Crypt Redux",
-                new Dictionary<string, List<NewPortal>> {
+                new Dictionary<string, List<TunicPortal>> {
                     {
                         "Dark Tomb Entry Point",
-                        new List<NewPortal> {
-                            new NewPortal("Dark Tomb to Overworld", "Overworld Redux_"),
-                            new NewPortal("Dark Tomb to Checkpoint", "Sewer_Boss_"),
+                        new List<TunicPortal> {
+                            new TunicPortal("Dark Tomb to Overworld", "Overworld Redux_"),
+                            new TunicPortal("Dark Tomb to Checkpoint", "Sewer_Boss_"),
                         }
                     },
                     {
                         "Dark Tomb Dark Exit",
-                        new List<NewPortal> {
-                            new NewPortal("Dark Tomb to Furnace", "Furnace_"),
+                        new List<TunicPortal> {
+                            new TunicPortal("Dark Tomb to Furnace", "Furnace_"),
                         }
                     },
                 }
             },
             {
                 "Archipelagos Redux",
-                new Dictionary<string, List<NewPortal>> {
+                new Dictionary<string, List<TunicPortal>> {
                     {
                         "West Garden",
-                        new List<NewPortal> {
-                            new NewPortal("West Garden Exit near Hero's Grave", "Overworld Redux_lower"),
-                            new NewPortal("West Garden to Magic Dagger House", "archipelagos_house_"),
-                            new NewPortal("West Garden Shop", "Shop_"),
+                        new List<TunicPortal> {
+                            new TunicPortal("West Garden Exit near Hero's Grave", "Overworld Redux_lower"),
+                            new TunicPortal("West Garden to Magic Dagger House", "archipelagos_house_"),
+                            new TunicPortal("West Garden Shop", "Shop_"),
                         }
                     },
                     {
                         "West Garden after Boss",
-                        new List<NewPortal> {
-                            new NewPortal("West Garden Exit after Boss", "Overworld Redux_upper"),
+                        new List<TunicPortal> {
+                            new TunicPortal("West Garden Exit after Boss", "Overworld Redux_upper"),
                         }
                     },
                     {
                         "West Garden Laurels Exit",
-                        new List<NewPortal> {
-                            new NewPortal("West Garden Laurels Exit", "Overworld Redux_lowest"),
+                        new List<TunicPortal> {
+                            new TunicPortal("West Garden Laurels Exit", "Overworld Redux_lowest"),
                         }
                     },
                     {
                         "West Garden Hero's Grave",
-                        new List<NewPortal> {
-                            new NewPortal("West Garden Hero's Grave", "RelicVoid_teleporter_relic plinth"),
+                        new List<TunicPortal> {
+                            new TunicPortal("West Garden Hero's Grave", "RelicVoid_teleporter_relic plinth"),
                         }
                     },
                     {
                         "West Garden Portal",
-                        new List<NewPortal> {
-                            new NewPortal("West Garden to Far Shore", "Transit_teleporter_archipelagos_teleporter"),
+                        new List<TunicPortal> {
+                            new TunicPortal("West Garden to Far Shore", "Transit_teleporter_archipelagos_teleporter"),
                         }
                     },
                 }
             },
             {
                 "archipelagos_house",
-                new Dictionary<string, List<NewPortal>> {
+                new Dictionary<string, List<TunicPortal>> {
                     {
                         "Magic Dagger House",
-                        new List<NewPortal> {
-                            new NewPortal("Magic Dagger House Exit", "Archipelagos Redux_"),
+                        new List<TunicPortal> {
+                            new TunicPortal("Magic Dagger House Exit", "Archipelagos Redux_"),
                         }
                     },
                 }
             },
             {
                 "Atoll Redux",
-                new Dictionary<string, List<NewPortal>> {
+                new Dictionary<string, List<TunicPortal>> {
                     {
                         "Ruined Atoll",
-                        new List<NewPortal> {
-                            new NewPortal("Atoll Upper Exit", "Overworld Redux_upper"),
-                            new NewPortal("Atoll Shop", "Shop_"),
-                            new NewPortal("Frog Stairs Eye Entrance", "Frog Stairs_eye"),
+                        new List<TunicPortal> {
+                            new TunicPortal("Atoll Upper Exit", "Overworld Redux_upper"),
+                            new TunicPortal("Atoll Shop", "Shop_"),
+                            new TunicPortal("Frog Stairs Eye Entrance", "Frog Stairs_eye"),
                         }
                     },
                     {
                         "Ruined Atoll Lower Entry Area",
-                        new List<NewPortal> {
-                            new NewPortal("Atoll Lower Exit", "Overworld Redux_lower"),
+                        new List<TunicPortal> {
+                            new TunicPortal("Atoll Lower Exit", "Overworld Redux_lower"),
                         }
                     },
                     {
                         "Ruined Atoll Portal",
-                        new List<NewPortal> {
-                            new NewPortal("Atoll to Far Shore", "Transit_teleporter_atoll"),
-                            new NewPortal("Atoll Statue Teleporter", "Library Exterior_"),
+                        new List<TunicPortal> {
+                            new TunicPortal("Atoll to Far Shore", "Transit_teleporter_atoll"),
+                            new TunicPortal("Atoll Statue Teleporter", "Library Exterior_"),
                         }
                     },
                     {
                         "Ruined Atoll Frog Mouth",
-                        new List<NewPortal> {
-                            new NewPortal("Frog Stairs Mouth Entrance", "Frog Stairs_mouth"),
+                        new List<TunicPortal> {
+                            new TunicPortal("Frog Stairs Mouth Entrance", "Frog Stairs_mouth"),
                         }
                     },
                 }
             },
             {
                 "Frog Stairs",
-                new Dictionary<string, List<NewPortal>> {
+                new Dictionary<string, List<TunicPortal>> {
                     {
                         "Frog's Domain Entry",
-                        new List<NewPortal> {
-                            new NewPortal("Frog Stairs Eye Exit", "Atoll Redux_eye"),
-                            new NewPortal("Frog Stairs Mouth Exit", "Atoll Redux_mouth"),
-                            new NewPortal("Frog Stairs to Frog's Domain's Entrance", "frog cave main_Entrance"),
-                            new NewPortal("Frog Stairs to Frog's Domain's Exit", "frog cave main_Exit"),
+                        new List<TunicPortal> {
+                            new TunicPortal("Frog Stairs Eye Exit", "Atoll Redux_eye"),
+                            new TunicPortal("Frog Stairs Mouth Exit", "Atoll Redux_mouth"),
+                            new TunicPortal("Frog Stairs to Frog's Domain's Entrance", "frog cave main_Entrance"),
+                            new TunicPortal("Frog Stairs to Frog's Domain's Exit", "frog cave main_Exit"),
                         }
                     },
                 }
             },
             {
                 "frog cave main",
-                new Dictionary<string, List<NewPortal>> {
+                new Dictionary<string, List<TunicPortal>> {
                     {
                         "Frog's Domain",
-                        new List<NewPortal> {
-                            new NewPortal("Frog's Domain Ladder Exit", "Frog Stairs_Entrance"),
+                        new List<TunicPortal> {
+                            new TunicPortal("Frog's Domain Ladder Exit", "Frog Stairs_Entrance"),
                         }
                     },
                     {
                         "Frog's Domain Back",
-                        new List<NewPortal> {
-                            new NewPortal("Frog's Domain Orb Exit", "Frog Stairs_Exit"),
+                        new List<TunicPortal> {
+                            new TunicPortal("Frog's Domain Orb Exit", "Frog Stairs_Exit"),
                         }
                     },
                 }
             },
             {
                 "Library Exterior",
-                new Dictionary<string, List<NewPortal>> {
+                new Dictionary<string, List<TunicPortal>> {
                     {
                         "Library Exterior Tree",
-                        new List<NewPortal> {
-                            new NewPortal("Library Exterior Tree", "Atoll Redux_"),
+                        new List<TunicPortal> {
+                            new TunicPortal("Library Exterior Tree", "Atoll Redux_"),
                         }
                     },
                     {
                         "Library Exterior Ladder",
-                        new List<NewPortal> {
-                            new NewPortal("Library Exterior Ladder", "Library Hall_"),
+                        new List<TunicPortal> {
+                            new TunicPortal("Library Exterior Ladder", "Library Hall_"),
                         }
                     },
                 }
             },
             {
                 "Library Hall",
-                new Dictionary<string, List<NewPortal>> {
+                new Dictionary<string, List<TunicPortal>> {
                     {
                         "Library Hall",
-                        new List<NewPortal> {
-                            new NewPortal("Library Hall Bookshelf Exit", "Library Exterior_"),
-                            new NewPortal("Library Hall to Rotunda", "Library Rotunda_"),
+                        new List<TunicPortal> {
+                            new TunicPortal("Library Hall Bookshelf Exit", "Library Exterior_"),
+                            new TunicPortal("Library Hall to Rotunda", "Library Rotunda_"),
                         }
                     },
                     {
                         "Library Hero's Grave",
-                        new List<NewPortal> {
-                            new NewPortal("Library Hero's Grave", "RelicVoid_teleporter_relic plinth"),
+                        new List<TunicPortal> {
+                            new TunicPortal("Library Hero's Grave", "RelicVoid_teleporter_relic plinth"),
                         }
                     },
                 }
             },
             {
                 "Library Rotunda",
-                new Dictionary<string, List<NewPortal>> {
+                new Dictionary<string, List<TunicPortal>> {
                     {
                         "Library Rotunda",
-                        new List<NewPortal> {
-                            new NewPortal("Library Rotunda Lower Exit", "Library Hall_"),
-                            new NewPortal("Library Rotunda Upper Exit", "Library Lab_"),
+                        new List<TunicPortal> {
+                            new TunicPortal("Library Rotunda Lower Exit", "Library Hall_"),
+                            new TunicPortal("Library Rotunda Upper Exit", "Library Lab_"),
                         }
                     },
                 }
             },
             {
                 "Library Lab",
-                new Dictionary<string, List<NewPortal>> {
+                new Dictionary<string, List<TunicPortal>> {
                     {
                         "Library Lab Lower",
-                        new List<NewPortal> {
-                            new NewPortal("Library Lab to Rotunda", "Library Rotunda_"),
+                        new List<TunicPortal> {
+                            new TunicPortal("Library Lab to Rotunda", "Library Rotunda_"),
                         }
                     },
                     {
                         "Library Portal",
-                        new List<NewPortal> {
-                            new NewPortal("Library to Far Shore", "Transit_teleporter_library teleporter"),
+                        new List<TunicPortal> {
+                            new TunicPortal("Library to Far Shore", "Transit_teleporter_library teleporter"),
                         }
                     },
                     {
                         "Library Lab",
-                        new List<NewPortal> {
-                            new NewPortal("Library Lab to Librarian Arena", "Library Arena_"),
+                        new List<TunicPortal> {
+                            new TunicPortal("Library Lab to Librarian Arena", "Library Arena_"),
                         }
                     },
                 }
             },
             {
                 "Library Arena",
-                new Dictionary<string, List<NewPortal>> {
+                new Dictionary<string, List<TunicPortal>> {
                     {
                         "Library Arena",
-                        new List<NewPortal> {
-                            new NewPortal("Librarian Arena Exit", "Library Lab_"),
+                        new List<TunicPortal> {
+                            new TunicPortal("Librarian Arena Exit", "Library Lab_"),
                         }
                     },
                 }
             },
             {
                 "East Forest Redux",
-                new Dictionary<string, List<NewPortal>> {
+                new Dictionary<string, List<TunicPortal>> {
                     {
                         "East Forest",
-                        new List<NewPortal> {
-                            new NewPortal("Forest to Belltower", "Forest Belltower_"),
-                            new NewPortal("Forest Guard House 1 Lower Entrance", "East Forest Redux Laddercave_lower"),
-                            new NewPortal("Forest Guard House 1 Gate Entrance", "East Forest Redux Laddercave_gate"),
-                            new NewPortal("Forest Guard House 2 Lower Entrance", "East Forest Redux Interior_lower"),
-                            new NewPortal("Forest Guard House 2 Upper Entrance", "East Forest Redux Interior_upper"),
-                            new NewPortal("Forest Grave Path Lower Entrance", "Sword Access_lower"),
-                            new NewPortal("Forest Grave Path Upper Entrance", "Sword Access_upper"),
+                        new List<TunicPortal> {
+                            new TunicPortal("Forest to Belltower", "Forest Belltower_"),
+                            new TunicPortal("Forest Guard House 1 Lower Entrance", "East Forest Redux Laddercave_lower"),
+                            new TunicPortal("Forest Guard House 1 Gate Entrance", "East Forest Redux Laddercave_gate"),
+                            new TunicPortal("Forest Guard House 2 Lower Entrance", "East Forest Redux Interior_lower"),
+                            new TunicPortal("Forest Guard House 2 Upper Entrance", "East Forest Redux Interior_upper"),
+                            new TunicPortal("Forest Grave Path Lower Entrance", "Sword Access_lower"),
+                            new TunicPortal("Forest Grave Path Upper Entrance", "Sword Access_upper"),
                         }
                     },
                     {
                         "East Forest Dance Fox Spot",
-                        new List<NewPortal> {
-                            new NewPortal("Forest Dance Fox Outside Doorway", "East Forest Redux Laddercave_upper"),
+                        new List<TunicPortal> {
+                            new TunicPortal("Forest Dance Fox Outside Doorway", "East Forest Redux Laddercave_upper"),
                         }
                     },
                     {
                         "East Forest Portal",
-                        new List<NewPortal> {
-                            new NewPortal("Forest to Far Shore", "Transit_teleporter_forest teleporter"),
+                        new List<TunicPortal> {
+                            new TunicPortal("Forest to Far Shore", "Transit_teleporter_forest teleporter"),
                         }
                     },
                 }
             },
             {
                 "East Forest Redux Laddercave",
-                new Dictionary<string, List<NewPortal>> {
+                new Dictionary<string, List<TunicPortal>> {
                     {
                         "Guard House 1 West",
-                        new List<NewPortal> {
-                            new NewPortal("Guard House 1 Dance Fox Exit", "East Forest Redux_upper"),
-                            new NewPortal("Guard House 1 Lower Exit", "East Forest Redux_lower"),
+                        new List<TunicPortal> {
+                            new TunicPortal("Guard House 1 Dance Fox Exit", "East Forest Redux_upper"),
+                            new TunicPortal("Guard House 1 Lower Exit", "East Forest Redux_lower"),
                         }
                     },
                     {
                         "Guard House 1 East",
-                        new List<NewPortal> {
-                            new NewPortal("Guard House 1 Upper Forest Exit", "East Forest Redux_gate"),
-                            new NewPortal("Guard House 1 to Guard Captain Room", "Forest Boss Room_"),
+                        new List<TunicPortal> {
+                            new TunicPortal("Guard House 1 Upper Forest Exit", "East Forest Redux_gate"),
+                            new TunicPortal("Guard House 1 to Guard Captain Room", "Forest Boss Room_"),
                         }
                     },
                 }
             },
             {
                 "Sword Access",
-                new Dictionary<string, List<NewPortal>> {
+                new Dictionary<string, List<TunicPortal>> {
                     {
                         "Forest Grave Path Upper",
-                        new List<NewPortal> {
-                            new NewPortal("Forest Grave Path Upper Exit", "East Forest Redux_upper"),
+                        new List<TunicPortal> {
+                            new TunicPortal("Forest Grave Path Upper Exit", "East Forest Redux_upper"),
                         }
                     },
                     {
                         "Forest Grave Path Main",
-                        new List<NewPortal> {
-                            new NewPortal("Forest Grave Path Lower Exit", "East Forest Redux_lower"),
+                        new List<TunicPortal> {
+                            new TunicPortal("Forest Grave Path Lower Exit", "East Forest Redux_lower"),
                         }
                     },
                     {
                         "Forest Hero's Grave",
-                        new List<NewPortal> {
-                            new NewPortal("East Forest Hero's Grave", "RelicVoid_teleporter_relic plinth"),
+                        new List<TunicPortal> {
+                            new TunicPortal("East Forest Hero's Grave", "RelicVoid_teleporter_relic plinth"),
                         }
                     },
                 }
             },
             {
                 "East Forest Redux Interior",
-                new Dictionary<string, List<NewPortal>> {
+                new Dictionary<string, List<TunicPortal>> {
                     {
                         "Guard House 2",
-                        new List<NewPortal> {
-                            new NewPortal("Guard House 2 Lower Exit", "East Forest Redux_lower"),
-                            new NewPortal("Guard House 2 Upper Exit", "East Forest Redux_upper"),
+                        new List<TunicPortal> {
+                            new TunicPortal("Guard House 2 Lower Exit", "East Forest Redux_lower"),
+                            new TunicPortal("Guard House 2 Upper Exit", "East Forest Redux_upper"),
                         }
                     },
                 }
             },
             {
                 "Forest Boss Room",
-                new Dictionary<string, List<NewPortal>> {
+                new Dictionary<string, List<TunicPortal>> {
                     {
                         "Forest Boss Room",
-                        new List<NewPortal> {
-                            new NewPortal("Guard Captain Room Non-Gate Exit", "East Forest Redux Laddercave_"),
-                            new NewPortal("Guard Captain Room Gate Exit", "Forest Belltower_"),
+                        new List<TunicPortal> {
+                            new TunicPortal("Guard Captain Room Non-Gate Exit", "East Forest Redux Laddercave_"),
+                            new TunicPortal("Guard Captain Room Gate Exit", "Forest Belltower_"),
                         }
                     },
                 }
             },
             {
                 "Forest Belltower",
-                new Dictionary<string, List<NewPortal>> {
+                new Dictionary<string, List<TunicPortal>> {
                     {
                         "Forest Belltower Main",
-                        new List<NewPortal> {
-                            new NewPortal("Forest Belltower to Fortress", "Fortress Courtyard_"),
-                            new NewPortal("Forest Belltower to Overworld", "Overworld Redux_"),
+                        new List<TunicPortal> {
+                            new TunicPortal("Forest Belltower to Fortress", "Fortress Courtyard_"),
+                            new TunicPortal("Forest Belltower to Overworld", "Overworld Redux_"),
                         }
                     },
                     {
                         "Forest Belltower Lower",
-                        new List<NewPortal> {
-                            new NewPortal("Forest Belltower to Forest", "East Forest Redux_"),
+                        new List<TunicPortal> {
+                            new TunicPortal("Forest Belltower to Forest", "East Forest Redux_"),
                         }
                     },
                     {
                         "Forest Belltower Upper",
-                        new List<NewPortal> {
-                            new NewPortal("Forest Belltower to Guard Captain Room", "Forest Boss Room_"),
+                        new List<TunicPortal> {
+                            new TunicPortal("Forest Belltower to Guard Captain Room", "Forest Boss Room_"),
                         }
                     },
                 }
             },
             {
                 "Fortress Courtyard",
-                new Dictionary<string, List<NewPortal>> {
+                new Dictionary<string, List<TunicPortal>> {
                     {
                         "Fortress Courtyard",
-                        new List<NewPortal> {
-                            new NewPortal("Fortress Courtyard to Fortress Grave Path Lower", "Fortress Reliquary_Lower"),
-                            new NewPortal("Fortress Courtyard to Fortress Interior", "Fortress Main_Big Door"),
+                        new List<TunicPortal> {
+                            new TunicPortal("Fortress Courtyard to Fortress Grave Path Lower", "Fortress Reliquary_Lower"),
+                            new TunicPortal("Fortress Courtyard to Fortress Interior", "Fortress Main_Big Door"),
                         }
                     },
                     {
                         "Fortress Courtyard Upper",
-                        new List<NewPortal> {
-                            new NewPortal("Fortress Courtyard to Fortress Grave Path Upper", "Fortress Reliquary_Upper"),
-                            new NewPortal("Fortress Courtyard to East Fortress", "Fortress East_"),
+                        new List<TunicPortal> {
+                            new TunicPortal("Fortress Courtyard to Fortress Grave Path Upper", "Fortress Reliquary_Upper"),
+                            new TunicPortal("Fortress Courtyard to East Fortress", "Fortress East_"),
                         }
                     },
                     {
                         "Fortress Exterior near cave",
-                        new List<NewPortal> {
-                            new NewPortal("Fortress Courtyard to Beneath the Earth", "Fortress Basement_"),
-                            new NewPortal("Fortress Courtyard Shop", "Shop_"),
+                        new List<TunicPortal> {
+                            new TunicPortal("Fortress Courtyard to Beneath the Earth", "Fortress Basement_"),
+                            new TunicPortal("Fortress Courtyard Shop", "Shop_"),
                         }
                     },
                     {
                         "Fortress Exterior from East Forest",
-                        new List<NewPortal> {
-                            new NewPortal("Fortress Courtyard to Forest Belltower", "Forest Belltower_"),
+                        new List<TunicPortal> {
+                            new TunicPortal("Fortress Courtyard to Forest Belltower", "Forest Belltower_"),
                         }
                     },
                     {
                         "Fortress Exterior from Overworld",
-                        new List<NewPortal> {
-                            new NewPortal("Fortress Courtyard to Overworld", "Overworld Redux_"),
+                        new List<TunicPortal> {
+                            new TunicPortal("Fortress Courtyard to Overworld", "Overworld Redux_"),
                         }
                     },
                 }
             },
             {
                 "Fortress Basement",
-                new Dictionary<string, List<NewPortal>> {
+                new Dictionary<string, List<TunicPortal>> {
                     {
                         "Beneath the Vault Back",
-                        new List<NewPortal> {
-                            new NewPortal("Beneath the Earth to Fortress Interior", "Fortress Main_"),
+                        new List<TunicPortal> {
+                            new TunicPortal("Beneath the Earth to Fortress Interior", "Fortress Main_"),
                         }
                     },
                     {
                         "Beneath the Vault Front",
-                        new List<NewPortal> {
-                            new NewPortal("Beneath the Earth to Fortress Courtyard", "Fortress Courtyard_"),
+                        new List<TunicPortal> {
+                            new TunicPortal("Beneath the Earth to Fortress Courtyard", "Fortress Courtyard_"),
                         }
                     },
                 }
             },
             {
                 "Fortress Main",
-                new Dictionary<string, List<NewPortal>> {
+                new Dictionary<string, List<TunicPortal>> {
                     {
                         "Eastern Vault Fortress",
-                        new List<NewPortal> {
-                            new NewPortal("Fortress Interior Main Exit", "Fortress Courtyard_Big Door"),
-                            new NewPortal("Fortress Interior to Beneath the Earth", "Fortress Basement_"),
-                            new NewPortal("Fortress Interior Shop", "Shop_"),
-                            new NewPortal("Fortress Interior to East Fortress Upper", "Fortress East_upper"),
-                            new NewPortal("Fortress Interior to East Fortress Lower", "Fortress East_lower"),
+                        new List<TunicPortal> {
+                            new TunicPortal("Fortress Interior Main Exit", "Fortress Courtyard_Big Door"),
+                            new TunicPortal("Fortress Interior to Beneath the Earth", "Fortress Basement_"),
+                            new TunicPortal("Fortress Interior Shop", "Shop_"),
+                            new TunicPortal("Fortress Interior to East Fortress Upper", "Fortress East_upper"),
+                            new TunicPortal("Fortress Interior to East Fortress Lower", "Fortress East_lower"),
                         }
                     },
                     {
                         "Eastern Vault Fortress Gold Door",
-                        new List<NewPortal> {
-                            new NewPortal("Fortress Interior to Siege Engine Arena", "Fortress Arena_"),
+                        new List<TunicPortal> {
+                            new TunicPortal("Fortress Interior to Siege Engine Arena", "Fortress Arena_"),
                         }
                     },
                 }
             },
             {
                 "Fortress East",
-                new Dictionary<string, List<NewPortal>> {
+                new Dictionary<string, List<TunicPortal>> {
                     {
                         "Fortress East Shortcut Lower",
-                        new List<NewPortal> {
-                            new NewPortal("East Fortress to Interior Lower", "Fortress Main_lower"),
+                        new List<TunicPortal> {
+                            new TunicPortal("East Fortress to Interior Lower", "Fortress Main_lower"),
                         }
                     },
                     {
                         "Fortress East Shortcut Upper",
-                        new List<NewPortal> {
-                            new NewPortal("East Fortress to Courtyard", "Fortress Courtyard_"),
-                            new NewPortal("East Fortress to Interior Upper", "Fortress Main_upper"),
+                        new List<TunicPortal> {
+                            new TunicPortal("East Fortress to Courtyard", "Fortress Courtyard_"),
+                            new TunicPortal("East Fortress to Interior Upper", "Fortress Main_upper"),
                         }
                     },
                 }
             },
             {
                 "Fortress Reliquary",
-                new Dictionary<string, List<NewPortal>> {
+                new Dictionary<string, List<TunicPortal>> {
                     {
                         "Fortress Grave Path",
-                        new List<NewPortal> {
-                            new NewPortal("Fortress Grave Path Lower Exit", "Fortress Courtyard_Lower"),
-                            new NewPortal("Fortress Hero's Grave", "RelicVoid_teleporter_relic plinth"),
+                        new List<TunicPortal> {
+                            new TunicPortal("Fortress Grave Path Lower Exit", "Fortress Courtyard_Lower"),
+                            new TunicPortal("Fortress Hero's Grave", "RelicVoid_teleporter_relic plinth"),
                         }
                     },
                     {
                         "Fortress Grave Path Upper",
-                        new List<NewPortal> {
-                            new NewPortal("Fortress Grave Path Upper Exit", "Fortress Courtyard_Upper"),
+                        new List<TunicPortal> {
+                            new TunicPortal("Fortress Grave Path Upper Exit", "Fortress Courtyard_Upper"),
                         }
                     },
                     {
                         "Fortress Grave Path Dusty Entrance",
-                        new List<NewPortal> {
-                            new NewPortal("Fortress Grave Path Dusty Entrance", "Dusty_"),
+                        new List<TunicPortal> {
+                            new TunicPortal("Fortress Grave Path Dusty Entrance", "Dusty_"),
                         }
                     },
                 }
             },
             {
                 "Dusty",
-                new Dictionary<string, List<NewPortal>> {
+                new Dictionary<string, List<TunicPortal>> {
                     {
                         "Fortress Leaf Piles",
-                        new List<NewPortal> {
-                            new NewPortal("Dusty Exit", "Fortress Reliquary_"),
+                        new List<TunicPortal> {
+                            new TunicPortal("Dusty Exit", "Fortress Reliquary_"),
                         }
                     },
                 }
             },
             {
                 "Fortress Arena",
-                new Dictionary<string, List<NewPortal>> {
+                new Dictionary<string, List<TunicPortal>> {
                     {
                         "Fortress Arena",
-                        new List<NewPortal> {
-                            new NewPortal("Siege Engine Arena to Fortress", "Fortress Main_"),
+                        new List<TunicPortal> {
+                            new TunicPortal("Siege Engine Arena to Fortress", "Fortress Main_"),
                         }
                     },
                     {
                         "Fortress Arena Portal",
-                        new List<NewPortal> {
-                            new NewPortal("Fortress to Far Shore", "Transit_teleporter_spidertank"),
+                        new List<TunicPortal> {
+                            new TunicPortal("Fortress to Far Shore", "Transit_teleporter_spidertank"),
                         }
                     },
                 }
             },
             {
                 "Mountain",
-                new Dictionary<string, List<NewPortal>> {
+                new Dictionary<string, List<TunicPortal>> {
                     {
                         "Lower Mountain Stairs",
-                        new List<NewPortal> {
-                            new NewPortal("Stairs to Top of the Mountain", "Mountaintop_"),
+                        new List<TunicPortal> {
+                            new TunicPortal("Stairs to Top of the Mountain", "Mountaintop_"),
                         }
                     },
                     {
                         "Lower Mountain",
-                        new List<NewPortal> {
-                            new NewPortal("Mountain to Quarry", "Quarry Redux_"),
-                            new NewPortal("Mountain to Overworld", "Overworld Redux_"),
+                        new List<TunicPortal> {
+                            new TunicPortal("Mountain to Quarry", "Quarry Redux_"),
+                            new TunicPortal("Mountain to Overworld", "Overworld Redux_"),
                         }
                     },
                 }
             },
             {
                 "Mountaintop",
-                new Dictionary<string, List<NewPortal>> {
+                new Dictionary<string, List<TunicPortal>> {
                     {
                         "Top of the Mountain",
-                        new List<NewPortal> {
-                            new NewPortal("Top of the Mountain Exit", "Mountain_"),
+                        new List<TunicPortal> {
+                            new TunicPortal("Top of the Mountain Exit", "Mountain_"),
                         }
                     },
                 }
             },
             {
                 "Darkwoods Tunnel",
-                new Dictionary<string, List<NewPortal>> {
+                new Dictionary<string, List<TunicPortal>> {
                     {
                         "Quarry Connector",
-                        new List<NewPortal> {
-                            new NewPortal("Quarry Connector to Overworld", "Overworld Redux_"),
-                            new NewPortal("Quarry Connector to Quarry", "Quarry Redux_"),
+                        new List<TunicPortal> {
+                            new TunicPortal("Quarry Connector to Overworld", "Overworld Redux_"),
+                            new TunicPortal("Quarry Connector to Quarry", "Quarry Redux_"),
                         }
                     },
                 }
             },
             {
                 "Quarry Redux",
-                new Dictionary<string, List<NewPortal>> {
+                new Dictionary<string, List<TunicPortal>> {
                     {
                         "Quarry Entry",
-                        new List<NewPortal> {
-                            new NewPortal("Quarry to Overworld Exit", "Darkwoods Tunnel_"),
-                            new NewPortal("Quarry Shop", "Shop_"),
+                        new List<TunicPortal> {
+                            new TunicPortal("Quarry to Overworld Exit", "Darkwoods Tunnel_"),
+                            new TunicPortal("Quarry Shop", "Shop_"),
                         }
                     },
                     {
                         "Quarry Monastery Entry",
-                        new List<NewPortal> {
-                            new NewPortal("Quarry to Monastery Front", "Monastery_front"),
+                        new List<TunicPortal> {
+                            new TunicPortal("Quarry to Monastery Front", "Monastery_front"),
                         }
                     },
                     {
                         "Monastery Rope",
-                        new List<NewPortal> {
-                            new NewPortal("Quarry to Monastery Back", "Monastery_back"),
+                        new List<TunicPortal> {
+                            new TunicPortal("Quarry to Monastery Back", "Monastery_back"),
                         }
                     },
                     {
                         "Quarry Back",
-                        new List<NewPortal> {
-                            new NewPortal("Quarry to Mountain", "Mountain_"),
+                        new List<TunicPortal> {
+                            new TunicPortal("Quarry to Mountain", "Mountain_"),
                         }
                     },
                     {
                         "Lower Quarry Zig Door",
-                        new List<NewPortal> {
-                            new NewPortal("Quarry to Ziggurat", "ziggurat2020_0_"),
+                        new List<TunicPortal> {
+                            new TunicPortal("Quarry to Ziggurat", "ziggurat2020_0_"),
                         }
                     },
                     {
                         "Quarry Portal",
-                        new List<NewPortal> {
-                            new NewPortal("Quarry to Far Shore", "Transit_teleporter_quarry teleporter"),
+                        new List<TunicPortal> {
+                            new TunicPortal("Quarry to Far Shore", "Transit_teleporter_quarry teleporter"),
                         }
                     },
                 }
             },
             {
                 "Monastery",
-                new Dictionary<string, List<NewPortal>> {
+                new Dictionary<string, List<TunicPortal>> {
                     {
                         "Monastery Back",
-                        new List<NewPortal> {
-                            new NewPortal("Monastery Rear Exit", "Quarry Redux_back"),
+                        new List<TunicPortal> {
+                            new TunicPortal("Monastery Rear Exit", "Quarry Redux_back"),
                         }
                     },
                     {
                         "Monastery Front",
-                        new List<NewPortal> {
-                            new NewPortal("Monastery Front Exit", "Quarry Redux_front"),
+                        new List<TunicPortal> {
+                            new TunicPortal("Monastery Front Exit", "Quarry Redux_front"),
                         }
                     },
                     {
                         "Monastery Hero's Grave",
-                        new List<NewPortal> {
-                            new NewPortal("Monastery Hero's Grave", "RelicVoid_teleporter_relic plinth"),
+                        new List<TunicPortal> {
+                            new TunicPortal("Monastery Hero's Grave", "RelicVoid_teleporter_relic plinth"),
                         }
                     },
                 }
             },
             {
                 "ziggurat2020_0",
-                new Dictionary<string, List<NewPortal>> {
+                new Dictionary<string, List<TunicPortal>> {
                     {
                         "Rooted Ziggurat Entry",
-                        new List<NewPortal> {
-                            new NewPortal("Ziggurat Entry Hallway to Ziggurat Upper", "ziggurat2020_1_"),
-                            new NewPortal("Ziggurat Entry Hallway to Quarry", "Quarry Redux_"),
+                        new List<TunicPortal> {
+                            new TunicPortal("Ziggurat Entry Hallway to Ziggurat Upper", "ziggurat2020_1_"),
+                            new TunicPortal("Ziggurat Entry Hallway to Quarry", "Quarry Redux_"),
                         }
                     },
                 }
             },
             {
                 "ziggurat2020_1",
-                new Dictionary<string, List<NewPortal>> {
+                new Dictionary<string, List<TunicPortal>> {
                     {
                         "Rooted Ziggurat Upper Entry",
-                        new List<NewPortal> {
-                            new NewPortal("Ziggurat Upper to Ziggurat Entry Hallway", "ziggurat2020_0_"),
+                        new List<TunicPortal> {
+                            new TunicPortal("Ziggurat Upper to Ziggurat Entry Hallway", "ziggurat2020_0_"),
                         }
                     },
                     {
                         "Rooted Ziggurat Upper Back",
-                        new List<NewPortal> {
-                            new NewPortal("Ziggurat Upper to Ziggurat Tower", "ziggurat2020_2_"),
+                        new List<TunicPortal> {
+                            new TunicPortal("Ziggurat Upper to Ziggurat Tower", "ziggurat2020_2_"),
                         }
                     },
                 }
             },
             {
                 "ziggurat2020_2",
-                new Dictionary<string, List<NewPortal>> {
+                new Dictionary<string, List<TunicPortal>> {
                     {
                         "Rooted Ziggurat Middle Top",
-                        new List<NewPortal> {
-                            new NewPortal("Ziggurat Tower to Ziggurat Upper", "ziggurat2020_1_"),
+                        new List<TunicPortal> {
+                            new TunicPortal("Ziggurat Tower to Ziggurat Upper", "ziggurat2020_1_"),
                         }
                     },
                     {
                         "Rooted Ziggurat Middle Bottom",
-                        new List<NewPortal> {
-                            new NewPortal("Ziggurat Tower to Ziggurat Lower", "ziggurat2020_3_"),
+                        new List<TunicPortal> {
+                            new TunicPortal("Ziggurat Tower to Ziggurat Lower", "ziggurat2020_3_"),
                         }
                     },
                 }
             },
             {
                 "ziggurat2020_3",
-                new Dictionary<string, List<NewPortal>> {
+                new Dictionary<string, List<TunicPortal>> {
                     {
                         "Rooted Ziggurat Lower Front",
-                        new List<NewPortal> {
-                            new NewPortal("Ziggurat Lower to Ziggurat Tower", "ziggurat2020_2_"),
+                        new List<TunicPortal> {
+                            new TunicPortal("Ziggurat Lower to Ziggurat Tower", "ziggurat2020_2_"),
                         }
                     },
                     {
                         "Rooted Ziggurat Portal Room Entrance",
-                        new List<NewPortal> {
-                            new NewPortal("Ziggurat Portal Room Entrance", "ziggurat2020_FTRoom_"),
+                        new List<TunicPortal> {
+                            new TunicPortal("Ziggurat Portal Room Entrance", "ziggurat2020_FTRoom_"),
                         }
                     },
                 }
             },
             {
                 "ziggurat2020_FTRoom",
-                new Dictionary<string, List<NewPortal>> {
+                new Dictionary<string, List<TunicPortal>> {
                     {
                         "Rooted Ziggurat Portal Room Exit",
-                        new List<NewPortal> {
-                            new NewPortal("Ziggurat Portal Room Exit", "ziggurat2020_3_"),
+                        new List<TunicPortal> {
+                            new TunicPortal("Ziggurat Portal Room Exit", "ziggurat2020_3_"),
                         }
                     },
                     {
                         "Rooted Ziggurat Portal",
-                        new List<NewPortal> {
-                            new NewPortal("Ziggurat to Far Shore", "Transit_teleporter_ziggurat teleporter"),
+                        new List<TunicPortal> {
+                            new TunicPortal("Ziggurat to Far Shore", "Transit_teleporter_ziggurat teleporter"),
                         }
                     },
                 }
             },
             {
                 "Swamp Redux 2",
-                new Dictionary<string, List<NewPortal>> {
+                new Dictionary<string, List<TunicPortal>> {
                     {
                         "Swamp",
-                        new List<NewPortal> {
-                            new NewPortal("Swamp Lower Exit", "Overworld Redux_conduit"),
-                            new NewPortal("Swamp Shop", "Shop_"),
+                        new List<TunicPortal> {
+                            new TunicPortal("Swamp Lower Exit", "Overworld Redux_conduit"),
+                            new TunicPortal("Swamp Shop", "Shop_"),
                         }
                     },
                     {
                         "Swamp to Cathedral Main Entrance",
-                        new List<NewPortal> {
-                            new NewPortal("Swamp to Cathedral Main Entrance", "Cathedral Redux_main"),
+                        new List<TunicPortal> {
+                            new TunicPortal("Swamp to Cathedral Main Entrance", "Cathedral Redux_main"),
                         }
                     },
                     {
                         "Swamp to Cathedral Treasure Room",
-                        new List<NewPortal> {
-                            new NewPortal("Swamp to Cathedral Secret Legend Room Entrance", "Cathedral Redux_secret"),
+                        new List<TunicPortal> {
+                            new TunicPortal("Swamp to Cathedral Secret Legend Room Entrance", "Cathedral Redux_secret"),
                         }
                     },
                     {
                         "Back of Swamp",
-                        new List<NewPortal> {
-                            new NewPortal("Swamp to Gauntlet", "Cathedral Arena_"),
+                        new List<TunicPortal> {
+                            new TunicPortal("Swamp to Gauntlet", "Cathedral Arena_"),
                         }
                     },
                     {
                         "Back of Swamp Laurels Area",
-                        new List<NewPortal> {
-                            new NewPortal("Swamp Upper Exit", "Overworld Redux_wall"),
+                        new List<TunicPortal> {
+                            new TunicPortal("Swamp Upper Exit", "Overworld Redux_wall"),
                         }
                     },
                     {
                         "Swamp Hero's Grave",
-                        new List<NewPortal> {
-                            new NewPortal("Swamp Hero's Grave", "RelicVoid_teleporter_relic plinth"),
+                        new List<TunicPortal> {
+                            new TunicPortal("Swamp Hero's Grave", "RelicVoid_teleporter_relic plinth"),
                         }
                     },
                 }
             },
             {
                 "Cathedral Redux",
-                new Dictionary<string, List<NewPortal>> {
+                new Dictionary<string, List<TunicPortal>> {
                     {
                         "Cathedral",
-                        new List<NewPortal> {
-                            new NewPortal("Cathedral Main Exit", "Swamp Redux 2_main"),
-                            new NewPortal("Cathedral Elevator", "Cathedral Arena_"),
+                        new List<TunicPortal> {
+                            new TunicPortal("Cathedral Main Exit", "Swamp Redux 2_main"),
+                            new TunicPortal("Cathedral Elevator", "Cathedral Arena_"),
                         }
                     },
                     {
                         "Cathedral Secret Legend Room",
-                        new List<NewPortal> {
-                            new NewPortal("Cathedral Secret Legend Room Exit", "Swamp Redux 2_secret"),
+                        new List<TunicPortal> {
+                            new TunicPortal("Cathedral Secret Legend Room Exit", "Swamp Redux 2_secret"),
                         }
                     },
                 }
             },
             {
                 "Cathedral Arena",
-                new Dictionary<string, List<NewPortal>> {
+                new Dictionary<string, List<TunicPortal>> {
                     {
                         "Cathedral Gauntlet Exit",
-                        new List<NewPortal> {
-                            new NewPortal("Gauntlet to Swamp", "Swamp Redux 2_"),
+                        new List<TunicPortal> {
+                            new TunicPortal("Gauntlet to Swamp", "Swamp Redux 2_"),
                         }
                     },
                     {
                         "Cathedral Gauntlet Checkpoint",
-                        new List<NewPortal> {
-                            new NewPortal("Gauntlet Elevator", "Cathedral Redux_"),
-                            new NewPortal("Gauntlet Shop", "Shop_"),
+                        new List<TunicPortal> {
+                            new TunicPortal("Gauntlet Elevator", "Cathedral Redux_"),
+                            new TunicPortal("Gauntlet Shop", "Shop_"),
                         }
                     },
                 }
             },
             {
                 "RelicVoid",
-                new Dictionary<string, List<NewPortal>> {
+                new Dictionary<string, List<TunicPortal>> {
                     {
                         "Hero Relic - Fortress",
-                        new List<NewPortal> {
-                            new NewPortal("Hero's Grave to Fortress", "Fortress Reliquary_teleporter_relic plinth"),
+                        new List<TunicPortal> {
+                            new TunicPortal("Hero's Grave to Fortress", "Fortress Reliquary_teleporter_relic plinth"),
                         }
                     },
                     {
                         "Hero Relic - Quarry",
-                        new List<NewPortal> {
-                            new NewPortal("Hero's Grave to Monastery", "Monastery_teleporter_relic plinth"),
+                        new List<TunicPortal> {
+                            new TunicPortal("Hero's Grave to Monastery", "Monastery_teleporter_relic plinth"),
                         }
                     },
                     {
                         "Hero Relic - West Garden",
-                        new List<NewPortal> {
-                            new NewPortal("Hero's Grave to West Garden", "Archipelagos Redux_teleporter_relic plinth"),
+                        new List<TunicPortal> {
+                            new TunicPortal("Hero's Grave to West Garden", "Archipelagos Redux_teleporter_relic plinth"),
                         }
                     },
                     {
                         "Hero Relic - East Forest",
-                        new List<NewPortal> {
-                            new NewPortal("Hero's Grave to East Forest", "Sword Access_teleporter_relic plinth"),
+                        new List<TunicPortal> {
+                            new TunicPortal("Hero's Grave to East Forest", "Sword Access_teleporter_relic plinth"),
                         }
                     },
                     {
                         "Hero Relic - Library",
-                        new List<NewPortal> {
-                            new NewPortal("Hero's Grave to Library", "Library Hall_teleporter_relic plinth"),
+                        new List<TunicPortal> {
+                            new TunicPortal("Hero's Grave to Library", "Library Hall_teleporter_relic plinth"),
                         }
                     },
                     {
                         "Hero Relic - Swamp",
-                        new List<NewPortal> {
-                            new NewPortal("Hero's Grave to Swamp", "Swamp Redux 2_teleporter_relic plinth"),
+                        new List<TunicPortal> {
+                            new TunicPortal("Hero's Grave to Swamp", "Swamp Redux 2_teleporter_relic plinth"),
                         }
                     },
                 }
             },
             {
                 "Transit",
-                new Dictionary<string, List<NewPortal>> {
+                new Dictionary<string, List<TunicPortal>> {
                     {
                         "Far Shore to West Garden",
-                        new List<NewPortal> {
-                            new NewPortal("Far Shore to West Garden", "Archipelagos Redux_teleporter_archipelagos_teleporter"),
+                        new List<TunicPortal> {
+                            new TunicPortal("Far Shore to West Garden", "Archipelagos Redux_teleporter_archipelagos_teleporter"),
                         }
                     },
                     {
                         "Far Shore to Library",
-                        new List<NewPortal> {
-                            new NewPortal("Far Shore to Library", "Library Lab_teleporter_library teleporter"),
+                        new List<TunicPortal> {
+                            new TunicPortal("Far Shore to Library", "Library Lab_teleporter_library teleporter"),
                         }
                     },
                     {
                         "Far Shore to Quarry",
-                        new List<NewPortal> {
-                            new NewPortal("Far Shore to Quarry", "Quarry Redux_teleporter_quarry teleporter"),
+                        new List<TunicPortal> {
+                            new TunicPortal("Far Shore to Quarry", "Quarry Redux_teleporter_quarry teleporter"),
                         }
                     },
                     {
                         "Far Shore to East Forest",
-                        new List<NewPortal> {
-                            new NewPortal("Far Shore to East Forest", "East Forest Redux_teleporter_forest teleporter"),
+                        new List<TunicPortal> {
+                            new TunicPortal("Far Shore to East Forest", "East Forest Redux_teleporter_forest teleporter"),
                         }
                     },
                     {
                         "Far Shore to Fortress",
-                        new List<NewPortal> {
-                            new NewPortal("Far Shore to Fortress", "Fortress Arena_teleporter_spidertank"),
+                        new List<TunicPortal> {
+                            new TunicPortal("Far Shore to Fortress", "Fortress Arena_teleporter_spidertank"),
                         }
                     },
                     {
                         "Far Shore",
-                        new List<NewPortal> {
-                            new NewPortal("Far Shore to Atoll", "Atoll Redux_teleporter_atoll"),
-                            new NewPortal("Far Shore to Ziggurat", "ziggurat2020_FTRoom_teleporter_ziggurat teleporter"),
-                            new NewPortal("Far Shore to Heir", "Spirit Arena_teleporter_spirit arena"),
-                            new NewPortal("Far Shore to Town", "Overworld Redux_teleporter_town"),
+                        new List<TunicPortal> {
+                            new TunicPortal("Far Shore to Atoll", "Atoll Redux_teleporter_atoll"),
+                            new TunicPortal("Far Shore to Ziggurat", "ziggurat2020_FTRoom_teleporter_ziggurat teleporter"),
+                            new TunicPortal("Far Shore to Heir", "Spirit Arena_teleporter_spirit arena"),
+                            new TunicPortal("Far Shore to Town", "Overworld Redux_teleporter_town"),
                         }
                     },
                     {
                         "Far Shore to Spawn",
-                        new List<NewPortal> {
-                            new NewPortal("Far Shore to Spawn", "Overworld Redux_teleporter_starting island"),
+                        new List<TunicPortal> {
+                            new TunicPortal("Far Shore to Spawn", "Overworld Redux_teleporter_starting island"),
                         }
                     },
                 }
             },
             {
                 "Spirit Arena",
-                new Dictionary<string, List<NewPortal>> {
+                new Dictionary<string, List<TunicPortal>> {
                     {
                         "Spirit Arena",
-                        new List<NewPortal> {
-                            new NewPortal("Heir Arena Exit", "Transit_teleporter_spirit arena"),
+                        new List<TunicPortal> {
+                            new TunicPortal("Heir Arena Exit", "Transit_teleporter_spirit arena"),
                         }
                     },
                 }
             },
             {
                 "Purgatory",
-                new Dictionary<string, List<NewPortal>> {
+                new Dictionary<string, List<TunicPortal>> {
                     {
                         "Purgatory",
-                        new List<NewPortal> {
-                            new NewPortal("Purgatory Bottom Exit", "Purgatory_bottom"),
-                            new NewPortal("Purgatory Top Exit", "Purgatory_top"),
+                        new List<TunicPortal> {
+                            new TunicPortal("Purgatory Bottom Exit", "Purgatory_bottom"),
+                            new TunicPortal("Purgatory Top Exit", "Purgatory_top"),
                         }
                     },
                 }
@@ -3548,566 +3548,6 @@ namespace TunicArchipelago {
 
         };
 
-        //// this is a big list of every portal in the game, along with their access requirements
-        //// a portal without access requirements just means you can get to the center of the region from that portal and vice versa
-        //public static Dictionary<string, List<TunicPortal>> PortalList2 = new Dictionary<string, List<TunicPortal>>
-        //{
-        //    {
-        //        "Overworld Redux",
-        //        new List<TunicPortal> {
-        //            new TunicPortal("Sword Cave", "", "Stick House Entrance", granularRegion: "Overworld"),
-        //            new TunicPortal("Windmill", "", "Windmill Entrance", granularRegion: "Overworld"),
-        //            new TunicPortal("Sewer", "entrance", "Well Ladder Entrance", granularRegion: "Overworld"),
-        //            new TunicPortal("Sewer", "west_aqueduct", "Entrance to Well from Well Rail", granularRegion: "Overworld Well to Furnace Rail", ignoreScene: true, givesAccess: new List<string> { "Overworld Redux, Furnace_gyro_upper_north" }, requiredItems: new Dictionary<string, int> { { "Overworld Redux, Furnace_gyro_upper_north", 1 } }),
-        //            new TunicPortal("Overworld Interiors", "house", "Old House Entry Door", granularRegion: "Overworld Not First Steps", requiredItems: new Dictionary<string, int> { {"Key (House)", 1} }), // make this match actual item name
-        //            new TunicPortal("Overworld Interiors", "under_checkpoint", "Old House Waterfall Entrance", granularRegion: "Overworld"),
-        //            new TunicPortal("Furnace", "gyro_upper_north", "Entrance to Furnace from Well Rail", granularRegion: "Overworld Well to Furnace Rail", ignoreScene: true, givesAccess: new List<string> { "Overworld Redux, Sewer_west_aqueduct" }, requiredItems: new Dictionary<string, int> { { "Overworld Redux, Sewer_west_aqueduct", 1 } }),
-        //            new TunicPortal("Furnace", "gyro_upper_east", "Entrance to Furnace under Windmill", granularRegion: "Overworld"),
-        //            new TunicPortal("Furnace", "gyro_west", "Entrance to Furnace near West Garden", granularRegion: "Overworld Not First Steps", ignoreScene: true, givesAccess: new List<string> {"Overworld Redux, Archipelagos Redux_lower"}, requiredItems: new Dictionary<string, int> { { "Overworld Redux, Archipelagos Redux_lower", 1 } }),
-        //            new TunicPortal("Furnace", "gyro_lower", "Entrance to Furnace from Beach", granularRegion: "Overworld"),
-        //            new TunicPortal("Overworld Cave", "", "Caustic Light Cave Entrance", granularRegion: "Overworld"),
-        //            new TunicPortal("Swamp Redux 2", "wall", "Swamp Upper Entrance", granularRegion: "Overworld Not First Steps", requiredItems: new Dictionary<string, int> { { "Hyperdash", 1} }),
-        //            new TunicPortal("Swamp Redux 2", "conduit", "Swamp Lower Entrance", granularRegion: "Overworld"),
-        //            new TunicPortal("Ruins Passage", "east", "Ruined Passage Not-Door Entrance", granularRegion: "Overworld"),
-        //            new TunicPortal("Ruins Passage", "west", "Ruined Passage Door Entrance", granularRegion: "Overworld Not First Steps", requiredItems: new Dictionary<string, int> { { "Key", 2 } }), // and access to any overworld portal, but we start in overworld so no need to put it here
-        //            new TunicPortal("Atoll Redux", "upper", "Atoll Upper Entrance", granularRegion: "Overworld"),
-        //            new TunicPortal("Atoll Redux", "lower", "Atoll Lower Entrance", granularRegion: "Overworld"),
-        //            new TunicPortal("ShopSpecial", "", "Special Shop Entrance", granularRegion: "Overworld Not First Steps", requiredItems: new Dictionary<string, int> { { "Hyperdash", 1} }),
-        //            new TunicPortal("Maze Room", "", "Maze Cave Entrance", granularRegion: "Overworld"),
-        //            new TunicPortal("Archipelagos Redux", "upper", "West Garden Entrance near Belltower", granularRegion: "Overworld Not First Steps", requiredItems: new Dictionary<string, int> { { "Hyperdash", 1 } }),
-        //            new TunicPortal("Archipelagos Redux", "lower", "West Garden Entrance from Furnace", granularRegion: "Overworld Not First Steps", ignoreScene: true, givesAccess: new List<string> {"Overworld Redux, Furnace_gyro_west"}, requiredItems: new Dictionary<string, int> {{"Overworld Redux, Furnace_gyro_west", 1}}),
-        //            new TunicPortal("Archipelagos Redux", "lowest", "West Garden Laurels Entrance", granularRegion: "Overworld Not First Steps", requiredItems: new Dictionary<string, int> { { "Hyperdash", 1 } }),
-        //            new TunicPortal("Temple", "main", "Temple Door Entrance", granularRegion: "Overworld Not First Steps", requiredItemsOr: new List<Dictionary<string, int>> { new Dictionary<string, int> { { "Forest Belltower, Forest Boss Room_", 1 }, { "Overworld Redux, Archipelagos Redux_upper", 1 }, { "Stick", 1 } }, new Dictionary<string, int> { { "Forest Belltower, Forest Boss Room_", 1 }, { "Overworld Redux, Archipelagos Redux_upper", 1 }, { "Techbow", 1 } }, new Dictionary<string, int> { { "Forest Belltower, Forest Boss Room_", 1 }, { "Hyperdash", 1 }, { "Stick", 1 } }, new Dictionary<string, int> { { "Forest Belltower, Forest Boss Room_", 1 }, { "Hyperdash", 1 }, { "Techbow", 1 } } }),
-        //            new TunicPortal("Temple", "rafters", "Temple Rafters Entrance", granularRegion: "Overworld"),
-        //            new TunicPortal("Ruined Shop", "", "Ruined Shop Entrance", granularRegion: "Overworld"),
-        //            new TunicPortal("PatrolCave", "", "Patrol Cave Entrance", granularRegion: "Overworld"),
-        //            new TunicPortal("Town Basement", "beach", "Hourglass Cave Entrance", granularRegion: "Overworld"),
-        //            new TunicPortal("Changing Room", "", "Changing Room Entrance", granularRegion: "Overworld"),
-        //            new TunicPortal("CubeRoom", "", "Cube Cave Entrance", granularRegion: "Overworld"),
-        //            new TunicPortal("Mountain", "", "Stairs from Overworld to Mountain", granularRegion: "Overworld"),
-        //            new TunicPortal("Fortress Courtyard", "", "Overworld to Fortress", granularRegion: "Overworld"),
-        //            new TunicPortal("Town_FiligreeRoom", "", "Fountain HC Door Entrance", granularRegion: "Overworld Ability", entryItems: new Dictionary<string, int> { { "21", 1 } }), // this is entry items because when you exit from this portal, you end up in front of the door
-        //            new TunicPortal("EastFiligreeCache", "", "Southeast HC Door Entrance", granularRegion: "Overworld Ability", requiredItems: new Dictionary<string, int> { { "21", 1 } }), // this is required items because when you exit from this portal, you end up behind the door
-        //            new TunicPortal("Darkwoods Tunnel", "", "Overworld to Quarry Connector", granularRegion: "Overworld"),
-        //            new TunicPortal("Crypt Redux", "", "Dark Tomb Main Entrance", granularRegion: "Overworld"),
-        //            new TunicPortal("Forest Belltower", "", "Overworld to Forest Belltower", granularRegion: "Overworld"),
-        //            new TunicPortal("Transit", "teleporter_town", "Town to Far Shore", granularRegion: "Overworld Ability", prayerPortal: true),
-        //            new TunicPortal("Transit", "teleporter_starting island", "Spawn to Far Shore", granularRegion: "Overworld Ability", prayerPortal: true),
-        //            new TunicPortal("Waterfall", "", "Secret Gathering Place Entrance", granularRegion: "Overworld"),
-
-        //            // new TunicPortal("_", "", "Portal"), // ?
-        //            // new TunicPortal("Forest Belltower_", "showfloordemo2022", "Portal (12)"), // ?
-        //            // new TunicPortal("DEMO_altEnd_", "", "_Portal (Secret Demo End)"), // ?
-        //        }
-        //    },
-        //    {
-        //        "Waterfall", // fairy cave
-        //        new List<TunicPortal> {
-        //            new TunicPortal("Overworld Redux", "", "Secret Gathering Place Exit", granularRegion: "Waterfall", deadEnd: true),
-        //        }
-        //    },
-        //    {
-        //        "Windmill",
-        //        new List<TunicPortal> {
-        //            new TunicPortal("Overworld Redux", "", "Windmill Exit", granularRegion: "Windmill"),
-        //            new TunicPortal("Shop", "", "Windmill Shop", granularRegion: "Windmill"),
-        //        }
-        //    },
-        //    {
-        //        "Overworld Interiors", // House in town
-        //        new List<TunicPortal> {
-        //            new TunicPortal("Overworld Redux", "house", "Old House Door Exit", granularRegion: "Old House Front"),
-        //            new TunicPortal("g_elements", "", "Old House to Glyph Tower", granularRegion: "Old House Front"),
-        //            new TunicPortal("Overworld Redux", "under_checkpoint", "Old House Waterfall Exit", granularRegion: "Old House Back", ignoreScene: true, requiredItems: new Dictionary<string, int> { { "Overworld Interiors, Overworld Redux_house", 1 } }), // since you get access to the center of a region from either portal, only one of these two is actually needed
-
-        //            // new TunicPortal("Archipelagos Redux_", "", "_ShowfloorDemo2022 Portal"), // unused and disabled
-        //        }
-        //    },
-        //    {
-        //        "g_elements", // Relic tower
-        //        new List<TunicPortal> {
-        //            new TunicPortal("Overworld Interiors", "", "Glyph Tower Exit", granularRegion: "g_elements", deadEnd: true),
-        //        }
-        //    },
-        //    {
-        //        "Changing Room",
-        //        new List<TunicPortal> {
-        //            new TunicPortal("Overworld Redux", "", "Changing Room Exit", granularRegion: "Changing Room", deadEnd: true),
-        //        }
-        //    },
-        //    {
-        //        "Town_FiligreeRoom", // the one next to the fountain
-        //        new List<TunicPortal> {
-        //            new TunicPortal("Overworld Redux", "", "Fountain HC Room Exit", granularRegion: "Town_FiligreeRoom", deadEnd: true),
-        //        }
-        //    },
-        //    {
-        //        "CubeRoom",
-        //        new List<TunicPortal> {
-        //            new TunicPortal("Overworld Redux", "", "Cube Cave Exit", granularRegion: "CubeRoom", deadEnd: true),
-        //        }
-        //    },
-        //    {
-        //        "PatrolCave",
-        //        new List<TunicPortal> {
-        //            new TunicPortal("Overworld Redux", "", "Guard Patrol Cave Exit", granularRegion: "PatrolCave", deadEnd: true),
-        //        }
-        //    },
-        //    {
-        //        "Ruined Shop",
-        //        new List<TunicPortal> {
-        //            new TunicPortal("Overworld Redux", "", "Ruined Shop Exit", granularRegion: "Ruined Shop", deadEnd: true),
-        //        }
-        //    },
-        //    {
-        //        "Furnace", // Under the west belltower
-        //        // I'm calling the "center" of this region the space accessible by the windmill and beach
-        //        new List<TunicPortal> {
-        //            new TunicPortal("Overworld Redux", "gyro_upper_north", "Furnace Exit towards Well", granularRegion: "Furnace", requiredItems: new Dictionary<string, int> { {"Hyperdash", 1} }),
-        //            new TunicPortal("Crypt Redux", "", "Furnace Exit to Dark Tomb", granularRegion: "Furnace", requiredItems: new Dictionary<string, int> { {"Hyperdash", 1} }, givesAccess: new List<string> {"Furnace, Overworld Redux_gyro_west"}),
-        //            new TunicPortal("Overworld Redux", "gyro_west", "Furnace Exit towards West Garden", granularRegion: "Furnace", requiredItems : new Dictionary<string, int> { {"Hyperdash", 1} }, givesAccess : new List<string> {"Furnace, Crypt Redux_"}),
-        //            new TunicPortal("Overworld Redux", "gyro_lower", "Furnace Exit to Beach", granularRegion: "Furnace"),
-        //            new TunicPortal("Overworld Redux", "gyro_upper_east", "Furnace Exit under Windmill", granularRegion: "Furnace"),
-        //        }
-        //    },
-        //    {
-        //        "Sword Cave", // Stick house
-        //        new List<TunicPortal> {
-        //            new TunicPortal("Overworld Redux", "", "Stick House Exit", granularRegion: "Sword Cave", deadEnd: true),
-        //        }
-        //    },
-        //    {
-        //        "Ruins Passage", // That little hallway with the key door near the start in Overworld
-        //        new List<TunicPortal> {
-        //            new TunicPortal("Overworld Redux", "east", "Ruined Passage Not-Door Exit", granularRegion: "Ruined Passage"),
-        //            new TunicPortal("Overworld Redux", "west", "Ruined Passage Door Exit", granularRegion: "Ruined Passage"),
-        //        }
-        //    },
-        //    {
-        //        "EastFiligreeCache", // The holy cross room with the 3 chests near swamp entrance
-        //        new List<TunicPortal> {
-        //            new TunicPortal("Overworld Redux", "", "Southeast HC Room Exit", granularRegion: "EastFiligreeCache", deadEnd: true),
-        //        }
-        //    },
-        //    {
-        //        "Overworld Cave", // East beach, next to swamp entrance, rotating lights room
-        //        new List<TunicPortal> {
-        //            new TunicPortal("Overworld Redux", "", "Caustic Light Cave Exit", granularRegion: "Overworld Cave", deadEnd: true),
-        //        }
-        //    },
-        //    {
-        //        "Maze Room", // Invisible maze
-        //        new List<TunicPortal> {
-        //            new TunicPortal("Overworld Redux", "", "Maze Cave Exit", granularRegion: "Maze Room", deadEnd: true),
-        //        }
-        //    },
-        //    {
-        //        "Town Basement", // Hourglass cave
-        //        new List<TunicPortal> {
-        //            new TunicPortal("Overworld Redux", "beach", "Hourglass Cave Exit", granularRegion: "Town Basement", deadEnd: true), // yes, it has a tag even though it doesn't need one
-        //        }
-        //    },
-        //    {
-        //        "ShopSpecial", // Special shop, laurel across from that platform between east forest and fortress
-        //        new List<TunicPortal> {
-        //            new TunicPortal("Overworld Redux", "", "Special Shop Exit", granularRegion: "ShopSpecial", deadEnd: true),
-        //        }
-        //    },
-        //    {
-        //        "Temple", // Where you put the hexes
-        //        new List<TunicPortal> {
-        //            new TunicPortal("Overworld Redux", "rafters", "Temple Rafters Exit", granularRegion: "Temple"),
-        //            new TunicPortal("Overworld Redux", "main", "Temple Door Exit", granularRegion: "Temple"),
-        //        }
-        //    },
-        //    {
-        //        "Sewer", // Beneath the Well
-        //        new List<TunicPortal> {
-        //            new TunicPortal("Overworld Redux", "entrance", "Well Ladder Exit", granularRegion: "Sewer"),
-        //            new TunicPortal("Sewer_Boss", "", "Well to Well Boss", granularRegion: "Sewer"),
-        //            new TunicPortal("Overworld Redux", "west_aqueduct", "Well Exit towards Furnace", granularRegion: "Sewer"),
-        //        }
-        //    },
-        //    {
-        //        "Sewer_Boss", // Boss room in the Beneath the Well
-        //        new List<TunicPortal> {
-        //            new TunicPortal("Sewer", "", "Well Boss to Well", granularRegion: "Sewer_Boss"),
-        //            new TunicPortal("Crypt Redux", "", "Checkpoint to Dark Tomb", granularRegion: "Sewer_Boss", requiredItemsOr: new List<Dictionary<string, int>> { new Dictionary<string, int> { { "Sewer_Boss, Sewer_", 1 } }, new Dictionary<string, int> { { "Hyperdash", 1 } } }),
-        //        }
-        //    },
-        //    {
-        //        "Crypt Redux",
-        //        new List<TunicPortal> {
-        //            new TunicPortal("Overworld Redux", "", "Dark Tomb to Overworld", granularRegion: "Crypt Redux"),
-        //            new TunicPortal("Furnace", "", "Dark Tomb to Furnace", granularRegion: "Crypt Redux", requiredItems: new Dictionary<string, int> { {"Lantern", 1} }),
-        //            new TunicPortal("Sewer_Boss", "", "Dark Tomb to Checkpoint", granularRegion: "Crypt Redux"),
-        //        }
-        //    },
-        //    {
-        //        "Archipelagos Redux", // West Garden
-        //        new List<TunicPortal> {
-        //            new TunicPortal("Overworld Redux", "lower", "West Garden Exit near Hero's Grave", granularRegion: "West Garden"),
-        //            new TunicPortal("archipelagos_house", "", "West Garden to Magic Dagger House", granularRegion: "West Garden"),
-        //            new TunicPortal("Overworld Redux", "upper", "West Garden after Boss", granularRegion: "West Garden", ignoreScene: true, requiredItemsOr: new List<Dictionary<string, int>> { new Dictionary<string, int> { { "Sword", 1 }, { "Archipelagos Redux, Overworld Redux_lower", 1 } }, new Dictionary<string, int> { { "Hyperdash", 1 }, {"Archipelagos Redux", 1 } } }),
-        //            new TunicPortal("Shop", "", "West Garden Shop", granularRegion: "West Garden"), // there's two of these, one is unused and disabled
-        //            new TunicPortal("Overworld Redux", "lowest", "West Garden Laurels Exit", granularRegion: "West Garden", requiredItems: new Dictionary<string, int> { { "Hyperdash", 1 } }),
-        //            new TunicPortal("RelicVoid", "teleporter_relic plinth", "West Garden Hero's Grave", granularRegion: "West Garden", prayerPortal: true), // Hero grave
-        //            new TunicPortal("Transit", "teleporter_archipelagos_teleporter", "West Garden to Far Shore", granularRegion: "West Garden Portal", prayerPortal: true, deadEnd: true), // Portal to the thing behind dagger house
-        //        }
-        //    },
-        //    {
-        //        "archipelagos_house", // Magic Dagger house in West Garden
-        //        new List<TunicPortal> {
-        //            new TunicPortal("Archipelagos Redux", "", "Magic Dagger House Exit", granularRegion: "Magic Dagger House", deadEnd: true),
-        //        }
-        //    },
-        //    {
-        //        "Atoll Redux",
-        //        new List<TunicPortal> {
-        //            new TunicPortal("Frog Stairs", "eye", "Frog Stairs Eye Entrance", granularRegion: "Atoll"),
-        //            new TunicPortal("Library Exterior", "", "Atoll Statue Teleporter", granularRegion: "Atoll", prayerPortal: true),
-        //            new TunicPortal("Overworld Redux", "upper", "Atoll Upper Exit", granularRegion: "Atoll"),
-        //            new TunicPortal("Overworld Redux", "lower", "Atoll Lower Exit", granularRegion: "Atoll", requiredItems: new Dictionary<string, int> {{"Hyperdash", 1}}),
-        //            new TunicPortal("Frog Stairs", "mouth", "Frog Stairs Mouth Entrance", granularRegion: "Atoll", requiredItemsOr: new List<Dictionary<string, int>> { new Dictionary<string, int> { { "Wand", 1 } }, new Dictionary<string, int> { { "Hyperdash", 1 } } }),
-        //            new TunicPortal("Shop", "", "Atoll Shop", granularRegion: "Atoll"),
-        //            new TunicPortal("Transit", "teleporter_atoll", "Atoll to Far Shore", granularRegion: "Atoll", prayerPortal: true),
-        //            // new TunicPortal("Forest Lake_", "teleporter", "Portal"), // Unused portal, same spot as library portal
-        //        }
-        //    },
-        //    {
-        //        "Frog Stairs", // Entrance to frog's domain
-        //        new List<TunicPortal> {
-        //            new TunicPortal("Atoll Redux", "mouth", "Frog Stairs Mouth Exit", granularRegion: "Frog Stairs"),
-        //            new TunicPortal("frog cave main", "Exit", "Frog Stairs to Frog's Domain's Exit", granularRegion: "Frog Stairs"),
-        //            new TunicPortal("Atoll Redux", "eye", "Frog Stairs Eye Exit", granularRegion: "Frog Stairs"),
-        //            new TunicPortal("frog cave main", "Entrance", "Frog Stairs to Frog's Domain's Entrance", granularRegion: "Frog Stairs"),
-        //        }
-        //    },
-        //    {
-        //        "frog cave main", // Frog's domain, yes it's lowercase
-        //        new List<TunicPortal> {
-        //            new TunicPortal("Frog Stairs", "Exit", "Frog's Domain Orb Exit", granularRegion: "Frog's Domain Back", ignoreScene: true, requiredItems: new Dictionary<string, int> { { "Wand", 1 }, { "frog cave main, Frog Stairs_Entrance", 1 } }),
-        //            new TunicPortal("Frog Stairs", "Entrance", "Frog's Domain Ladder Exit", granularRegion: "Frog's Domain Front", ignoreScene: true, oneWay: true),
-        //        }
-        //    },
-        //    {
-        //        "Library Exterior",
-        //        new List<TunicPortal> {
-        //            new TunicPortal("Library Hall", "", "Library Exterior Ladder", granularRegion: "Library Exterior", requiredItemsOr: new List<Dictionary<string, int>> { new Dictionary<string, int> { { "Hyperdash", 1 } }, new Dictionary<string, int> { { "Wand", 1} } }),
-        //            new TunicPortal("Atoll Redux", "", "Library Exterior Tree", granularRegion: "Library Exterior", requiredItemsOr: new List<Dictionary<string, int>> { new Dictionary<string, int> { { "Hyperdash", 1 }, { "12", 1 } }, new Dictionary<string, int> { { "Wand", 1}, { "12", 1 } } }),
-        //        }
-        //    },
-        //    {
-        //        "Library Hall", // Entry area with hero grave
-        //        new List<TunicPortal> {
-        //            new TunicPortal("Library Rotunda", "", "Library Hall to Rotunda", granularRegion: "Library Hall"),
-        //            new TunicPortal("Library Exterior", "", "Library Hall Bookshelf Exit", granularRegion: "Library Hall"),
-        //            new TunicPortal("RelicVoid", "teleporter_relic plinth", "Library Hero's Grave", granularRegion: "Library Hall", prayerPortal: true),
-        //        }
-        //    },
-        //    {
-        //        "Library Rotunda", // The circular room with the ladder
-        //        new List<TunicPortal> {
-        //            new TunicPortal("Library Hall", "", "Library Rotunda Lower Exit", granularRegion: "Library Rotunda"),
-        //            new TunicPortal("Library Lab", "", "Library Rotunda Upper Exit", granularRegion: "Library Rotunda"),
-        //        }
-        //    },
-        //    {
-        //        "Library Lab",
-        //        new List<TunicPortal> {
-        //            new TunicPortal("Library Arena", "", "Library Lab to Librarian Arena", granularRegion: "Library Lab", ignoreScene: true, requiredItemsOr: new List<Dictionary<string, int>> { new Dictionary<string, int> { { "Hyperdash", 1 }, { "Library Lab", 1 } }, new Dictionary<string, int> { { "Wand", 1}, {"Library Lab", 1 } } }),
-        //            new TunicPortal("Library Rotunda", "", "Library Lab to Rotunda", granularRegion: "Library Lab", ignoreScene: true, requiredItemsOr: new List<Dictionary<string, int>> { new Dictionary<string, int> { { "Hyperdash", 1 }, { "Library Lab", 1 } }, new Dictionary<string, int> { { "Wand", 1}, {"Library Lab, Library Rotunda_", 1 } } }),
-        //            new TunicPortal("Transit", "teleporter_library teleporter", "Library to Far Shore", granularRegion: "Library Lab", ignoreScene: true, prayerPortal: true, requiredItemsOr: new List<Dictionary<string, int>> { new Dictionary<string, int> { { "Hyperdash", 1 }, { "Library Lab, Library Rotunda_", 1 } }, new Dictionary<string, int> { { "Wand", 1}, {"Library Lab, Library Rotunda_", 1 } }, new Dictionary<string, int> { { "Library Lab", 1 } } }),
-        //        }
-        //    },
-        //    {
-        //        "Library Arena",
-        //        new List<TunicPortal> {
-        //            new TunicPortal("Library Lab", "", "Librarian Arena Exit", granularRegion: "Library Arena", deadEnd: true),
-        //        }
-        //    },
-        //    {
-        //        "East Forest Redux",
-        //        new List<TunicPortal> {
-        //            new TunicPortal("Sword Access", "lower", "Forest Grave Path Lower Entrance", granularRegion: "East Forest"),
-        //            new TunicPortal("East Forest Redux Laddercave", "upper", "Forest Dance Fox Outside Doorway", granularRegion: "East Forest", requiredItems: new Dictionary<string, int> { { "Hyperdash", 1 } } ),
-        //            new TunicPortal("East Forest Redux Interior", "lower", "Forest Guard House 2 Lower Entrance", granularRegion: "East Forest"),
-        //            new TunicPortal("East Forest Redux Laddercave", "gate", "Forest Guard House 1 Gate Entrance", granularRegion: "East Forest"),
-        //            new TunicPortal("Sword Access", "upper", "Forest Grave Path Upper Entrance", granularRegion: "East Forest"),
-        //            new TunicPortal("East Forest Redux Interior", "upper", "Forest Guard House 2 Upper Entrance", granularRegion: "East Forest"),
-        //            new TunicPortal("East Forest Redux Laddercave", "lower", "Forest Guard House 1 Lower Entrance", granularRegion: "East Forest"),
-        //            new TunicPortal("Forest Belltower", "", "Forest to Belltower", granularRegion: "East Forest"),
-        //            new TunicPortal("Transit", "teleporter_forest teleporter", "Forest to Far Shore", granularRegion: "East Forest", prayerPortal: true),
-        //        }
-        //    },
-        //    {
-        //        "East Forest Redux Laddercave", // the place with the two ladders that leads to the boss room
-        //        new List<TunicPortal> {
-        //            new TunicPortal("East Forest Redux", "upper", "Guard House 1 Dance Fox Exit", "Laddercave", ignoreScene: true, givesAccess: new List<string> { "East Forest Redux Laddercave, East Forest Redux_upper" }, requiredItems: new Dictionary<string, int> { { "East Forest Redux Laddercave, East Forest Redux_gate", 1 } }), // making the upper ones the "center" for easier logic writing
-        //            new TunicPortal("East Forest Redux", "lower", "Guard House 1 Lower Exit", "Laddercave", ignoreScene: true, givesAccess: new List<string> { "East Forest Redux Laddercave, East Forest Redux_lower" }, requiredItems: new Dictionary<string, int> { { "East Forest Redux Laddercave, East Forest Redux_gate", 1 } }),
-        //            new TunicPortal("East Forest Redux", "gate", "Guard House 1 Upper Forest Exit", "Laddercave"),
-        //            new TunicPortal("Forest Boss Room", "", "Guard House 1 to Guard Captain Room", "Laddercave"),
-        //        }
-        //    },
-        //    {
-        //        "Sword Access", // East forest hero grave area
-        //        new List<TunicPortal> {
-        //            new TunicPortal("East Forest Redux", "upper", "Forest Grave Path Upper Exit", granularRegion: "Sword Access", requiredItems: new Dictionary<string, int> { { "Hyperdash", 1 } }),
-        //            new TunicPortal("East Forest Redux", "lower", "Forest Grave Path Lower Exit", granularRegion: "Sword Access"),
-        //            new TunicPortal("RelicVoid", "teleporter_relic plinth", "East Forest Hero's Grave", granularRegion: "Sword Access Back", ignoreScene: true, prayerPortal: true, requiredItems: new Dictionary<string, int> { {"Sword Access, East Forest Redux_lower", 1 } }), // Can't open the gate from behind
-                    
-        //            // new TunicPortal("Forest 1_", "lower", "Portal (1)"),
-        //            // new TunicPortal("Forest 1_", "", "Portal"),
-        //            // new TunicPortal("Forest 1_", "upper", "Portal (2)"),
-        //        }
-        //    },
-        //    {
-        //        "East Forest Redux Interior", // Guardhouse 2
-        //        new List<TunicPortal> {
-        //            new TunicPortal("East Forest Redux", "lower", "Guard House 2 Lower Exit", "Guardhouse 2"),
-        //            new TunicPortal("East Forest Redux", "upper", "Guard House 2 Upper Exit", "Guardhouse 2"),
-        //        }
-        //    },
-        //    {
-        //        "Forest Boss Room",
-        //        new List<TunicPortal> {
-        //            new TunicPortal("East Forest Redux Laddercave", "", "Guard Captain Room Non-Gate Exit", "Forest Boss"), // entering it from behind puts you in the room, not behind the gate
-        //            new TunicPortal("Forest Belltower", "", "Guard Captain Room Gate Exit", "Forest Boss"),
-
-        //            // new TunicPortal("Archipelagos Redux_", "showfloordemo2022", "Portal (2)"),
-        //        }
-        //    },
-        //    {
-        //        "Forest Belltower",
-        //        new List<TunicPortal> {
-        //            new TunicPortal("Fortress Courtyard", "", "Forest Belltower to Fortress", granularRegion: "Forest Belltower Main"),
-        //            new TunicPortal("East Forest Redux", "", "Forest Belltower to Forest", granularRegion: "Forest Belltower Lower"),
-        //            new TunicPortal("Overworld Redux", "", "Forest Belltower to Overworld", granularRegion: "Forest Belltower Main"),
-        //            new TunicPortal("Forest Boss Room", "", "Forest Belltower to Guard Captain Room", granularRegion: "Forest Belltower Upper", ignoreScene: true, oneWay: true),
-        //        }
-        //    },
-        //    {
-        //        "Fortress Courtyard", // Outside the fortress, the area connected to east forest and overworld. Center of the area is on the fortress-side of the bridge
-        //        new List<TunicPortal> {
-        //            new TunicPortal("Fortress Reliquary", "Lower", "Fortress Courtyard to Fortress Grave Path Lower", granularRegion: "Fortress Courtyard"),
-        //            new TunicPortal("Fortress Reliquary", "Upper", "Fortress Courtyard to Fortress Grave Path Upper", granularRegion: "Fortress Courtyard Upper", ignoreScene: true, oneWay: true, givesAccess: new List<string> { "Fortress Courtyard, Fortress East_" }),
-        //            new TunicPortal("Fortress Main", "Big Door", "Fortress Courtyard to Fortress Interior", granularRegion: "Fortress Courtyard"),
-        //            new TunicPortal("Fortress East", "", "Fortress Courtyard to East Fortress", granularRegion: "Fortress Courtyard Upper", ignoreScene: true, oneWay: true, givesAccess: new List<string> { "Fortress Courtyard, Fortress Reliquary_Upper" }),
-        //            new TunicPortal("Fortress Basement", "", "Fortress Courtyard to Beneath the Earth", granularRegion: "Fortress Courtyard", ignoreScene: true, requiredItemsOr: new List<Dictionary<string, int>> { new Dictionary<string, int> { { "12", 1 }, { "Fortress Courtyard, Overworld Redux_", 1 } }, new Dictionary<string, int> { { "Hyperdash", 1 }, { "Fortress Courtyard", 1 } }, new Dictionary<string, int> { {"Fortress Courtyard, Shop_", 1 } } }),
-        //            new TunicPortal("Forest Belltower", "", "Fortress Courtyard to Forest Belltower", granularRegion: "Fortress Courtyard", requiredItems: new Dictionary<string, int>{ { "Hyperdash", 1 } }),
-        //            new TunicPortal("Overworld Redux", "", "Fortress Courtyard to Overworld", granularRegion: "Fortress Courtyard", ignoreScene: true, requiredItemsOr: new List<Dictionary<string, int>> { new Dictionary<string, int> { {"Hyperdash", 1}, { "Fortress Courtyard", 1 } }, new Dictionary<string, int> { {"Fortress Courtyard, Fortress East_", 1} }, new Dictionary<string, int> { { "Wand", 1 }, { "Fortress Courtyard, Forest Belltower_", 1 } } }), // remember, required items is just what you need to get to the center of a region -- prayer only gets you to the shop and beneath the earth
-        //            new TunicPortal("Shop", "", "Fortress Courtyard Shop", granularRegion: "Fortress Courtyard", ignoreScene: true, requiredItemsOr: new List<Dictionary<string, int>> { new Dictionary<string, int> { { "12", 1 }, { "Fortress Courtyard, Overworld Redux_", 1 } }, new Dictionary<string, int> { { "Hyperdash", 1 }, { "Fortress Courtyard", 1 } }, new Dictionary<string, int> { {"Fortress Courtyard, Fortress Basement_", 1 } } }),
-
-        //            // new TunicPortal("Overworld Redux_", "", "Portal (4)"), // unused and disabled
-        //        }
-        //    },
-        //    {
-        //        "Fortress Basement", // Under the fortress
-        //        new List<TunicPortal>
-        //        {
-        //            new TunicPortal("Fortress Main", "", "Beneath the Earth to Fortress Interior", "Fortress Basement"),
-        //            new TunicPortal("Fortress Courtyard", "", "Beneath the Earth to Fortress Courtyard", "Fortress Basement"),
-        //        }
-        //    },
-        //    {
-        //        "Fortress Main", // Inside the fortress
-        //        new List<TunicPortal> {
-        //            new TunicPortal("Fortress Courtyard", "Big Door", "Fortress Interior Main Exit", "Fortress Main"),
-        //            new TunicPortal("Fortress Basement", "", "Fortress Interior to Beneath the Earth", "Fortress Main"),
-        //            new TunicPortal("Fortress Arena", "", "Fortress Interior to Siege Engine Arena", "Fortress Main", requiredItems: new Dictionary<string, int> { { "12", 1 }, {"Fortress Courtyard, Overworld Redux_", 1}, { "Fortress Courtyard, Fortress Reliquary_upper", 1 }, {"Fortress Main, Fortress Courtyard_Big Door", 1 } }), // requires that one prayer thing to be down
-        //            new TunicPortal("Shop", "", "Fortress Interior Shop", "Fortress Main"),
-        //            new TunicPortal("Fortress East", "upper", "Fortress Interior to East Fortress Upper", "Fortress Main"),
-        //            new TunicPortal("Fortress East", "lower", "Fortress Interior to East Fortress Lower", "Fortress Main"),
-        //        }
-        //    },
-        //    {
-        //        "Fortress East", // that tiny area with the couple mages up high, and the ladder in the lower right
-        //        new List<TunicPortal> {
-        //            new TunicPortal("Fortress Main", "lower", "East Fortress to Interior Lower", granularRegion: "Fortress East Lower", ignoreScene: true, requiredItems: new Dictionary<string, int> { { "Fortress East, Fortress Main_upper", 1} }),
-        //            new TunicPortal("Fortress Courtyard", "", "East Fortress to Courtyard", granularRegion: "Fortress East"),
-        //            new TunicPortal("Fortress Main", "upper", "East Fortress to Interior Upper", granularRegion: "Fortress East"),
-        //        }
-        //    },
-        //    {
-        //        "Fortress Reliquary", // Where the grave is
-        //        new List<TunicPortal> {
-        //            new TunicPortal("Fortress Courtyard", "Lower", "Fortress Grave Path Lower Exit", granularRegion: "Fortress Grave Path"),
-        //            new TunicPortal("Dusty", "", "Fortress Grave Path Dusty Entrance", granularRegion: "Fortress Grave Path", requiredItems: new Dictionary<string, int> { { "Hyperdash", 1 } }),
-        //            new TunicPortal("Fortress Courtyard", "Upper", "Fortress Grave Path Upper Exit", granularRegion: "Fortress Grave Path Upper", deadEnd: true),
-        //            new TunicPortal("RelicVoid", "teleporter_relic plinth", "Fortress Hero's Grave", granularRegion: "Fortress Grave Path", prayerPortal: true),
-        //        }
-        //    },
-        //    {
-        //        "Dusty", // broom
-        //        new List<TunicPortal> {
-        //            new TunicPortal("Fortress Reliquary", "", "Dusty Exit", "Dusty", deadEnd: true),
-        //        }
-        //    },
-        //    {
-        //        "Fortress Arena", // Where the boss is
-        //        new List<TunicPortal> {
-        //            new TunicPortal("Fortress Main", "", "Siege Engine Arena to Fortress", "Fortress Arena"),
-        //            new TunicPortal("Transit", "teleporter_spidertank", "Fortress to Far Shore", "Fortress Arena", entryItems: new Dictionary<string, int> { { "12", 1 }, { "Fortress Basement, Fortress Main_", 1 }, {"Fortress Main, Fortress Courtyard_", 1}, { "Fortress Courtyard, Fortress Main_", 1 } }),
-        //            // new TunicPortal("Fortress Main_", "", "Portal"), // There's two of these, one is disabled
-        //        }
-        //    },
-        //    {
-        //        "Mountain",
-        //        new List<TunicPortal> {
-        //            new TunicPortal("Mountaintop", "", "Stairs to Top of the Mountain", "Mountain", requiredItems: new Dictionary<string, int> { { "21", 1 } }),
-        //            new TunicPortal("Quarry Redux", "", "Mountain to Quarry", "Mountain"),
-        //            new TunicPortal("Overworld Redux", "", "Mountain to Overworld", "Mountain"),
-        //        }
-        //    },
-        //    {
-        //        "Mountaintop",
-        //        new List<TunicPortal> {
-        //            new TunicPortal("Mountain", "", "Top of the Mountain Exit", "Mountaintop", deadEnd: true),
-        //        }
-        //    },
-        //    {
-        //        "Darkwoods Tunnel", // connector between overworld and quarry
-        //        new List<TunicPortal> {
-        //            new TunicPortal("Overworld Redux", "", "Quarry Connector to Overworld", "Darkwoods"),
-        //            new TunicPortal("Quarry Redux", "", "Quarry Connector to Quarry", "Darkwoods"),
-        //        }
-        //    },
-        //    {
-        //        "Quarry Redux",
-        //        new List<TunicPortal> {
-        //            new TunicPortal("Darkwoods Tunnel", "", "Quarry to Overworld Exit", granularRegion: "Quarry"),
-        //            new TunicPortal("Shop", "", "Quarry Shop", granularRegion: "Quarry"),
-        //            new TunicPortal("Monastery", "front", "Quarry to Monastery Front", granularRegion: "Quarry"),
-        //            new TunicPortal("Monastery", "back", "Quarry to Monastery Back", granularRegion: "Monastery Rope", ignoreScene: true, oneWay: true),
-        //            new TunicPortal("Mountain", "", "Quarry to Mountain", granularRegion: "Quarry"),
-        //            new TunicPortal("ziggurat2020_0", "", "Quarry to Ziggurat", granularRegion: "Quarry", entryItems: new Dictionary<string, int> { { "Wand", 1 }, { "Darkwood Tunnel, Quarry Redux_", 1 }, { "12", 1 } }),
-        //            new TunicPortal("Transit", "teleporter_quarry teleporter", "Quarry to Far Shore", granularRegion: "Quarry", prayerPortal: true, entryItems: new Dictionary<string, int> { { "Wand", 1 }, { "Darkwood Tunnel, Quarry Redux_", 1 }, { "12", 1 } }),
-        //        }
-        //    },
-        //    {
-        //        "Monastery",
-        //        new List<TunicPortal> {
-        //            new TunicPortal("Quarry Redux", "back", "Monastery Rear Exit", "Monastery"),
-        //            new TunicPortal("Quarry Redux", "front", "Monastery Front Exit", "Monastery"),
-        //            new TunicPortal("RelicVoid", "teleporter_relic plinth", "Monastery Hero's Grave", "Monastery", prayerPortal: true),
-
-        //            // new TunicPortal("Quarry_", "lower", "Portal (1)"), // Unused portal, disabled, and very high up
-        //        }
-        //    },
-        //    {
-        //        "ziggurat2020_0", // Zig entrance hallway
-        //        new List<TunicPortal> {
-        //            new TunicPortal("ziggurat2020_1", "", "Zig Entry Hallway to Zig Upper", "Zig 0"),
-        //            new TunicPortal("Quarry Redux", "", "Zig Entry Hallway to Quarry", "Zig 0"),
-        //        }
-        //    },
-        //    {
-        //        "ziggurat2020_1", // Upper zig
-        //        new List<TunicPortal> {
-        //            // new TunicPortal("ziggurat2020_3", "zig2_skip", "Zig Skip"), // the elevator skip to lower zig, put a secret here later
-        //            new TunicPortal("ziggurat2020_0", "", "Zig Upper to Zig Entry", granularRegion: "Zig 1 Top", ignoreScene: true, oneWay: true),
-        //            new TunicPortal("ziggurat2020_2", "", "Zig Upper to Zig Tower", granularRegion: "Zig 1 Bottom", deadEnd: true, ignoreScene: true, requiredItems: new Dictionary<string, int>{{"ziggurat2020_1, ziggurat2020_0_", 1}}),
-        //        }
-        //    },
-        //    {
-        //        "ziggurat2020_2", // Zig intermediate elevator
-        //        new List<TunicPortal> {
-        //            new TunicPortal("ziggurat2020_1", "", "Zig Tower to Zig Upper", granularRegion: "Zig 2 Top", ignoreScene: true, oneWay: true),
-        //            new TunicPortal("ziggurat2020_3", "", "Zig Tower to Zig Lower", granularRegion: "Zig 2 Bottom", deadEnd: true, ignoreScene: true, requiredItems: new Dictionary<string, int>{{"ziggurat2020_2, ziggurat2020_1_", 1}}),
-        //        }
-        //    },
-        //    {
-        //        "ziggurat2020_3", // Lower zig, center is designated as before the prayer spot with the two cube minibosses
-        //        new List<TunicPortal> {
-        //            new TunicPortal("ziggurat2020_FTRoom", "", "Zig Portal Room Entrance", granularRegion: "Zig 3", ignoreScene: true, prayerPortal: true, requiredItemsOr: new List<Dictionary<string, int>> { new Dictionary<string, int> { {"Hyperdash", 1 }, { "ziggurat2020_3, ziggurat2020_2_", 1 } }, new Dictionary<string, int> { { "12", 1 }, { "ziggurat2020_3, ziggurat2020_2_", 1 } } }), // Prayer portal room
-        //            // new TunicPortal("ziggurat2020_1", "zig2_skip", "Zig Skip Exit"), // the elevator skip to lower zig
-        //            new TunicPortal("ziggurat2020_2", "", "Zig Lower to Zig Tower", granularRegion: "Zig 3"),
-        //        }
-        //    },
-        //    {
-        //        "ziggurat2020_FTRoom", // The room with the prayer portal
-        //        new List<TunicPortal> {
-        //            new TunicPortal("ziggurat2020_3", "", "Zig Portal Room Exit", "Zig Portal Room", ignoreScene: true, requiredItems: new Dictionary<string, int> { { "12", 1 }, { "ziggurat2020_3, ziggurat2020_FTRoom", 1 } }),
-        //            new TunicPortal("Transit", "teleporter_ziggurat teleporter", "Zig to Far Shore", "Zig Portal Room", prayerPortal: true),
-        //        }
-        //    },
-        //    {
-        //        "Swamp Redux 2",
-        //        new List<TunicPortal> {
-        //            new TunicPortal("Overworld Redux", "conduit", "Swamp Lower Exit", granularRegion: "Swamp Front"),
-        //            new TunicPortal("Cathedral Redux", "main", "Swamp to Cathedral Main Entrance", granularRegion: "Swamp Front", requiredItems: new Dictionary<string, int> { { "12", 1 }, { "Hyperdash", 1 }, { "Overworld Redux, Swamp Redux 2_wall", 1 } } ),
-        //            new TunicPortal("Cathedral Redux", "secret", "Swamp to Cathedral Secret Legend Room Entrance", granularRegion: "Swamp Front", requiredItems: new Dictionary<string, int> { { "21", 1 } }),
-        //            new TunicPortal("Cathedral Arena", "", "Swamp to Gauntlet", granularRegion: "Swamp Back", ignoreScene: true, requiredItemsOr: new List<Dictionary<string, int>> { new Dictionary<string, int> { { "Hyperdash", 1 }, {"Swamp Redux 2, Overworld Redux_wall", 1 } }, new Dictionary<string, int> { { "Swamp Redux 2, RelicVoid_teleporter_relic plinth", 1 } } }),
-        //            new TunicPortal("Shop", "", "Swamp Shop", granularRegion: "Swamp Front"),
-        //            new TunicPortal("Overworld Redux", "wall", "Swamp Upper Exit", granularRegion: "Swamp Back", ignoreScene: true, requiredItems: new Dictionary<string, int> { { "Hyperdash", 1 }, { "Swamp Redux 2, Cathedral Arena_", 1 } }),
-        //            new TunicPortal("RelicVoid", "teleporter_relic plinth", "Swamp Hero's Grave", granularRegion: "Swamp Back", ignoreScene: true, prayerPortal: true, requiredItems: new Dictionary<string, int> { { "Swamp Redux 2, Cathedral Arena_", 1 } }),
-        //        }
-        //    },
-        //    {
-        //        "Cathedral Redux",
-        //        new List<TunicPortal> {
-        //            new TunicPortal("Swamp Redux 2", "main", "Cathedral Main Exit", granularRegion: "Cathedral"),
-        //            new TunicPortal("Cathedral Arena", "", "Cathedral Elevator", granularRegion: "Cathedral"),
-        //            new TunicPortal("Swamp Redux 2", "secret", "Cathedral Secret Legend Room Exit", granularRegion: "Cathedral Secret Legend", ignoreScene: true, deadEnd: true), // only one chest, just use item access rules for it
-        //        }
-        //    },
-        //    {
-        //        "Cathedral Arena", // Gauntlet
-        //        new List<TunicPortal> {
-        //            new TunicPortal("Swamp Redux 2", "", "Gauntlet to Swamp", granularRegion: "Gauntlet Bottom", ignoreScene: true, deadEnd: true, requiredItems: new Dictionary<string, int>{{"Cathedral Arena, Cathedral Redux_", 1}, {"Hyperdash", 1}}),
-        //            new TunicPortal("Cathedral Redux", "", "Gauntlet Elevator", granularRegion: "Gauntlet Top", ignoreScene: true, givesAccess: new List<string> {"Cathedral Arena, Shop_"}, requiredItems: new Dictionary<string, int>{{"Cathedral Arena, Shop_", 1}}),
-        //            new TunicPortal("Shop", "", "Gauntlet Shop", granularRegion: "Gauntlet Top", ignoreScene: true, givesAccess: new List<string> {"Cathedral Arena, Swamp Redux 2_"}, requiredItems: new Dictionary<string, int>{{"Cathedral Arena, Cathedral Redux_", 1}}), // we love gauntlet shop
-        //        }
-        //    },
-        //    {
-        //        "Shop", // Every shop is just this region
-        //        new List<TunicPortal> {
-        //            new TunicPortal("Previous Region", "", "Shop Portal", granularRegion: "Shop"),
-        //        }
-        //    },
-        //    {
-        //        "RelicVoid", // Hero relic area
-        //        new List<TunicPortal> {
-        //            new TunicPortal("Fortress Reliquary", "teleporter_relic plinth", "Hero's Grave to Fortress", "RelicVoid", ignoreScene: true, deadEnd: true),
-        //            new TunicPortal("Monastery", "teleporter_relic plinth", "Hero's Grave to Monastery", "RelicVoid", ignoreScene: true, deadEnd: true),
-        //            new TunicPortal("Archipelagos Redux", "teleporter_relic plinth", "Hero's Grave to West Garden", "RelicVoid", ignoreScene: true, deadEnd: true),
-        //            new TunicPortal("Sword Access", "teleporter_relic plinth", "Hero's Grave to East Forest", "RelicVoid", ignoreScene: true, deadEnd: true),
-        //            new TunicPortal("Library Hall", "teleporter_relic plinth", "Hero's Grave to Library", "RelicVoid", ignoreScene: true, deadEnd: true),
-        //            new TunicPortal("Swamp Redux 2", "teleporter_relic plinth", "Hero's Grave to Swamp", "RelicVoid", ignoreScene: true, deadEnd: true),
-        //        }
-        //    },
-        //    {
-        //        "Transit", // Teleporter hub
-        //        new List<TunicPortal> {
-        //            new TunicPortal("Archipelagos Redux", "teleporter_archipelagos_teleporter", "Far Shore to West Garden", "Transit", entryItems: new Dictionary<string, int>{ { "12", 1 }, { "Archipelagos Redux, Overworld Redux_lower", 1} }),
-        //            new TunicPortal("Library Lab", "teleporter_library teleporter", "Far Shore to Library", "Transit", entryItems: new Dictionary<string, int>{ { "12", 1 }, { "Library Lab, Library Arena_", 1} }),
-        //            new TunicPortal("Quarry Redux", "teleporter_quarry teleporter", "Far Shore to Quarry", "Transit", entryItems: new Dictionary<string, int>{ { "12", 1 }, { "Quarry Redux, Darkwoods Tunnel_", 1 }, {"Darkwoods Tunnel, Quarry Redux_", 1 }, { "Wand", 1 } }),
-        //            new TunicPortal("East Forest Redux", "teleporter_forest teleporter", "Far Shore to East Forest", "Transit", requiredItems: new Dictionary<string, int> { { "Hyperdash", 1 } }),
-        //            new TunicPortal("Fortress Arena", "teleporter_spidertank", "Far Shore to Fortress", "Transit", entryItems: new Dictionary<string, int> { { "12", 1 }, { "Fortress Basement, Fortress Main_", 1 }, {"Fortress Courtyard, Overworld Redux_", 1}, { "Fortress Courtyard, Fortress Main_", 1 } }),
-        //            new TunicPortal("Atoll Redux", "teleporter_atoll", "Far Shore to Atoll", "Transit"),
-        //            new TunicPortal("ziggurat2020_FTRoom", "teleporter_ziggurat teleporter", "Far Shore to Zig", "Transit"),
-        //            new TunicPortal("Spirit Arena", "teleporter_spirit arena", "Far Shore to Heir", "Transit"),
-        //            new TunicPortal("Overworld Redux", "teleporter_town", "Far Shore to Town", "Transit"),
-        //            new TunicPortal("Overworld Redux", "teleporter_starting island", "Far Shore to Spawn", "Transit", requiredItems: new Dictionary<string, int> { { "Hyperdash", 1 } }),
-
-        //            // new TunicPortal("Transit_", "teleporter_", "Portal"), // Unused portal, far away and not enabled
-        //        }
-        //    },
-        //    {
-        //        "Spirit Arena", // Heir fight
-        //        new List<TunicPortal> {
-        //            new TunicPortal("Transit", "teleporter_spirit arena", "Heir Arena Exit", "Heir Arena", deadEnd: true),
-        //        }
-        //    },
-        //    {
-        //        "Purgatory", // Second save hallway
-        //        new List<TunicPortal> {
-        //            new TunicPortal("Purgatory", "bottom", "Purgatory Bottom Exit", "Purgatory"),
-        //            new TunicPortal("Purgatory", "top", "Purgatory Top Exit", "Purgatory"),
-        //        }
-        //    },
-        //};
-
         public static void ShuffleList<T>(IList<T> list, int seed) {
             var rng = new System.Random(seed);
             int n = list.Count;
@@ -4294,27 +3734,80 @@ namespace TunicArchipelago {
             return inventory;
         }
 
+        public static List<string> UpdateReachableRegions(List<string> inventory) {
+            int inv_count = inventory.Count;
+            // for each origin region
+            foreach (KeyValuePair<string, Dictionary<string, List<List<string>>>> traversal_group in TraversalReqs) {
+                string origin = traversal_group.Key;
+                // for each destination in an origin's group
+                foreach (KeyValuePair<string, List<List<string>>> destination_group in traversal_group.Value) {
+                    string destination = destination_group.Key;
+                    // if we don't have the origin region, skip it
+                    if (!inventory.Contains(origin)) {
+                        continue;
+                    }
+                    // if we can already reach this region, skip it
+                    if (inventory.Contains(destination)) {
+                        continue;
+                    }
+                    // met is whether you meet any of the requirement lists for a destination
+                    bool met = false;
+                    // check through each list of requirements
+                    foreach (List<string> reqs in destination_group.Value) {
+                        if (reqs.Count == 0) {
+                            // if a group is empty, you can just walk there
+                            met = true;
+                        } else {
+                            // check if we have the items in our inventory to traverse this path
+                            int met_count = 0;
+                            foreach (string req in reqs) {
+                                if (inventory.Contains(req)) {
+                                    met_count++;
+                                }
+                            }
+                            // if you have all the requirements, you can traverse this path
+                            if (met_count == reqs.Count) {
+                                met = true;
+                            }
+                        }
+                        // if we meet one list of requirements, we don't have to do the rest
+                        if (met == true) {
+                            break;
+                        }
+                    }
+                    if (met == true) {
+                        inventory.Add(destination);
+                    }
+                }
+            }
+            // if we gained any regions, rerun this to get any new regions
+            if (inv_count != inventory.Count) {
+                UpdateReachableRegions(inventory);
+            }
+            return inventory;
+        }
+
         // create a list of all portals with their information loaded in, just a slightly expanded version of the above to include destinations
         public static void RandomizePortals(int seed) {
             RandomizedPortals.Clear();
 
             // separate the portals into their respective lists
-            foreach (KeyValuePair<string, Dictionary<string, List<NewPortal>>> scene_group in RegionPortalsList) {
+            foreach (KeyValuePair<string, Dictionary<string, List<TunicPortal>>> scene_group in RegionPortalsList) {
                 string scene_name = scene_group.Key;
-                foreach (KeyValuePair<string, List<NewPortal>> region_group in scene_group.Value) {
+                foreach (KeyValuePair<string, List<TunicPortal>> region_group in scene_group.Value) {
                     string region_name = region_group.Key;
-                    List<NewPortal> region_portals = region_group.Value;
-                    foreach (NewPortal portal in region_portals) {
-                        Portal newPortal = new Portal(name: portal.Name, destination: portal.Destination, scene: scene_name, region: region_name);
+                    List<TunicPortal> region_portals = region_group.Value;
+                    foreach (TunicPortal portal in region_portals) {
+                        Portal TunicPortal = new Portal(name: portal.Name, destination: portal.Destination, scene: scene_name, region: region_name);
                         if (RegionDict[region_name].DeadEnd == true) {
-                            deadEndPortals.Add(newPortal);
+                            deadEndPortals.Add(TunicPortal);
                         } else {
-                            twoPlusPortals.Add(newPortal);
+                            twoPlusPortals.Add(TunicPortal);
                         }
                         // need to throw fairy cave into the twoPlus list if laurels is at 10 fairies
-                        if (newPortal.Region == "Secret Gathering Place" && SaveFile.GetInt("randomizer laurels location") == 3) {
-                            deadEndPortals.Remove(newPortal);
-                            twoPlusPortals.Add(newPortal);
+                        if (TunicPortal.Region == "Secret Gathering Place" && SaveFile.GetInt("randomizer laurels location") == 3) {
+                            deadEndPortals.Remove(TunicPortal);
+                            twoPlusPortals.Add(TunicPortal);
                         }
                     }
                 }
@@ -4421,15 +3914,17 @@ namespace TunicArchipelago {
             if (SaveFile.GetInt("randomizer ER fixed shop") == 1) {
                 shopCount = 1;
                 Portal windmillPortal = new Portal(name: "Windmill Entrance", destination: "Windmill", scene: "Overworld Redux", region: "Overworld");
-                Portal shopPortal = new Portal(destination: "Previous Region", tag: "", name: "Shop portal", scene: "Shop", region: "Shop");
+                Portal shopPortal = new Portal(name: "Shop Portal", destination: "Previous Region", scene: "Shop", region: "Shop");
                 RandomizedPortals.Add("fixedshop", new PortalCombo(windmillPortal, shopPortal));
                 shopRegionList.Add("Overworld Redux");
             }
             int regionNumber = 0;
             while (shopCount > 0) {
                 // manually making a portal for the shop, because it has some special properties
-                Portal shopPortal = new Portal(destination: "Previous Region", tag: "", name: "Shop portal", scene: "Shop", region: "Shop");
+                Portal shopPortal = new Portal(name: "Shop Portal", destination: "Previous Region", scene: "Shop", region: "Shop");
                 // check that a shop has not already been added to this region, since two shops in the same region causes problems
+                Logger.LogInfo("number of portals left in two plus is " + twoPlusPortals.Count.ToString());
+                Logger.LogInfo("portal to attempt to pair is " + twoPlusPortals[regionNumber].Name);
                 if (!shopRegionList.Contains(twoPlusPortals[regionNumber].Scene)) {
                     comboNumber++;
                     shopRegionList.Add(twoPlusPortals[regionNumber].Scene);
@@ -4446,12 +3941,16 @@ namespace TunicArchipelago {
                     Logger.LogInfo("too many shops, not enough regions, add more shops");
                 }
             }
-
+            Logger.LogInfo("test 1");
             // now we have every region accessible
             // the twoPlusPortals list still has items left in it, so now we pair them off
             while (twoPlusPortals.Count > 1) {
+                Logger.LogInfo("test 2");
                 // I don't think the LockBeforeKey check can lead to an infinite loop?
-                if (LockBeforeKey(twoPlusPortals[0]) == true || LockBeforeKey(twoPlusPortals[1]) == true) { ShuffleList(twoPlusPortals, seed); } else {
+                if (LockBeforeKey(twoPlusPortals[0]) == true || LockBeforeKey(twoPlusPortals[1]) == true) {
+                    ShuffleList(twoPlusPortals, seed);
+                } else {
+                    Logger.LogInfo("test 3");
                     comboNumber++;
                     RandomizedPortals.Add(comboNumber.ToString(), new PortalCombo(twoPlusPortals[0], twoPlusPortals[1]));
                     twoPlusPortals.RemoveAt(1); // I could do removeat0 twice, but I don't like how that looks
@@ -4476,14 +3975,14 @@ namespace TunicArchipelago {
             List<Portal> portalsList = new List<Portal>();
             int comboNumber = 0;
 
-            foreach (KeyValuePair<string, Dictionary<string, List<NewPortal>>> scene_group in RegionPortalsList) {
+            foreach (KeyValuePair<string, Dictionary<string, List<TunicPortal>>> scene_group in RegionPortalsList) {
                 string scene_name = scene_group.Key;
-                foreach (KeyValuePair<string, List<NewPortal>> region_group in scene_group.Value) {
+                foreach (KeyValuePair<string, List<TunicPortal>> region_group in scene_group.Value) {
                     string region_name = region_group.Key;
-                    List<NewPortal> region_portals = region_group.Value;
-                    foreach (NewPortal portal in region_portals) {
-                        Portal newPortal = new Portal(name: portal.Name, destination: portal.Destination, scene: scene_name, region: region_name);
-                        portalsList.Add(newPortal);
+                    List<TunicPortal> region_portals = region_group.Value;
+                    foreach (TunicPortal portal in region_portals) {
+                        Portal TunicPortal = new Portal(name: portal.Name, destination: portal.Destination, scene: scene_name, region: region_name);
+                        portalsList.Add(TunicPortal);
                     }
                 }
             }
@@ -4519,7 +4018,7 @@ namespace TunicArchipelago {
                     Portal portal1 = portalCombo.Value.Portal1;
                     Portal portal2 = portalCombo.Value.Portal2;
 
-                    if (portal1.Scene == loadingScene.name && portal1.Tag == portal.id && portal1.Destination == portal.destinationSceneName) {
+                    if (portal1.Scene == loadingScene.name && portal1.Destination == portal.FullID) {
                         if (portal2.Scene == "Shop") {
                             portal.destinationSceneName = portal2.Scene;
                             portal.id = "";
@@ -4534,7 +4033,7 @@ namespace TunicArchipelago {
                         break;
                     }
 
-                    if (portal2.Scene == loadingScene.name && portal2.Tag == portal.id && portal2.Destination == portal.destinationSceneName) {
+                    if (portal2.Scene == loadingScene.name && portal2.Destination == portal.FullID) {
                         if (portal1.Scene == "Shop") {
                             portal.destinationSceneName = portal1.Scene;
                             portal.id = "";
@@ -4561,7 +4060,7 @@ namespace TunicArchipelago {
                     string comboTag = portalCombo.Key;
                     Portal portal1 = portalCombo.Value.Portal1;
                     Portal portal2 = portalCombo.Value.Portal2;
-                    if (portal1.Scene == "Overworld Redux" && portal1.Tag == portal.id && portal1.Destination == portal.destinationSceneName) {
+                    if (portal1.Scene == "Overworld Redux" && portal1.Destination == portal.FullID) {
                         if (portal2.Scene == "Shop") {
                             portal.destinationSceneName = portal2.Scene;
                             portal.id = "";
@@ -4574,7 +4073,7 @@ namespace TunicArchipelago {
                         break;
                     }
 
-                    if (portal2.Scene == "Overworld Redux" && portal2.Tag == portal.id && portal2.Destination == portal.destinationSceneName) {
+                    if (portal2.Scene == "Overworld Redux" && portal2.Destination == portal.FullID) {
                         if (portal1.Scene == "Shop") {
                             portal.destinationSceneName = portal1.Scene;
                             portal.id = "";

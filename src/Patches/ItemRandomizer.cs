@@ -207,7 +207,6 @@ namespace TunicArchipelago {
 
                 // pick an item
                 string itemName = ItemLookup.FairyLookup.Keys.Contains(item.Name) ? "Fairy" : item.Name;
-                //Logger.LogInfo("placing the item " + itemName);
                 // remove item from inventory for reachability checks
                 if (UnplacedInventory.Keys.Contains(itemName)) {
                     UnplacedInventory[itemName] -= 1;
@@ -239,23 +238,18 @@ namespace TunicArchipelago {
                     }
 
                     // fill up our FullInventory with regions until we stop getting new regions -- these are the portals and regions we can currently reach
-                    Logger.LogInfo("number of portals is " + TunicPortals.RandomizedPortals.Count.ToString());
-                    while (FullInventory.Count < TunicPortals.RandomizedPortals.Count + UnplacedInventory.Count) {
-
+                    while (true) {
+                        int start_num = FullInventory.Count;
                         FullInventory = TunicPortals.UpdateReachableRegions(FullInventory);
-
                         foreach (PortalCombo portalCombo in TunicPortals.RandomizedPortals.Values) {
                             FullInventory = portalCombo.AddComboRegions(FullInventory);
                         }
-                        Logger.LogInfo("full inventory count is " + FullInventory.Count.ToString());
-                        Logger.LogInfo("comparison count is " + (TunicPortals.RandomizedPortals.Count + UnplacedInventory.Count).ToString());
+                        int end_num = FullInventory.Count;
+                        if (start_num == end_num) {
+                            break;
+                        }
                     }
                 }
-
-                //Logger.LogInfo("Full Inventory contains the following items");
-                //foreach (KeyValuePair<string, int> inv_item in FullInventory) {
-                //    Logger.LogInfo(inv_item.Key);
-                //}
 
                 // pick a location
                 int l;
@@ -264,14 +258,10 @@ namespace TunicArchipelago {
                 //foreach (Location loc in InitialLocations)
                 //{ if (!loc.reachable(CombinedInventory)) { Logger.LogInfo("location " + loc.SceneName + " " + loc.LocationId + " is not reachable"); } }
                 //Logger.LogInfo(InitialLocations[l].SceneName + " " + InitialLocations[l].LocationId);
-                Logger.LogInfo("test message 0");
                 // if location isn't reachable with current inventory excluding the item to be placed, pick a new location
                 while (!InitialLocations[l].reachable(FullInventory)) {
-                    //Logger.LogInfo(InitialLocations[l].SceneName + " " + InitialLocations[l].LocationId);
-                    //Logger.LogInfo("the above location failed");
                     l = random.Next(InitialLocations.Count);
                 }
-                Logger.LogInfo("test message 1");
 
                 // prepare matched list of progression items and locations
                 string DictionaryId = $"{InitialLocations[l].LocationId} [{InitialLocations[l].SceneName}]";
@@ -284,7 +274,16 @@ namespace TunicArchipelago {
             SphereZero = FullInventory;
 
             if (SaveFile.GetInt("randomizer entrance rando enabled") == 1) {
-                SphereZero = GetERSphereOne();
+                List<string> sphere_zero_list = GetERSphereOne();
+                foreach (string sphere_zero_item in sphere_zero_list) {
+                    if (!SphereZero.ContainsKey(sphere_zero_item)) {
+                    SphereZero.Add(sphere_zero_item, 1);
+                    }
+                }
+            }
+            Logger.LogInfo("test message");
+            foreach (string itemm in SphereZero.Keys) {
+                Logger.LogInfo("item is " + itemm);
             }
 
             // shuffle remaining rewards and locations
@@ -427,46 +426,47 @@ namespace TunicArchipelago {
         }
 
         // In ER, we want sphere 1 to be in Overworld or adjacent to Overworld
-        public static Dictionary<string, int> GetERSphereOne() {
+        public static List<string> GetERSphereOne() {
             List<Portal> PortalInventory = new List<Portal>();
-            Dictionary<string, int> CombinedInventory = new Dictionary<string, int> { { "Overworld", 1 } };
+            List<string> CombinedInventory = new List<string> { "Overworld" };
 
             // add starting sword and abilities as applicable
             if (SaveFile.GetInt("randomizer started with sword") == 1) {
-                CombinedInventory.Add("Sword", 1);
+                CombinedInventory.Add("Sword");
             }
             if (SaveFile.GetInt("randomizer shuffled abilities") == 0) {
-                CombinedInventory.Add("12", 1);
-                CombinedInventory.Add("21", 1);
-                CombinedInventory.Add("Overworld Fountain Cross Door", 1);
-                CombinedInventory.Add("Overworld Southeast Cross Door", 1);
-                CombinedInventory.Add("Overworld Town Portal", 1);
-                CombinedInventory.Add("Overworld Spawn Portal", 1);
+                CombinedInventory.Add("12");
+                CombinedInventory.Add("21");
+                CombinedInventory.Add("Overworld Fountain Cross Door");
+                CombinedInventory.Add("Overworld Southeast Cross Door");
+                CombinedInventory.Add("Overworld Town Portal");
+                CombinedInventory.Add("Overworld Spawn Portal");
             }
             // add these too if you're ignoring them in logic
             if (SaveFile.GetInt(SaveFlags.MasklessLogic) == 1) {
-                CombinedInventory.Add("Mask", 1);
+                CombinedInventory.Add("Mask");
             }
             if (SaveFile.GetInt(SaveFlags.LanternlessLogic) == 1) {
-                CombinedInventory.Add("Lantern", 1);
+                CombinedInventory.Add("Lantern");
             }
 
             // find which portals you can reach from spawn without additional progression
             foreach (PortalCombo portalCombo in TunicPortals.RandomizedPortals.Values) {
-                if (CombinedInventory.ContainsKey(portalCombo.Portal1.Region)) {
+                if (CombinedInventory.Contains(portalCombo.Portal1.Region)) {
                     PortalInventory.Add(portalCombo.Portal2);
                 }
-                if (CombinedInventory.ContainsKey(portalCombo.Portal2.Region)) {
+                if (CombinedInventory.Contains(portalCombo.Portal2.Region)) {
                     PortalInventory.Add(portalCombo.Portal1);
                 }
             }
 
             // add the regions you can reach as your first steps to the inventory
             foreach (Portal portal in PortalInventory) {
-                if (!CombinedInventory.ContainsKey(portal.Region)) {
-                    CombinedInventory.Add(portal.Region, 1);
+                if (!CombinedInventory.Contains(portal.Region)) {
+                    CombinedInventory.Add(portal.Region);
                 }
             }
+            CombinedInventory = TunicPortals.UpdateReachableRegions(CombinedInventory);
             return CombinedInventory;
         }
     }
