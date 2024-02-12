@@ -60,47 +60,6 @@ namespace TunicArchipelago {
 
         public static Dictionary<string, string> HintMessages = new Dictionary<string, string>();
 
-        // Used for getting what sphere 1 is if you have ER on
-        // Gives you items in Overworld or items in adjacent scenes
-        // will need updating if/when we do a different starting spot
-        public static List<string> GetERSphereOne()
-        {
-            List<Portal> PortalInventory = new List<Portal>();
-            List<string> CombinedInventory = new List<string>{"Overworld"};
-            
-            // add starting sword and abilities if applicable
-            if (SaveFile.GetInt("randomizer started with sword") == 1)
-            { CombinedInventory.Add("Sword"); }
-            if (SaveFile.GetInt(AbilityShuffle) == 0)
-            {
-                CombinedInventory.Add("12");
-                CombinedInventory.Add("21");
-            }
-            
-            // find which portals you can reach from spawn without additional progression
-            foreach (PortalCombo portalCombo in TunicPortals.RandomizedPortals.Values)
-            {
-                if (portalCombo.Portal1.Region == "Overworld")
-                { PortalInventory.Add(portalCombo.Portal2); }
-                if (portalCombo.Portal1.Region == "Overworld Ability" && SaveFile.GetInt(AbilityShuffle) == 0)
-                { PortalInventory.Add(portalCombo.Portal2); }
-
-                if (portalCombo.Portal2.Region == "Overworld")
-                { PortalInventory.Add(portalCombo.Portal1); }
-                if (portalCombo.Portal2.Region == "Overworld Ability" && SaveFile.GetInt(AbilityShuffle) == 0)
-                { PortalInventory.Add(portalCombo.Portal1); }
-            }
-
-            // add the new portals and any applicable new scenes to the inventory
-            foreach (Portal portal in PortalInventory)
-            {
-                CombinedInventory.Add(portal.SceneDestinationTag);
-                CombinedInventory.AddRange(portal.Rewards(CombinedInventory));
-            }
-
-            return CombinedInventory;
-        }
-
         public static void PopulateHints() {
             HintMessages.Clear();
             HeroGraveHints.Clear();
@@ -425,7 +384,7 @@ namespace TunicArchipelago {
             Dictionary<string, ArchipelagoItem> SphereOnePlayer = new Dictionary<string, ArchipelagoItem>();
             Dictionary<string, ArchipelagoItem> SphereOneOthersTunic = new Dictionary<string, ArchipelagoItem>();
             Dictionary<string, ArchipelagoItem> SphereOneOthers = new Dictionary<string, ArchipelagoItem>();
-            List<string> ERSphereOneItemsAndAreas = GetERSphereOne();
+            List<string> ERSphereOneItemsAndAreas = ItemRandomizer.GetERSphereOne();
             foreach (string itemkey in ItemLookup.ItemList.Keys) {
                 ArchipelagoItem item = ItemLookup.ItemList[itemkey];
                 // In ER, we need to check more info, since every item has a required item count
