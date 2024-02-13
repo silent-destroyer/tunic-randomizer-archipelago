@@ -3612,85 +3612,6 @@ namespace TunicArchipelago {
             }
         }
 
-        // function to see if we're placing a lock before its key, since doing that can possibly self-lock
-        public static bool LockBeforeKey(Portal checkPortal) {
-            if (checkPortal.SceneDestinationTag == "Overworld Redux, Temple_main") {
-                // check if the belltower upper has been placed yet, if not then reshuffle the two plus portals list (since this list is gonna be the bigger one)
-                int i = 0;
-                foreach (Portal portal in deadEndPortals) {
-                    if (portal.SceneDestinationTag == "Forest Belltower, Forest Boss Room_") {
-                        i++;
-                        break;
-                    }
-                }
-                if (i == 1) { return true; }
-            } else if (checkPortal.SceneDestinationTag == "Fortress Main, Fortress Arena_") {
-                // check if none of the portals that lead to the necessary fuses have been placed
-                int i = 0;
-                int j = 0;
-                int k = 0;
-                foreach (Portal portal in twoPlusPortals) {
-                    if (portal.SceneDestinationTag == "Fortress Courtyard, Fortress Reliquary_upper"
-                        || portal.SceneDestinationTag == "Fortress Courtyard, Fortress East_") { i++; }
-                    if (portal.Scene == "Fortress Basement") { j++; }
-                    if (portal.Scene == "Fortress Main") { k++; }
-                }
-                if (i == 2 || j == 2 || k == 6) { return true; }
-            } else if (checkPortal.SceneDestinationTag == "Fortress Arena, Transit_teleporter_spidertank"
-                  || checkPortal.SceneDestinationTag == "Transit, Fortress Arena_teleporter_spidertank") {
-                // check if none of the portals that lead to the necessary fuses have been placed
-                int i = 0;
-                int j = 0;
-                int k = 0;
-                foreach (Portal portal in twoPlusPortals) {
-                    if (portal.Scene == "Fortress Courtyard") { i++; }
-                    if (portal.Scene == "Fortress Basement") { j++; }
-                    if (portal.Scene == "Fortress Main") { k++; }
-                }
-                if (i == 8 || j == 2 || k == 6) { return true; }
-            } else if (checkPortal.SceneDestinationTag == "Swamp Redux 2, Cathedral Redux_main") {
-                int i = 0;
-                foreach (Portal portal in twoPlusPortals) {
-                    if (portal.SceneDestinationTag == "Swamp Redux 2, Overworld Redux_conduit"
-                        || portal.SceneDestinationTag == "Swamp Redux 2, Shop_"
-                        || portal.SceneDestinationTag == "Swamp Redux 2, Cathedral Redux_secret") { i++; }
-                }
-                if (i == 3) { return true; }
-            } else if (checkPortal.SceneDestinationTag == "ziggurat2020_FTRoom, ziggurat2020_3") {
-                int i = 0;
-                foreach (Portal portal in twoPlusPortals) {
-                    if (portal.Scene == "ziggurat2020_3") { i++; }
-                }
-                if (i == 2) { return true; }
-            } else if (checkPortal.SceneDestinationTag == "Quarry Redux, Transit_teleporter_quarry teleporter") {
-                int i = 0;
-                foreach (Portal portal in twoPlusPortals) {
-                    if (portal.Scene == "Darkwoods Tunnel") { i++; }
-                }
-                if (i == 2) { return true; }
-            } else if (checkPortal.SceneDestinationTag == "Transit, Quarry Redux_teleporter_quarry teleporter") {
-                int i = 0;
-                int j = 0;
-                foreach (Portal portal in twoPlusPortals) {
-                    if (portal.Scene == "Darkwoods Tunnel") { i++; }
-                    if (portal.Scene == "Quarry Redux") { j++; }
-                }
-                if (i == 2 || j == 7) { return true; }
-            } else if (checkPortal.SceneDestinationTag == "Transit, Library Lab_teleporter_library teleporter") {
-                int i = 0;
-                foreach (Portal portal in twoPlusPortals) {
-                    if (portal.Scene == "Library Lab") { i++; }
-                }
-                if (i == 3) { return true; }
-            } else if (checkPortal.SceneDestinationTag == "Transit, Archipelagos Redux_teleporter_archipelagos_teleporter") {
-                int i = 0;
-                foreach (Portal portal in twoPlusPortals) {
-                    if (portal.Scene == "Archipelagos Redux") { i++; }
-                }
-                if (i == 7) { return true; }
-            }
-            return false;
-        }
 
         // if we have some granular regions, we get another one. This is for one-way connections, basically
         // so that we don't unnecessarily force the back of house to be connected to a non-dead-end, for example
@@ -3965,14 +3886,11 @@ namespace TunicArchipelago {
             ShuffleList(deadEndPortals, seed);
             ShuffleList(twoPlusPortals, seed);
             while (deadEndPortals.Count > 0) {
-                if (LockBeforeKey(twoPlusPortals[0]) == true) {
-                    ShuffleList(twoPlusPortals, seed);
-                } else {
-                    comboNumber++;
-                    RandomizedPortals.Add(comboNumber.ToString(), new PortalCombo(deadEndPortals[0], twoPlusPortals[0]));
-                    deadEndPortals.RemoveAt(0);
-                    twoPlusPortals.RemoveAt(0);
-                }
+                comboNumber++;
+                RandomizedPortals.Add(comboNumber.ToString(), new PortalCombo(deadEndPortals[0], twoPlusPortals[0]));
+                deadEndPortals.RemoveAt(0);
+                twoPlusPortals.RemoveAt(0);
+                
             }
 
             // shops get added separately cause they're weird
@@ -4007,15 +3925,10 @@ namespace TunicArchipelago {
             // now we have every region accessible
             // the twoPlusPortals list still has items left in it, so now we pair them off
             while (twoPlusPortals.Count > 1) {
-                // I don't think the LockBeforeKey check can lead to an infinite loop?
-                if (LockBeforeKey(twoPlusPortals[0]) == true || LockBeforeKey(twoPlusPortals[1]) == true) {
-                    ShuffleList(twoPlusPortals, seed);
-                } else {
-                    comboNumber++;
-                    RandomizedPortals.Add(comboNumber.ToString(), new PortalCombo(twoPlusPortals[0], twoPlusPortals[1]));
-                    twoPlusPortals.RemoveAt(1); // I could do removeat0 twice, but I don't like how that looks
-                    twoPlusPortals.RemoveAt(0);
-                }
+                comboNumber++;
+                RandomizedPortals.Add(comboNumber.ToString(), new PortalCombo(twoPlusPortals[0], twoPlusPortals[1]));
+                twoPlusPortals.RemoveAt(1); // I could do removeat0 twice, but I don't like how that looks
+                twoPlusPortals.RemoveAt(0);
             }
             if (twoPlusPortals.Count == 1) {
                 // if this triggers, there's an odd number of portals total
