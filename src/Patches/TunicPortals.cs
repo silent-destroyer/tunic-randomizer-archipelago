@@ -1266,10 +1266,6 @@ namespace TunicArchipelago {
                 new RegionInfo("Overworld Redux", false)
             },
             {
-                "Overworld Holy Cross",
-                new RegionInfo("Fake", true)
-            },
-            {
                 "Overworld Belltower",
                 new RegionInfo("Overworld Redux", false)
             },
@@ -1897,10 +1893,6 @@ namespace TunicArchipelago {
                 "Spirit Arena",
                 new RegionInfo("Spirit Arena", true)
             },
-            {
-                "Spirit Arena Victory",
-                new RegionInfo("Spirit Arena", true)
-            },
         };
 
         public static Dictionary<string, Dictionary<string, List<List<string>>>> TraversalReqs = new Dictionary<string, Dictionary<string, List<List<string>>>> {
@@ -2159,6 +2151,26 @@ namespace TunicArchipelago {
                 }
             },
             {
+                "Forest Belltower Upper",
+                new Dictionary<string, List<List<string>>> {
+                        {
+                        "Forest Belltower Main",
+                        new List<List<string>> {
+                        }
+                    },
+                }
+            },
+            {
+                "Forest Belltower Main",
+                new Dictionary<string, List<List<string>>> {
+                        {
+                        "Forest Belltower Lower",
+                        new List<List<string>> {
+                        }
+                    },
+                }
+            },
+            {
                 "East Forest Dance Fox Spot",
                 new Dictionary<string, List<List<string>>> {
                     {
@@ -2179,6 +2191,16 @@ namespace TunicArchipelago {
                 new Dictionary<string, List<List<string>>> {
                     {
                         "East Forest",
+                        new List<List<string>> {
+                        }
+                    },
+                }
+            },
+            {
+                "Guard House 1 East",
+                new Dictionary<string, List<List<string>>> {
+                    {
+                        "Guard House 1 West",
                         new List<List<string>> {
                         }
                     },
@@ -2256,10 +2278,10 @@ namespace TunicArchipelago {
                         "Beneath the Well Main",
                         new List<List<string>> {
                             new List<string> {
-                                "Stick",
+                                "Stick", "Lantern"
                             },
                             new List<string> {
-                                "Techbow",
+                                "Techbow", "Lantern"
                             },
                         }
                     },
@@ -2272,10 +2294,10 @@ namespace TunicArchipelago {
                         "Beneath the Well Main",
                         new List<List<string>> {
                             new List<string> {
-                                "Stick",
+                                "Stick"
                             },
                             new List<string> {
-                                "Techbow",
+                                "Techbow"
                             },
                         }
                     },
@@ -2326,7 +2348,7 @@ namespace TunicArchipelago {
                         "Dark Tomb Main",
                         new List<List<string>> {
                             new List<string> {
-                                "Lantern",
+                                "Lantern"
                             },
                         }
                     },
@@ -2354,7 +2376,7 @@ namespace TunicArchipelago {
                         "Dark Tomb Main",
                         new List<List<string>> {
                             new List<string> {
-                                "Lantern",
+                                "Lantern"
                             },
                         }
                     },
@@ -2367,21 +2389,21 @@ namespace TunicArchipelago {
                         "West Garden Laurels Exit",
                         new List<List<string>> {
                             new List<string> {
-                                "Hyperdash",
+                                "Hyperdash"
                             },
                             new List<string> {
-                                "Ladder Storage",
+                                "Ladder Storage"
                             },
                         }
                     },
                     {
-                        "West Garden After Boss",
+                        "West Garden after Boss",
                         new List<List<string>> {
                             new List<string> {
-                                "Sword",
+                                "Sword"
                             },
                             new List<string> {
-                                "Ladder Storage",
+                                "Ladder Storage"
                             },
                         }
                     },
@@ -2389,7 +2411,7 @@ namespace TunicArchipelago {
                         "West Garden Hero's Grave",
                         new List<List<string>> {
                             new List<string> {
-                                "12",
+                                "12"
                             },
                         }
                     },
@@ -2397,7 +2419,7 @@ namespace TunicArchipelago {
                         "West Garden Portal Item",
                         new List<List<string>> {
                             new List<string> {
-                                "26", "Wand", "Stundagger", "Techbow", "nmg",
+                                "26", "Wand", "Stundagger", "Techbow", "nmg"
                             },
                         }
                     },
@@ -2410,20 +2432,20 @@ namespace TunicArchipelago {
                         "West Garden",
                         new List<List<string>> {
                             new List<string> {
-                                "Hyperdash",
+                                "Hyperdash"
                             },
                         }
                     },
                 }
             },
             {
-                "West Garden After Boss",
+                "West Garden after Boss",
                 new Dictionary<string, List<List<string>>> {
                     {
                         "West Garden",
                         new List<List<string>> {
                             new List<string> {
-                                "Hyperdash",
+                                "Hyperdash"
                             },
                         }
                     },
@@ -2436,7 +2458,7 @@ namespace TunicArchipelago {
                         "West Garden",
                         new List<List<string>> {
                             new List<string> {
-                                "26", "Wand", "Stundagger", "Techbow", "nmg",
+                                "26", "Wand", "Stundagger", "Techbow", "nmg"
                             },
                         }
                     },
@@ -2444,7 +2466,7 @@ namespace TunicArchipelago {
                         "West Garden Portal",
                         new List<List<string>> {
                             new List<string> {
-                                "Hyperdash", "12", "West Garden",
+                                "Hyperdash", "12", "West Garden"
                             },
                         }
                     },
@@ -2457,7 +2479,7 @@ namespace TunicArchipelago {
                         "West Garden Portal Item",
                         new List<List<string>> {
                             new List<string> {
-                                "Hyperdash",
+                                "Hyperdash"
                             },
                         }
                     },
@@ -3033,6 +3055,12 @@ namespace TunicArchipelago {
                     {
                         "Monastery Back",
                         new List<List<string>> {
+                            new List<string> {
+                                "Sword"
+                            },
+                            new List<string> {
+                                "Techbow"
+                            }
                         }
                     },
                 }
@@ -3044,7 +3072,7 @@ namespace TunicArchipelago {
                         "Quarry Portal",
                         new List<List<string>> {
                             new List<string> {
-                                "12", "Quarry Connector",
+                                "12", "Quarry Connector", "Wand"
                             },
                         }
                     },
@@ -3057,6 +3085,16 @@ namespace TunicArchipelago {
                             new List<string> {
                                 "Sword",
                             },
+                        }
+                    },
+                }
+            },
+            {
+                "Quarry Portal",
+                new Dictionary<string, List<List<string>>> {
+                    {
+                        "Quarry Entry",
+                        new List<List<string>> {
                         }
                     },
                 }
@@ -3141,6 +3179,19 @@ namespace TunicArchipelago {
                     {
                         "Quarry Monastery Entry",
                         new List<List<string>> {
+                        }
+                    },
+                }
+            },
+            {
+                "Lower Quarry",
+                new Dictionary<string, List<List<string>>> {
+                    {
+                        "Lower Quarry Zig Door",
+                        new List<List<string>> {
+                            new List<string> {
+                                "Quarry", "Quarry Connector", "Wand"
+                            }
                         }
                     },
                 }
@@ -3449,7 +3500,7 @@ namespace TunicArchipelago {
                         "Far Shore to Quarry",
                         new List<List<string>> {
                             new List<string> {
-                                "12", "Quarry Connector", "Quarry",
+                                "12", "Quarry Connector", "Quarry", "Wand"
                             },
                         }
                     },
@@ -3838,7 +3889,7 @@ namespace TunicArchipelago {
             string start_region = "Overworld";
 
             Dictionary<string, int> MaxItems = new Dictionary<string, int> {
-                { "Stick", 1 }, { "Sword", 1 }, { "Wand", 1 }, { "Stundagger", 1 }, { "Techbow", 1 }, { "Hyperdash", 1 }, { "Mask", 1 }, { "Lantern", 1 }, { "12", 1 }, { "21", 1 }, { "26", 1 }, { "Key", 2 }, 
+                { "Stick", 1 }, { "Sword", 1 }, { "Wand", 1 }, { "Stundagger", 1 }, { "Techbow", 1 }, { "Hyperdash", 1 }, { "Mask", 1 }, { "Lantern", 1 }, { "12", 1 }, { "21", 1 }, { "26", 1 }, { "Key", 2 }, { "Key (House)", 1 }
             };
 
             Dictionary<string, int> FullInventory = new Dictionary<string, int>();
@@ -3867,14 +3918,17 @@ namespace TunicArchipelago {
             // create a portal combo for every region in the threePlusRegions list, so that every region can now be accessed (ignoring rules for now)
             int comboNumber = 0;
             while (FullInventory.Count < total_nondeadend_count + MaxItems.Count) {
-                //Logger.LogInfo("full inventory size is " + FullInventory.Count.ToString());
-                //Logger.LogInfo("comparison size is " + (total_nondeadend_count + MaxItems.Count).ToString());
+                Logger.LogInfo("full inventory size is " + FullInventory.Count.ToString());
+                Logger.LogInfo("comparison size is " + (total_nondeadend_count + MaxItems.Count).ToString());
+                foreach (string thing in FullInventory.Keys) {
+                    Logger.LogInfo("thing in full inventory is " + thing);
+                }
                 ShuffleList(twoPlusPortals, seed);
                 Portal portal1 = null;
                 Portal portal2 = null;
                 foreach (Portal portal in twoPlusPortals) {
                     // find a portal in a region we can't access yet
-                    if (LockBeforeKey(portal) == false && !FullInventory.ContainsKey(portal.Region)) {
+                    if (!FullInventory.ContainsKey(portal.Region)) {
                         portal1 = portal;
                     }
                 }
@@ -3884,7 +3938,7 @@ namespace TunicArchipelago {
                 twoPlusPortals.Remove(portal1);
                 ShuffleList(twoPlusPortals, seed);
                 foreach (Portal secondPortal in twoPlusPortals) {
-                    if (LockBeforeKey(secondPortal) == false && FullInventory.ContainsKey(secondPortal.Region)) {
+                    if (FullInventory.ContainsKey(secondPortal.Region)) {
                         portal2 = secondPortal;
                         twoPlusPortals.Remove(secondPortal);
                         break;
@@ -3895,6 +3949,8 @@ namespace TunicArchipelago {
                 }
                 // add the portal combo to the randomized portals list
                 RandomizedPortals.Add(comboNumber.ToString(), new PortalCombo(portal1, portal2));
+                Logger.LogInfo("portal 1 is " + portal1.Name + ", and its region is " + portal1.Region);
+                Logger.LogInfo("portal 2 is " + portal2.Name + ", and its region is " + portal2.Region);
 
                 FullInventory.Add(portal1.Region, 1);
                 // if laurels is at fairy cave, add it when we connect fairy cave

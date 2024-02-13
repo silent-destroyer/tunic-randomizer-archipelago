@@ -4025,8 +4025,7 @@
                         {""Techbow"": 1}
                     ],
                     ""RequiredItemsDoors"": [
-                        {""Monastery Back"": 1, ""Sword"": 1},
-                        {""Monastery Back"": 1, ""Techbow"": 1}
+                        {""Monastery Back"": 1}
                     ],
                     ""SceneId"": 22,
                     ""SceneName"": ""Monastery""
