@@ -4020,9 +4020,13 @@
                 ""Location"": {
                     ""LocationId"": ""200"",
                     ""Position"": ""(0.2, 25.0, 175.4)"",
-                    ""RequiredItems"": [],
+                    ""RequiredItems"": [
+                        {""Sword"": 1},
+                        {""Techbow"": 1}
+                    ],
                     ""RequiredItemsDoors"": [
-                        {""Monastery Back"": 1}
+                        {""Monastery Back"": 1, ""Sword"": 1},
+                        {""Monastery Back"": 1, ""Techbow"": 1}
                     ],
                     ""SceneId"": 22,
                     ""SceneName"": ""Monastery""

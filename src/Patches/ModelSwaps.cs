@@ -1158,7 +1158,8 @@ namespace TunicArchipelago {
                             __instance.__4__this.transform.GetChild(0).GetChild(10).GetChild(0).GetChild(i).GetChild(0).gameObject.SetActive(true);
                             foreach (ShopItem shopItem in ShopManager.cachedShopItems) {
                                 if (ShopItemIDs.Contains($"{shopItem.name} [Shop]") && !Locations.CheckedLocations[$"{shopItem.name} [Shop]"]
-                                    && ItemLookup.ItemList[$"{shopItem.name} [Shop]"].ItemName.Contains("Ice Bomb") && (IsSinglePlayer() || Archipelago.instance.IsTunicPlayer(ItemLookup.ItemList[$"{shopItem.name} [Shop]"].Player))) {
+                                    && ((IsSinglePlayer() && Locations.RandomizedLocations[$"{shopItem.name} [Shop]"].Reward.Name.Contains("Ice Bomb")) 
+                                    || (IsArchipelago() && ItemLookup.ItemList[$"{shopItem.name} [Shop]"].ItemName.Contains("Ice Bomb") && Archipelago.instance.IsTunicPlayer(ItemLookup.ItemList[$"{shopItem.name} [Shop]"].Player)))) {
                                     shopItem.transform.GetChild(0).GetChild(1).GetChild(0).gameObject.SetActive(true);
                                 }
                             }

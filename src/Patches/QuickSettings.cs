@@ -1,7 +1,6 @@
 ﻿using BepInEx.Logging;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.Eventing.Reader;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -603,6 +602,12 @@ namespace TunicArchipelago {
                 if (TunicArchipelago.Settings.DisableDistantBellShots) {
                     Settings.Add("no_distant_bell_shot");
                 }
+                if (TunicArchipelago.Settings.DisableIceGrappling) {
+                    Settings.Add("no_ice_grapple");
+                }
+                if (TunicArchipelago.Settings.DisableLadderStorage) {
+                    Settings.Add("no_ladder_storage");
+                }
             }
 
             GUIUtility.systemCopyBuffer = string.Join(",", Settings.ToArray());
@@ -663,6 +668,12 @@ namespace TunicArchipelago {
                 if (TunicArchipelago.Settings.DisableDistantBellShots) {
                     Settings.Add("no_distant_bell_shot");
                 }
+                if (TunicArchipelago.Settings.DisableIceGrappling) {
+                    Settings.Add("no_ice_grapple");
+                }
+                if (TunicArchipelago.Settings.DisableLadderStorage) {
+                    Settings.Add("no_ladder_storage");
+                }
             }
 
             GUIUtility.systemCopyBuffer = string.Join(",", Settings.ToArray());
@@ -721,7 +732,8 @@ namespace TunicArchipelago {
                 TunicArchipelago.Settings.Lanternless = SettingsString.Contains("lanternless");
                 TunicArchipelago.Settings.Maskless = SettingsString.Contains("maskless");
 
-                if (SettingsString.Contains("enemy_randomizer")) {
+                TunicArchipelago.Settings.EnemyRandomizerEnabled = SettingsString.Contains("enemy_randomizer");
+                if (TunicArchipelago.Settings.EnemyRandomizerEnabled) {
                     TunicArchipelago.Settings.EnemyRandomizerEnabled = true;
                     TunicArchipelago.Settings.ExtraEnemiesEnabled = SettingsString.Contains("extra_enemies");
                     if (SettingsString.Split('!').Count() > 1) {
@@ -735,11 +747,12 @@ namespace TunicArchipelago {
                         }
                     }
                 }
-
-                if (SettingsString.Contains("race_mode")) {
-                    TunicArchipelago.Settings.RaceMode = true;
+                TunicArchipelago.Settings.RaceMode = SettingsString.Contains("race_mode");
+                if (TunicArchipelago.Settings.RaceMode) {
                     TunicArchipelago.Settings.DisableIceboltInHeirFight = SettingsString.Contains("no_heir_icebolt");
                     TunicArchipelago.Settings.DisableDistantBellShots = SettingsString.Contains("no_distant_bell_shot");
+                    TunicArchipelago.Settings.DisableIceGrappling = SettingsString.Contains("no_ice_grapple");
+                    TunicArchipelago.Settings.DisableLadderStorage = SettingsString.Contains("no_ladder_storage");
                 }
 
                 OptionsGUIPatches.SaveSettings();
