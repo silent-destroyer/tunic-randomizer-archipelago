@@ -3596,7 +3596,66 @@ namespace TunicArchipelago {
                     },
                 }
             },
-
+            {
+                "Shop Entrance 1",
+                new Dictionary<string, List<List<string>>> {
+                    {
+                        "Shop",
+                        new List<List<string>> {
+                        }
+                    },
+                }
+            },
+            {
+                "Shop Entrance 2",
+                new Dictionary<string, List<List<string>>> {
+                    {
+                        "Shop",
+                        new List<List<string>> {
+                        }
+                    },
+                }
+            },
+            {
+                "Shop Entrance 3",
+                new Dictionary<string, List<List<string>>> {
+                    {
+                        "Shop",
+                        new List<List<string>> {
+                        }
+                    },
+                }
+            },
+            {
+                "Shop Entrance 4",
+                new Dictionary<string, List<List<string>>> {
+                    {
+                        "Shop",
+                        new List<List<string>> {
+                        }
+                    },
+                }
+            },
+            {
+                "Shop Entrance 5",
+                new Dictionary<string, List<List<string>>> {
+                    {
+                        "Shop",
+                        new List<List<string>> {
+                        }
+                    },
+                }
+            },
+            {
+                "Shop Entrance 6",
+                new Dictionary<string, List<List<string>>> {
+                    {
+                        "Shop",
+                        new List<List<string>> {
+                        }
+                    },
+                }
+            },
         };
 
         public static void ShuffleList<T>(IList<T> list, int seed) {
@@ -3612,42 +3671,6 @@ namespace TunicArchipelago {
             }
         }
 
-
-        // if we have some granular regions, we get another one. This is for one-way connections, basically
-        // so that we don't unnecessarily force the back of house to be connected to a non-dead-end, for example
-        public static List<string> AddDependentRegions(string region) {
-            List<string> regions = new List<string>();
-            // idk if we need to clear it
-            regions.Clear();
-            regions.Add(region);
-
-            if (region == "Old House Front") {
-                regions.Add("Old House Back");
-            } else if (region == "Frog's Domain Front") {
-                regions.Add("Frog's Domain Back");
-            } else if (region == "Sword Access") {
-                regions.Add("Sword Access Back");
-            } else if (region == "Forest Belltower Upper") {
-                regions.Add("Forest Belltower Main");
-                regions.Add("Forest Belltower Lower");
-            } else if (region == "Forest Beltower Main") {
-                regions.Add("Forest Belltower Lower");
-            } else if (region == "Fortress Courtyard Upper") {
-                regions.Add("Fortress Courtyard");
-            } else if (region == "Fortress East") {
-                regions.Add("Fortress East Lower");
-            } else if (region == "Monastery Rope") {
-                regions.Add("Quarry");
-            } else if (region == "Zig 1 Top") {
-                regions.Add("Zig 1 Bottom");
-            } else if (region == "Zig 2 Top") {
-                regions.Add("Zig 2 Bottom");
-            } else if (region == "Gauntlet Top") {
-                regions.Add("Gauntlet Bottom");
-            }
-
-            return regions;
-        }
 
         // making a separate lists for portals connected to one, two, or three+ regions, to be populated by the foreach coming up next
         public static List<Portal> deadEndPortals = new List<Portal>();
@@ -3899,14 +3922,14 @@ namespace TunicArchipelago {
             if (SaveFile.GetInt("randomizer ER fixed shop") == 1) {
                 shopCount = 1;
                 Portal windmillPortal = new Portal(name: "Windmill Entrance", destination: "Windmill_", scene: "Overworld Redux", region: "Overworld");
-                Portal shopPortal = new Portal(name: "Shop Portal", destination: "Previous Region", scene: "Shop", region: "Shop");
+                Portal shopPortal = new Portal(name: "Shop Portal", destination: "Previous Region", scene: "Shop", region: "Shop Entrance 2");
                 RandomizedPortals.Add("fixedshop", new PortalCombo(windmillPortal, shopPortal));
                 shopSceneList.Add("Overworld Redux");
             }
             int regionNumber = 0;
             while (shopCount > 0) {
                 // manually making a portal for the shop, because it has some special properties
-                Portal shopPortal = new Portal(name: "Shop Portal", destination: "Previous Region", scene: "Shop", region: "Shop");
+                Portal shopPortal = new Portal(name: "Shop Portal", destination: "Previous Region", scene: "Shop", region: $"Shop Entrance {shopCount}");
                 // check that a shop has not already been added to this region, since two shops in the same region causes problems
                 if (!shopSceneList.Contains(twoPlusPortals[regionNumber].Scene)) {
                     comboNumber++;
