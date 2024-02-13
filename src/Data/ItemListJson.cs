@@ -7,7 +7,7 @@
                     ""LocationId"": ""999"",
                     ""Position"": ""(0.0, 0.0, 0.0)"",
                     ""RequiredItems"": [
-                        {""Hyperdash"": 1}
+                        {""Hyperdash"": 1, ""Sword"": 1}
                     ],
                     ""RequiredItemsDoors"": [
                         {""Hyperdash"": 1, ""Cathedral Arena, Swamp Redux_"": 1, ""Sword"": 1},
@@ -4024,9 +4024,13 @@
                 ""Location"": {
                     ""LocationId"": ""200"",
                     ""Position"": ""(0.2, 25.0, 175.4)"",
-                    ""RequiredItems"": [],
+                    ""RequiredItems"": [
+                        {""Sword"": 1},
+                        {""Techbow"": 1}
+                    ],
                     ""RequiredItemsDoors"": [
-                        {""Monastery"": 1}
+                        {""Monastery"": 1, ""Sword"": 1},
+                        {""Monastery"": 1, ""Techbow"": 1},
                     ],
                     ""SceneId"": 22,
                     ""SceneName"": ""Monastery""

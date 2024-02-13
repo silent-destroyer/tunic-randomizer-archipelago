@@ -341,13 +341,13 @@ namespace TunicArchipelago {
             } else if (SceneName == "Posterity") {
                 GhostHints.SpawnRescuedGhostFox();
             } else if (SceneName == "Shop") {
-                if (new System.Random().Next(100) < 3) {
+                if (new System.Random().Next(100) < 2) {
                     GameObject.Find("merchant").SetActive(false);
                     GameObject.Find("Environment").transform.GetChild(3).gameObject.SetActive(true);
                 }
                 ModelSwaps.AddNewShopItems();
             } else if (SceneName == "ShopSpecial") {
-                if (new System.Random().Next(100) < 3) {
+                if (new System.Random().Next(100) < 2) {
                     GameObject.Find("merchant (1)").SetActive(false);
                     GameObject.Find("Environment").transform.GetChild(3).gameObject.SetActive(true);
                 }

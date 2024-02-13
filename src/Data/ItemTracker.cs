@@ -138,9 +138,9 @@ namespace TunicArchipelago {
             }
 
             if (Item.Type == ItemTypes.HEXAGONQUEST && SaveFile.GetInt(AbilityShuffle) == 1) {
-                if (Inventory.GetItemByName("Gold Hexagon").Quantity == SaveFile.GetInt(HexagonQuestPrayer)) { ImportantItems["Prayer"]++; }
-                if (Inventory.GetItemByName("Gold Hexagon").Quantity == SaveFile.GetInt(HexagonQuestHolyCross)) { ImportantItems["Holy Cross"]++; }
-                if (Inventory.GetItemByName("Gold Hexagon").Quantity == SaveFile.GetInt(HexagonQuestIcebolt)) { ImportantItems["Icebolt"]++; }
+                if (Inventory.GetItemByName("Hexagon Gold").Quantity == SaveFile.GetInt(HexagonQuestPrayer)) { ImportantItems["Prayer"]++; }
+                if (Inventory.GetItemByName("Hexagon Gold").Quantity == SaveFile.GetInt(HexagonQuestHolyCross)) { ImportantItems["Holy Cross"]++; }
+                if (Inventory.GetItemByName("Hexagon Gold").Quantity == SaveFile.GetInt(HexagonQuestIcebolt)) { ImportantItems["Icebolt"]++; }
             }
             
             if (Item.Type == ItemTypes.SWORDUPGRADE) {
