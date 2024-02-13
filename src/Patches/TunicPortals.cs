@@ -3894,23 +3894,23 @@ namespace TunicArchipelago {
             }
 
             // shops get added separately cause they're weird
-            List<string> shopRegionList = new List<string>();
+            List<string> shopSceneList = new List<string>();
             int shopCount = 6;
             if (SaveFile.GetInt("randomizer ER fixed shop") == 1) {
                 shopCount = 1;
-                Portal windmillPortal = new Portal(name: "Windmill Entrance", destination: "Windmill", scene: "Overworld Redux", region: "Overworld");
+                Portal windmillPortal = new Portal(name: "Windmill Entrance", destination: "Windmill_", scene: "Overworld Redux", region: "Overworld");
                 Portal shopPortal = new Portal(name: "Shop Portal", destination: "Previous Region", scene: "Shop", region: "Shop");
                 RandomizedPortals.Add("fixedshop", new PortalCombo(windmillPortal, shopPortal));
-                shopRegionList.Add("Overworld Redux");
+                shopSceneList.Add("Overworld Redux");
             }
             int regionNumber = 0;
             while (shopCount > 0) {
                 // manually making a portal for the shop, because it has some special properties
                 Portal shopPortal = new Portal(name: "Shop Portal", destination: "Previous Region", scene: "Shop", region: "Shop");
                 // check that a shop has not already been added to this region, since two shops in the same region causes problems
-                if (!shopRegionList.Contains(twoPlusPortals[regionNumber].Scene)) {
+                if (!shopSceneList.Contains(twoPlusPortals[regionNumber].Scene)) {
                     comboNumber++;
-                    shopRegionList.Add(twoPlusPortals[regionNumber].Scene);
+                    shopSceneList.Add(twoPlusPortals[regionNumber].Scene);
                     //Logger.LogInfo("adding scene " + twoPlusPortals[regionNumber].Scene + " to shop scene list");
                     RandomizedPortals.Add(comboNumber.ToString(), new PortalCombo(twoPlusPortals[regionNumber], shopPortal));
                     twoPlusPortals.RemoveAt(regionNumber);

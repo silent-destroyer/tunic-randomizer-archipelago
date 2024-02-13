@@ -9,11 +9,6 @@ namespace TunicArchipelago {
         public string Region { get; set; }
         public string SceneDestinationTag { get; set; }
 
-        public bool SpecialReqs {
-            get;
-            set;
-        } = false;
-
         public Portal(string name, string destination, string scene, string region) {
             Name = name;
             Destination = destination;
