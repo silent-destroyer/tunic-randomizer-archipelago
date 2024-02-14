@@ -366,7 +366,7 @@ namespace TunicArchipelago {
             } else if(SceneName == "frog cave main") { 
                 SetupFrogDomainSecret();
             } else if(SceneName == "Sword Access") {
-                GameObject Bush = GameObject.Find("_Grass/bush (97)");
+                GameObject Bush = GameObject.Find("_Grass/bush (70)");
                 if (Bush != null) {
                     Bush.SetActive(false);
                 }
