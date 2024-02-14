@@ -723,8 +723,18 @@ namespace TunicArchipelago {
             }
         }
 
+        public static bool UpgradeMenu___Buy_PrefixPatch(UpgradeMenu __instance) {
+            
+            if (TunicArchipelago.Settings.RaceMode && TunicArchipelago.Settings.DisableUpgradeStealing && UpgradeAltar.nearbyThings.Count == 0) {
+                UpgradeMenu.instance.__Exit();
+                return false;
+            }
+
+            return true;
+        }
 
         public static bool UpgradeAltar_DoOfferingSequence_PrefixPatch(UpgradeAltar __instance, OfferingItem offeringItemToOffer) {
+            
             if (TunicArchipelago.Settings.FasterUpgrades) {
                 Notifications.Show($"{TextBuilderPatches.SpriteNameToAbbreviation[offeringItemToOffer.icon.name]} \"{offeringItemToOffer.statLabelLocKey}\" wehnt uhp fruhm {offeringItemToOffer.upgradeItemReceived.Quantity} [arrow_right] {offeringItemToOffer.upgradeItemReceived.Quantity+1}!", $"#E Ar ahksehpts yor awfuri^.");
                 UpgradeMenu.instance.__Exit();

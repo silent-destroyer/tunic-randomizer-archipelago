@@ -163,7 +163,7 @@ namespace TunicArchipelago {
             OptionsGUI.addToggle("Disable Distant West Bell Shot", "Off", "On", TunicArchipelago.Settings.DisableDistantBellShots ? 1 : 0, (OptionsGUIMultiSelect.MultiSelectAction)ToggleDisableDistantDong);
             OptionsGUI.addToggle("Disable Ice Grappling Enemies", "Off", "On", TunicArchipelago.Settings.DisableIceGrappling ? 1 : 0, (OptionsGUIMultiSelect.MultiSelectAction)ToggleDisableIceGrapples);
             OptionsGUI.addToggle("Disable Ladder Storage", "Off", "On", TunicArchipelago.Settings.DisableLadderStorage ? 1 : 0, (OptionsGUIMultiSelect.MultiSelectAction)ToggleDisableLadderStorage);
-
+            OptionsGUI.addToggle("Disable Upgrade Stealing", "Off", "On", TunicArchipelago.Settings.DisableUpgradeStealing ? 1 : 0, (OptionsGUIMultiSelect.MultiSelectAction)ToggleDisableUpgradeStealing);
         }
 
         public static void addPageButton(string pageName, Action pageMethod) {
@@ -513,6 +513,10 @@ namespace TunicArchipelago {
 
         public static void ToggleDisableLadderStorage(int index) {
             TunicArchipelago.Settings.DisableLadderStorage = !TunicArchipelago.Settings.DisableLadderStorage;
+            SaveSettings();
+        }
+        public static void ToggleDisableUpgradeStealing(int index) {
+            TunicArchipelago.Settings.DisableUpgradeStealing = !TunicArchipelago.Settings.DisableUpgradeStealing;
             SaveSettings();
         }
 

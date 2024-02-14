@@ -231,6 +231,11 @@ namespace TunicArchipelago {
             set;
         }
 
+        public bool DisableUpgradeStealing {
+            get;
+            set;
+        }
+
         // Fox Settings
         public bool RandomFoxColorsEnabled {
             get;
@@ -334,6 +339,7 @@ namespace TunicArchipelago {
             DisableDistantBellShots = false;
             DisableIceGrappling = false;
             DisableLadderStorage = false;
+            DisableUpgradeStealing = false;
 
             // Fox Customization
             RandomFoxColorsEnabled = true;

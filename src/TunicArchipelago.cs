@@ -205,6 +205,9 @@ namespace TunicArchipelago {
             Harmony.Patch(AccessTools.Method(typeof(ForcewandItemBehaviour._throwBeamCoroutine_d__32), "MoveNext"), new HarmonyMethod(AccessTools.Method(typeof(CustomItemBehaviors), "ForcewandItemBehaviour__throwBeamCoroutine_d__32_MoveNext_PrefixPatch")));
 
             Harmony.Patch(AccessTools.Method(typeof(Ladder), "ClimbOn"), new HarmonyMethod(AccessTools.Method(typeof(PlayerCharacterPatches), "Ladder_ClimbOn_PrefixPatch")));
+
+            Harmony.Patch(AccessTools.Method(typeof(UpgradeMenu), "__Buy"), new HarmonyMethod(AccessTools.Method(typeof(ItemPatches), "UpgradeMenu___Buy_PrefixPatch")));
+
         }
     }
 }

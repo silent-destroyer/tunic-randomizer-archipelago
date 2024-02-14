@@ -608,6 +608,9 @@ namespace TunicArchipelago {
                 if (TunicArchipelago.Settings.DisableLadderStorage) {
                     Settings.Add("no_ladder_storage");
                 }
+                if (TunicArchipelago.Settings.DisableUpgradeStealing) {
+                    Settings.Add("no_upgrade_stealing");
+                }
             }
 
             GUIUtility.systemCopyBuffer = string.Join(",", Settings.ToArray());
@@ -673,6 +676,9 @@ namespace TunicArchipelago {
                 }
                 if (TunicArchipelago.Settings.DisableLadderStorage) {
                     Settings.Add("no_ladder_storage");
+                }
+                if (TunicArchipelago.Settings.DisableUpgradeStealing) {
+                    Settings.Add("no_upgrade_stealing");
                 }
             }
 
@@ -753,6 +759,7 @@ namespace TunicArchipelago {
                     TunicArchipelago.Settings.DisableDistantBellShots = SettingsString.Contains("no_distant_bell_shot");
                     TunicArchipelago.Settings.DisableIceGrappling = SettingsString.Contains("no_ice_grapple");
                     TunicArchipelago.Settings.DisableLadderStorage = SettingsString.Contains("no_ladder_storage");
+                    TunicArchipelago.Settings.DisableUpgradeStealing = SettingsString.Contains("no_upgrade_stealing");
                 }
 
                 OptionsGUIPatches.SaveSettings();
