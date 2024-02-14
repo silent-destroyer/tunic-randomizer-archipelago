@@ -37,6 +37,7 @@ namespace TunicArchipelago {
         public static float FinishLineSwordTimer = 0.0f;
         public static float CompletionTimer = 0.0f;
         public static float ResetDayNightTimer = -1.0f;
+        public static LadderEnd LastLadder = null;
 
         public static void PlayerCharacter_creature_Awake_PostfixPatch(PlayerCharacter __instance) {
 
@@ -169,11 +170,30 @@ namespace TunicArchipelago {
                     TechbowItemBehaviour.kIceShotWindow = 0;
                 }
                 // Prevents ladder storage from being used
-                if (TunicArchipelago.Settings.DisableLadderStorage && __instance.currentLadder != null && (__instance.cachedAnimator.GetBool("sprint") || __instance.cachedAnimator.GetBool("swing sword") || __instance.cachedAnimator.GetBool("swing stick"))) {
-                    __instance.cachedAnimator.SetBool("climbing", false);
-                    __instance.currentLadder = null;
-                    __instance.Flinch(true);
+                if (TunicArchipelago.Settings.DisableLadderStorage && __instance.currentLadder != null) {
+                    if (__instance.cachedAnimator.GetBool("climbing") && __instance.cachedAnimator.GetBool("sprint")) {
+                        if (__instance.transform.position.x > LastLadder.transform.position.x + 5 || __instance.transform.position.x < LastLadder.transform.position.x - 5
+                            || __instance.transform.position.z > LastLadder.transform.position.z + 5 || __instance.transform.position.z < LastLadder.transform.position.z - 5) {
+
+                            if (LastLadder != null) {
+                                __instance.currentLadder.ClimbOn(LastLadder);
+                            } else {
+                                __instance.cachedAnimator.SetBool("climbing", false);
+                                __instance.currentLadder = null;
+                                __instance.Flinch(true);
+                            }
+                        }
+                    }
+                    if (__instance.cachedAnimator.GetBool("climbing") && (__instance.cachedAnimator.GetBool("swing sword") || __instance.cachedAnimator.GetBool("swing stick"))) {
+                        __instance.cachedAnimator.SetBool("climbing", false);
+                        __instance.currentLadder = null;
+                        __instance.Flinch(true);
+                    }
                 }
+            }
+
+            if (__instance.currentLadder == null && LastLadder != null) {
+                LastLadder = null;
             }
 
             if (PaletteEditor.FoxCape != null) {
@@ -627,6 +647,11 @@ namespace TunicArchipelago {
                     CustomItemBehaviors.CanSwingGoldenSword = false;
                 }
             }
+            return true;
+        }
+
+        public static bool Ladder_ClimbOn_PrefixPatch(Ladder __instance, LadderEnd ladderEnd) {
+            LastLadder = ladderEnd;
             return true;
         }
 
