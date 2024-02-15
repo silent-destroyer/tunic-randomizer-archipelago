@@ -331,7 +331,7 @@ namespace TunicArchipelago {
                 // Apply bonus upgrade text
                 if (TunicArchipelago.Settings.BonusStatUpgradesEnabled) {
                     GoldenTrophy.collectionMessage = ScriptableObject.CreateInstance<LanguageLine>();
-                    GoldenTrophy.collectionMessage.text = ItemLookup.BonusUpgrades[Item.ItemNameForInventory].CustomPickupMessage;
+                    GoldenTrophy.collectionMessage.text = Translations.Translate(ItemLookup.BonusUpgrades[Item.ItemNameForInventory].CustomPickupMessage, true);
                     Inventory.GetItemByName(ItemLookup.BonusUpgrades[Item.ItemNameForInventory].LevelUp).Quantity += 1;
                 } else {
                     GoldenTrophy.collectionMessage = ScriptableObject.CreateInstance<LanguageLine>();
@@ -339,7 +339,7 @@ namespace TunicArchipelago {
                 }
 
                 ItemPresentation.PresentItem(GoldenTrophy);
-                NotificationBottom = TunicArchipelago.Settings.BonusStatUpgradesEnabled ? ItemLookup.BonusUpgrades[Item.ItemNameForInventory].CustomPickupMessage : $"kawngrahJoulA$uhnz!";
+                NotificationBottom = TunicArchipelago.Settings.BonusStatUpgradesEnabled ? Translations.Translate(ItemLookup.BonusUpgrades[Item.ItemNameForInventory].CustomPickupMessage, true) : $"kawngrahJoulA$uhnz!";
             }
 
             if (Item.Type == ItemTypes.RELIC) {
@@ -352,7 +352,7 @@ namespace TunicArchipelago {
 
                 // Apply custom pickup text
                 RelicItem.collectionMessage = new LanguageLine();
-                RelicItem.collectionMessage.text = ItemLookup.BonusUpgrades[Item.ItemNameForInventory].CustomPickupMessage;
+                RelicItem.collectionMessage.text = Translations.Translate(ItemLookup.BonusUpgrades[Item.ItemNameForInventory].CustomPickupMessage, true);
                 
                 ItemPresentation.PresentItem(RelicItem);
             }
@@ -532,7 +532,7 @@ namespace TunicArchipelago {
                 // Apply bonus upgrade text
                 if (TunicArchipelago.Settings.BonusStatUpgradesEnabled) {
                     GoldenTrophy.collectionMessage = ScriptableObject.CreateInstance<LanguageLine>();
-                    GoldenTrophy.collectionMessage.text = ItemLookup.BonusUpgrades[Item.ItemNameForInventory].CustomPickupMessage;
+                    GoldenTrophy.collectionMessage.text = Translations.Translate(ItemLookup.BonusUpgrades[Item.ItemNameForInventory].CustomPickupMessage, true);
                     Inventory.GetItemByName(ItemLookup.BonusUpgrades[Item.ItemNameForInventory].LevelUp).Quantity += 1;
                 } else {
                     GoldenTrophy.collectionMessage = ScriptableObject.CreateInstance<LanguageLine>();
@@ -540,7 +540,7 @@ namespace TunicArchipelago {
                 }
 
                 ItemPresentation.PresentItem(GoldenTrophy);
-                NotificationBottom = TunicArchipelago.Settings.BonusStatUpgradesEnabled ? ItemLookup.BonusUpgrades[Item.ItemNameForInventory].CustomPickupMessage : $"kawngrahJoulA$uhnz!";
+                NotificationBottom = TunicArchipelago.Settings.BonusStatUpgradesEnabled ? Translations.Translate(ItemLookup.BonusUpgrades[Item.ItemNameForInventory].CustomPickupMessage, true) : $"kawngrahJoulA$uhnz!";
             }
 
             if (Item.Type == ItemTypes.RELIC) {
@@ -553,7 +553,7 @@ namespace TunicArchipelago {
 
                 // Apply custom pickup text
                 RelicItem.collectionMessage = new LanguageLine();
-                RelicItem.collectionMessage.text = ItemLookup.BonusUpgrades[Item.ItemNameForInventory].CustomPickupMessage;
+                RelicItem.collectionMessage.text = Translations.Translate(ItemLookup.BonusUpgrades[Item.ItemNameForInventory].CustomPickupMessage, true);
 
                 ItemPresentation.PresentItem(RelicItem);
             }

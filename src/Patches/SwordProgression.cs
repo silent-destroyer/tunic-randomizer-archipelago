@@ -16,13 +16,13 @@ namespace TunicArchipelago {
                 //fownd ahn Itehm!
                 Inventory.GetItemByName("Stick").Quantity = 1;
                 Inventory.GetItemByName("Stick").collectionMessage = ScriptableObject.CreateInstance<LanguageLine>();
-                Inventory.GetItemByName("Stick").collectionMessage.text = $"fownd ahn Itehm! \"(<#8ddc6e>Lv. 1<#FFFFFF>)\"";
+                Inventory.GetItemByName("Stick").collectionMessage.text = TunicArchipelago.Settings.UseTrunicTranslations ? $"fownd ahn Itehm! (<#8ddc6e>lehvuhl 1<#FFFFFF>)" : $"fownd ahn Itehm! \"(<#8ddc6e>Lv. 1<#FFFFFF>)\"";
 
                 ItemPresentation.PresentItem(Inventory.GetItemByName("Stick"));
             } else if (SwordLevel == 2) {
                 Inventory.GetItemByName("Sword").Quantity = 1;
                 Inventory.GetItemByName("Sword").collectionMessage = ScriptableObject.CreateInstance<LanguageLine>();
-                Inventory.GetItemByName("Sword").collectionMessage.text = $"fownd ahn Itehm! \"(<#e99d4c>Lv. 2<#FFFFFF>)\"";
+                Inventory.GetItemByName("Sword").collectionMessage.text = TunicArchipelago.Settings.UseTrunicTranslations ? $"fownd ahn Itehm! (<#e99d4c>lehvuhl 2<#FFFFFF>)" : $"fownd ahn Itehm! \"(<#e99d4c>Lv. 2<#FFFFFF>)\"";
                 Inventory.GetItemByName("Sword").useAlreadyHaveOneMessage = false;
                 ItemPresentation.PresentItem(Inventory.GetItemByName("Sword"));
                 List<ButtonAssignableItem> items = Inventory.buttonAssignedItems.ToList();
@@ -35,6 +35,7 @@ namespace TunicArchipelago {
                 Inventory.buttonAssignedItems = items.ToArray();
             } else if (SwordLevel == 3) {
                 Inventory.GetItemByName("Librarian Sword").Quantity = 1;
+                Inventory.GetItemByName("Librarian Sword").collectionMessage.text = TunicArchipelago.Settings.UseTrunicTranslations ? $"             ? ? ?    (<#ca7be4>lehvuhl 3<#FFFFFF>)" : $"\"        ? ? ? (<#ca7be4>Lv. 3<#FFFFFF>)\"";
                 ItemPresentation.PresentItem(Inventory.GetItemByName("Librarian Sword"));
                 Inventory.GetItemByName("Level Up - Attack").Quantity += 1;
                 TunicArchipelago.Tracker.ImportantItems["Level Up - Attack"] = Inventory.GetItemByName("Level Up - Attack").Quantity;
@@ -48,6 +49,7 @@ namespace TunicArchipelago {
                 Inventory.buttonAssignedItems = items.ToArray();
             } else if (SwordLevel >= 4) {
                 Inventory.GetItemByName("Heir Sword").Quantity = 1;
+                Inventory.GetItemByName("Heir Sword").collectionMessage.text = TunicArchipelago.Settings.UseTrunicTranslations ? $"             ! ! !    (<#5de7cf>lehvuhl 4<#FFFFFF>)" : $"\"        ! ! ! (<#5de7cf>Lv. 4<#FFFFFF>)\"";
                 ItemPresentation.PresentItem(Inventory.GetItemByName("Heir Sword"));
                 Inventory.GetItemByName("Level Up - Attack").Quantity += 1;
                 TunicArchipelago.Tracker.ImportantItems["Level Up - Attack"] = Inventory.GetItemByName("Level Up - Attack").Quantity;
