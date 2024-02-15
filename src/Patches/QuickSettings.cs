@@ -12,7 +12,7 @@ namespace TunicArchipelago {
 
         private static ManualLogSource Logger = TunicArchipelago.Logger;
 
-        public static int CustomSeed = 0;
+        public static string CustomSeed = "";
         public static Font OdinRounded;
         public static List<string> FoolChoices = new List<string>() { "Off", "Normal", "Double", "<size=19>Onslaught</size>" };
         public static List<string> FoolColors = new List<string>() { "white", "#4FF5D4", "#E3D457", "#FF3333" };
@@ -301,25 +301,25 @@ namespace TunicArchipelago {
             TunicArchipelago.Settings.EnemyRandomizerEnabled = GUI.Toggle(new Rect(10f, y, 200f, 30f), TunicArchipelago.Settings.EnemyRandomizerEnabled, "Enemy Randomizer");
             GUI.skin.button.fontSize = 20;
             y += 40f;
-            GUI.Label(new Rect(10f, y, 300f, 30f), $"Custom Seed: {(CustomSeed == 0 ? "Not Set" : CustomSeed.ToString())}");
-            if (CustomSeed != 0) {
+            GUI.Label(new Rect(10f, y, 300f, 30f), $"Custom Seed: {(CustomSeed == "" ? "Not Set" : CustomSeed.ToString())}");
+            if (CustomSeed != "") {
                 bool ClearSeed = GUI.Button(new Rect(300f, y, 110f, 30f), "Clear");
                 if (ClearSeed) {
-                    CustomSeed = 0;
+                    CustomSeed = "";
                 }
             }
             y += 40f;
             bool GenerateSeed = GUI.Button(new Rect(10f, y, 200f, 30f), "Generate Seed");
             if (GenerateSeed) {
-                CustomSeed = new System.Random().Next();
+                CustomSeed = new System.Random().Next().ToString();
             }
 
             bool PasteSeed = GUI.Button(new Rect(220f, y, 200f, 30f), "Paste Seed");
             if (PasteSeed) {
                 try {
-                    CustomSeed = int.Parse(GUIUtility.systemCopyBuffer, CultureInfo.InvariantCulture);
+                    CustomSeed = int.Parse(GUIUtility.systemCopyBuffer, CultureInfo.InvariantCulture).ToString();
                 } catch (System.Exception e) {
-
+                    Logger.LogError("Invalid custom seed pasted!");
                 }
             }
             y += 40f;
@@ -690,7 +690,7 @@ namespace TunicArchipelago {
             try {
                 string SettingsString = GUIUtility.systemCopyBuffer;
                 string[] SplitSettings = SettingsString.Split(',');
-                CustomSeed = int.Parse(SplitSettings[0], CultureInfo.InvariantCulture);
+                CustomSeed = int.Parse(SplitSettings[0], CultureInfo.InvariantCulture).ToString();
                 RandomizerSettings.GameModes NewGameMode;
                 if (SettingsString.Contains("mystery_seed")) {
                     TunicArchipelago.Settings.MysterySeed = true;

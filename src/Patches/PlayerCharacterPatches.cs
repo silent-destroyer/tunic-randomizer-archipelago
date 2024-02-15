@@ -347,7 +347,7 @@ namespace TunicArchipelago {
             int seed = SaveFile.GetInt("seed");
 
             if (seed == 0) {
-                seed = QuickSettings.CustomSeed == 0 ? new System.Random().Next() : QuickSettings.CustomSeed;
+                seed = QuickSettings.CustomSeed == "" ? new System.Random().Next() : int.Parse(QuickSettings.CustomSeed);
                 Logger.LogInfo($"Starting new single player file with seed: " + seed);
                 SaveFile.SetInt("seed", seed);
                 SaveFile.SetInt("randomizer", 1);
