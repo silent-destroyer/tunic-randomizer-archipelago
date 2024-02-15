@@ -1258,6 +1258,17 @@ namespace TunicArchipelago {
                     },
                 }
             },
+            {
+                "Shop",
+                new Dictionary<string, List<TunicPortal>> {
+                    {
+                        "Shop",
+                        new List<TunicPortal> {
+                            new TunicPortal("Shop", "Previous Region_"),
+                        }
+                    },
+                }
+            },
         };
 
         public static Dictionary<string, RegionInfo> RegionDict = new Dictionary<string, RegionInfo> {
@@ -3802,6 +3813,9 @@ namespace TunicArchipelago {
             // separate the portals into their respective lists
             foreach (KeyValuePair<string, Dictionary<string, List<TunicPortal>>> scene_group in RegionPortalsList) {
                 string scene_name = scene_group.Key;
+                if (scene_name == "Shop") {
+                    continue;
+                }
                 foreach (KeyValuePair<string, List<TunicPortal>> region_group in scene_group.Value) {
                     string region_name = region_group.Key;
                     List<TunicPortal> region_portals = region_group.Value;
