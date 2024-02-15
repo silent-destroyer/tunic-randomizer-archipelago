@@ -3983,7 +3983,8 @@
                     ""LocationId"": ""126"",
                     ""Position"": ""(80.0, 16.0, 13.0)"",
                     ""RequiredItems"": [
-                        {""Sword"": 1}
+                        {""Sword"": 1},
+                        {""Techbow"": 1}
                     ],
                     ""RequiredItemsDoors"": [
                         {""Quarry"": 1, ""Sword"": 1}
@@ -4002,7 +4003,8 @@
                     ""LocationId"": ""133"",
                     ""Position"": ""(3.4, -8.0, -21.0)"",
                     ""RequiredItems"": [
-                        {""Sword"": 1}
+                        {""Sword"": 1},
+                        {""Techbow"": 1}
                     ],
                     ""RequiredItemsDoors"": [
                         {""Quarry"": 1, ""Sword"": 1}
@@ -4092,7 +4094,8 @@
                     ""LocationId"": ""127"",
                     ""Position"": ""(-71.0, -20.0, 40.0)"",
                     ""RequiredItems"": [
-                        {""Mask"": 1}
+                        {""Mask"": 1, ""Sword"": 1},
+                        {""Mask"": 1, ""Techbow"": 1}
                     ],
                     ""RequiredItemsDoors"": [
                         {""Mask"": 1, ""Lower Quarry"": 1}
@@ -4111,7 +4114,8 @@
                     ""LocationId"": ""120"",
                     ""Position"": ""(-149.7, -39.7, 8.0)"",
                     ""RequiredItems"": [
-                        {""Mask"": 1}
+                        {""Mask"": 1, ""Sword"": 1},
+                        {""Mask"": 1, ""Techbow"": 1}
                     ],
                     ""RequiredItemsDoors"": [
                         {""Mask"": 1, ""Lower Quarry"": 1}
@@ -4130,7 +4134,8 @@
                     ""LocationId"": ""265"",
                     ""Position"": ""(-78.9, -40.0, 38.8)"",
                     ""RequiredItems"": [
-                        {""Mask"": 1}
+                        {""Mask"": 1, ""Sword"": 1},
+                        {""Mask"": 1, ""Techbow"": 1}
                     ],
                     ""RequiredItemsDoors"": [
                         {""Mask"": 1, ""Lower Quarry"": 1}
@@ -4149,7 +4154,8 @@
                     ""LocationId"": ""121"",
                     ""Position"": ""(-140.0, -48.0, -6.0)"",
                     ""RequiredItems"": [
-                        {""Mask"": 1}
+                        {""Mask"": 1, ""Sword"": 1},
+                        {""Mask"": 1, ""Techbow"": 1}
                     ],
                     ""RequiredItemsDoors"": [
                         {""Mask"": 1, ""Lower Quarry"": 1}
@@ -4168,7 +4174,8 @@
                     ""LocationId"": ""130"",
                     ""Position"": ""(-80.0, -56.0, -57.0)"",
                     ""RequiredItems"": [
-                        {""Mask"": 1}
+                        {""Mask"": 1, ""Sword"": 1},
+                        {""Mask"": 1, ""Techbow"": 1}
                     ],
                     ""RequiredItemsDoors"": [
                         {""Mask"": 1, ""Lower Quarry"": 1}
@@ -4187,7 +4194,8 @@
                     ""LocationId"": ""131"",
                     ""Position"": ""(1.0, -47.6, -78.0)"",
                     ""RequiredItems"": [
-                        {""Mask"": 1}
+                        {""Mask"": 1, ""Sword"": 1},
+                        {""Mask"": 1, ""Techbow"": 1}
                     ],
                     ""RequiredItemsDoors"": [
                         {""Mask"": 1, ""Lower Quarry"": 1}
@@ -4206,7 +4214,8 @@
                     ""LocationId"": ""262"",
                     ""Position"": ""(-88.0, -43.5, -66.5)"",
                     ""RequiredItems"": [
-                        {""Mask"": 1}
+                        {""Mask"": 1, ""Sword"": 1},
+                        {""Mask"": 1, ""Techbow"": 1}
                     ],
                     ""RequiredItemsDoors"": [
                         {""Mask"": 1, ""Lower Quarry"": 1}
@@ -4225,7 +4234,8 @@
                     ""LocationId"": ""122"",
                     ""Position"": ""(-131.0, -77.0, -103.0)"",
                     ""RequiredItems"": [
-                        {""Mask"": 1}
+                        {""Mask"": 1, ""Sword"": 1},
+                        {""Mask"": 1, ""Techbow"": 1}
                     ],
                     ""RequiredItemsDoors"": [
                         {""Mask"": 1, ""Lower Quarry"": 1}
@@ -4244,7 +4254,8 @@
                     ""LocationId"": ""129"",
                     ""Position"": ""(-100.0, -69.0, -153.0)"",
                     ""RequiredItems"": [
-                        {""Mask"": 1}
+                        {""Mask"": 1, ""Sword"": 1},
+                        {""Mask"": 1, ""Techbow"": 1}
                     ],
                     ""RequiredItemsDoors"": [
                         {""Mask"": 1, ""Lower Quarry"": 1}
@@ -4263,7 +4274,8 @@
                     ""LocationId"": ""132"",
                     ""Position"": ""(-7.4, -80.3, -77.3)"",
                     ""RequiredItems"": [
-                        {""Mask"": 1}
+                        {""Mask"": 1, ""Sword"": 1},
+                        {""Mask"": 1, ""Techbow"": 1}
                     ],
                     ""RequiredItemsDoors"": [
                         {""Mask"": 1, ""Lower Quarry"": 1}
@@ -4282,7 +4294,8 @@
                     ""LocationId"": ""123"",
                     ""Position"": ""(-9.0, -12.0, -64.7)"",
                     ""RequiredItems"": [
-                        {""Sword"": 1}
+                        {""Sword"": 1},
+                        {""Techbow"": 1}
                     ],
                     ""RequiredItemsDoors"": [
                         {""Quarry"": 1, ""Sword"": 1}
@@ -4301,7 +4314,8 @@
                     ""LocationId"": ""117"",
                     ""Position"": ""(-23.0, 0.0, 7.0)"",
                     ""RequiredItems"": [
-                        {""Sword"": 1}
+                        {""Sword"": 1},
+                        {""Techbow"": 1}
                     ],
                     ""RequiredItemsDoors"": [
                         {""Quarry"": 1, ""Sword"": 1}
@@ -4320,7 +4334,8 @@
                     ""LocationId"": ""224"",
                     ""Position"": ""(28.5, 0.0, -3.0)"",
                     ""RequiredItems"": [
-                        {""Sword"": 1}
+                        {""Sword"": 1},
+                        {""Techbow"": 1}
                     ],
                     ""RequiredItemsDoors"": [
                         {""Quarry"": 1, ""Sword"": 1}
@@ -4339,7 +4354,8 @@
                     ""LocationId"": ""289"",
                     ""Position"": ""(52.0, 0.0, 2.5)"",
                     ""RequiredItems"": [
-                        {""Sword"": 1}
+                        {""Sword"": 1},
+                        {""Techbow"": 1}
                     ],
                     ""RequiredItemsDoors"": [
                         {""Quarry"": 1, ""Sword"": 1}
@@ -4358,7 +4374,8 @@
                     ""LocationId"": ""118"",
                     ""Position"": ""(125.4, 16.0, 14.8)"",
                     ""RequiredItems"": [
-                        {""Sword"": 1}
+                        {""Sword"": 1},
+                        {""Techbow"": 1}
                     ],
                     ""RequiredItemsDoors"": [
                         {""Quarry"": 1, ""Sword"": 1}
@@ -4377,7 +4394,8 @@
                     ""LocationId"": ""268"",
                     ""Position"": ""(-13.0, 8.0, 21.6)"",
                     ""RequiredItems"": [
-                        {""Sword"": 1}
+                        {""Sword"": 1},
+                        {""Techbow"": 1}
                     ],
                     ""RequiredItemsDoors"": [
                         {""Quarry"": 1, ""Sword"": 1}
@@ -4396,7 +4414,8 @@
                     ""LocationId"": ""125"",
                     ""Position"": ""(38.7, 24.5, 28.6)"",
                     ""RequiredItems"": [
-                        {""Sword"": 1}
+                        {""Sword"": 1},
+                        {""Techbow"": 1}
                     ],
                     ""RequiredItemsDoors"": [
                         {""Quarry"": 1, ""Sword"": 1}
@@ -4415,7 +4434,8 @@
                     ""LocationId"": ""124"",
                     ""Position"": ""(62.0, 8.0, 15.0)"",
                     ""RequiredItems"": [
-                        {""Sword"": 1}
+                        {""Sword"": 1},
+                        {""Techbow"": 1}
                     ],
                     ""RequiredItemsDoors"": [
                         {""Quarry"": 1, ""Sword"": 1}
@@ -4434,7 +4454,8 @@
                     ""LocationId"": ""119"",
                     ""Position"": ""(81.0, 56.0, 25.0)"",
                     ""RequiredItems"": [
-                        {""Sword"": 1}
+                        {""Sword"": 1},
+                        {""Techbow"": 1}
                     ],
                     ""RequiredItemsDoors"": [
                         {""Quarry"": 1, ""Sword"": 1}
@@ -4453,7 +4474,8 @@
                     ""LocationId"": ""250"",
                     ""Position"": ""(21.8, 63.0, 51.4)"",
                     ""RequiredItems"": [
-                        {""Sword"": 1}
+                        {""Sword"": 1},
+                        {""Techbow"": 1}
                     ],
                     ""RequiredItemsDoors"": [
                         {""Quarry Monastery Entry"": 1}
@@ -4491,7 +4513,8 @@
                     ""LocationId"": ""134"",
                     ""Position"": ""(1.0, 40.0, -19.0)"",
                     ""RequiredItems"": [
-                        {""Sword"": 1}
+                        {""Sword"": 1},
+                        {""Techbow"": 1}
                     ],
                     ""RequiredItemsDoors"": [
                         {""Quarry"": 1, ""Sword"": 1}
@@ -4510,7 +4533,8 @@
                     ""LocationId"": ""274"",
                     ""Position"": ""(135.0, 138.0, -58.0)"",
                     ""RequiredItems"": [
-                        {""Wand"": 1, ""Mask"": 1, ""12"": 1}
+                        {""Wand"": 1, ""Mask"": 1, ""12"": 1, ""Sword"": 1},
+                        {""Wand"": 1, ""Mask"": 1, ""12"": 1, ""Techbow"": 1}
                     ],
                     ""RequiredItemsDoors"": [
                         {""Rooted Ziggurat Upper Front"": 1, ""Sword"": 1}
@@ -4529,7 +4553,8 @@
                     ""LocationId"": ""275"",
                     ""Position"": ""(130.0, 106.0, -129.0)"",
                     ""RequiredItems"": [
-                        {""Wand"": 1, ""Mask"": 1, ""12"": 1}
+                        {""Wand"": 1, ""Mask"": 1, ""12"": 1, ""Sword"": 1},
+                        {""Wand"": 1, ""Mask"": 1, ""12"": 1, ""Techbow"": 1}
                     ],
                     ""RequiredItemsDoors"": [
                         {""Rooted Ziggurat Upper Back"": 1}
@@ -4548,7 +4573,8 @@
                     ""LocationId"": ""229"",
                     ""Position"": ""(149.9, 424.3, -42.6)"",
                     ""RequiredItems"": [
-                        {""Wand"": 1, ""Mask"": 1, ""12"": 1}
+                        {""Wand"": 1, ""Mask"": 1, ""12"": 1, ""Sword"": 1},
+                        {""Wand"": 1, ""Mask"": 1, ""12"": 1, ""Techbow"": 1}
                     ],
                     ""RequiredItemsDoors"": [
                         {""Rooted Ziggurat Middle Top"": 1}
@@ -4567,7 +4593,8 @@
                     ""LocationId"": ""230"",
                     ""Position"": ""(74.0, 4.0, 5.0)"",
                     ""RequiredItems"": [
-                        {""Wand"": 1, ""Mask"": 1, ""12"": 1}
+                        {""Wand"": 1, ""Mask"": 1, ""12"": 1, ""Sword"": 1},
+                        {""Wand"": 1, ""Mask"": 1, ""12"": 1, ""Techbow"": 1}
                     ],
                     ""RequiredItemsDoors"": [
                         {""Rooted Ziggurat Lower Front"": 1}
@@ -4586,7 +4613,8 @@
                     ""LocationId"": ""231"",
                     ""Position"": ""(-7.0, 4.0, -24.0)"",
                     ""RequiredItems"": [
-                        {""Wand"": 1, ""Mask"": 1, ""12"": 1}
+                        {""Wand"": 1, ""Mask"": 1, ""12"": 1, ""Sword"": 1},
+                        {""Wand"": 1, ""Mask"": 1, ""12"": 1, ""Techbow"": 1}
                     ],
                     ""RequiredItemsDoors"": [
                         {""Rooted Ziggurat Lower Front"": 1}
@@ -4605,7 +4633,8 @@
                     ""LocationId"": ""234"",
                     ""Position"": ""(67.6, 4.0, -38.0)"",
                     ""RequiredItems"": [
-                        {""Wand"": 1, ""Mask"": 1, ""12"": 1}
+                        {""Wand"": 1, ""Mask"": 1, ""12"": 1, ""Sword"": 1},
+                        {""Wand"": 1, ""Mask"": 1, ""12"": 1, ""Techbow"": 1}
                     ],
                     ""RequiredItemsDoors"": [
                         {""Rooted Ziggurat Lower Front"": 1}
@@ -4624,7 +4653,8 @@
                     ""LocationId"": ""261"",
                     ""Position"": ""(129.1, 4.1, -27.3)"",
                     ""RequiredItems"": [
-                        {""Wand"": 1, ""Mask"": 1, ""12"": 1}
+                        {""Wand"": 1, ""Mask"": 1, ""12"": 1, ""Sword"": 1},
+                        {""Wand"": 1, ""Mask"": 1, ""12"": 1, ""Techbow"": 1}
                     ],
                     ""RequiredItemsDoors"": [
                         {""Rooted Ziggurat Lower Front"": 1}
@@ -4643,7 +4673,8 @@
                     ""LocationId"": ""260"",
                     ""Position"": ""(149.2, 4.0, -53.5)"",
                     ""RequiredItems"": [
-                        {""Wand"": 1, ""Mask"": 1, ""12"": 1}
+                        {""Wand"": 1, ""Mask"": 1, ""12"": 1, ""Sword"": 1},
+                        {""Wand"": 1, ""Mask"": 1, ""12"": 1, ""Techbow"": 1}
                     ],
                     ""RequiredItemsDoors"": [
                         {""Rooted Ziggurat Lower Front"": 1}
@@ -4662,7 +4693,8 @@
                     ""LocationId"": ""232"",
                     ""Position"": ""(85.6, 4.0, -51.8)"",
                     ""RequiredItems"": [
-                        {""Wand"": 1, ""Mask"": 1, ""12"": 1}
+                        {""Wand"": 1, ""Mask"": 1, ""12"": 1, ""Sword"": 1},
+                        {""Wand"": 1, ""Mask"": 1, ""12"": 1, ""Techbow"": 1}
                     ],
                     ""RequiredItemsDoors"": [
                         {""Rooted Ziggurat Lower Front"": 1}
@@ -4681,7 +4713,8 @@
                     ""LocationId"": ""233"",
                     ""Position"": ""(153.0, 0.0, -61.0)"",
                     ""RequiredItems"": [
-                        {""Wand"": 1, ""Mask"": 1, ""12"": 1}
+                        {""Wand"": 1, ""Mask"": 1, ""12"": 1, ""Sword"": 1},
+                        {""Wand"": 1, ""Mask"": 1, ""12"": 1, ""Techbow"": 1}
                     ],
                     ""RequiredItemsDoors"": [
                         {""Rooted Ziggurat Lower Front"": 1, ""12"": 1, ""Sword"": 1}
@@ -4700,7 +4733,8 @@
                     ""LocationId"": ""Hexagon Blue"",
                     ""Position"": ""(521.0, -32.9, -146.0)"",
                     ""RequiredItems"": [
-                        {""Wand"": 1, ""Mask"": 1, ""12"": 1}
+                        {""Wand"": 1, ""Mask"": 1, ""12"": 1, ""Sword"": 1},
+                        {""Wand"": 1, ""Mask"": 1, ""12"": 1, ""Techbow"": 1}
                     ],
                     ""RequiredItemsDoors"": [
                         {""Rooted Ziggurat Lower Back"": 1, ""Sword"": 1}
