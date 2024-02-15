@@ -3862,11 +3862,6 @@ namespace TunicArchipelago {
             // create a portal combo for every region in the threePlusRegions list, so that every region can now be accessed (ignoring rules for now)
             int comboNumber = 0;
             while (FullInventory.Count < total_nondeadend_count + MaxItems.Count) {
-                Logger.LogInfo("full inventory size is " + FullInventory.Count.ToString());
-                Logger.LogInfo("comparison size is " + (total_nondeadend_count + MaxItems.Count).ToString());
-                foreach (string thing in FullInventory.Keys) {
-                    Logger.LogInfo("thing in full inventory is " + thing);
-                }
                 ShuffleList(twoPlusPortals, seed);
                 Portal portal1 = null;
                 Portal portal2 = null;
@@ -3893,8 +3888,6 @@ namespace TunicArchipelago {
                 }
                 // add the portal combo to the randomized portals list
                 RandomizedPortals.Add(comboNumber.ToString(), new PortalCombo(portal1, portal2));
-                Logger.LogInfo("portal 1 is " + portal1.Name + ", and its region is " + portal1.Region);
-                Logger.LogInfo("portal 2 is " + portal2.Name + ", and its region is " + portal2.Region);
 
                 FullInventory.Add(portal1.Region, 1);
                 // if laurels is at fairy cave, add it when we connect fairy cave

@@ -43,11 +43,9 @@ namespace TunicArchipelago {
 
                 //check if this requirement is fully met, otherwise move to the next requirement
                 int met = 0;
-                //Logger.LogInfo("required items for " + this.LocationId);
                 foreach (string item in req.Keys) {
                     //Logger.LogInfo(item);
                     if (!inventory.ContainsKey(item)) {
-                        //Logger.LogInfo("inventory does not contain item " + item);
                         break;
                     } else if (inventory[item] >= req[item]) {
                         met += 1;
@@ -57,7 +55,6 @@ namespace TunicArchipelago {
                     return true;
                 }
             }
-            //Logger.LogInfo("returning false");
             //if no requirements are met, the location isn't reachable
             return false;
         }
