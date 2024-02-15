@@ -153,6 +153,9 @@ namespace TunicArchipelago {
                 if (Screen.width <= 1280 && Screen.height <= 800) {
                     Stats.transform.localScale = new Vector3(3.6f, 3.6f, 3.6f);
                 }
+                if (Screen.width == 1920 && Screen.height == 1440) {
+                    Stats.transform.localScale = new Vector3(3.6f, 3.6f, 3.6f);
+                }
             }
             Loaded = true;
         }
