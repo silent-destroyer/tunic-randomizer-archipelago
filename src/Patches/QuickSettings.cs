@@ -426,6 +426,9 @@ namespace TunicArchipelago {
             }
             bool ClearPlayer = GUI.Button(new Rect(190f, 70f, 75f, 30f), "Clear");
             if (ClearPlayer) {
+                if (editingPlayer) { 
+                    stringToEdit = "";
+                }
                 TunicArchipelago.Settings.ConnectionSettings.Player = "";
                 OptionsGUIPatches.SaveSettings();
             }
@@ -463,6 +466,9 @@ namespace TunicArchipelago {
             }
             bool ClearHost = GUI.Button(new Rect(190f, 200f, 75f, 30f), "Clear");
             if (ClearHost) {
+                if (editingHostname) {
+                    stringToEdit = "";
+                }
                 TunicArchipelago.Settings.ConnectionSettings.Hostname = "";
                 OptionsGUIPatches.SaveSettings();
             }
@@ -497,6 +503,9 @@ namespace TunicArchipelago {
             }
             bool ClearPort = GUI.Button(new Rect(190f, 300f, 75f, 30f), "Clear");
             if (ClearPort) {
+                if (editingPort) {
+                    stringToEdit = "";
+                }
                 TunicArchipelago.Settings.ConnectionSettings.Port = "";
                 OptionsGUIPatches.SaveSettings();
             }
@@ -526,6 +535,9 @@ namespace TunicArchipelago {
             }
             bool ClearPassword = GUI.Button(new Rect(190f, 400f, 75f, 30f), "Clear");
             if (ClearPassword) {
+                if (editingPassword) {
+                    stringToEdit = "";
+                }
                 TunicArchipelago.Settings.ConnectionSettings.Password = "";
                 OptionsGUIPatches.SaveSettings();
             }
