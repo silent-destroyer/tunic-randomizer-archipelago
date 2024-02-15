@@ -551,6 +551,7 @@ namespace TunicArchipelago {
                     if (CurrentScene == "ziggurat2020_1" && Enemy.GetComponent<Administrator>() != null) {
                         EnemyKeys.Remove("Hedgehog Trap");
                         EnemyKeys.Remove("administrator_servant");
+                        EnemyKeys.Remove("Shadowreaper");
                     }
                     if (CurrentScene == "Forest Boss Room" && Enemy.GetComponent<BossAnnounceOnAggro>() != null) {
                         EnemyKeys.Remove("administrator_servant");
