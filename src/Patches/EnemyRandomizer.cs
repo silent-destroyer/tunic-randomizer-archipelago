@@ -46,6 +46,21 @@ namespace TunicArchipelago {
             "Fortress Basement Spider Small (5)",
             "Sewer Bat (7)", "Sewer Bat (8)", "Sewer Bat (9)",
             "Sewer Bat (10)", "Sewer Bat (11)", "Sewer Bat (12)",
+            "East Forest Redux Skuladot redux (4)",
+            "East Forest Redux Skuladot redux (5)",
+            "East Forest Redux Skuladot redux (6)",
+        };
+        public static List<string> DoNotPlaceTurretHere = new List<string>() {
+            "Cathedral Redux Fox enemy zombie (13)",
+            "Fortress Basement Spider Small (3)",
+            "Fortress Basement Spider Small (5)",
+            "Sewer Bat (7)", "Sewer Bat (8)", "Sewer Bat (9)",
+            "Sewer Bat (10)", "Sewer Bat (11)", "Sewer Bat (12)",
+            "East Forest Redux Skuladot redux (4)",
+            "East Forest Redux Skuladot redux (5)",
+            "East Forest Redux Skuladot redux (6)",
+            "East Forest Redux Spider Small (8)",
+            "Overworld Redux Honourguard",
         };
 
         public static Dictionary<string, List<string>> LocationEnemies = new Dictionary<string, List<string>>() {
@@ -577,7 +592,9 @@ namespace TunicArchipelago {
                     if (DoNotPlaceCoffeeTableHere.Contains($"{CurrentScene} {Enemy.name}")) {
                         EnemyKeys.Remove("administrator_servant");
                     }
-
+                    if (DoNotPlaceTurretHere.Contains($"{CurrentScene} {Enemy.name}")) {
+                        EnemyKeys.Remove("Turret");
+                    }
                     // Make alternate variants of certain enemies slightly less common
                     EnemyKeys.Remove(Random.NextDouble() < 0.25 ? "Frog Small" : "Frog Small_Ghost");
                     EnemyKeys.Remove(Random.NextDouble() < 0.25 ? "Frog Spear" : "Frog Spear_Ghost");
