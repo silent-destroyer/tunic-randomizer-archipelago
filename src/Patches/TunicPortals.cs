@@ -1,5 +1,6 @@
 ﻿using BepInEx.Logging;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -4011,7 +4012,8 @@ namespace TunicArchipelago {
 
         // a function to apply the randomized portal list to portals during onSceneLoaded
         public static void ModifyPortals(Scene loadingScene) {
-            var Portals = Resources.FindObjectsOfTypeAll<ScenePortal>();
+            var Portals = Resources.FindObjectsOfTypeAll<ScenePortal>().Where(portal => portal.gameObject.scene.name == SceneManager.GetActiveScene().name
+            && !portal.FullID.Contains("heirfasttravel") && !portal.id.Contains("heirfasttravel"));
             foreach (var portal in Portals) {
                 // go through the list of randomized portals and see if either the first or second portal matches the one we're looking at
                 foreach (KeyValuePair<string, PortalCombo> portalCombo in RandomizedPortals) {
@@ -4054,7 +4056,8 @@ namespace TunicArchipelago {
 
         // this is for use in PlayerCharacterPatches. Will need to refactor later if we do random player spawn
         public static void AltModifyPortals() {
-            var Portals = Resources.FindObjectsOfTypeAll<ScenePortal>();
+            var Portals = Resources.FindObjectsOfTypeAll<ScenePortal>().Where(portal => portal.gameObject.scene.name == SceneManager.GetActiveScene().name
+            && !portal.FullID.Contains("heirfasttravel") && !portal.id.Contains("heirfasttravel"));
             foreach (var portal in Portals) {
                 // go through the list of randomized portals and see if either the first or second portal matches the one we're looking at
                 foreach (KeyValuePair<string, PortalCombo> portalCombo in RandomizedPortals) {
@@ -4091,7 +4094,8 @@ namespace TunicArchipelago {
         }
 
         public static void MarkPortals() {
-            var Portals = Resources.FindObjectsOfTypeAll<ScenePortal>();
+            var Portals = Resources.FindObjectsOfTypeAll<ScenePortal>().Where(portal => portal.gameObject.scene.name == SceneManager.GetActiveScene().name
+            && !portal.FullID.Contains("heirfasttravel") && !portal.id.Contains("heirfasttravel"));
 
             foreach (var portal in Portals) {
                 if (portal.FullID == PlayerCharacterSpawn.portalIDToSpawnAt) {
