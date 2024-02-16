@@ -8,10 +8,10 @@
 #
 name: Ruin Seeker
 description: tunc
-game: Tunic
+game: TUNIC
 requires:
   version: 0.4.4
-Tunic:
+TUNIC:
   # Play with sword upgrades enabled.
   sword_progression: 'true'
   # Start with a sword.
