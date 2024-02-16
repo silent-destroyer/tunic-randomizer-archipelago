@@ -17,6 +17,11 @@ namespace TunicArchipelago {
             return (TunicArchipelago.Settings.UseTrunicTranslations && EnglishToTrunic.ContainsKey(Input)) ? EnglishToTrunic[Input] : Input;
         }
 
+        public static string TranslateDefaultNoQuotes(string Input, bool CheckSetting) {
+
+            return ((CheckSetting ? TunicArchipelago.Settings.UseTrunicTranslations : true) && EnglishToTrunic.ContainsKey(Input)) ? EnglishToTrunic[Input] : Input;
+        }
+
         public static string TranslateDefaultQuotes(string Input) {
             return (TunicArchipelago.Settings.UseTrunicTranslations && EnglishToTrunic.ContainsKey(Input)) ? EnglishToTrunic[Input] : $"\"{Input}\"";
         }

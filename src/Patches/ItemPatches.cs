@@ -331,7 +331,7 @@ namespace TunicArchipelago {
                 // Apply bonus upgrade text
                 if (TunicArchipelago.Settings.BonusStatUpgradesEnabled) {
                     GoldenTrophy.collectionMessage = ScriptableObject.CreateInstance<LanguageLine>();
-                    GoldenTrophy.collectionMessage.text = Translations.Translate(ItemLookup.BonusUpgrades[Item.ItemNameForInventory].CustomPickupMessage, true);
+                    GoldenTrophy.collectionMessage.text = Translations.TranslateDefaultNoQuotes(ItemLookup.BonusUpgrades[Item.ItemNameForInventory].CustomPickupMessage, true);
                     Inventory.GetItemByName(ItemLookup.BonusUpgrades[Item.ItemNameForInventory].LevelUp).Quantity += 1;
                 } else {
                     GoldenTrophy.collectionMessage = ScriptableObject.CreateInstance<LanguageLine>();
@@ -339,7 +339,7 @@ namespace TunicArchipelago {
                 }
 
                 ItemPresentation.PresentItem(GoldenTrophy);
-                NotificationBottom = TunicArchipelago.Settings.BonusStatUpgradesEnabled ? Translations.Translate(ItemLookup.BonusUpgrades[Item.ItemNameForInventory].CustomPickupMessage, true) : $"kawngrahJoulA$uhnz!";
+                NotificationBottom = TunicArchipelago.Settings.BonusStatUpgradesEnabled ? Translations.TranslateDefaultNoQuotes(ItemLookup.BonusUpgrades[Item.ItemNameForInventory].CustomPickupMessage, true) : $"kawngrahJoulA$uhnz!";
             }
 
             if (Item.Type == ItemTypes.RELIC) {
@@ -524,7 +524,7 @@ namespace TunicArchipelago {
                     SaveFile.SetInt("last page viewed", int.Parse(Item.ItemNameForInventory, CultureInfo.InvariantCulture));
                 }
             }
-
+            
             if (Item.Type == ItemTypes.GOLDENTROPHY) {
 
                 Item GoldenTrophy = Inventory.GetItemByName(Item.ItemNameForInventory);
@@ -532,7 +532,7 @@ namespace TunicArchipelago {
                 // Apply bonus upgrade text
                 if (TunicArchipelago.Settings.BonusStatUpgradesEnabled) {
                     GoldenTrophy.collectionMessage = ScriptableObject.CreateInstance<LanguageLine>();
-                    GoldenTrophy.collectionMessage.text = Translations.Translate(ItemLookup.BonusUpgrades[Item.ItemNameForInventory].CustomPickupMessage, true);
+                    GoldenTrophy.collectionMessage.text = Translations.TranslateDefaultNoQuotes(ItemLookup.BonusUpgrades[Item.ItemNameForInventory].CustomPickupMessage, true);
                     Inventory.GetItemByName(ItemLookup.BonusUpgrades[Item.ItemNameForInventory].LevelUp).Quantity += 1;
                 } else {
                     GoldenTrophy.collectionMessage = ScriptableObject.CreateInstance<LanguageLine>();
@@ -540,7 +540,7 @@ namespace TunicArchipelago {
                 }
 
                 ItemPresentation.PresentItem(GoldenTrophy);
-                NotificationBottom = TunicArchipelago.Settings.BonusStatUpgradesEnabled ? Translations.Translate(ItemLookup.BonusUpgrades[Item.ItemNameForInventory].CustomPickupMessage, true) : $"kawngrahJoulA$uhnz!";
+                NotificationBottom = TunicArchipelago.Settings.BonusStatUpgradesEnabled ? Translations.TranslateDefaultNoQuotes(ItemLookup.BonusUpgrades[Item.ItemNameForInventory].CustomPickupMessage, true) : $"kawngrahJoulA$uhnz!";
             }
 
             if (Item.Type == ItemTypes.RELIC) {
