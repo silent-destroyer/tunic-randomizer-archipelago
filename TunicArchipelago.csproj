@@ -8,7 +8,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>TunicArchipelago</RootNamespace>
-    <AssemblyName>TunicArchipelago</AssemblyName>
+    <AssemblyName>TunicRandomizer</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
@@ -166,11 +166,13 @@
     <Compile Include="src\Data\PortalCombo.cs" />
     <Compile Include="src\Data\RandomizerSettings.cs" />
     <Compile Include="src\Data\SaveFlags.cs" />
-    <Compile Include="src\Data\VanillaCheck.cs" />
+    <Compile Include="src\Data\Translations.cs" />
+    <Compile Include="src\Data\Check.cs" />
     <Compile Include="src\Patches\EnemyRandomizer.cs" />
     <Compile Include="src\Patches\FairyTargets.cs" />
     <Compile Include="src\Patches\GhostHints.cs" />
     <Compile Include="src\Patches\CustomItemBehaviors.cs" />
+    <Compile Include="src\Patches\ItemRandomizer.cs" />
     <Compile Include="src\Util\HeroGraveToggle.cs" />
     <Compile Include="src\Patches\InteractionPatches.cs" />
     <Compile Include="src\Patches\ItemPatches.cs" />

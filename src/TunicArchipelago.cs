@@ -24,10 +24,9 @@ namespace TunicArchipelago {
 
         public static ManualLogSource Logger;
         public static RandomizerSettings Settings = new RandomizerSettings();
-
-        public static string SettingsPath = Application.dataPath + "/../BepInEx/plugins/Tunic Archipelago/ArchipelagoSettings.json";
+        public static string SettingsPath = Application.persistentDataPath + "/Randomizer/Settings.json";
         public static string ItemTrackerPath = Application.persistentDataPath + "/Randomizer/ItemTracker.json";
-        public static string SpoilerLogPath = Application.persistentDataPath + "/Randomizer/ArchipelagoSpoiler.log";
+        public static string SpoilerLogPath = Application.persistentDataPath + "/Randomizer/Spoiler.log";
         public static ItemTracker Tracker;
 
         public override void Load() {
@@ -40,6 +39,7 @@ namespace TunicArchipelago {
 
             ClassInjector.RegisterTypeInIl2Cpp<Archipelago>();
             ClassInjector.RegisterTypeInIl2Cpp<WaveSpell>();
+            ClassInjector.RegisterTypeInIl2Cpp<EntranceSeekerSpell>();
             ClassInjector.RegisterTypeInIl2Cpp<VisibleByNotHavingItem>();
             ClassInjector.RegisterTypeInIl2Cpp<HeroGraveToggle>();
             ClassInjector.RegisterTypeInIl2Cpp<MailboxFlag>();
@@ -61,10 +61,6 @@ namespace TunicArchipelago {
             
             if (!Directory.Exists(Application.persistentDataPath + "/Randomizer/")) {
                 Directory.CreateDirectory(Application.persistentDataPath + "/Randomizer/");
-            }
-
-            if (!Directory.Exists(Application.dataPath + "/../BepInEx/plugins/Tunic Archipelago")) {
-                Directory.CreateDirectory(Application.dataPath + "/../BepInEx/plugins/Tunic Archipelago");
             }
 
             if (!File.Exists(SettingsPath)) {
@@ -205,6 +201,13 @@ namespace TunicArchipelago {
             Harmony.Patch(AccessTools.Method(typeof(FileManagementGUI), "LoadFileAndStart"), new HarmonyMethod(AccessTools.Method(typeof(QuickSettings), "FileManagement_LoadFileAndStart_PrefixPatch")));
 
             Harmony.Patch(AccessTools.Method(typeof(SpecialSwampTrigger), "OnTriggerEnter"), new HarmonyMethod(AccessTools.Method(typeof(InteractionPatches), "SpecialSwampTrigger_OnTriggerEnter_PrefixPatch")));
+
+            Harmony.Patch(AccessTools.Method(typeof(ForcewandItemBehaviour._throwBeamCoroutine_d__32), "MoveNext"), new HarmonyMethod(AccessTools.Method(typeof(CustomItemBehaviors), "ForcewandItemBehaviour__throwBeamCoroutine_d__32_MoveNext_PrefixPatch")));
+
+            Harmony.Patch(AccessTools.Method(typeof(Ladder), "ClimbOn"), new HarmonyMethod(AccessTools.Method(typeof(PlayerCharacterPatches), "Ladder_ClimbOn_PrefixPatch")));
+
+            Harmony.Patch(AccessTools.Method(typeof(UpgradeMenu), "__Buy"), new HarmonyMethod(AccessTools.Method(typeof(ItemPatches), "UpgradeMenu___Buy_PrefixPatch")));
+
         }
     }
 }

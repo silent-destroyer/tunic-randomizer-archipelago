@@ -34,9 +34,33 @@ namespace TunicArchipelago {
         };
 
         public static List<string> ExcludedScenes = new List<string>() {
+            "PatrolCave",
             "Library Arena",
             "Fortress Arena",
-            "Spirit Arena"
+            "Spirit Arena",
+        };
+
+        public static List<string> DoNotPlaceCoffeeTableHere = new List<string>() {
+            "Cathedral Redux Fox enemy zombie (13)",
+            "Fortress Basement Spider Small (3)",
+            "Fortress Basement Spider Small (5)",
+            "Sewer Bat (7)", "Sewer Bat (8)", "Sewer Bat (9)",
+            "Sewer Bat (10)", "Sewer Bat (11)", "Sewer Bat (12)",
+            "East Forest Redux Skuladot redux (4)",
+            "East Forest Redux Skuladot redux (5)",
+            "East Forest Redux Skuladot redux (6)",
+        };
+        public static List<string> DoNotPlaceTurretHere = new List<string>() {
+            "Cathedral Redux Fox enemy zombie (13)",
+            "Fortress Basement Spider Small (3)",
+            "Fortress Basement Spider Small (5)",
+            "Sewer Bat (7)", "Sewer Bat (8)", "Sewer Bat (9)",
+            "Sewer Bat (10)", "Sewer Bat (11)", "Sewer Bat (12)",
+            "East Forest Redux Skuladot redux (4)",
+            "East Forest Redux Skuladot redux (5)",
+            "East Forest Redux Skuladot redux (6)",
+            "East Forest Redux Spider Small (8)",
+            "Overworld Redux Honourguard",
         };
 
         public static Dictionary<string, List<string>> LocationEnemies = new Dictionary<string, List<string>>() {
@@ -136,6 +160,15 @@ namespace TunicArchipelago {
                 "Cathedral Arena",
                 new List<string>() {
                     "tech knight ghost",
+                    "Frog Small_Ghost",
+                    "Frog Spear_Ghost",
+                    "Fairyprobe Archipelagos (Ghost)",
+                    "bomezome_easy_ghost",
+                    "bomezome_easy_ghost (tweaked)",
+                    "Wizard_Support_Ghost",
+                    "Skuladot redux_ghost",
+                    "Skuladot redux_shield_ghost",
+                    "Skuladot redux Big_ghost",
                 }
             },
             {
@@ -176,6 +209,13 @@ namespace TunicArchipelago {
                 }
             },
             {
+                "Library Arena",
+                new List<string> () {
+                    "Bat_librarian add",
+                    "Skuladot redux_librarian add"
+                }
+            },
+            {
                 "Posterity",
                 new List<string> () {
                     "Phage",
@@ -191,26 +231,30 @@ namespace TunicArchipelago {
                     "Blob",
                     "Hedgehog",
                     "Skuladot redux",
+                    "Skuladot redux void",
+                    "Skuladot redux_ghost",
                     "plover",
                     "Spinnerbot Baby",
                     "Crabbit",
-                    "Crabbit with Shell",
                     "Fox enemy zombie",
                     "BlobBig",
                     "BlobBigger",
                     "HedgehogBig",
                     "Bat",
+                    "Bat void",
                     "Spider Small",
                     "bomezome_easy",
+                    "bomezome_easy_ghost",
                     "Fairyprobe Archipelagos",
+                    "Fairyprobe Archipelagos (Ghost)",
                     "Fairyprobe Archipelagos (Dmg)",
                     "Skuladot redux_shield",
-                    "Crabbo",
-                    "Spinnerbot Corrupted",
+                    "Skuladot redux_shield_ghost",
                     "Turret",
                     "Hedgehog Trap",
                     "administrator_servant",
                     "Phage",
+                    "Spinnerbot Corrupted",
                 }
             },
             {
@@ -220,7 +264,9 @@ namespace TunicArchipelago {
                     "sewertentacle",
                     "Honourguard",
                     "Skuladot redux Big",
+                    "Skuladot redux Big_ghost",
                     "Crow",
+                    "Crow Voidtouched",
                     "crocodoo",
                     "crocodoo Voidtouched",
                     "Scavenger",
@@ -230,17 +276,22 @@ namespace TunicArchipelago {
                     "bomezome_fencer",
                     "Ghostfox_monster",
                     "voidling redux",
-                    "Frog Spear",
                     "Frog",
                     "Frog Small",
+                    "Frog Small_Ghost",
+                    "Frog Spear",
+                    "Frog Spear_Ghost",
                     "Spider Big",
+                    "Crabbo",
+                    "Crabbit with Shell",
                     "Wizard_Sword",
                     "Wizard_Support",
-                    "Crow Voidtouched",
+                    "Wizard_Support_Ghost",
                     "woodcutter",
                     "Fox enemy",
                     "Centipede",
                     "Ghost Knight",
+                    "bomezome_easy_ghost (tweaked)",
                 }
             },
             {
@@ -315,6 +366,17 @@ namespace TunicArchipelago {
             { "Voidtouched", $"\"Voidtouched\"" },
             { "Centipede", $"\"Centipede\"" },
             { "Shadowreaper", $"\"Shadowreaper\"" },
+            { "Bat void", $"\"Phrend\" (void)" },
+            { "Skuladot redux void", $"\"Rudeling\" (void)" },
+            { "Frog Small_Ghost", $"\"Frog...?\" (smawl) [frog]" },
+            { "Frog Spear_Ghost", $"\"Frog...?\" (spEr) [frog]" },
+            { "Fairyprobe Archipelagos (Ghost)", $"\"Fairy...?\"" },
+            { "bomezome_easy_ghost", $"\"Fleemer...?\"" },
+            { "bomezome_easy_ghost (tweaked)", $"\"Fleemer...?\" (lRj)" },
+            { "Wizard_Support_Ghost", $"\"Custodian...?\" (suhport)" },
+            { "Skuladot redux_ghost", $"\"Rudeling...?\"" },
+            { "Skuladot redux_shield_ghost", $"\"Rudeling...?\" ($Eld)" },
+            { "Skuladot redux Big_ghost", $"\"Guard Captain...?\"" },
         };
 
         public static void CreateAreaSeeds() {
@@ -333,6 +395,8 @@ namespace TunicArchipelago {
                 { "Hedgehog Trap (1)", "Hedgehog Trap" },
                 { "Centipede from egg (Varient)", "Centipede" },
                 { "Spinnerbot (3)", "Spinnerbot Corrupted" },
+                { "Bat_librarian add", "Bat void" },
+                { "Skuladot redux_librarian add", "Skuladot redux void" },
             };
             foreach (string LocationEnemy in LocationEnemies[SceneName]) {
                 string EnemyName = LocationEnemy;
@@ -360,6 +424,7 @@ namespace TunicArchipelago {
                 if (EnemyName == "Centipede") {
                     Enemies[EnemyName].GetComponent<Centipede>().maxBeamDistance = 10f;
                     Enemies[EnemyName].GetComponent<Centipede>().attackDistance = 5f;
+                    Enemies[EnemyName].GetComponent<Centipede>().monsterAggroDistance = 20f;
                 }
                 if (EnemyName == "Crabbit with Shell") {
                     Enemies["Crabbit"] = GameObject.Instantiate(Enemies[EnemyName]);
@@ -381,6 +446,32 @@ namespace TunicArchipelago {
                     Enemies["Crabbo"].GetComponent<Crabbo>().averageAttackCooldown = 1.25f;
                     Enemies["Crabbo"].SetActive(false);
                     GameObject.DontDestroyOnLoad(Enemies["Crabbo"]);
+                }
+
+                if (EnemyName == "Bat void") {
+                    Enemies[EnemyName].GetComponent<Bat>().monsterAggroDistance = 4;
+                }
+
+                if (EnemyName == "Skuladot redux_ghost") {
+                    Enemies[EnemyName].GetComponent<Monster>().dropValue = Enemies["Skuladot redux"].GetComponent<Monster>().dropValue;
+                }
+                if (EnemyName == "Skuladot redux_shield_ghost") {
+                    Enemies[EnemyName].GetComponent<Monster>().dropValue = Enemies["Skuladot redux_shield"].GetComponent<Monster>().dropValue;
+                }
+                if (EnemyName == "Skuladot redux Big_ghost") {
+                    Enemies[EnemyName].GetComponent<Monster>().dropValue = Enemies["Skuladot redux Big"].GetComponent<Monster>().dropValue;
+                }
+                if (EnemyName == "bomezome_easy") {
+                    Enemies["bomezome_easy_ghost"].GetComponent<Monster>().dropValue = Enemies["bomezome_easy"].GetComponent<Monster>().dropValue;
+                }
+                if (EnemyName == "Frog Small") {
+                    Enemies["Frog Small_Ghost"].GetComponent<Monster>().dropValue = Enemies["Frog Small"].GetComponent<Monster>().dropValue;
+                }
+                if (EnemyName == "Frog Spear") {
+                    Enemies["Frog Spear_Ghost"].GetComponent<Monster>().dropValue = Enemies["Frog Spear"].GetComponent<Monster>().dropValue;
+                }
+                if (EnemyName == "Wizard_Support") {
+                    Enemies["Wizard_Support_Ghost"].GetComponent<Monster>().dropValue = Enemies["Wizard_Support"].GetComponent<Monster>().dropValue;
                 }
 
                 Enemies[EnemyName].name = EnemyName + " Prefab";
@@ -440,6 +531,12 @@ namespace TunicArchipelago {
             if (CurrentScene == "Forest Boss Room" && GameObject.Find("Skuladot redux") != null) {
                 Monsters.Add(GameObject.Find("Skuladot redux"));
             }
+            if (CurrentScene == "Fortress Basement") {
+                Monsters.AddRange(Resources.FindObjectsOfTypeAll<GameObject>().Where(slorm => slorm.GetComponent<Spinnerbot>() != null && slorm.gameObject.scene.name == CurrentScene && slorm.name == "Spinnerbot Baby").ToList());
+            }
+            if (CurrentScene == "frog cave main") {
+                Monsters.Add(GameObject.Find("Wizard_Support"));
+            }
             if (TunicArchipelago.Settings.ExtraEnemiesEnabled && CurrentScene == "Monastery") {
                 Resources.FindObjectsOfTypeAll<Voidtouched>().ToList()[0].gameObject.transform.parent = null;
             }
@@ -469,6 +566,7 @@ namespace TunicArchipelago {
                     if (CurrentScene == "ziggurat2020_1" && Enemy.GetComponent<Administrator>() != null) {
                         EnemyKeys.Remove("Hedgehog Trap");
                         EnemyKeys.Remove("administrator_servant");
+                        EnemyKeys.Remove("Shadowreaper");
                     }
                     if (CurrentScene == "Forest Boss Room" && Enemy.GetComponent<BossAnnounceOnAggro>() != null) {
                         EnemyKeys.Remove("administrator_servant");
@@ -478,10 +576,36 @@ namespace TunicArchipelago {
                         Enemy.name = Enemy.name.Replace("Spinnerbot", "Spinnerbot Corrupted");
                     }
                     if (TunicArchipelago.Settings.ExtraEnemiesEnabled) {
-                        if (Enemy.transform.parent != null && Enemy.transform.parent.name.Contains("NG+")) {
+                        if (Enemy.transform.parent != null && (Enemy.transform.parent.name.Contains("NG+") || Enemy.transform.parent.name.ToLower().Contains("night"))) {
                             Enemy.transform.parent.gameObject.SetActive(true);
                         }
+
+                        if (CurrentScene == "Monastery") {
+                            if (GameObject.Find("_NIGHT/Corruption Blocker/") != null) {
+                                GameObject.Find("_NIGHT/Corruption Blocker/").SetActive(false);
+                            }
+                            if (GameObject.Find("_NIGHT/Corruption Blocker (retreat door)/") != null) {
+                                GameObject.Find("_NIGHT/Corruption Blocker (retreat door)/").SetActive(false);
+                            }
+                        }
                     }
+                    if (DoNotPlaceCoffeeTableHere.Contains($"{CurrentScene} {Enemy.name}")) {
+                        EnemyKeys.Remove("administrator_servant");
+                    }
+                    if (DoNotPlaceTurretHere.Contains($"{CurrentScene} {Enemy.name}")) {
+                        EnemyKeys.Remove("Turret");
+                    }
+                    // Make alternate variants of certain enemies slightly less common
+                    EnemyKeys.Remove(Random.NextDouble() < 0.25 ? "Frog Small" : "Frog Small_Ghost");
+                    EnemyKeys.Remove(Random.NextDouble() < 0.25 ? "Frog Spear" : "Frog Spear_Ghost");
+                    EnemyKeys.Remove(Random.NextDouble() < 0.25 ? "Fairyprobe Archipelagos" : "Fairyprobe Archipelagos (Ghost)");
+                    EnemyKeys.Remove(Random.NextDouble() < 0.25 ? "bomezome_easy" : "bomezome_easy_ghost");
+                    EnemyKeys.Remove(Random.NextDouble() < 0.25 ? "Wizard_Support" : "Wizard_Support_Ghost");
+                    EnemyKeys.Remove(Random.NextDouble() < 0.50 ? "Skuladot redux void" : "Skuladot redux_ghost");
+                    EnemyKeys.Remove(Random.NextDouble() < 0.25 ? "Skuladot redux_shield" : "Skuladot redux_shield_ghost");
+                    EnemyKeys.Remove(Random.NextDouble() < 0.25 ? "Skuladot redux Big" : "Skuladot redux Big_ghost");
+                    EnemyKeys.Remove(Random.NextDouble() < 0.25 ? "Bat" : "Bat void");
+
                     string NewEnemyName = "";
                     if (TunicArchipelago.Settings.EnemyDifficulty == RandomizerSettings.EnemyRandomizationType.RANDOM) {
                         NewEnemy = GameObject.Instantiate(Enemies[EnemyKeys[Random.Next(EnemyKeys.Count)]]);
@@ -513,13 +637,7 @@ namespace TunicArchipelago {
                         if (EnemyTypes == null) {
                             NewEnemy = GameObject.Instantiate(Enemies[EnemyKeys[Random.Next(EnemyKeys.Count)]]);
                         } else {
-                            if (CurrentScene == "Cathedral Arena") {
-                                EnemyTypes.Remove("administrator_servant");
-                                EnemyTypes.Remove("Hedgehog Trap");
-                                if (Inventory.GetItemByName("Wand").Quantity == 0) {
-                                    EnemyTypes.Remove("Crabbit with Shell");
-                                }
-                            }
+                            EnemyTypes = EnemyTypes.Where(x => EnemyKeys.Contains(x)).ToList();
                             NewEnemy = GameObject.Instantiate(Enemies[EnemyTypes[Random.Next(EnemyTypes.Count)]]);
                         }
                     } else {
@@ -552,7 +670,7 @@ namespace TunicArchipelago {
                         TopLine.text = $"\"Enemy\"";
                         foreach (string Key in ProperEnemyNames.Keys) {
                             if (NewEnemy.name.Replace(" Prefab", "").Replace("(Clone)", "") == Key) {
-                                TopLine.text = ProperEnemyNames[Key];
+                                TopLine.text = Translations.TranslateDefaultNoQuotes(ProperEnemyNames[Key]);
                                 if (NewEnemy.name.Contains("crocodoo")) {
                                     BottomLine.text = $"#uh wuhn ahnd OnlE";
                                 } else if (EnemyRankings["Average"].Contains(Key)) {
@@ -610,6 +728,10 @@ namespace TunicArchipelago {
                         if (NewEnemy.GetComponent<Monster>().defaultStartingMaxHP != null) {
                             NewEnemy.GetComponent<Monster>().defaultStartingMaxHP.Value = 50f;
                         }
+                    }
+
+                    if (NewEnemy.GetComponent<Administrator>() != null && NewEnemy.name.ToLower().Contains("servant")) {
+                        NewEnemy.GetComponent<BoxCollider>().extents /= 2;
                     }
 
                     NewEnemy.name += $" {i}";
@@ -709,9 +831,8 @@ namespace TunicArchipelago {
         }
 
         public static bool Monster_Die_MoveNext_PrefixPatch(Monster._Die_d__77 __instance, ref bool __result) {
-            if (__instance.__4__this.GetComponent<BossAnnounceOnAggro>() != null) {
+            if (__instance.__4__this.GetComponent<BossAnnounceOnAggro>() != null && IsArchipelago()) {
                 if (SceneManager.GetActiveScene().name == "Forest Boss Room") {
-                    StateVariable.GetStateVariableByName("SV_Forest Boss Room_Skuladot redux Big").BoolValue = true;
                     Archipelago.instance.UpdateDataStorage("Defeated Guard Captain", true);
                 }
                 if (__instance.__4__this.GetComponent<Knightbot>() != null) {
@@ -727,6 +848,11 @@ namespace TunicArchipelago {
                     Archipelago.instance.UpdateDataStorage("Defeated Boss Scavenger", true);
                 }
             }
+
+            if (SceneLoaderPatches.SceneName == "Forest Boss Room" && __instance.__4__this.GetComponent<BossAnnounceOnAggro>() != null) {
+                StateVariable.GetStateVariableByName("SV_Forest Boss Room_Skuladot redux Big").BoolValue = true;
+            }
+
 
             if (__instance.__4__this.GetComponent<TunicKnightVoid>() != null) {
                 CoinSpawner.SpawnCoins(50, __instance.__4__this.transform.position);

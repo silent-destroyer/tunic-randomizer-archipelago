@@ -48,7 +48,7 @@ namespace TunicArchipelago {
             if (!OptionsGUIPatches.BonusOptionsUnlocked) {
                 AreaData AreaData = ScriptableObject.CreateInstance<AreaData>();
                 AreaData.topLine = ScriptableObject.CreateInstance<LanguageLine>();
-                AreaData.topLine.text = $"\"BONUS CUSTOMIZATION UNLOCKED\"";
+                AreaData.topLine.text = TunicArchipelago.Settings.UseTrunicTranslations ? "bOnuhs kuhstuhmizA$uhn uhnlawkd" : $"\"BONUS CUSTOMIZATION UNLOCKED\"";
                 AreaData.bottomLine = ScriptableObject.CreateInstance<LanguageLine>();
                 AreaData.bottomLine.text = $"%ah^ks for plAi^! (prehs 3 too wAv)";
                 AreaLabel.ShowLabel(AreaData);
@@ -60,6 +60,11 @@ namespace TunicArchipelago {
             WaveSpell WaveSpell = __instance.TryCast<WaveSpell>();
             if (WaveSpell != null) {
                 WaveSpell.CheckInput(inputs, length);
+            }
+
+            EntranceSeekerSpell EntranceSeekerSpell = __instance.TryCast<EntranceSeekerSpell>();
+            if (EntranceSeekerSpell != null) {
+                EntranceSeekerSpell.CheckInput(inputs, length);
             }
         }
     }

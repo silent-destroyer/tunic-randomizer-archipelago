@@ -41,7 +41,9 @@ namespace TunicArchipelago {
         }
 
         public void UpdateDataStorage(string Key, object Value) {
-            integration.UpdateDataStorage(Key, Value);
+            if (SaveFlags.IsArchipelago()) {
+                integration.UpdateDataStorage(Key, Value);
+            }
         }
 
         public void Release() {

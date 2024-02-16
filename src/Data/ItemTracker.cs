@@ -41,9 +41,9 @@ namespace TunicArchipelago {
             {"Flask Shard", 0},
             {"Flask Container", 0},
             {"Pages", 0},
-            {"Prayer Page", 0},
-            {"Holy Cross Page", 0},
-            {"Ice Rod Page", 0},
+            {"Prayer", 0},
+            {"Holy Cross", 0},
+            {"Icebolt", 0},
             {"Fairies", 0},
             {"Golden Trophies", 0},
             {"Dath Stone", 0},
@@ -124,9 +124,9 @@ namespace TunicArchipelago {
             if (Item.Type == ItemTypes.PAGE) {
                 ImportantItems["Pages"]++;
 
-                if (Item.Name == "Pages 24-25 (Prayer)") { ImportantItems["Prayer Page"]++; }
-                if (Item.Name == "Pages 42-43 (Holy Cross)") { ImportantItems["Holy Cross Page"]++; }
-                if (Item.Name == "Pages 52-53 (Ice Rod)") { ImportantItems["Ice Rod Page"]++; }
+                if (Item.Name == "Pages 24-25 (Prayer)") { ImportantItems["Prayer"]++; }
+                if (Item.Name == "Pages 42-43 (Holy Cross)") { ImportantItems["Holy Cross"]++; }
+                if (Item.Name == "Pages 52-53 (Icebolt)") { ImportantItems["Icebolt"]++; }
             }
             
             if (Item.Type == ItemTypes.GOLDENTROPHY) {
@@ -135,6 +135,12 @@ namespace TunicArchipelago {
                 if (ImportantItems["Golden Trophies"] >= 12) {
                     Inventory.GetItemByName("Spear").Quantity = 1;
                 }
+            }
+
+            if (Item.Type == ItemTypes.HEXAGONQUEST && SaveFile.GetInt(AbilityShuffle) == 1) {
+                if (Inventory.GetItemByName("Hexagon Gold").Quantity == SaveFile.GetInt(HexagonQuestPrayer)) { ImportantItems["Prayer"]++; }
+                if (Inventory.GetItemByName("Hexagon Gold").Quantity == SaveFile.GetInt(HexagonQuestHolyCross)) { ImportantItems["Holy Cross"]++; }
+                if (Inventory.GetItemByName("Hexagon Gold").Quantity == SaveFile.GetInt(HexagonQuestIcebolt)) { ImportantItems["Icebolt"]++; }
             }
             
             if (Item.Type == ItemTypes.SWORDUPGRADE) {
@@ -168,6 +174,8 @@ namespace TunicArchipelago {
         }
 
         public static void PopulateSpoilerLog() {
+            if (TunicArchipelago.Settings.RaceMode) { return; }
+
             int seed = SaveFile.GetInt("seed");
             Dictionary<string, List<string>> SpoilerLog = new Dictionary<string, List<string>>();
             foreach (string Key in Locations.SceneNamesForSpoilerLog.Keys)
@@ -175,45 +183,70 @@ namespace TunicArchipelago {
                 SpoilerLog[Key] = new List<string>();
             }
 
-            foreach (string Key in ItemLookup.ItemList.Keys) {
-                ArchipelagoItem Item = ItemLookup.ItemList[Key];
+            if (IsArchipelago()) {
+                foreach (string Key in ItemLookup.ItemList.Keys) {
+                    ArchipelagoItem Item = ItemLookup.ItemList[Key];
 
-                string Spoiler = $"\t{((Locations.CheckedLocations[Key] || SaveFile.GetInt($"randomizer picked up {Key}") == 1 || (TunicArchipelago.Settings.CollectReflectsInWorld && SaveFile.GetInt($"randomizer {Key} was collected") == 1)) ? "x" : "-")} {Locations.LocationIdToDescription[Key]}: {Item.ItemName} ({Archipelago.instance.GetPlayerName(Item.Player)})";
+                    string Spoiler = $"\t{((Locations.CheckedLocations[Key] || SaveFile.GetInt($"randomizer picked up {Key}") == 1 || (TunicArchipelago.Settings.CollectReflectsInWorld && SaveFile.GetInt($"randomizer {Key} was collected") == 1)) ? "x" : "-")} {Locations.LocationIdToDescription[Key]}: {Item.ItemName} ({Archipelago.instance.GetPlayerName(Item.Player)})";
 
-                SpoilerLog[Locations.VanillaLocations[Key].Location.SceneName].Add(Spoiler);
+                    SpoilerLog[Locations.VanillaLocations[Key].Location.SceneName].Add(Spoiler);
+                }
             }
-
+            if (IsSinglePlayer()) {
+                foreach(string Key in Locations.RandomizedLocations.Keys) {
+                    Check Check = Locations.RandomizedLocations[Key];
+                    ItemData Item = ItemLookup.GetItemDataFromCheck(Check);
+                    string Spoiler = $"\t{(Locations.CheckedLocations[Key] ? "x" : "-")} {Locations.LocationIdToDescription[Key]}: {Item.Name}";
+                    SpoilerLog[Locations.VanillaLocations[Key].Location.SceneName].Add(Spoiler);
+                }
+            }
             List<string> SpoilerLogLines = new List<string>() {
-                "Seed: " + SaveFile.GetString("seed"),
+                "Seed: " + seed,
                 "Lines that start with 'x' instead of '-' represent items that have been collected\n",
-                "Major Items"
             };
-
-            foreach (string MajorItem in ItemLookup.MajorItems) {
+            if (IsArchipelago()) {
+                SpoilerLogLines.Add("Major Items");
+                foreach (string MajorItem in ItemLookup.MajorItems) {
                 if(MajorItem == "Gold Questagon") { continue; }
-                if(Locations.MajorItemLocations.ContainsKey(MajorItem) && Locations.MajorItemLocations[MajorItem].Count > 0) {
-                    foreach (ArchipelagoHint apHint in Locations.MajorItemLocations[MajorItem]) {
+                    if(Locations.MajorItemLocations.ContainsKey(MajorItem) && Locations.MajorItemLocations[MajorItem].Count > 0) {
+                        foreach (ArchipelagoHint apHint in Locations.MajorItemLocations[MajorItem]) {
 
-                        bool HasItem = false;
-                        if (Archipelago.instance.integration.session.Locations.AllLocationsChecked.Contains(Archipelago.instance.integration.session.Locations.GetLocationIdFromName(Archipelago.instance.GetPlayerGame((int)apHint.Player), apHint.Location))) { 
-                            HasItem = true;
+                            bool HasItem = false;
+                            if (Archipelago.instance.integration.session.Locations.AllLocationsChecked.Contains(Archipelago.instance.integration.session.Locations.GetLocationIdFromName(Archipelago.instance.GetPlayerGame((int)apHint.Player), apHint.Location))) { 
+                                HasItem = true;
+                            }
+                            string Spoiler = $"\t{(HasItem ? "x" : "-")} {MajorItem}: {apHint.Location} ({Archipelago.instance.GetPlayerName((int)apHint.Player)}'s World)";
+                            SpoilerLogLines.Add(Spoiler);
                         }
-                        string Spoiler = $"\t{(HasItem ? "x" : "-")} {MajorItem}: {apHint.Location} ({Archipelago.instance.GetPlayerName((int)apHint.Player)}'s World)";
+                    }
+                }
+            }
+            if (IsSinglePlayer()) {
+                SpoilerLogLines.AddRange(GetMysterySeedSettingsForSpoilerLog());
+
+                SpoilerLogLines.Add("Major Items");
+                foreach (string MajorItem in ItemLookup.LegacyMajorItems) {
+                    foreach (Check Check in ItemRandomizer.FindAllRandomizedItemsByName(MajorItem)) {
+                        ItemData ItemData = ItemLookup.GetItemDataFromCheck(Check);
+                        string Key = $"{Check.Location.LocationId} [{Check.Location.SceneName}]";
+                        string Spoiler = $"\t{(Locations.CheckedLocations[Key] ? "x" : "-")} {ItemData.Name}: {Locations.SceneNamesForSpoilerLog[Check.Location.SceneName]} - {Locations.LocationIdToDescription[Key]}";
                         SpoilerLogLines.Add(Spoiler);
                     }
                 }
             }
+
+            if (SaveFile.GetInt(HexagonQuestEnabled) == 1 && SaveFile.GetInt(AbilityShuffle) == 1) {
+                SpoilerLogLines.Add($"\t{(SaveFile.GetInt(PrayerUnlocked) == 1 ? "x" : "-")} Prayer: {SaveFile.GetInt(HexagonQuestPrayer)} Gold Questagons");
+                SpoilerLogLines.Add($"\t{(SaveFile.GetInt(HolyCrossUnlocked) == 1 ? "x" : "-")} Holy Cross: {SaveFile.GetInt(HexagonQuestHolyCross)} Gold Questagons");
+                SpoilerLogLines.Add($"\t{(SaveFile.GetInt(IceBoltUnlocked) == 1 ? "x" : "-")} Icebolt: {SaveFile.GetInt(HexagonQuestIcebolt)} Gold Questagons");
+            }
+            
             foreach (string Key in SpoilerLog.Keys) {
                 SpoilerLogLines.Add(Locations.SceneNamesForSpoilerLog[Key]);
                 SpoilerLog[Key].Sort();
                 foreach (string line in SpoilerLog[Key]) {
                     SpoilerLogLines.Add(line);
                 }
-            }
-            if (SaveFile.GetInt(HexagonQuestEnabled) == 1 && SaveFile.GetInt(AbilityShuffle) == 1) {
-                SpoilerLogLines.Add($"\t{(SaveFile.GetInt(PrayerUnlocked) == 1 ? "x" : "-")} Prayer: {SaveFile.GetInt(HexagonQuestPrayer)} Gold Questagons");
-                SpoilerLogLines.Add($"\t{(SaveFile.GetInt(HolyCrossUnlocked) == 1 ? "x" : "-")} Holy Cross: {SaveFile.GetInt(HexagonQuestHolyCross)} Gold Questagons");
-                SpoilerLogLines.Add($"\t{(SaveFile.GetInt(IceRodUnlocked) == 1 ? "x" : "-")} Ice Rod: {SaveFile.GetInt(HexagonQuestIceRod)} Gold Questagons");
             }
 
             if (SaveFile.GetInt(EntranceRando) == 1)
@@ -236,6 +269,27 @@ namespace TunicArchipelago {
                 File.WriteAllLines(TunicArchipelago.SpoilerLogPath, SpoilerLogLines);
             }
             Logger.LogInfo("Wrote spoiler log to " + TunicArchipelago.SpoilerLogPath);
+        }
+
+        private static List<string> GetMysterySeedSettingsForSpoilerLog() {
+            if (SaveFile.GetInt("randomizer mystery seed") == 0) { return new List<string>(); };
+            List<string> MysterySettings = new List<string>() {
+                "Mystery Seed Settings:",
+                $"\t- Hexagon Quest: {SaveFile.GetInt(HexagonQuestEnabled) == 1}",
+                SaveFile.GetInt(HexagonQuestEnabled) == 1 ? $"\t- Hexagon Quest Goal: {SaveFile.GetInt("randomizer hexagon quest goal")}" : "",
+                SaveFile.GetInt(HexagonQuestEnabled) == 1 ? $"\t- Extra Hexagons: {SaveFile.GetInt("randomizer hexagon quest extras")}%" : "",
+                $"\t- Sword Progression: {SaveFile.GetInt(SwordProgressionEnabled) == 1}",
+                $"\t- Keys Behind Bosses: {SaveFile.GetInt(KeysBehindBosses) == 1}",
+                $"\t- Start with Sword: {SaveFile.GetInt("randomizer started with sword") == 1}",
+                $"\t- Shuffled Abilities: {SaveFile.GetInt(AbilityShuffle) == 1}",
+                $"\t- Entrance Randomizer: {SaveFile.GetInt(EntranceRando) == 1}",
+                SaveFile.GetInt(EntranceRando) == 1 ? $"\t- Entrance Randomizer (Fewer Shops): {SaveFile.GetInt("randomizer ER fixed shop") == 1}" : "",
+                $"\t- Maskless Logic: {SaveFile.GetInt(MasklessLogic) == 1}",
+                $"\t- Lanternless Logic: {SaveFile.GetInt(LanternlessLogic) == 1}",
+                $"\t- Laurels Location: {((RandomizerSettings.FixedLaurelsType)SaveFile.GetInt("randomizer laurels location")).ToString()}\n",
+            };
+            MysterySettings.RemoveAll(x => x == "");
+            return MysterySettings;
         }
     }
 }

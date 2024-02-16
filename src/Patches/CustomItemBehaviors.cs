@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using static TunicArchipelago.SaveFlags;
 
 namespace TunicArchipelago {
@@ -163,6 +164,29 @@ namespace TunicArchipelago {
             }            
             PlayerCharacter.instance.gameObject.AddComponent<Rotate>();
             PlayerCharacterPatches.IsTeleporting = true;
+            return true;
+        }
+
+        public static bool ForcewandItemBehaviour__throwBeamCoroutine_d__32_MoveNext_PrefixPatch(ForcewandItemBehaviour._throwBeamCoroutine_d__32 __instance) {
+
+            // Checks if the toggle for disabling ice grappling is on, and if target is a frozen enemy
+            if (__instance.__8__1 != null && __instance.__8__1.gameObjectToTether != null
+                && __instance.__8__1.gameObjectToTether.GetComponent<Monster>() != null && __instance.__8__1.gameObjectToTether.GetComponent<Monster>().Frozen
+                && TunicArchipelago.Settings.RaceMode && TunicArchipelago.Settings.DisableIceGrappling) {
+                // Allow the east forest slime to be grappled still
+                if (SceneManager.GetActiveScene().name == "East Forest Redux" && __instance.__8__1.gameObjectToTether.transform.parent != null && __instance.__8__1.gameObjectToTether.transform.parent.name == "_MONSTERS ALWAYS") {
+                    return true;
+                }
+
+                // Cancel orb animation and refund mp to player if ice grapples are disabled
+                __instance.__8__1.gameObjectToTether = null;
+                __instance.__8__1.ztargOfTetheredObject = null;
+                __instance.__4__this.tentacleBeamRenderer.enabled = false;
+                
+                __instance.__4__this.StopAllCoroutines();
+                PlayerCharacter.SetMP(PlayerCharacter.GetMP() + __instance.__4__this.usageCostDat.IntValue);
+
+            }
             return true;
         }
 

@@ -16,13 +16,13 @@ namespace TunicArchipelago {
                 //fownd ahn Itehm!
                 Inventory.GetItemByName("Stick").Quantity = 1;
                 Inventory.GetItemByName("Stick").collectionMessage = ScriptableObject.CreateInstance<LanguageLine>();
-                Inventory.GetItemByName("Stick").collectionMessage.text = $"fownd ahn Itehm! \"(<#8ddc6e>Lv. 1<#FFFFFF>)\"";
+                Inventory.GetItemByName("Stick").collectionMessage.text = TunicArchipelago.Settings.UseTrunicTranslations ? $"fownd ahn Itehm! (<#8ddc6e>lehvuhl 1<#FFFFFF>)" : $"fownd ahn Itehm! \"(<#8ddc6e>Lv. 1<#FFFFFF>)\"";
 
                 ItemPresentation.PresentItem(Inventory.GetItemByName("Stick"));
             } else if (SwordLevel == 2) {
                 Inventory.GetItemByName("Sword").Quantity = 1;
                 Inventory.GetItemByName("Sword").collectionMessage = ScriptableObject.CreateInstance<LanguageLine>();
-                Inventory.GetItemByName("Sword").collectionMessage.text = $"fownd ahn Itehm! \"(<#e99d4c>Lv. 2<#FFFFFF>)\"";
+                Inventory.GetItemByName("Sword").collectionMessage.text = TunicArchipelago.Settings.UseTrunicTranslations ? $"fownd ahn Itehm! (<#e99d4c>lehvuhl 2<#FFFFFF>)" : $"fownd ahn Itehm! \"(<#e99d4c>Lv. 2<#FFFFFF>)\"";
                 Inventory.GetItemByName("Sword").useAlreadyHaveOneMessage = false;
                 ItemPresentation.PresentItem(Inventory.GetItemByName("Sword"));
                 List<ButtonAssignableItem> items = Inventory.buttonAssignedItems.ToList();
@@ -35,6 +35,7 @@ namespace TunicArchipelago {
                 Inventory.buttonAssignedItems = items.ToArray();
             } else if (SwordLevel == 3) {
                 Inventory.GetItemByName("Librarian Sword").Quantity = 1;
+                Inventory.GetItemByName("Librarian Sword").collectionMessage.text = TunicArchipelago.Settings.UseTrunicTranslations ? $"             ? ? ?    (<#ca7be4>lehvuhl 3<#FFFFFF>)" : $"\"        ? ? ? (<#ca7be4>Lv. 3<#FFFFFF>)\"";
                 ItemPresentation.PresentItem(Inventory.GetItemByName("Librarian Sword"));
                 Inventory.GetItemByName("Level Up - Attack").Quantity += 1;
                 TunicArchipelago.Tracker.ImportantItems["Level Up - Attack"] = Inventory.GetItemByName("Level Up - Attack").Quantity;
@@ -48,6 +49,7 @@ namespace TunicArchipelago {
                 Inventory.buttonAssignedItems = items.ToArray();
             } else if (SwordLevel >= 4) {
                 Inventory.GetItemByName("Heir Sword").Quantity = 1;
+                Inventory.GetItemByName("Heir Sword").collectionMessage.text = TunicArchipelago.Settings.UseTrunicTranslations ? $"             ! ! !    (<#5de7cf>lehvuhl 4<#FFFFFF>)" : $"\"        ! ! ! (<#5de7cf>Lv. 4<#FFFFFF>)\"";
                 ItemPresentation.PresentItem(Inventory.GetItemByName("Heir Sword"));
                 Inventory.GetItemByName("Level Up - Attack").Quantity += 1;
                 TunicArchipelago.Tracker.ImportantItems["Level Up - Attack"] = Inventory.GetItemByName("Level Up - Attack").Quantity;
@@ -171,8 +173,18 @@ namespace TunicArchipelago {
 
         public static bool HitReceiver_ReceiveHit_PrefixPatch(HitReceiver __instance, ref HitType hitType, ref bool unblockable, ref bool isPlayerCharacterMelee) {
 
+            // Disables hitting the west bell from long range for race purposes
+            if (__instance.GetComponent<TuningForkBell>() != null && __instance.name == "tuning fork" && SceneManager.GetActiveScene().name == "Overworld Redux" 
+                && hitType == HitType.TECHBOW && TunicArchipelago.Settings.RaceMode && TunicArchipelago.Settings.DisableDistantBellShots) { 
+                if (PlayerCharacter.instance.transform.position.x > __instance.transform.position.x + 5
+                    || PlayerCharacter.instance.transform.position.z > __instance.transform.position.z + 5) {
+                    return false;
+                }
+            }
+
+            // Allows lvl 4 sword to hit bells/switches, also tells AP data storage if bells were rung
             if ((__instance.GetComponent<TuningForkBell>() != null || __instance.GetComponent<PowerSwitch>() != null) && isPlayerCharacterMelee) {
-                if (__instance.name == "tuning fork") {
+                if (__instance.name == "tuning fork" && IsArchipelago()) {
                     if (SceneManager.GetActiveScene().name == "Forest Belltower") {
                         Archipelago.instance.UpdateDataStorage("Rang East Bell", true);
                     }

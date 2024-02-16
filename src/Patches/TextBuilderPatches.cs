@@ -237,7 +237,7 @@ namespace TunicArchipelago {
             { "Pages 46-47", "[book]" },
             { "Pages 48-49", "[book]" },
             { "Pages 50-51", "[book]" },
-            { "Pages 52-53 (Ice Rod)", "[book]" },
+            { "Pages 52-53 (Icebolt)", "[book]" },
             { "Pages 54-55", "[book]" },
             // Non-Tunic Item
             { "Archipelago Item", "[archipelago]"}

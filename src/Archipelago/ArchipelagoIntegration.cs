@@ -41,6 +41,10 @@ namespace TunicArchipelago {
         private int ItemIndex = 0;
 
         public void Update() {
+            if ((SceneManager.GetActiveScene().name == "TitleScreen" && TunicArchipelago.Settings.Mode != RandomizerSettings.RandomizerType.ARCHIPELAGO) || SaveFile.GetInt("archipelago") == 0) {
+                return;
+            }
+
             if (!connected) {
                 return;
             }
@@ -64,7 +68,6 @@ namespace TunicArchipelago {
             if (SpeedrunData.gameComplete != 0 && !sentCompletion) {
                 sentCompletion = true;
                 SendCompletion();
-                SpeedrunFinishlineDisplayPatches.SetupCompletionStatsDisplay();
             }
 
         }
@@ -81,7 +84,11 @@ namespace TunicArchipelago {
                 return;
             }
             if (session == null) {
-                session = ArchipelagoSessionFactory.CreateSession(TunicArchipelago.Settings.ConnectionSettings.Hostname, TunicArchipelago.Settings.ConnectionSettings.Port);
+                try {
+                    session = ArchipelagoSessionFactory.CreateSession(TunicArchipelago.Settings.ConnectionSettings.Hostname, int.Parse(TunicArchipelago.Settings.ConnectionSettings.Port));
+                } catch (Exception e) {
+                    Logger.LogInfo("Failed to create archipelago session!");
+                }
             }
             incomingItemHandler = IncomingItemHandler();
             outgoingItemHandler = OutgoingItemHandler();
@@ -285,6 +292,11 @@ namespace TunicArchipelago {
                 if (Locations.VanillaLocations.Keys.Where(key => Locations.VanillaLocations[key].Location.SceneName == SceneLoaderPatches.SceneName && !Locations.CheckedLocations[key]).ToList().Count == 0) {
                     FairyTargets.CreateLoadZoneTargets();
                 }
+
+                if (TunicArchipelago.Settings.CreateSpoilerLog && !TunicArchipelago.Settings.RaceMode) {
+                    ItemTracker.PopulateSpoilerLog();
+                }
+
                 session.Locations.ScoutLocationsAsync(location)
                     .ContinueWith(locationInfoPacket =>
                         outgoingItems.Enqueue(locationInfoPacket.Result.Locations[0]));
@@ -303,7 +315,7 @@ namespace TunicArchipelago {
         }
 
         public void Release() {
-            if (sentCompletion && !sentRelease) {
+            if (connected && sentCompletion && !sentRelease) {
                 session.Socket.SendPacket(new SayPacket() { Text = "!release" });
                 sentRelease = true;
                 Logger.LogInfo("Released remaining checks.");
@@ -311,7 +323,7 @@ namespace TunicArchipelago {
         }
 
         public void Collect() {
-            if (sentCompletion && !sentCollect) {
+            if (connected && sentCompletion && !sentCollect) {
                 session.Socket.SendPacket(new SayPacket() { Text = "!collect" });
                 sentCollect = true;
                 Logger.LogInfo("Collected remaining items.");

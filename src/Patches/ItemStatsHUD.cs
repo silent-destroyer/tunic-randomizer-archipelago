@@ -153,6 +153,9 @@ namespace TunicArchipelago {
                 if (Screen.width <= 1280 && Screen.height <= 800) {
                     Stats.transform.localScale = new Vector3(3.6f, 3.6f, 3.6f);
                 }
+                if (Screen.width == 1920 && Screen.height == 1440) {
+                    Stats.transform.localScale = new Vector3(3.6f, 3.6f, 3.6f);
+                }
             }
             Loaded = true;
         }
@@ -235,7 +238,7 @@ namespace TunicArchipelago {
                     icon.SetActive(false);
                 }
 
-                List<string> abilities = new List<string>() { "Prayer", "Holy Cross", "Ice Rod" };
+                List<string> abilities = new List<string>() { "Prayer", "Holy Cross", "Icebolt" };
                 TMP_FontAsset odin = Resources.FindObjectsOfTypeAll<TMP_FontAsset>().Where(Font => Font.name == "Latin Rounded").ToList()[0];
                 Material fontMaterial = ModelSwaps.FindMaterial("Latin Rounded - Quantity Outline");
                 for (int i = 0; i < 3; i++) {
@@ -294,7 +297,7 @@ namespace TunicArchipelago {
 
             bool HasPrayer = SaveFile.GetInt(PrayerUnlocked) == 1;
             bool HasHolyCross = SaveFile.GetInt(HolyCrossUnlocked) == 1;
-            bool HasIceRod = SaveFile.GetInt(IceRodUnlocked) == 1;
+            bool HasIcebolt = SaveFile.GetInt(IceBoltUnlocked) == 1;
             Color Full = new Color(1, 1, 1, 1);
             Color Faded = new Color(1, 1, 1, 0.5f);
             bool isHexQuest = SaveFile.GetInt(HexagonQuestEnabled) == 1;
@@ -303,7 +306,7 @@ namespace TunicArchipelago {
                 SortedDictionary<int, string> HexUnlocks = new SortedDictionary<int, string>() {
                     { SaveFile.GetInt(HexagonQuestPrayer), "Prayer" },
                     { SaveFile.GetInt(HexagonQuestHolyCross), "Holy Cross" },
-                    { SaveFile.GetInt(HexagonQuestIceRod), "Ice Rod" },
+                    { SaveFile.GetInt(HexagonQuestIcebolt), "Icebolt" },
                 };
 
                 int GoldHexes = Inventory.GetItemByName("Hexagon Gold").Quantity;
@@ -345,11 +348,11 @@ namespace TunicArchipelago {
             } else {
                 AbilityShuffle.transform.GetChild(13).GetComponent<TextMeshProUGUI>().text = "Prayer";
                 AbilityShuffle.transform.GetChild(14).GetComponent<TextMeshProUGUI>().text = "Holy Cross";
-                AbilityShuffle.transform.GetChild(15).GetComponent<TextMeshProUGUI>().text = "Ice Rod";
+                AbilityShuffle.transform.GetChild(15).GetComponent<TextMeshProUGUI>().text = "Icebolt";
 
                 AbilityShuffle.transform.GetChild(13).GetComponent<TextMeshProUGUI>().color = HasPrayer ? Full : Faded;
                 AbilityShuffle.transform.GetChild(14).GetComponent<TextMeshProUGUI>().color = HasHolyCross ? Full : Faded;
-                AbilityShuffle.transform.GetChild(15).GetComponent<TextMeshProUGUI>().color = HasIceRod ? Full : Faded;
+                AbilityShuffle.transform.GetChild(15).GetComponent<TextMeshProUGUI>().color = HasIcebolt ? Full : Faded;
 
                 AbilityShuffle.transform.GetChild(16).GetComponent<TextMeshProUGUI>().text = "24-25";
                 AbilityShuffle.transform.GetChild(17).GetComponent<TextMeshProUGUI>().text = "42-43";
@@ -362,11 +365,11 @@ namespace TunicArchipelago {
 
                 AbilityShuffle.transform.GetChild(16).GetComponent<TextMeshProUGUI>().color = HasPrayer ? Full : Faded;
                 AbilityShuffle.transform.GetChild(17).GetComponent<TextMeshProUGUI>().color = HasHolyCross ? Full : Faded;
-                AbilityShuffle.transform.GetChild(18).GetComponent<TextMeshProUGUI>().color = HasIceRod ? Full : Faded;
+                AbilityShuffle.transform.GetChild(18).GetComponent<TextMeshProUGUI>().color = HasIcebolt ? Full : Faded;
 
                 AbilityShuffle.transform.GetChild(7).GetComponent<Image>().color = HasPrayer ? Full : Faded;
                 AbilityShuffle.transform.GetChild(8).GetComponent<Image>().color = HasHolyCross ? Full : Faded;
-                AbilityShuffle.transform.GetChild(9).GetComponent<Image>().color = HasIceRod ? Full : Faded;
+                AbilityShuffle.transform.GetChild(9).GetComponent<Image>().color = HasIcebolt ? Full : Faded;
             }
 
         }
@@ -374,8 +377,8 @@ namespace TunicArchipelago {
         public static void Update() {
             try {
                 if (Locations.VanillaLocations.Count > 0) {
-                    int ObtainedItemCount = Locations.VanillaLocations.Keys.Where(loc => Locations.CheckedLocations[loc] || (TunicArchipelago.Settings.CollectReflectsInWorld && SaveFile.GetInt($"randomizer {loc} was collected") == 1)).ToList().Count;
-                    int ObtainedItemCountInCurrentScene = Locations.VanillaLocations.Keys.Where(loc => Locations.VanillaLocations[loc].Location.SceneName == SceneLoaderPatches.SceneName && (Locations.CheckedLocations[loc] || (TunicArchipelago.Settings.CollectReflectsInWorld && SaveFile.GetInt($"randomizer {loc} was collected") == 1))).ToList().Count;
+                    int ObtainedItemCount = Locations.VanillaLocations.Keys.Where(loc => Locations.CheckedLocations[loc] || (SaveFlags.IsArchipelago() && TunicArchipelago.Settings.CollectReflectsInWorld && SaveFile.GetInt($"randomizer {loc} was collected") == 1)).ToList().Count;
+                    int ObtainedItemCountInCurrentScene = Locations.VanillaLocations.Keys.Where(loc => Locations.VanillaLocations[loc].Location.SceneName == SceneLoaderPatches.SceneName && (Locations.CheckedLocations[loc] || (SaveFlags.IsArchipelago() && TunicArchipelago.Settings.CollectReflectsInWorld && SaveFile.GetInt($"randomizer {loc} was collected") == 1))).ToList().Count;
                     int TotalItemCountInCurrentScene = Locations.VanillaLocations.Keys.Where(loc => Locations.VanillaLocations[loc].Location.SceneName == SceneLoaderPatches.SceneName).ToList().Count;
                     Pages.GetComponent<TextMeshProUGUI>().text = $"Pages:\t\t{TunicArchipelago.Tracker.ImportantItems["Pages"]}/28";
                     Pages.GetComponent<TextMeshProUGUI>().color = TunicArchipelago.Tracker.ImportantItems["Pages"] == 28 ? new Color(0.917f, 0.65f, .08f) : Color.white;
