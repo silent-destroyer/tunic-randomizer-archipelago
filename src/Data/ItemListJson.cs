@@ -4962,7 +4962,9 @@
                 ""Location"": {
                     ""LocationId"": ""1005"",
                     ""Position"": ""(59.8, 0.0, -70.6)"",
-                    ""RequiredItems"": [],
+                    ""RequiredItems"": [
+                        {""Sword"": 1}
+                    ],
                     ""RequiredItemsDoors"": [
                         {""Swamp"": 1}
                     ],
